@@ -1,32 +1,24 @@
-# Ultra HD Social Media Automation Engine
-# Base: Debian Bullseye slim with Node.js 20
-FROM node:20-bullseye-slim
+# Lexa Trip Social Automation Cloud Engine
+FROM node:20-slim
 
-# Install system dependencies: FFmpeg, fonts, ca-certificates
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    ffmpeg \
-    fonts-dejavu-core \
-    fonts-freefont-ttf \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
-
-# Create working directory
+# Create app directory
 WORKDIR /app
 
-# Install Node dependencies
+# Copy dependency specifications
 COPY package*.json ./
-RUN npm ci --omit=dev || npm install --omit=dev
+
+# Install production dependencies (ffmpeg-static, sharp, express, etc.)
+RUN npm install --omit=dev
 
 # Copy project files
 COPY . .
 
-# Set production environment variables
+# Environment settings
 ENV NODE_ENV=production
 ENV PORT=10000
-ENV FFMPEG_PATH=/usr/bin/ffmpeg
 
-# Expose default application port for Render
+# Expose port for Render
 EXPOSE 10000
 
-# Start server
+# Start Automation Server
 CMD ["node", "server.js"]
