@@ -23,8 +23,9 @@
       "watermarkText": "Lexa Trip Jaisalmer"
     },
     "telegram": {
-      "enabled": false,
-      "botToken": "",
+      "enabled": true,
+      "botToken": "9283650493:AAEbHNXPtWnej_39TBrCQ3y8yXZUESR2D7E",
+      "botUsername": "lexatrip_auto_bot",
       "allowedChatId": ""
     },
     "publicBaseUrl": "https://lexatrip-iv1iwd.loca.lt",
@@ -7935,6 +7936,19 @@
             "post",
             "reel"
           ]
+        },
+        "telegram": {
+          "enabled": true,
+          "name": "Lexa Trip Automation Bot",
+          "handle": "@lexatrip_auto_bot",
+          "credentials": {
+            "botToken": "9283650493:AAEbHNXPtWnej_39TBrCQ3y8yXZUESR2D7E"
+          },
+          "supports": [
+            "post",
+            "reel",
+            "carousel"
+          ]
         }
       },
       "customChannels": [],
@@ -7960,7 +7974,7 @@
       },
       "telegram": {
         "enabled": true,
-        "botToken": "smart_telegram_bot_token",
+        "botToken": "9283650493:AAEbHNXPtWnej_39TBrCQ3y8yXZUESR2D7E",
         "chatId": "987654321"
       }
     },

@@ -10,4 +10,6 @@ services:
         value: production
       - key: PORT
         value: 10000
+      - key: TELEGRAM_BOT_TOKEN
+        value: 9283650493:AAEbHNXPtWnej_39TBrCQ3y8yXZUESR2D7E
     autoDeploy: true
