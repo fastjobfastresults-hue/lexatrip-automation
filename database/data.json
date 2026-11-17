@@ -4728,14 +4728,68 @@
       "caption": "Experience magical moments in Jaisalmer with Lexa Trip #Highlight4",
       "mediaPath": "D:\\lexa automation web and app\\generated\\batch_1794831887155\\reel_4_1080x1920.mp4",
       "scheduledTime": "2026-11-17T08:56:00.000Z",
-      "status": "queued",
+      "status": "published",
       "targets": [
         "instagram",
         "facebook",
         "youtube",
         "pinterest"
       ],
-      "createdAt": "2026-11-16T12:26:25.448Z"
+      "createdAt": "2026-11-16T12:26:25.448Z",
+      "publishedAt": "2026-11-17T08:56:05.430Z",
+      "publishResults": [
+        {
+          "platform": "instagram",
+          "status": "published",
+          "details": {
+            "success": true,
+            "simulated": true,
+            "platform": "instagram",
+            "type": "reel",
+            "postId": "ig_reel_1794905765427",
+            "publishedAt": "2026-11-17T08:56:05.427Z",
+            "message": "Ultra HD Reel dispatched successfully via Smart Bridge."
+          }
+        },
+        {
+          "platform": "facebook",
+          "status": "published",
+          "details": {
+            "success": true,
+            "simulated": true,
+            "platform": "facebook",
+            "type": "reel",
+            "videoId": "fbr_vid_1794905765428",
+            "publishedAt": "2026-11-17T08:56:05.428Z",
+            "message": "Facebook Reel dispatched successfully via Smart Bridge."
+          }
+        },
+        {
+          "platform": "youtube",
+          "status": "published",
+          "details": {
+            "success": true,
+            "simulated": false,
+            "platform": "youtube",
+            "videoId": "yt_1794905765429",
+            "publishedAt": "2026-11-17T08:56:05.429Z"
+          }
+        },
+        {
+          "platform": "pinterest",
+          "status": "published",
+          "details": {
+            "success": true,
+            "simulated": true,
+            "platform": "pinterest",
+            "type": "video_pin",
+            "pinId": "pin_1794905765429",
+            "boardId": "board_jaisalmer",
+            "publishedAt": "2026-11-17T08:56:05.429Z",
+            "message": "Pin dispatched successfully via Smart Bridge."
+          }
+        }
+      ]
     },
     {
       "id": "q_batch_1794831887155_reel_5_1794831985454_rg5y",
@@ -4779,6 +4833,69 @@
     }
   ],
   "logs": [
+    {
+      "id": "log_1794905765447_oevx7",
+      "timestamp": "2026-11-17T08:56:05.447Z",
+      "type": "publish",
+      "queueId": "q_batch_1794831887155_reel_4_1794831985448_ne33",
+      "destination": "लेक्सा ट्रिप जैसलमेर (Lexa Trip Jaisalmer)",
+      "itemType": "reel",
+      "title": "Reel #4: Desert Highlight 4",
+      "status": "success",
+      "results": [
+        {
+          "platform": "instagram",
+          "status": "published",
+          "details": {
+            "success": true,
+            "simulated": true,
+            "platform": "instagram",
+            "type": "reel",
+            "postId": "ig_reel_1794905765427",
+            "publishedAt": "2026-11-17T08:56:05.427Z",
+            "message": "Ultra HD Reel dispatched successfully via Smart Bridge."
+          }
+        },
+        {
+          "platform": "facebook",
+          "status": "published",
+          "details": {
+            "success": true,
+            "simulated": true,
+            "platform": "facebook",
+            "type": "reel",
+            "videoId": "fbr_vid_1794905765428",
+            "publishedAt": "2026-11-17T08:56:05.428Z",
+            "message": "Facebook Reel dispatched successfully via Smart Bridge."
+          }
+        },
+        {
+          "platform": "youtube",
+          "status": "published",
+          "details": {
+            "success": true,
+            "simulated": false,
+            "platform": "youtube",
+            "videoId": "yt_1794905765429",
+            "publishedAt": "2026-11-17T08:56:05.429Z"
+          }
+        },
+        {
+          "platform": "pinterest",
+          "status": "published",
+          "details": {
+            "success": true,
+            "simulated": true,
+            "platform": "pinterest",
+            "type": "video_pin",
+            "pinId": "pin_1794905765429",
+            "boardId": "board_jaisalmer",
+            "publishedAt": "2026-11-17T08:56:05.429Z",
+            "message": "Pin dispatched successfully via Smart Bridge."
+          }
+        }
+      ]
+    },
     {
       "id": "log_1794900663644_n0eor",
       "timestamp": "2026-11-17T07:31:03.644Z",

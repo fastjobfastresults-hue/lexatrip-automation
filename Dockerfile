@@ -22,11 +22,11 @@ COPY . .
 
 # Set production environment variables
 ENV NODE_ENV=production
-ENV PORT=3800
+ENV PORT=10000
 ENV FFMPEG_PATH=/usr/bin/ffmpeg
 
-# Expose default application port
-EXPOSE 3800
+# Expose default application port for Render
+EXPOSE 10000
 
 # Start server
 CMD ["node", "server.js"]

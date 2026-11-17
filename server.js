@@ -23,11 +23,15 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
 
-const PORT = process.env.PORT || 3800;
+const PORT = process.env.PORT || 10000;
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Health Check for Cloud Load Balancers & Render
+app.get('/health', (req, res) => res.status(200).send('OK'));
+app.get('/healthz', (req, res) => res.status(200).send('OK'));
 
 // Cache-Control headers to prevent browser from caching stale files
 app.use((req, res, next) => {
@@ -604,7 +608,7 @@ app.get('/api/logs', (req, res) => {
 });
 
 // Start Server & Background Services
-server.listen(PORT, async () => {
+server.listen(PORT, '0.0.0.0', async () => {
   console.log(`================================================================`);
   console.log(`🌟 LEXA TRIP MULTI-DESTINATION AUTOMATION ENGINE RUNNING 🌟`);
   console.log(`📡 Localhost URL: http://localhost:${PORT}`);
