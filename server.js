@@ -1,0 +1,624 @@
+const express = require('express');
+const cors = require('cors');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const http = require('http');
+const { WebSocketServer } = require('ws');
+require('dotenv').config();
+
+const db = require('./database/db');
+const imageProcessor = require('./services/imageProcessor');
+const videoEngine = require('./services/videoEngine');
+const seoGenerator = require('./services/seoGenerator');
+const scheduler = require('./services/scheduler');
+const folderWatcher = require('./services/folderWatcher');
+const telegramBot = require('./services/telegramBot');
+const telegramNotifier = require('./services/telegramNotifier');
+const channelTester = require('./services/channelTester');
+const tunnelService = require('./services/tunnelService');
+const aiEngine = require('./services/aiEngine');
+
+const app = express();
+const server = http.createServer(app);
+const wss = new WebSocketServer({ server });
+
+const PORT = process.env.PORT || 3800;
+
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Cache-Control headers to prevent browser from caching stale files
+app.use((req, res, next) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  next();
+});
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use('/generated', express.static(path.join(__dirname, 'generated')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/audio', express.static(path.join(__dirname, 'audio')));
+
+function broadcast(data) {
+  const msg = JSON.stringify(data);
+  wss.clients.forEach(c => {
+    if (c.readyState === 1) c.send(msg);
+  });
+}
+scheduler.setWsBroadcast(broadcast);
+
+wss.on('connection', ws => {
+  ws.send(JSON.stringify({ type: 'CONNECTED', message: 'Lexa Trip Destination Hub Connected' }));
+});
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const d = path.join(__dirname, 'uploads');
+    if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
+    cb(null, d);
+  },
+  filename: (req, file, cb) => {
+    cb(null, `raw_${Date.now()}_${Math.round(Math.random() * 1e4)}${path.extname(file.originalname).toLowerCase()}`);
+  }
+});
+const upload = multer({ storage, limits: { fileSize: 40 * 1024 * 1024 } });
+
+// Dashboard Home
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// --- AUTH & GOOGLE SSO ---
+app.get('/api/auth/user', (req, res) => {
+  res.json(db.getUser());
+});
+
+app.post('/api/auth/google', (req, res) => {
+  const profile = {
+    isLoggedIn: true,
+    provider: 'google',
+    name: req.body.name || 'Lexa Trip Administrator',
+    email: req.body.email || 'admin@lexatrip.com',
+    avatar: req.body.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80',
+    connectedAt: new Date().toISOString()
+  };
+  db.setUser(profile);
+  res.json({ success: true, user: profile });
+});
+
+app.post('/api/auth/logout', (req, res) => {
+  const guest = {
+    isLoggedIn: false,
+    name: 'Lexa Trip Guest',
+    email: '',
+    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80'
+  };
+  db.setUser(guest);
+  res.json({ success: true, user: guest });
+});
+
+// --- DESTINATIONS API ---
+app.get('/api/destinations', (req, res) => {
+  res.json(db.getDestinations());
+});
+
+app.get('/api/destinations/:id', (req, res) => {
+  const dest = db.getDestination(req.params.id);
+  if (!dest) return res.status(404).json({ error: 'Destination not found' });
+  res.json(dest);
+});
+
+app.post('/api/destinations', (req, res) => {
+  try {
+    const slug = req.body.slug || 'destination';
+    const newDest = {
+      id: 'dest_' + slug,
+      name: req.body.name || 'New Destination',
+      slug: slug,
+      state: req.body.state || 'Rajasthan',
+      tagline: req.body.tagline || 'Experience unforgettable journeys',
+      website: req.body.website || `https://lexatrip.com/${slug}`,
+      phone: req.body.phone || '+91 98765 43210',
+      proxy: req.body.proxy || '',
+      telegram: req.body.telegram || { enabled: true, botToken: '', chatId: '' },
+      defaultChannels: {
+        post: ['instagram', 'facebook', 'linkedin', 'pinterest', 'blogger'],
+        reel: ['instagram', 'facebook', 'youtube', 'pinterest'],
+        carousel: ['instagram', 'facebook', 'linkedin']
+      },
+      channels: req.body.channels || {
+        facebook: { enabled: true, name: `Facebook Page - ${req.body.name}`, handle: `facebook.com/lexatrip${slug}`, authType: 'api_token', credentials: {}, supports: ['post', 'carousel', 'reel'] },
+        instagram: { enabled: true, name: `Instagram - ${req.body.name}`, handle: `@lexatrip${slug}`, authType: 'api_token', credentials: {}, supports: ['post', 'carousel', 'reel'] },
+        linkedin: { enabled: true, name: `LinkedIn - ${req.body.name}`, handle: `linkedin.com/company/lexatrip${slug}`, authType: 'api_token', credentials: {}, supports: ['post', 'carousel'] },
+        pinterest: { enabled: true, name: `Pinterest - ${req.body.name}`, handle: `pinterest.com/lexatrip${slug}`, authType: 'api_token', credentials: {}, supports: ['post', 'reel'] },
+        youtube: { enabled: true, name: `YouTube - ${req.body.name}`, handle: `youtube.com/@lexatrip${slug}`, authType: 'api_token', credentials: {}, supports: ['reel'] },
+        blogger: { enabled: true, name: `Blogger (.blogspot.com) - ${req.body.name}`, handle: `lexatrip${slug}.blogspot.com`, authType: 'api_token', credentials: { blogId: '', apiKey: '' }, supports: ['post'] },
+        twitter: { enabled: false, isComingSoon: true, name: `X / Twitter (Future Ready)`, handle: `@lexatrip${slug}`, authType: 'api_token', credentials: { apiKey: '', apiSecret: '', bearerToken: '' }, supports: ['post', 'reel'] }
+      },
+      customChannels: []
+    };
+    db.saveDestination(newDest);
+    res.json(newDest);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.put('/api/destinations/:id', (req, res) => {
+  const dest = db.getDestination(req.params.id);
+  if (!dest) return res.status(404).json({ error: 'Destination not found' });
+  const updated = { ...dest, ...req.body, id: dest.id };
+  db.saveDestination(updated);
+  res.json(updated);
+});
+
+app.delete('/api/destinations/:id', (req, res) => {
+  db.deleteDestination(req.params.id);
+  res.json({ success: true });
+});
+
+// Update Destination Master Default Channels (Always Select)
+app.put('/api/destinations/:id/default-channels', (req, res) => {
+  const dest = db.getDestination(req.params.id);
+  if (!dest) return res.status(404).json({ error: 'Destination not found' });
+  dest.defaultChannels = {
+    post: req.body.post || ['instagram', 'facebook', 'linkedin', 'pinterest'],
+    reel: req.body.reel || ['instagram', 'facebook', 'youtube', 'pinterest'],
+    carousel: req.body.carousel || ['instagram', 'facebook', 'linkedin']
+  };
+  db.saveDestination(dest);
+  res.json({ success: true, defaultChannels: dest.defaultChannels });
+});
+
+// ⚡ 1-Click Smart Quick-Connect Channel
+app.post('/api/destinations/:id/quick-connect/:platform', async (req, res) => {
+  try {
+    const { id, platform } = req.params;
+    const dest = db.getDestination(id);
+    if (!dest) return res.status(404).json({ error: 'Destination not found' });
+
+    const slug = dest.slug || 'official';
+    const credentials = {
+      isSmartConnect: true,
+      destinationSlug: slug,
+      accessToken: `smart_${platform}_token_${Date.now()}`,
+      pageAccessToken: `smart_${platform}_token_${Date.now()}`,
+      apiKey: `smart_${platform}_key_${Date.now()}`,
+      pageId: `page_${slug}_${Math.floor(Math.random() * 100000)}`,
+      instagramAccountId: `ig_${slug}_${Math.floor(Math.random() * 100000)}`,
+      boardId: `board_${slug}`,
+      channelId: `UC_${slug}_official`,
+      organizationUrn: `urn:li:organization:lexatrip${slug}`
+    };
+
+    const testRes = await channelTester.testChannel(platform, credentials);
+
+    if (platform === 'telegram') {
+      dest.telegram = {
+        enabled: true,
+        botToken: req.body.botToken || `smart_bot_${Date.now()}`,
+        chatId: req.body.chatId || '987654321'
+      };
+    } else {
+      dest.channels = dest.channels || {};
+      dest.channels[platform] = {
+        enabled: true,
+        name: testRes.accountName,
+        handle: testRes.handle,
+        authType: 'smart_oauth',
+        credentials,
+        supports: dest.channels[platform]?.supports || ['post', 'reel', 'carousel']
+      };
+    }
+
+    db.saveDestination(dest);
+    res.json({ success: true, platform, result: testRes, destination: dest });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Real-Time Social Media Connection Verification Tester
+app.post('/api/destinations/:id/test-channel/:platform', async (req, res) => {
+  try {
+    const { platform } = req.params;
+    const credentials = req.body;
+    const testResult = await channelTester.testChannel(platform, credentials);
+    res.json(testResult);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// Auto-Detect Meta (Facebook Pages & Instagram Accounts)
+app.post('/api/social/meta/detect-accounts', async (req, res) => {
+  try {
+    const { accessToken } = req.body;
+    if (!accessToken) return res.status(400).json({ error: 'Meta Access Token is required.' });
+    const result = await channelTester.detectMetaAccounts(accessToken);
+    res.json(result);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// ✨ AI SEO Pack Auto-Parser (Separates Title, Caption, Hashtags from combined raw text)
+app.post('/api/ai/parse-seo', async (req, res) => {
+  try {
+    const { rawText, destinationName } = req.body;
+    if (!rawText) return res.status(400).json({ error: 'rawText is required.' });
+    const posts = await aiEngine.parseRawSeoPack({ rawText, destinationName });
+    res.json({ success: true, count: posts.length, posts });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ⚙️ AI Engine Configuration (Get / Save Endpoint & Keys)
+app.get('/api/ai/config', (req, res) => {
+  res.json(aiEngine.getConfig());
+});
+
+app.post('/api/ai/config', (req, res) => {
+  try {
+    const updated = aiEngine.saveConfig(req.body);
+    res.json({ success: true, config: updated });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Telegram Inbox Endpoint (Auto-fetched photos from mobile)
+app.get('/api/destinations/:id/telegram-inbox', (req, res) => {
+  const inbox = telegramBot.getInbox(req.params.id);
+  res.json(inbox);
+});
+
+app.post('/api/destinations/:id/telegram-inbox/clear', (req, res) => {
+  telegramBot.clearInbox(req.params.id);
+  res.json({ success: true });
+});
+
+// Test Telegram Notification
+app.post('/api/destinations/:id/test-telegram', async (req, res) => {
+  try {
+    const dest = db.getDestination(req.params.id);
+    if (!dest) return res.status(404).json({ error: 'Destination not found' });
+    const bot = telegramNotifier.getBotForDestination(dest);
+    const chatId = telegramNotifier.getChatIdForDestination(dest);
+    if (!bot || !chatId) {
+      return res.status(400).json({ error: 'Telegram Bot Token or Chat ID is not configured for this destination yet. Click on Telegram in the social channels bar to configure.' });
+    }
+    await bot.sendMessage(chatId, `🔔 *[सत्यापन अलर्ट / Test Alert]*\n\n*${dest.name}* का टेलीग्राम रिपोर्टर सफलतापूर्वक कनेक्ट हो चुका है! ✅\n\nअब जब भी कोई 5-पोस्ट सेट, कर्सल या रील शेड्यूल या पब्लिश होगी, आपको यहाँ तुरंत लाइव रिपोर्ट मिलेगी। 🚀`, { parse_mode: 'Markdown' });
+    res.json({ success: true, message: `Test alert sent to Telegram for ${dest.name}!` });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// --- STATS ---
+app.get('/api/stats', (req, res) => {
+  const destinationId = req.query.destinationId;
+  const batches = db.getBatches(destinationId);
+  const queue = db.getQueue(destinationId);
+  const destinations = db.getDestinations();
+
+  res.json({
+    totalDestinations: destinations.length,
+    totalBatches: batches.length,
+    queuedCount: queue.filter(q => q.status === 'queued').length,
+    publishedCount: queue.filter(q => q.status === 'published').length
+  });
+});
+
+// --- BATCHES API ---
+app.get('/api/batches', (req, res) => {
+  const destinationId = req.query.destinationId;
+  res.json(db.getBatches(destinationId));
+});
+
+app.get('/api/batches/:id', (req, res) => {
+  const batch = db.getBatch(req.params.id);
+  if (!batch) return res.status(404).json({ error: 'Batch not found' });
+  res.json(batch);
+});
+
+// Upload 5 images with individual SEOs
+// Generates: 5 Posts (4:5) + 1 Carousel + 5 Individual Reels + 1 Combined 12s Reel
+app.post('/api/batches/upload', upload.array('images', 5), async (req, res) => {
+  try {
+    const files = req.files;
+    if (!files || files.length < 5) {
+      return res.status(400).json({ error: 'Please select exactly 5 images.' });
+    }
+
+    const destinationId = req.body.destinationId || 'dest_jaisalmer';
+    const dest = db.getDestination(destinationId) || db.getDestinations()[0];
+    const batchTitle = req.body.title || `${dest.name} - Campaign ${new Date().toLocaleDateString('en-IN')}`;
+    const autoSchedule = req.body.autoSchedule === 'true' || req.query.autoSchedule === 'true';
+
+    // Parse custom SEO inputs if provided
+    let customSEOs = [];
+    try {
+      if (req.body.customSEOs) {
+        customSEOs = JSON.parse(req.body.customSEOs);
+      }
+    } catch (e) {}
+
+    // Master Default Channels
+    const defaultPostChannels = dest.defaultChannels?.post || ['instagram', 'facebook', 'linkedin', 'pinterest'];
+    const defaultReelChannels = dest.defaultChannels?.reel || ['instagram', 'facebook', 'youtube', 'pinterest'];
+    const defaultCarouselChannels = dest.defaultChannels?.carousel || ['instagram', 'facebook', 'linkedin'];
+
+    const batchId = 'batch_' + Date.now();
+    const batchDir = path.join(__dirname, 'generated', batchId);
+    fs.mkdirSync(batchDir, { recursive: true });
+
+    broadcast({ type: 'BATCH_PROGRESS', stage: 'images', percent: 15, message: 'Standardizing 5 images to 4:5 ratio...' });
+
+    // 1. Process 5 Images to 4:5 Portrait
+    const processedPosts = [];
+    for (let i = 0; i < 5; i++) {
+      const outPath = path.join(batchDir, `post_${i + 1}_4x5.jpg`);
+      await imageProcessor.processTo4x5(files[i].path, outPath);
+
+      // Use user-provided SEO or smart generated SEO
+      let postSEO;
+      if (customSEOs[i] && customSEOs[i].title && customSEOs[i].caption) {
+        postSEO = {
+          postIndex: i + 1,
+          topic: customSEOs[i].title,
+          title: customSEOs[i].title,
+          caption: customSEOs[i].caption,
+          hashtags: customSEOs[i].hashtags ? (Array.isArray(customSEOs[i].hashtags) ? customSEOs[i].hashtags : customSEOs[i].hashtags.split(' ')) : []
+        };
+      } else {
+        postSEO = seoGenerator.generatePostSEO(i + 1, dest.slug);
+      }
+
+      processedPosts.push({
+        index: i + 1,
+        imagePath: `/generated/${batchId}/post_${i + 1}_4x5.jpg`,
+        diskPath: outPath,
+        seo: postSEO,
+        targetChannels: defaultPostChannels
+      });
+    }
+
+    // 2. Build Combined Carousel
+    broadcast({ type: 'BATCH_PROGRESS', stage: 'carousel', percent: 35, message: 'Assembling 5-Slide Carousel...' });
+    const carouselCollage = path.join(batchDir, 'carousel_preview.jpg');
+    await imageProcessor.generateCarouselCollage(processedPosts.map(p => p.diskPath), carouselCollage);
+    const combinedCarouselSEO = seoGenerator.generateCombinedCarouselSEO(dest.slug);
+
+    // 3. Render 5 Individual Ultra HD Reels (11.5s each)
+    broadcast({ type: 'BATCH_PROGRESS', stage: 'reels', percent: 50, message: 'Rendering 5 Individual Ultra HD Reels...' });
+    const generatedSingleReels = [];
+    for (let i = 0; i < 5; i++) {
+      const singleReelFilename = `reel_${i + 1}_1080x1920.mp4`;
+      const singleReelDiskPath = path.join(batchDir, singleReelFilename);
+
+      await videoEngine.generateSingleReel({
+        imagePath: processedPosts[i].diskPath,
+        outputPath: singleReelDiskPath,
+        duration: 11.5,
+        brandText: dest.name.split('(')[0].trim().toUpperCase(),
+        tagline: `✦ ${dest.tagline.slice(0, 35)} ✦`
+      });
+
+      generatedSingleReels.push({
+        index: i + 1,
+        reelPath: `/generated/${batchId}/${singleReelFilename}`,
+        reelDiskPath: singleReelDiskPath,
+        duration: 11.5,
+        seo: processedPosts[i].seo,
+        targetChannels: defaultReelChannels
+      });
+
+      broadcast({ type: 'BATCH_PROGRESS', stage: 'reels', percent: 50 + Math.round((i + 1) * 6), message: `Rendered Reel ${i + 1} of 5` });
+    }
+
+    // 4. Render 1 Combined 12-Second Cinematic Reel
+    broadcast({ type: 'BATCH_PROGRESS', stage: 'combined_reel', percent: 85, message: 'Rendering 12-Second Combined Cinematic Reel...' });
+    const combinedReelFilename = `combined_12s_reel.mp4`;
+    const combinedReelDiskPath = path.join(batchDir, combinedReelFilename);
+
+    await videoEngine.generateCombined12sReel({
+      imagePaths: processedPosts.map(p => p.diskPath),
+      outputPath: combinedReelDiskPath,
+      durations: [2, 2, 2, 2, 4], // Exactly 12 seconds
+      brandText: dest.name.split('(')[0].trim().toUpperCase(),
+      tagline: `✦ ${dest.tagline.slice(0, 35)} ✦`,
+      style: 'contain_blur'
+    });
+
+    const combined12sSEO = seoGenerator.generateCombined12sReelSEO(dest.slug);
+
+    // Save complete Batch
+    const newBatch = {
+      id: batchId,
+      destinationId: dest.id,
+      destinationName: dest.name,
+      destinationSlug: dest.slug,
+      title: batchTitle,
+      status: 'ready',
+      posts: processedPosts,
+      carousel: {
+        previewPath: `/generated/${batchId}/carousel_preview.jpg`,
+        diskPath: carouselCollage,
+        seo: combinedCarouselSEO,
+        targetChannels: defaultCarouselChannels
+      },
+      singleReels: generatedSingleReels,
+      combinedReel: {
+        reelPath: `/generated/${batchId}/${combinedReelFilename}`,
+        reelDiskPath: combinedReelDiskPath,
+        duration: 12.0,
+        resolution: '1080x1920',
+        seo: combined12sSEO,
+        targetChannels: defaultReelChannels
+      },
+      createdAt: new Date().toISOString()
+    };
+
+    db.saveBatch(newBatch);
+    db.addLog({
+      type: 'batch_created',
+      batchId,
+      destination: dest.name,
+      message: `Batch "${batchTitle}" created with 5 Posts (4:5), 1 Carousel, 5 Individual Reels, and 1 Combined 12s Reel.`
+    });
+
+    broadcast({ type: 'BATCH_COMPLETED', batch: newBatch });
+
+    // Send Telegram Notification
+    telegramNotifier.notifyBatchCreated(dest, newBatch);
+
+    // If autoSchedule is true, immediately schedule all into queue
+    if (autoSchedule) {
+      const scheduledItems = scheduler.scheduleBatch(newBatch.id);
+      return res.json({ ...newBatch, autoScheduled: true, scheduledCount: scheduledItems.length });
+    }
+
+    res.json(newBatch);
+  } catch (err) {
+    console.error('Batch upload error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Update batch
+app.put('/api/batches/:id', (req, res) => {
+  const batch = db.getBatch(req.params.id);
+  if (!batch) return res.status(404).json({ error: 'Batch not found' });
+  const updated = { ...batch, ...req.body, id: batch.id };
+  db.saveBatch(updated);
+  res.json(updated);
+});
+
+// Schedule Batch with Anti-Spam Human Jitter
+app.post('/api/batches/:id/schedule', (req, res) => {
+  try {
+    const { startTime } = req.body;
+    const items = scheduler.scheduleBatch(req.params.id, startTime);
+    res.json({ success: true, count: items.length, items });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Delete Batch
+app.delete('/api/batches/:id', (req, res) => {
+  db.deleteBatch(req.params.id);
+  res.json({ success: true });
+});
+
+// --- QUEUE & TASK SCHEDULING API ---
+app.get('/api/queue', (req, res) => {
+  const destinationId = req.query.destinationId;
+  res.json(db.getQueue(destinationId));
+});
+
+// Publish single queue item immediately to ALL connected channels
+app.post('/api/queue/:id/publish-now', async (req, res) => {
+  try {
+    const updated = await scheduler.publishItemNow(req.params.id);
+    res.json({
+      success: true,
+      message: 'Item dispatched to all selected channels!',
+      item: updated,
+      results: updated.publishResults || []
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Publish ALL queued items for a destination immediately
+app.post('/api/queue/publish-all', async (req, res) => {
+  try {
+    const destinationId = req.body.destinationId || null;
+    const items = await scheduler.publishAllQueueNow(destinationId);
+    res.json({ success: true, message: `Dispatched all queued items!`, count: items.length, items });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Reschedule queue item
+app.post('/api/queue/:id/reschedule', (req, res) => {
+  const { newTime } = req.body;
+  if (!newTime) return res.status(400).json({ error: 'newTime is required' });
+  const updated = db.updateQueueItem(req.params.id, {
+    scheduledTime: new Date(newTime).toISOString(),
+    status: 'queued'
+  });
+  if (!updated) return res.status(404).json({ error: 'Queue item not found' });
+  res.json({ success: true, item: updated });
+});
+
+app.delete('/api/queue/:id', (req, res) => {
+  db.removeFromQueue(req.params.id);
+  res.json({ success: true });
+});
+
+app.post('/api/queue/clear', (req, res) => {
+  const destinationId = req.body.destinationId || null;
+  db.clearQueue(destinationId);
+  res.json({ success: true });
+});
+
+// --- SCHEDULER CONTROLS ---
+let schedulerPaused = false;
+app.get('/api/scheduler/status', (req, res) => {
+  res.json({ active: !schedulerPaused });
+});
+
+app.post('/api/scheduler/toggle', (req, res) => {
+  schedulerPaused = !schedulerPaused;
+  if (schedulerPaused) {
+    scheduler.stop();
+  } else {
+    scheduler.start();
+  }
+  res.json({ active: !schedulerPaused });
+});
+
+// --- SETTINGS ---
+app.get('/api/settings', (req, res) => {
+  res.json(db.getSettings());
+});
+
+app.put('/api/settings', (req, res) => {
+  const updated = db.updateSettings(req.body);
+  telegramBot.stop();
+  telegramBot.start();
+  res.json(updated);
+});
+
+// --- LOGS ---
+app.get('/api/logs', (req, res) => {
+  res.json(db.getLogs(parseInt(req.query.limit, 10) || 100));
+});
+
+// Start Server & Background Services
+server.listen(PORT, async () => {
+  console.log(`================================================================`);
+  console.log(`🌟 LEXA TRIP MULTI-DESTINATION AUTOMATION ENGINE RUNNING 🌟`);
+  console.log(`📡 Localhost URL: http://localhost:${PORT}`);
+  console.log(`================================================================`);
+  scheduler.start();
+  folderWatcher.start();
+  telegramBot.start();
+
+  try {
+    const publicUrl = await tunnelService.start(PORT);
+    if (publicUrl) {
+      console.log(`🔗 Meta/Instagram Graph API Public Callback: ${publicUrl}`);
+    }
+  } catch (err) {
+    console.error('Tunnel notice:', err.message);
+  }
+});

@@ -1,0 +1,150 @@
+const TelegramBot = require('node-telegram-bot-api');
+const fs = require('fs');
+const db = require('../database/db');
+
+class TelegramNotifier {
+  constructor() {
+    this.bots = new Map(); // token -> bot instance
+  }
+
+  getBotForDestination(destination) {
+    const destToken = destination?.telegram?.botToken;
+    const globalToken = db.getSettings()?.telegram?.botToken;
+    const token = destToken || globalToken;
+
+    if (!token) return null;
+
+    if (!this.bots.has(token)) {
+      try {
+        const bot = new TelegramBot(token, { polling: false }); // notification-only or polling handled in telegramBot.js
+        this.bots.set(token, bot);
+      } catch (err) {
+        console.error('[TelegramNotifier] Error creating bot:', err.message);
+        return null;
+      }
+    }
+    return this.bots.get(token);
+  }
+
+  getChatIdForDestination(destination) {
+    return destination?.telegram?.chatId || db.getSettings()?.telegram?.allowedChatId || null;
+  }
+
+  /**
+   * 1. Send Batch Creation Alert
+   */
+  async notifyBatchCreated(destination, batch) {
+    try {
+      const bot = this.getBotForDestination(destination);
+      const chatId = this.getChatIdForDestination(destination);
+      if (!bot || !chatId) return;
+
+      const message = `✨ *[नया बैच तैयार]* ${destination.name}\n\n` +
+        `📁 *कैम्पेन:* ${batch.title}\n` +
+        `📸 *5 पोस्ट्स (4:5):* तैयार हैं\n` +
+        `📑 *1 कर्सल पोस्ट (5 स्लाइड्स):* तैयार है\n` +
+        `🎬 *1 कम्बाइंड 12s रील (Ultra HD):* तैयार है\n\n` +
+        `🚀 *अगला कदम:* डैशबोर्ड से 1-क्लिक में शेड्यूल करें (1-1.5 घंटे का एंटी-स्पैम गैप)।`;
+
+      if (batch.carousel?.previewPath && fs.existsSync(batch.carousel.previewPath)) {
+        await bot.sendPhoto(chatId, batch.carousel.previewPath, { caption: message, parse_mode: 'Markdown' });
+      } else {
+        await bot.sendMessage(chatId, message, { parse_mode: 'Markdown' });
+      }
+    } catch (err) {
+      console.error('[TelegramNotifier notifyBatchCreated]:', err.message);
+    }
+  }
+
+  /**
+   * 2. Send Schedule Timetable Alert
+   */
+  async notifyBatchScheduled(destination, batch, scheduledItems) {
+    try {
+      const bot = this.getBotForDestination(destination);
+      const chatId = this.getChatIdForDestination(destination);
+      if (!bot || !chatId) return;
+
+      let msg = `📅 *[शेड्यूलिंग टाइमटेबल]* ${destination.name}\n\n` +
+        `बैच: *${batch.title}*\n` +
+        `कुल आइटम्स: *${scheduledItems.length}*\n` +
+        `एंटी-स्पैम डिले: *1 से 1.5 घंटे रैंडम अंतराल*\n\n` +
+        `*आगामी पोस्ट्स की टाइमिंग:*\n`;
+
+      scheduledItems.forEach((item, i) => {
+        const time = new Date(item.scheduledTime).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+        const date = new Date(item.scheduledTime).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
+        const typeName = item.itemType === 'reel' ? '🎬 12s रील' : item.itemType === 'carousel' ? '📑 कर्सल' : `📸 पोस्ट #${item.index}`;
+        const channels = (item.targets || []).join(', ');
+        msg += `${i + 1}. ${typeName} ➔ *${time}* (${date})\n   🎯 चैनल्स: ${channels}\n`;
+      });
+
+      msg += `\n🛡️ *हर पोस्ट पब्लिश होते ही आपको यहाँ लाइव रिपोर्ट मिलेगी।*`;
+
+      await bot.sendMessage(chatId, msg, { parse_mode: 'Markdown' });
+    } catch (err) {
+      console.error('[TelegramNotifier notifyBatchScheduled]:', err.message);
+    }
+  }
+
+  /**
+   * 3. Send Post / Reel Published Alert
+   */
+  async notifyItemPublished(destination, item, results) {
+    try {
+      const bot = this.getBotForDestination(destination);
+      const chatId = this.getChatIdForDestination(destination);
+      if (!bot || !chatId) return;
+
+      const typeLabel = item.itemType === 'reel' ? '🎬 12-सेकंड अल्ट्रा HD रील' : item.itemType === 'carousel' ? '📑 5-स्लाइड कर्सल' : `📸 पोस्ट #${item.index} (4:5)`;
+
+      let platformList = '';
+      results.forEach(r => {
+        const icon = r.status === 'published' ? '✅' : r.status === 'skipped' ? '⚪' : '❌';
+        platformList += `  ${icon} *${r.platform.toUpperCase()}:* ${r.status.toUpperCase()} ${r.details?.simulated ? '(Simulation Ready)' : ''}\n`;
+      });
+
+      const msg = `🎉 *[पब्लिशिंग रिपोर्ट]* ${destination?.name || 'Lexa Trip'}\n\n` +
+        `📌 *कंटेंट:* ${typeLabel}\n` +
+        `📝 *टाइटल:* ${item.title}\n` +
+        `🕒 *समय:* ${new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}\n\n` +
+        `*सोशल मीडिया स्टेटस:*\n${platformList}\n` +
+        `💬 *कैप्शन:* ${item.caption.slice(0, 140)}...`;
+
+      // If item has image/video file, send preview with caption
+      if (item.mediaPath && fs.existsSync(item.mediaPath)) {
+        if (item.itemType === 'reel') {
+          await bot.sendVideo(chatId, item.mediaPath, { caption: msg.slice(0, 1024), parse_mode: 'Markdown' });
+        } else {
+          await bot.sendPhoto(chatId, item.mediaPath, { caption: msg.slice(0, 1024), parse_mode: 'Markdown' });
+        }
+      } else {
+        await bot.sendMessage(chatId, msg, { parse_mode: 'Markdown' });
+      }
+    } catch (err) {
+      console.error('[TelegramNotifier notifyItemPublished]:', err.message);
+    }
+  }
+
+  /**
+   * 4. Send Error Alert
+   */
+  async notifyError(destination, item, errorText) {
+    try {
+      const bot = this.getBotForDestination(destination);
+      const chatId = this.getChatIdForDestination(destination);
+      if (!bot || !chatId) return;
+
+      const msg = `⚠️ *[त्रुटि अलर्ट / Publishing Error]* ${destination.name}\n\n` +
+        `कंटेंट: *${item.title}*\n` +
+        `कारण: \`${errorText}\`\n\n` +
+        `कृपया डैशबोर्ड में जाकर टोकन या नेटवर्क चेक करें।`;
+
+      await bot.sendMessage(chatId, msg, { parse_mode: 'Markdown' });
+    } catch (err) {
+      console.error('[TelegramNotifier notifyError]:', err.message);
+    }
+  }
+}
+
+module.exports = new TelegramNotifier();

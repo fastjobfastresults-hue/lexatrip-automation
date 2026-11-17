@@ -1,0 +1,31 @@
+{
+  "name": "lexa-automation-web-and-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "axios": "^1.21.1",
+    "chokidar": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.10",
+    "express": "^5.3.0",
+    "ffmpeg-static": "^5.3.0",
+    "fluent-ffmpeg": "^2.1.3",
+    "form-data": "^4.0.6",
+    "localtunnel": "^2.0.2",
+    "multer": "^2.5.0",
+    "node-cron": "^4.6.0",
+    "node-telegram-bot-api": "^2.4.0",
+    "sharp": "^0.35.5",
+    "uuid": "^14.0.3",
+    "ws": "^8.23.0"
+  }
+}

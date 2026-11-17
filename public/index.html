@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="hi" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lexa Trip | Futuristic Multi-Destination Social OS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          colors: {
+            apple: {
+              bg: '#050508',
+              surface: 'rgba(255, 255, 255, 0.03)',
+              border: 'rgba(255, 255, 255, 0.08)',
+              gold: '#D4AF37',
+              goldLight: '#F5E6B3',
+              goldDark: '#8F6F1E'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #050508; color: #F3F4F6; }
+    .glass-card {
+      background: rgba(18, 20, 29, 0.7);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card-elevated {
+      background: rgba(22, 24, 35, 0.85);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    }
+    .gold-btn {
+      background: linear-gradient(135deg, #E6C25B 0%, #D4AF37 60%, #B88B22 100%);
+      color: #08080C;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .gold-btn:hover {
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.35);
+      transform: translateY(-1px);
+    }
+    .dest-pill.active {
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(212, 175, 55, 0.05) 100%);
+      border-color: rgba(212, 175, 55, 0.6);
+      color: #FFF;
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+    }
+    .channel-card {
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .channel-card:hover {
+      border-color: rgba(212, 175, 55, 0.5);
+      background: rgba(255, 255, 255, 0.06);
+      transform: translateY(-2px);
+    }
+    .matrix-chip.active {
+      border-color: rgba(212, 175, 55, 0.7);
+      background: rgba(212, 175, 55, 0.15);
+      color: #FFF;
+      box-shadow: 0 0 12px rgba(212, 175, 55, 0.2);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-apple-gold selection:text-black">
+
+  <!-- TOP HEADER -->
+  <header class="sticky top-0 z-50 border-b border-apple-border/60 bg-[#050508]/85 backdrop-blur-xl px-6 py-3.5">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-600 via-apple-gold to-yellow-200 flex items-center justify-center text-apple-bg font-black text-xl shadow-lg">
+          <i class="fa-solid fa-compass"></i>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="text-base font-extrabold tracking-tight text-white">LEXA TRIP</h1>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-apple-gold/10 text-apple-gold border border-apple-gold/20 font-bold">Futuristic Social OS</span>
+          </div>
+          <p class="text-[11px] text-gray-400">1 Destination ➔ 1 Post Set ➔ All Connected Social Media</p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-3 text-xs">
+        <!-- Tunnel Badge -->
+        <div class="hidden md:flex items-center space-x-2 bg-white/[0.04] border border-apple-border px-3 py-1.5 rounded-full">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-gray-300 text-[11px]" id="tunnel-status-text">Public HTTPS Tunnel: Active</span>
+        </div>
+
+        <!-- Google SSO Pill -->
+        <div id="user-auth-pill" onclick="openGoogleModal()" class="cursor-pointer flex items-center space-x-2 bg-white/[0.04] hover:bg-white/[0.08] border border-apple-border px-3 py-1.5 rounded-full transition">
+          <img id="user-auth-avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80" class="w-5 h-5 rounded-full object-cover border border-amber-400/40" />
+          <span class="text-gray-200 font-medium text-xs hidden sm:inline" id="user-auth-name">Lexa Trip Admin</span>
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        </div>
+
+        <!-- Settings Button -->
+        <button onclick="openSettingsModal()" class="px-3.5 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] text-gray-300 border border-apple-border text-xs font-semibold transition flex items-center space-x-1.5">
+          <i class="fa-solid fa-sliders text-[11px]"></i>
+          <span class="hidden sm:inline">Settings</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- DESTINATIONS BAR -->
+  <section class="border-b border-apple-border/40 bg-[#0a0b12]/60 px-6 py-3">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-3 overflow-x-auto">
+      <div class="flex items-center space-x-2" id="destinations-pills-container">
+        <!-- Rendered by JS -->
+      </div>
+      <button onclick="openNewDestinationModal()" class="shrink-0 px-3.5 py-1.5 rounded-full bg-apple-gold/10 hover:bg-apple-gold/20 text-apple-gold border border-apple-gold/30 text-xs font-bold transition flex items-center space-x-1">
+        <i class="fa-solid fa-plus text-[10px]"></i>
+        <span>Add Destination</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- MAIN DESTINATION WORKSPACE -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-6 space-y-6">
+
+    <!-- 1. DESTINATION STATUS & INTERACTIVE CLICKABLE SOCIAL CHANNELS -->
+    <div class="glass-card rounded-3xl p-5 space-y-5">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-apple-border/40">
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-apple-gold bg-apple-gold/10 px-2 py-0.5 rounded-full border border-apple-gold/20">
+            Destination Command Center
+          </span>
+          <h2 class="text-xl font-extrabold text-white mt-1" id="dest-display-name">लेक्सा ट्रिप जैसलमेर</h2>
+          <p class="text-xs text-gray-400" id="dest-display-tagline">Unforgettable Golden Dunes & Luxury Desert Experiences</p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <!-- 1-Click Sandbox Setup Button -->
+          <button onclick="quickConnectAllChannels()" title="Populates demo simulator handles for safe offline rendering & queue testing" class="px-3.5 py-1.5 rounded-full bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold flex items-center space-x-1.5 transition">
+            <i class="fa-solid fa-flask text-amber-400"></i>
+            <span>🧪 1-Click Sandbox Test Setup</span>
+          </button>
+          <!-- Telegram Alert Test Button -->
+          <button onclick="testTelegramAlert()" class="px-3.5 py-1.5 rounded-full bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 border border-sky-500/30 text-xs font-bold flex items-center space-x-1.5 transition">
+            <i class="fa-brands fa-telegram text-sky-400"></i>
+            <span>Test Telegram Report</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- CLICKABLE SOCIAL MEDIA CHANNELS -->
+      <div>
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-[11px] font-bold text-gray-300 uppercase tracking-wider flex items-center space-x-1">
+            <span>Connected Social Media Channels (Click to Configure & Test)</span>
+            <i class="fa-solid fa-arrow-pointer text-apple-gold text-[10px]"></i>
+          </span>
+          <span class="text-[10px] text-gray-400">Click any card to add/verify credentials or use 1-Click OAuth</span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-2" id="interactive-channels-grid">
+          <!-- Rendered by JS: Clickable cards for Instagram, Facebook, YouTube, LinkedIn, Pinterest, Blogger, Telegram, Twitter -->
+        </div>
+      </div>
+
+      <!-- MASTER CHANNEL DISTRIBUTION MATRIX (ALWAYS SELECT SETTINGS) -->
+      <div class="bg-black/30 border border-apple-border/60 rounded-2xl p-4 space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-apple-border/30 pb-2">
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-diagram-project text-apple-gold text-sm"></i>
+            <h4 class="text-xs font-extrabold text-white tracking-wide uppercase">
+              ✦ Master Channel Distribution Matrix (ऑलवेज सेलेक्ट सेटिंग्स)
+            </h4>
+          </div>
+          <span class="text-[10px] text-gray-400">1 बार सेलेक्ट करें — हर पोस्ट व रील इन सभी पर एक साथ ऑटोमैटिक पब्लिश होगी</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+          <!-- Posts Default Target -->
+          <div class="bg-white/[0.02] border border-apple-border rounded-xl p-3 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-gray-200 text-[11px]">1. 4:5 Portrait Posts</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-300 font-mono">1080x1350</span>
+            </div>
+            <div class="flex flex-wrap gap-1.5" id="matrix-posts-container">
+              <!-- Rendered by JS: Chips for Instagram, Facebook, LinkedIn, Pinterest -->
+            </div>
+          </div>
+
+          <!-- Reels Default Target -->
+          <div class="bg-white/[0.02] border border-apple-border rounded-xl p-3 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-gray-200 text-[11px]">2. 9:16 Ultra HD & 12s Reels</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-300 font-mono">1080x1920</span>
+            </div>
+            <div class="flex flex-wrap gap-1.5" id="matrix-reels-container">
+              <!-- Rendered by JS: Chips for Instagram, Facebook, YouTube Shorts, Pinterest -->
+            </div>
+          </div>
+
+          <!-- Carousels Default Target -->
+          <div class="bg-white/[0.02] border border-apple-border rounded-xl p-3 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-gray-200 text-[11px]">3. 5-Slide Carousels</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-purple-500/10 text-purple-300 font-mono">Multi-Slide</span>
+            </div>
+            <div class="flex flex-wrap gap-1.5" id="matrix-carousels-container">
+              <!-- Rendered by JS: Chips for Instagram, Facebook, LinkedIn -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 2. FIVE DEDICATED IMAGE + SEO UPLOAD CARDS -->
+    <div class="glass-card-elevated rounded-3xl p-6 space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-apple-border/50">
+        <div>
+          <h3 class="text-base font-bold text-white flex items-center space-x-2">
+            <span class="w-6 h-6 rounded-full bg-apple-gold text-apple-bg flex items-center justify-center text-xs font-black">1</span>
+            <span>Upload 5 Posts + Enter Custom SEO (इमेज व एसईओ बॉक्स)</span>
+          </h3>
+          <p class="text-xs text-gray-400 mt-0.5">हर इमेज के साथ उसका एसईओ टाइटल, कैप्शन और हैशटैग टाइप या कॉपी-पेस्ट करें, या स्मार्ट ऑटो-फिल का उपयोग करें।</p>
+        </div>
+
+        <!-- Quick Import Action Buttons -->
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="importFromTelegramInbox()" id="btn-tg-import" class="px-3.5 py-1.5 text-xs font-semibold rounded-full bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 border border-sky-500/30 transition flex items-center space-x-1.5">
+            <i class="fa-brands fa-telegram"></i>
+            <span id="tg-inbox-label">Auto-Fetch from Telegram</span>
+          </button>
+          <button onclick="loadSampleDemoBatch()" class="px-3.5 py-1.5 text-xs font-semibold rounded-full bg-white/[0.05] hover:bg-white/[0.1] text-apple-gold border border-apple-gold/30 transition flex items-center space-x-1.5">
+            <i class="fa-solid fa-bolt text-[10px]"></i>
+            <span>1-Click Demo Sample</span>
+          </button>
+          <button onclick="document.getElementById('master-file-input').click()" class="px-3.5 py-1.5 text-xs font-semibold rounded-full bg-white/[0.05] hover:bg-white/[0.1] text-gray-300 border border-apple-border transition flex items-center space-x-1.5">
+            <i class="fa-solid fa-folder-open text-[10px]"></i>
+            <span>Drop All 5 at Once</span>
+          </button>
+          <input type="file" id="master-file-input" multiple accept="image/*" class="hidden" onchange="handleMasterFileSelect(event)" />
+        </div>
+      </div>
+
+      <!-- ✨ AI SEO PACK QUICK-PASTE & AUTO-SPLITTER -->
+      <div class="glass-card rounded-2xl p-4 border border-apple-gold/30 bg-apple-gold/[0.02] space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div class="flex items-center space-x-2.5">
+            <div class="w-8 h-8 rounded-xl bg-apple-gold/15 flex items-center justify-center text-apple-gold shrink-0">
+              <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-white flex items-center space-x-2">
+                <span>✨ AI SEO Pack 1-Click Auto-Splitter</span>
+                <span class="text-[9px] px-2 py-0.5 rounded-full bg-apple-gold/20 text-apple-gold font-mono font-normal">Title + Caption + Hashtags</span>
+              </h4>
+              <p class="text-[11px] text-gray-400">
+                अपना पूरा SEO पैक या 5 पोस्ट का टेक्स्ट एक साथ यहाँ पेस्ट करें — AI/Smart Parser टाइटल, कैप्शन और हैशटैग्स को 5 कार्ड्स में ऑटो-फिल कर देगा!
+              </p>
+            </div>
+          </div>
+          <button onclick="openAISettingsModal()" class="px-3 py-1.5 rounded-full bg-white/[0.06] hover:bg-white/[0.12] text-xs font-semibold text-gray-300 border border-apple-border flex items-center space-x-1.5 transition self-start sm:self-auto">
+            <i class="fa-solid fa-sliders text-apple-gold"></i>
+            <span>⚙️ AI Model / API Config</span>
+          </button>
+        </div>
+
+        <div>
+          <textarea id="ai-seo-raw-input" rows="3" placeholder="यहाँ अपना रॉ टेक्स्ट या 5 पोस्ट्स का कंबाइंड SEO पैक पेस्ट करें...
+उदाहरण:
+Post 1:
+Title: Golden Sunset Camel Safari in Sam Sand Dunes
+Caption: Experience the magic of the Thar desert with royal Swiss tents under million stars...
+Hashtags: #LexaTripJaisalmer #DesertSafari #SamDunes #RajasthanTourism
+
+Post 2:
+Title: 800-Year-Old Golden Living Fort (Sonar Qila)
+..." class="w-full bg-[#0a0b10] border border-apple-border rounded-xl p-3 text-xs text-gray-200 font-sans focus:outline-none focus:border-apple-gold transition resize-y"></textarea>
+        </div>
+
+        <div class="flex items-center justify-between pt-0.5">
+          <div class="text-[11px] text-gray-400 flex items-center space-x-2">
+            <span id="ai-provider-badge" class="px-2.5 py-0.5 rounded bg-white/[0.06] text-gray-300 font-mono text-[10px]">Active AI: Gemini / Local Smart Parser</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button onclick="clearRawSeoBox()" class="px-3 py-1.5 text-xs text-gray-400 hover:text-white">Clear</button>
+            <button onclick="parseAndFillSeoCards()" id="btn-parse-ai-seo" class="gold-btn px-4 py-2 rounded-full font-bold text-xs flex items-center space-x-2 shadow-lg">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              <span>✨ Auto-Split into 5 Post Cards</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 POST CARDS GRID -->
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-4" id="five-posts-grid">
+        <!-- Rendered by JS: 5 distinct post cards with upload dropzone + custom SEO inputs -->
+      </div>
+
+      <!-- GENERATION / SCHEDULE ACTIONS -->
+      <div class="pt-4 border-t border-apple-border/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="text-xs text-gray-400">
+          <span class="font-semibold text-white">⚡ Pipeline Outputs:</span>
+          <span>5 Posts (4:5) + 1 Carousel + 5 Ultra HD Reels (9:16) + 1 Combined 12s Cinematic Reel</span>
+        </div>
+
+        <div class="flex items-center space-x-3">
+          <button id="btn-process-only" onclick="processBatch(false)" class="px-5 py-2.5 rounded-full bg-white/[0.06] hover:bg-white/[0.12] text-gray-200 border border-apple-border text-xs font-bold transition flex items-center space-x-2">
+            <i class="fa-solid fa-eye"></i>
+            <span>Process & Preview First</span>
+          </button>
+          <button id="btn-oneclick-schedule" onclick="processBatch(true)" class="gold-btn px-6 py-2.5 rounded-full text-xs font-extrabold flex items-center space-x-2 shadow-lg">
+            <i class="fa-solid fa-bolt"></i>
+            <span>⚡ 1-Click Process & Auto-Schedule Everything</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- PROGRESS BAR (HIDDEN BY DEFAULT) -->
+      <div id="batch-progress-box" class="hidden space-y-2 pt-2">
+        <div class="flex items-center justify-between text-xs">
+          <span class="text-apple-gold font-bold flex items-center space-x-2" id="progress-status-text">
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            <span>Rendering Assets...</span>
+          </span>
+          <span class="text-gray-400 font-mono" id="progress-percent-text">0%</span>
+        </div>
+        <div class="w-full h-2 bg-white/[0.06] rounded-full overflow-hidden border border-apple-border">
+          <div id="progress-bar-fill" class="h-full bg-gradient-to-r from-amber-500 to-yellow-300 w-0 transition-all duration-300"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. REVIEW & MEDIA ASSETS PREVIEW PANEL -->
+    <div id="batch-preview-section" class="glass-card-elevated rounded-3xl p-6 space-y-6 hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 gap-3 border-b border-apple-border/50">
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+            Rendered Assets Ready
+          </span>
+          <h3 class="text-lg font-extrabold text-white mt-1" id="preview-batch-title">Campaign Assets Ready for Review</h3>
+          <p class="text-xs text-gray-400">All media assets, 12s reel, and SEO captions are ready to publish.</p>
+        </div>
+
+        <button onclick="scheduleActiveBatch()" id="btn-schedule-batch" class="gold-btn px-6 py-2.5 rounded-full text-xs font-extrabold flex items-center space-x-2 shadow-lg">
+          <i class="fa-regular fa-calendar-check"></i>
+          <span>🚀 Schedule Entire Batch (Anti-Spam 1 to 1.5h Gap)</span>
+        </button>
+      </div>
+
+      <!-- 12-SECOND CINEMATIC REEL PREVIEW -->
+      <div class="bg-black/40 border border-apple-border rounded-2xl p-5 space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span>
+            <h4 class="text-sm font-bold text-white">12-Second Combined Cinematic Reel (9:16 - 1080x1920)</h4>
+          </div>
+          <span class="text-xs text-apple-gold font-mono">Pacing: 2s + 2s + 2s + 2s + 4s = Exactly 12.0s</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+          <div class="max-w-[220px] mx-auto w-full aspect-[9/16] rounded-2xl overflow-hidden bg-black border border-apple-border shadow-2xl relative">
+            <video id="reel-12s-video" controls class="w-full h-full object-cover"></video>
+          </div>
+          <div class="md:col-span-2 space-y-3 text-xs">
+            <div>
+              <label class="block font-semibold text-gray-400 mb-1">12s Reel Title (YouTube Shorts & Instagram)</label>
+              <input type="text" id="reel-12s-title-input" class="w-full bg-[#0e1017] border border-apple-border rounded-xl px-3 py-2 text-gray-200" />
+            </div>
+            <div>
+              <label class="block font-semibold text-gray-400 mb-1">Caption & Trending Travel Hashtags</label>
+              <textarea id="reel-12s-caption-input" rows="4" class="w-full bg-[#0e1017] border border-apple-border rounded-xl p-3 text-gray-200 font-mono leading-relaxed"></textarea>
+            </div>
+            <div class="pt-2 flex items-center space-x-2">
+              <button onclick="publishCombinedReelNow()" class="px-4 py-2 rounded-full bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 text-xs font-bold transition flex items-center space-x-1.5">
+                <i class="fa-solid fa-paper-plane"></i>
+                <span>⚡ Live Publish Reel to All Selected Channels</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMBINED CAROUSEL PREVIEW -->
+      <div class="bg-black/40 border border-apple-border rounded-2xl p-5 space-y-4">
+        <div class="flex items-center justify-between">
+          <h4 class="text-sm font-bold text-white">5-Slide Instagram / Facebook Carousel Set</h4>
+          <span class="text-xs text-gray-400">Swipe Left ➔ Composite Panorama</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+          <div class="max-w-[240px] mx-auto w-full aspect-square rounded-2xl overflow-hidden bg-black border border-apple-border">
+            <img id="carousel-preview-img" src="" class="w-full h-full object-cover" />
+          </div>
+          <div class="md:col-span-2 space-y-3 text-xs">
+            <div>
+              <label class="block font-semibold text-gray-400 mb-1">Carousel Hook Title</label>
+              <input type="text" id="carousel-title-input" class="w-full bg-[#0e1017] border border-apple-border rounded-xl px-3 py-2 text-gray-200" />
+            </div>
+            <div>
+              <label class="block font-semibold text-gray-400 mb-1">Multi-Slide Itinerary Caption & SEO</label>
+              <textarea id="carousel-caption-input" rows="4" class="w-full bg-[#0e1017] border border-apple-border rounded-xl p-3 text-gray-200 font-mono leading-relaxed"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 INDIVIDUAL POSTS & INDIVIDUAL REELS PREVIEW -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <h4 class="text-base font-bold text-white">5 Individual Posts & Individual Reels</h4>
+          <span class="text-xs text-gray-400">Posts (4:5) + Individual Ultra HD Reels (9:16)</span>
+        </div>
+        <div id="posts-preview-container" class="grid grid-cols-1 md:grid-cols-5 gap-3.5">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. FUTURISTIC SCHEDULING TASK MANAGER (QUEUE & TIMELINE) -->
+    <div class="glass-card-elevated rounded-3xl p-6 space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 gap-3 border-b border-apple-border/40">
+        <div>
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-list-check text-apple-gold text-base"></i>
+            <h3 class="text-base font-bold text-white">
+              Scheduling Task Manager & Dispatch Center
+            </h3>
+          </div>
+          <p class="text-xs text-gray-400 mt-0.5">
+            Active Destination: <span id="queue-dest-label" class="text-amber-300 font-bold">लेक्सा ट्रिप जैसलमेर</span> · 
+            Anti-Spam Human Jitter (60–90 min) · Night Hour Safety Pause
+          </p>
+        </div>
+
+        <!-- Task Manager Action Controls -->
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="publishAllQueuedNow()" class="gold-btn px-4 py-2 rounded-full text-xs font-bold flex items-center space-x-1.5 shadow-md">
+            <i class="fa-solid fa-rocket"></i>
+            <span>⚡ 1-Click Publish All Now</span>
+          </button>
+          <button onclick="toggleSchedulerActive()" id="btn-toggle-scheduler" class="px-3.5 py-2 text-xs bg-white/[0.04] hover:bg-white/[0.08] text-gray-200 rounded-full border border-apple-border transition flex items-center space-x-1.5">
+            <i class="fa-solid fa-pause text-amber-400"></i>
+            <span id="scheduler-toggle-text">Pause Automation</span>
+          </button>
+          <button onclick="clearCurrentDestinationQueue()" class="px-3 py-2 text-xs text-rose-400 hover:bg-rose-500/10 rounded-full border border-rose-500/30 transition">
+            Clear
+          </button>
+          <button onclick="loadQueue()" class="px-3 py-2 text-xs bg-white/[0.04] hover:bg-white/[0.08] text-gray-200 rounded-full border border-apple-border transition flex items-center space-x-1">
+            <i class="fa-solid fa-arrows-rotate"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Task Tabs: Scheduled Queue vs Published Archive -->
+      <div class="flex items-center space-x-3 border-b border-apple-border/30 pb-2 text-xs">
+        <button onclick="switchTaskTab('queued')" id="tab-btn-queued" class="font-bold text-apple-gold border-b-2 border-apple-gold pb-1 px-1 flex items-center space-x-1.5">
+          <span>Upcoming Scheduled Tasks</span>
+          <span id="badge-queued-count" class="px-2 py-0.2 rounded-full bg-apple-gold/10 text-apple-gold text-[10px]">0</span>
+        </button>
+        <button onclick="switchTaskTab('published')" id="tab-btn-published" class="font-semibold text-gray-400 hover:text-white pb-1 px-1 flex items-center space-x-1.5">
+          <span>Published Archive (Live Posts)</span>
+          <span id="badge-published-count" class="px-2 py-0.2 rounded-full bg-white/[0.06] text-gray-400 text-[10px]">0</span>
+        </button>
+      </div>
+
+      <!-- Tasks Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-black/50 text-gray-400 uppercase font-semibold border-b border-apple-border text-[10px]">
+            <tr>
+              <th class="px-4 py-3">Scheduled Time</th>
+              <th class="px-4 py-3">Type</th>
+              <th class="px-4 py-3">Title / Topic</th>
+              <th class="px-4 py-3">Target Channels</th>
+              <th class="px-4 py-3">Anti-Spam Delay</th>
+              <th class="px-4 py-3">Status</th>
+              <th class="px-4 py-3 text-right">Instant Action</th>
+            </tr>
+          </thead>
+          <tbody id="queue-table-body" class="divide-y divide-apple-border text-gray-300">
+            <!-- Rendered by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- MODAL: GOOGLE SSO & AUTHENTICATION -->
+  <div id="google-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="glass-card-elevated rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-apple-border">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-9 h-9 rounded-2xl bg-white flex items-center justify-center text-lg shadow">
+            <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-white">Google Workspace SSO</h3>
+            <p class="text-[10px] text-gray-400">1-Click Sign-In for Lexa Trip Social OS</p>
+          </div>
+        </div>
+        <button onclick="closeGoogleModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <div class="bg-white/[0.03] border border-apple-border rounded-2xl p-4 text-center space-y-2">
+          <img id="modal-user-avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80" class="w-14 h-14 rounded-full mx-auto object-cover border-2 border-apple-gold shadow-lg" />
+          <div>
+            <h4 class="font-extrabold text-white text-sm" id="modal-user-name">Lexa Trip Administrator</h4>
+            <p class="text-[11px] text-gray-400 font-mono" id="modal-user-email">admin@lexatrip.com</p>
+          </div>
+          <span class="inline-block px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-semibold">
+            ● Google SSO Verified Session
+          </span>
+        </div>
+
+        <div class="bg-[#0c0d14] border border-apple-border rounded-xl p-3 space-y-1.5 text-[11px] text-gray-300">
+          <div class="font-semibold text-white flex items-center space-x-1.5">
+            <i class="fa-solid fa-shield-halved text-emerald-400 text-xs"></i>
+            <span>Authorized Enterprise Google Services:</span>
+          </div>
+          <div class="flex items-center justify-between text-gray-400 pt-1">
+            <span>• YouTube Data API v3 (Shorts Uploads)</span>
+            <span class="text-emerald-400">Active</span>
+          </div>
+          <div class="flex items-center justify-between text-gray-400">
+            <span>• Google Drive / Media Asset Sync</span>
+            <span class="text-emerald-400">Active</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between pt-3 border-t border-apple-border">
+        <button onclick="performGoogleLogout()" class="px-4 py-2 text-xs text-rose-400 hover:bg-rose-500/10 rounded-full border border-rose-500/30 transition">
+          Sign Out
+        </button>
+        <button onclick="performGoogleLogin()" class="gold-btn px-5 py-2 rounded-full font-bold text-xs flex items-center space-x-1.5 shadow">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24"><path fill="#08080C" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/></svg>
+          <span>Sign In / Re-authorize</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: SOCIAL MEDIA CHANNEL CONNECTION & VERIFICATION -->
+  <div id="channel-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="glass-card-elevated rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-apple-border">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-8 h-8 rounded-xl bg-white/[0.08] flex items-center justify-center text-lg" id="modal-channel-icon">
+            <i class="fa-brands fa-instagram text-pink-500"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-white" id="modal-channel-title">Connect Instagram</h3>
+            <p class="text-[10px] text-gray-400" id="modal-channel-dest-label">Destination: लेक्सा ट्रिप जैसलमेर</p>
+          </div>
+        </div>
+        <button onclick="closeChannelModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <input type="hidden" id="modal-channel-platform" />
+
+      <!-- Mode Selector Tabs: 🔑 Official Account Connect vs 🧪 Offline Sandbox Simulator -->
+      <div class="flex items-center bg-black/40 p-1 rounded-xl border border-apple-border text-xs">
+        <button onclick="switchChannelModalMode('custom')" id="tab-modal-custom" class="flex-1 py-2 rounded-lg font-bold bg-apple-gold text-black transition flex items-center justify-center space-x-1.5">
+          <i class="fa-solid fa-key"></i>
+          <span>🔑 Connect Official Account (Live)</span>
+        </button>
+        <button onclick="switchChannelModalMode('smart')" id="tab-modal-smart" class="flex-1 py-2 rounded-lg font-semibold text-gray-400 hover:text-white transition flex items-center justify-center space-x-1.5">
+          <i class="fa-solid fa-flask"></i>
+          <span>🧪 Sandbox Simulator (Demo)</span>
+        </button>
+      </div>
+
+      <!-- Custom Token Fields (Official Mode) -->
+      <div class="space-y-3 text-xs" id="channel-modal-fields">
+        <!-- Rendered dynamically by JS depending on platform -->
+      </div>
+
+      <!-- Smart Connect Pane (Simulator Mode) -->
+      <div id="channel-smart-connect-pane" class="space-y-3 text-xs bg-white/[0.02] border border-amber-500/20 rounded-2xl p-4 hidden">
+        <div class="flex items-start space-x-3">
+          <div class="w-8 h-8 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-400 shrink-0">
+            <i class="fa-solid fa-flask text-sm"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-white" id="smart-pane-heading">Offline Sandbox Simulator Mode</h4>
+            <p class="text-[11px] text-gray-400 mt-0.5" id="smart-pane-desc">
+              Connects an offline simulated test handle without requiring developer API tokens. Perfect for testing UI, 12-second FFmpeg video rendering, and scheduled daylight queues before going live.
+            </p>
+          </div>
+        </div>
+        <div class="pt-2">
+          <button onclick="performQuickConnectCurrentChannel()" class="w-full py-2.5 rounded-xl font-bold text-xs flex items-center justify-center space-x-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 shadow-lg transition">
+            <i class="fa-solid fa-flask"></i>
+            <span id="btn-quick-connect-label">🧪 Activate Offline Sandbox Simulator</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Test Status Result Box -->
+      <div id="channel-test-result" class="hidden p-3 rounded-xl border text-xs"></div>
+
+      <!-- Actions -->
+      <div class="flex items-center justify-between pt-3 border-t border-apple-border">
+        <button onclick="testCurrentChannelConnection()" id="btn-test-channel-modal" class="px-4 py-2 text-xs font-bold rounded-full bg-white/[0.08] hover:bg-white/[0.15] text-amber-300 border border-apple-border transition flex items-center space-x-1.5">
+          <i class="fa-solid fa-signal"></i>
+          <span>⚡ Test Live Connection</span>
+        </button>
+        <div class="flex items-center space-x-2 ml-auto">
+          <button onclick="closeChannelModal()" class="px-4 py-2 text-xs text-gray-400 hover:text-white">Close</button>
+          <button onclick="saveCurrentChannelCredentials()" id="btn-save-channel-modal" class="gold-btn px-5 py-2 rounded-full font-bold text-xs flex items-center space-x-1.5">
+            <i class="fa-solid fa-check"></i>
+            <span>Save & Link to Destination</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: LIVE PUBLISH PROGRESS / DISPATCH RESULTS -->
+  <div id="dispatch-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="glass-card-elevated rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-apple-border">
+        <div class="flex items-center space-x-2.5">
+          <span class="w-3 h-3 rounded-full bg-emerald-400 animate-ping"></span>
+          <h3 class="text-sm font-bold text-white">⚡ Live Multi-Channel Dispatch Engine</h3>
+        </div>
+        <button onclick="closeDispatchModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div class="p-3 rounded-2xl bg-white/[0.02] border border-apple-border flex items-center justify-between">
+          <span class="text-gray-400">Post Item:</span>
+          <span class="font-bold text-white max-w-xs truncate" id="dispatch-modal-item-title">Living Heritage Golden Fort</span>
+        </div>
+
+        <div class="space-y-2" id="dispatch-results-list">
+          <!-- Rendered dynamically: Instagram, Facebook, YouTube, LinkedIn, Pinterest -->
+        </div>
+
+        <div class="p-3 rounded-2xl bg-sky-500/10 border border-sky-500/20 text-sky-300 text-[11px] flex items-center space-x-2">
+          <i class="fa-brands fa-telegram text-base"></i>
+          <span>Telegram Real-Time Dispatch Alert has been sent to your mobile bot.</span>
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-apple-border flex justify-end">
+        <button onclick="closeDispatchModal()" class="gold-btn px-5 py-2 rounded-full font-bold text-xs">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD DESTINATION -->
+  <div id="dest-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="glass-card-elevated rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-apple-border">
+        <h3 class="text-sm font-bold text-white">Add New Destination Travel Hub</h3>
+        <button onclick="closeDestModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-gray-300 mb-1">Destination Name (उदा. लेक्सा ट्रिप उदयपुर)</label>
+          <input type="text" id="modal-new-dest-name" placeholder="लेक्सा ट्रिप उदयपुर (Lexa Trip Udaipur)" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200" />
+        </div>
+        <div>
+          <label class="block font-semibold text-gray-300 mb-1">Slug / Identifier</label>
+          <input type="text" id="modal-new-dest-slug" placeholder="udaipur" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono" />
+        </div>
+        <div>
+          <label class="block font-semibold text-gray-300 mb-1">Tagline</label>
+          <input type="text" id="modal-new-dest-tagline" placeholder="City of Lakes & Royal Luxury Stays" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200" />
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end space-x-2 pt-3 border-t border-apple-border">
+        <button onclick="closeDestModal()" class="px-4 py-2 text-xs text-gray-400 hover:text-white">Cancel</button>
+        <button onclick="saveNewDestination()" class="gold-btn px-5 py-2 rounded-full font-bold text-xs">Save Destination</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: SETTINGS -->
+  <div id="settings-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="glass-card-elevated rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-apple-border">
+        <h3 class="text-sm font-bold text-white">System Settings & Anti-Spam Jitter</h3>
+        <button onclick="closeSettingsModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-gray-300 mb-1">Min Post Interval</label>
+            <input type="number" id="setting-min-interval" value="60" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200" />
+            <p class="text-[10px] text-gray-500 mt-0.5">mins (default 60)</p>
+          </div>
+          <div>
+            <label class="block font-semibold text-gray-300 mb-1">Max Post Interval</label>
+            <input type="number" id="setting-max-interval" value="90" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200" />
+            <p class="text-[10px] text-gray-500 mt-0.5">mins (default 90)</p>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-gray-300 mb-1">Public HTTPS Tunnel URL (for Meta Graph API)</label>
+          <input type="text" id="setting-public-url" placeholder="https://lexatrip.loca.lt" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono" />
+          <p class="text-[10px] text-gray-500 mt-0.5">Auto-generated for Meta Graph API image callbacks.</p>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end space-x-2 pt-3 border-t border-apple-border">
+        <button onclick="closeSettingsModal()" class="px-4 py-2 text-xs text-gray-400 hover:text-white">Cancel</button>
+        <button onclick="saveSettingsModal()" class="gold-btn px-5 py-2 rounded-full font-bold text-xs">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: UNIVERSAL AI ENGINE SETTINGS -->
+  <div id="ai-settings-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="glass-card-elevated rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-apple-border">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-sm">
+            <i class="fa-solid fa-brain"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-white">Universal AI Engine Settings</h3>
+            <p class="text-[10px] text-gray-400">Gemini (Free), OpenAI, Claude & Custom Endpoints</p>
+          </div>
+        </div>
+        <button onclick="closeAISettingsModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-gray-300 mb-1">AI Provider</label>
+          <select id="ai-setting-provider" onchange="onAIProviderChange(this.value)" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-white font-semibold">
+            <option value="gemini">Google Gemini (Recommended - Free Tier Available)</option>
+            <option value="openai">OpenAI (ChatGPT - gpt-4o-mini / gpt-4o)</option>
+            <option value="claude">Anthropic Claude (claude-3-5-sonnet)</option>
+            <option value="custom">Custom Endpoint (OpenAI-compatible Base URL + Key + Model)</option>
+          </select>
+        </div>
+
+        <!-- Gemini Box -->
+        <div id="ai-box-gemini" class="space-y-2.5">
+          <div class="p-2.5 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-300 text-[11px] flex items-center justify-between">
+            <span>Free Google AI Studio Key</span>
+            <a href="https://aistudio.google.com/app/apikey" target="_blank" class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-200 font-bold border border-purple-500/30">Get Key ↗</a>
+          </div>
+          <div>
+            <label class="block font-semibold text-gray-300 mb-1">Gemini API Key</label>
+            <input type="password" id="ai-key-gemini" placeholder="AIzaSy..." class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono" />
+          </div>
+          <div>
+            <label class="block font-semibold text-gray-300 mb-1">Model</label>
+            <select id="ai-model-gemini" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono">
+              <option value="gemini-1.5-flash">gemini-1.5-flash (Fast & Free)</option>
+              <option value="gemini-2.0-flash">gemini-2.0-flash (Ultra Fast & Smart)</option>
+              <option value="gemini-1.5-pro">gemini-1.5-pro (Creative Pro)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- OpenAI Box -->
+        <div id="ai-box-openai" class="space-y-2.5 hidden">
+          <div>
+            <label class="block font-semibold text-gray-300 mb-1">OpenAI API Key</label>
+            <input type="password" id="ai-key-openai" placeholder="sk-..." class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono" />
+          </div>
+          <div>
+            <label class="block font-semibold text-gray-300 mb-1">Model Name</label>
+            <input type="text" id="ai-model-openai" value="gpt-4o-mini" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono" />
+          </div>
+        </div>
+
+        <!-- Claude Box -->
+        <div id="ai-box-claude" class="space-y-2.5 hidden">
+          <div>
+            <label class="block font-semibold text-gray-300 mb-1">Anthropic Claude API Key</label>
+            <input type="password" id="ai-key-claude" placeholder="sk-ant-..." class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono" />
+          </div>
+          <div>
+            <label class="block font-semibold text-gray-300 mb-1">Model Name</label>
+            <input type="text" id="ai-model-claude" value="claude-3-5-sonnet-20241022" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono" />
+          </div>
+        </div>
+
+        <!-- Custom Box -->
+        <div id="ai-box-custom" class="space-y-2.5 hidden">
+          <div>
+            <label class="block font-semibold text-gray-300 mb-1">Custom Base URL</label>
+            <input type="text" id="ai-custom-base-url" placeholder="https://api.groq.com/openai/v1 or https://openrouter.ai/api/v1" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono" />
+          </div>
+          <div>
+            <label class="block font-semibold text-gray-300 mb-1">Custom API Key</label>
+            <input type="password" id="ai-custom-key" placeholder="API Key / Bearer" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono" />
+          </div>
+          <div>
+            <label class="block font-semibold text-gray-300 mb-1">Model Name</label>
+            <input type="text" id="ai-custom-model" placeholder="e.g. llama-3.3-70b-versatile or deepseek-chat" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono" />
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between pt-3 border-t border-apple-border">
+        <span class="text-[10px] text-gray-500 font-mono">Zero key? Local parser runs 100% offline.</span>
+        <div class="flex items-center space-x-2">
+          <button onclick="closeAISettingsModal()" class="px-4 py-2 text-xs text-gray-400 hover:text-white">Cancel</button>
+          <button onclick="saveAISettingsModal()" class="gold-btn px-5 py-2 rounded-full font-bold text-xs">Save AI Config</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/app.js?v=6.0"></script>
+</body>
+</html>
