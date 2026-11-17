@@ -28,6 +28,9 @@ class TelegramBotService {
 
     try {
       this.bot = new TelegramBot(token, { polling: true });
+      this.bot.on('polling_error', (err) => {
+        // Quietly handle routine network/polling jitter
+      });
       this.setupHandlers();
       console.log('🤖 Telegram Bot active: 5-Post + Combined SEO Pipeline Listening!');
     } catch (err) {

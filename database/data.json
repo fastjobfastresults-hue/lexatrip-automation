@@ -26,7 +26,7 @@
       "enabled": true,
       "botToken": "9283650493:AAEbHNXPtWnej_39TBrCQ3y8yXZUESR2D7E",
       "botUsername": "lexatrip_auto_bot",
-      "allowedChatId": ""
+      "allowedChatId": "8455865796"
     },
     "publicBaseUrl": "https://lexatrip-iv1iwd.loca.lt",
     "aiConfig": {
@@ -7973,9 +7973,10 @@
         ]
       },
       "telegram": {
-        "enabled": true,
         "botToken": "9283650493:AAEbHNXPtWnej_39TBrCQ3y8yXZUESR2D7E",
-        "chatId": "987654321"
+        "chatId": "8455865796",
+        "channelId": "-1003697503605",
+        "channelUsername": "@lexatripjaisalmer"
       }
     },
     {
