@@ -58,16 +58,63 @@ class TelegramBotService {
     this.inbox.set(destinationId, []);
   }
 
-  getSession(key) {
+  resolveDestination(msg) {
+    const destinations = db.getDestinations();
+    const chatId = msg.chat?.id ? String(msg.chat.id) : '';
+    const chatTitle = (msg.chat?.title || '').toLowerCase();
+    const chatUsername = (msg.chat?.username || '').toLowerCase();
+
+    // 1. Match by saved channelId or chatId
+    for (const d of destinations) {
+      if (d.telegram?.channelId && String(d.telegram.channelId) === chatId) return d;
+      if (d.telegram?.chatId && String(d.telegram.chatId) === chatId) return d;
+    }
+
+    // 2. Smart Match by Destination Name or Slug (e.g. "Jaisalmer", "Mount Abu", "Udaipur")
+    for (const d of destinations) {
+      const slug = (d.slug || '').toLowerCase();
+      const name = (d.name || '').toLowerCase();
+      const city = name.replace(/lexa\s*trip/i, '').trim();
+      if (city && (chatTitle.includes(city) || chatUsername.includes(city))) {
+        // Auto-bind channel ID to this destination for future
+        d.telegram = d.telegram || {};
+        d.telegram.channelId = chatId;
+        d.telegram.channelUsername = msg.chat?.username ? `@${msg.chat.username}` : '';
+        db.saveDestination(d);
+        return d;
+      }
+      if (slug && (chatTitle.includes(slug) || chatUsername.includes(slug))) {
+        d.telegram = d.telegram || {};
+        d.telegram.channelId = chatId;
+        db.saveDestination(d);
+        return d;
+      }
+    }
+
+    // 3. Fallback to session destination or default
+    const session = this.sessions.get(chatId);
+    if (session?.destinationId) {
+      const found = db.getDestination(session.destinationId);
+      if (found) return found;
+    }
+
+    return destinations[0] || { id: 'dest_jaisalmer', name: 'Lexa Trip Jaisalmer', slug: 'jaisalmer' };
+  }
+
+  getSession(key, destination = null) {
     if (!this.sessions.has(key)) {
       this.sessions.set(key, {
-        destinationId: 'dest_jaisalmer',
+        destinationId: destination?.id || 'dest_jaisalmer',
         photos: [],
         combinedSeo: null,
         batchDate: new Date().toISOString().split('T')[0]
       });
     }
-    return this.sessions.get(key);
+    const sess = this.sessions.get(key);
+    if (destination && sess.destinationId !== destination.id) {
+      sess.destinationId = destination.id;
+    }
+    return sess;
   }
 
   resetSession(key) {
@@ -189,8 +236,8 @@ class TelegramBotService {
       if (!photoArray || photoArray.length === 0) return;
 
       const bestPhoto = photoArray[photoArray.length - 1];
-      const session = this.getSession(chatId);
-      const dest = db.getDestination(session.destinationId) || db.getDestinations()[0];
+      const dest = this.resolveDestination(msg);
+      const session = this.getSession(chatId, dest);
 
       const destInboxDir = path.join(__dirname, '..', 'uploads', 'telegram_inbox', dest.id);
       fs.mkdirSync(destInboxDir, { recursive: true });
@@ -251,8 +298,8 @@ class TelegramBotService {
       if (!text || text.startsWith('/')) return;
 
       const chatId = msg.chat.id;
-      const session = this.getSession(chatId);
-      const dest = db.getDestination(session.destinationId) || db.getDestinations()[0];
+      const dest = this.resolveDestination(msg);
+      const session = this.getSession(chatId, dest);
 
       // Check if this is the Combined SEO message
       const isCombinedSeo = /^(कंबाइंड\s*SEO|combined\s*seo|combinedseo)/i.test(text);
