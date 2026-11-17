@@ -18,6 +18,7 @@ const telegramNotifier = require('./services/telegramNotifier');
 const channelTester = require('./services/channelTester');
 const tunnelService = require('./services/tunnelService');
 const aiEngine = require('./services/aiEngine');
+const crmEngine = require('./services/crmEngine');
 
 const app = express();
 const server = http.createServer(app);
@@ -245,6 +246,66 @@ app.post('/api/social/meta/detect-accounts', async (req, res) => {
     res.json(result);
   } catch (err) {
     res.status(400).json({ error: err.message });
+  }
+});
+
+// ♾️ Master Lifetime Token Exchange (Converts short-lived to Permanent Never-Expiring Page Tokens)
+app.post('/api/social/meta/exchange-long-lived', async (req, res) => {
+  try {
+    const { userToken, appId, appSecret } = req.body;
+    if (!userToken) return res.status(400).json({ error: 'userToken is required' });
+
+    let finalUserToken = userToken;
+    let isLongLived = false;
+
+    // If appSecret provided, exchange for 60-day long-lived user token
+    if (appId && appSecret) {
+      try {
+        const exchangeUrl = `https://graph.facebook.com/v21.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${appId}&client_secret=${appSecret}&fb_exchange_token=${userToken}`;
+        const exchangeRes = await axios.get(exchangeUrl);
+        if (exchangeRes.data?.access_token) {
+          finalUserToken = exchangeRes.data.access_token;
+          isLongLived = true;
+        }
+      } catch (exErr) {
+        console.warn('Long-lived token exchange warning:', exErr.response?.data || exErr.message);
+      }
+    }
+
+    // Now query /me/accounts using this token - Page Tokens will be LIFETIME (Expires: Never)!
+    const detected = await channelTester.detectMetaAccounts(finalUserToken);
+    res.json({
+      success: true,
+      isPermanentLifetime: isLongLived,
+      longLivedUserToken: finalUserToken,
+      ...detected
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// --- CRM & AUTO-REPLY / AUTO-DM ENDPOINTS ---
+app.get('/api/crm', (req, res) => {
+  res.json(crmEngine.getCRMData());
+});
+
+app.put('/api/crm/settings', (req, res) => {
+  try {
+    const updated = crmEngine.saveCRMSettings(req.body);
+    res.json({ success: true, crm: updated });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/crm/simulate-interaction', async (req, res) => {
+  try {
+    const result = await crmEngine.processIncomingInteraction(req.body);
+    broadcast({ type: 'CRM_NEW_LEAD', lead: result.lead });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 

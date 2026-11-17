@@ -407,6 +407,14 @@ class Database {
   getLogs(limit = 100) {
     return (this.read().logs || []).slice(0, limit);
   }
+
+  getRawData() {
+    return this.read();
+  }
+
+  saveRawData(data) {
+    this.save(data);
+  }
 }
 
 module.exports = new Database();

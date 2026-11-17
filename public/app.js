@@ -1938,3 +1938,185 @@ async function saveAISettingsModal() {
     alert('Error saving AI config: ' + err.message);
   }
 }
+
+// --- UNIVERSAL SOCIAL CRM & MASTER TOKEN CONTROLLER ---
+let _crmDetectedPages = [];
+
+async function openCRMModal() {
+  document.getElementById('crm-modal').classList.remove('hidden');
+  const dName = document.getElementById('crm-active-dest-name');
+  if (dName) dName.textContent = currentDestination?.name || 'Active Destination';
+  await loadCRMData();
+}
+
+function closeCRMModal() {
+  document.getElementById('crm-modal').classList.add('hidden');
+}
+
+async function loadCRMData() {
+  try {
+    const res = await fetch('/api/crm');
+    if (!res.ok) return;
+    const data = await res.json();
+    const tReply = document.getElementById('crm-toggle-autoreply');
+    const tDm = document.getElementById('crm-toggle-autodm');
+    if (tReply) tReply.checked = !!data.autoReplyEnabled;
+    if (tDm) tDm.checked = !!data.autoDmEnabled;
+    renderCRMLeads(data.leads || []);
+  } catch (e) {
+    console.error('Error loading CRM data:', e);
+  }
+}
+
+function renderCRMLeads(leads) {
+  const container = document.getElementById('crm-leads-feed');
+  if (!container) return;
+  if (!leads || leads.length === 0) {
+    container.innerHTML = '<div class="text-[11px] text-gray-500 text-center py-4">No customer interactions logged yet.</div>';
+    return;
+  }
+  container.innerHTML = leads.map(l => `
+    <div class="p-2.5 rounded-xl bg-black/40 border border-apple-border/60 text-xs space-y-1">
+      <div class="flex items-center justify-between">
+        <span class="font-bold text-white flex items-center space-x-1.5">
+          <i class="fa-brands fa-${l.platform === 'instagram' ? 'instagram text-pink-400' : 'facebook text-blue-400'}"></i>
+          <span>${l.name}</span>
+          <span class="text-[10px] text-gray-400 font-mono">${l.handle}</span>
+        </span>
+        <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-[9px]">${l.status}</span>
+      </div>
+      <p class="text-gray-300 text-[11px]">💬 "${l.lastMessage}"</p>
+      ${l.replySent ? `<p class="text-apple-gold text-[10px] pl-3 border-l-2 border-apple-gold/40">↳ Auto-Reply: ${l.replySent.slice(0, 80)}...</p>` : ''}
+    </div>
+  `).join('');
+}
+
+async function saveCRMToggles() {
+  const autoReply = document.getElementById('crm-toggle-autoreply')?.checked;
+  const autoDm = document.getElementById('crm-toggle-autodm')?.checked;
+  await fetch('/api/crm/settings', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ autoReplyEnabled: autoReply, autoDmEnabled: autoDm })
+  });
+}
+
+async function syncAllMetaPagesFromMaster() {
+  const userToken = document.getElementById('crm-master-token').value.trim();
+  const appSecret = document.getElementById('crm-app-secret').value.trim();
+  if (!userToken) {
+    alert('Please paste your Master Meta Token first!');
+    return;
+  }
+
+  const container = document.getElementById('crm-detected-pages-container');
+  const select = document.getElementById('crm-detected-pages-select');
+  select.innerHTML = '<option value="">Detecting pages...</option>';
+  container.classList.remove('hidden');
+
+  try {
+    const res = await fetch('/api/social/meta/exchange-long-lived', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userToken, appId: '1610475786797567', appSecret })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+
+    _crmDetectedPages = data.pages || [];
+    if (_crmDetectedPages.length === 0) {
+      select.innerHTML = '<option value="">No pages found with pages_show_list permission.</option>';
+      return;
+    }
+
+    select.innerHTML = '<option value="">-- Choose Page to Link --</option>';
+    _crmDetectedPages.forEach((p, idx) => {
+      const ig = p.instagram ? ` (Instagram: @${p.instagram.username})` : ' (No Instagram linked)';
+      const opt = document.createElement('option');
+      opt.value = idx;
+      opt.textContent = `${p.pageName}${ig}`;
+      select.appendChild(opt);
+    });
+
+    alert(`⚡ Found ${_crmDetectedPages.length} Pages! Choose one from the dropdown to link to ${currentDestination?.name || 'Active Destination'}.`);
+  } catch (err) {
+    alert('Error detecting pages: ' + err.message);
+  }
+}
+
+async function linkSelectedPageToActiveDestination() {
+  const select = document.getElementById('crm-detected-pages-select');
+  const idx = select.value;
+  if (idx === '' || !_crmDetectedPages[idx]) {
+    alert('Please select a page from the dropdown first!');
+    return;
+  }
+
+  const selected = _crmDetectedPages[idx];
+  if (!currentDestination) return;
+
+  currentDestination.channels = currentDestination.channels || {};
+  currentDestination.channels.facebook = {
+    enabled: true,
+    name: selected.pageName,
+    handle: `facebook.com/${selected.pageId}`,
+    authType: 'permanent_api_token',
+    credentials: {
+      pageId: selected.pageId,
+      pageAccessToken: selected.pageAccessToken
+    },
+    supports: ['post', 'carousel', 'reel']
+  };
+
+  if (selected.instagram) {
+    currentDestination.channels.instagram = {
+      enabled: true,
+      name: selected.instagram.name || selected.pageName,
+      handle: `@${selected.instagram.username}`,
+      authType: 'permanent_api_token',
+      credentials: {
+        instagramAccountId: selected.instagram.id,
+        accessToken: selected.pageAccessToken
+      },
+      supports: ['post', 'carousel', 'reel']
+    };
+  }
+
+  try {
+    const res = await fetch(`/api/destinations/${currentDestination.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(currentDestination)
+    });
+    if (!res.ok) throw new Error('Failed to save destination');
+
+    await loadDestinations();
+    alert(`🎉 Successfully linked "${selected.pageName}" to ${currentDestination.name}!`);
+    closeCRMModal();
+  } catch (e) {
+    alert('Error linking page: ' + e.message);
+  }
+}
+
+async function testCRMLeadSimulation() {
+  const simulatedInquiry = {
+    platform: 'instagram',
+    senderName: 'Vikas Shekhawat',
+    senderId: '@vikas_travel_vlogs',
+    text: 'What are the charges for Jaisalmer desert camping and camel ride for 2 people?',
+    destinationName: currentDestination?.name || 'Lexa Trip Jaisalmer'
+  };
+
+  try {
+    const res = await fetch('/api/crm/simulate-interaction', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(simulatedInquiry)
+    });
+    const result = await res.json();
+    await loadCRMData();
+    alert(`✅ Auto-Reply Simulation Triggered!\n\nCustomer Inquiry: "${simulatedInquiry.text}"\n\n🤖 Automated Reply: "${result.publicReply}"\n\n📨 Auto-DM Sent: "${result.dmSent || 'N/A'}"`);
+  } catch (err) {
+    alert('Simulation error: ' + err.message);
+  }
+}
