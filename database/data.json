@@ -56,7 +56,8 @@
       "clientId": "86tq0bei3rlo84",
       "clientSecret": "V1BMX0FQMS5tUEVLcXFzNkdFb0RQRmV1LmYweVkrdz09",
       "organizationId": "144152014",
-      "organizationUrn": "urn:li:organization:144152014"
+      "organizationUrn": "urn:li:organization:144152014",
+      "accessToken": "AQVEUNZLO91zZlJbtdlyj3W5JBu4Ms4M7vi9BRnkplrAvMEpX0NzbwFAVm-Z9Zw6CZi7Nns1jUkdGnsBJqqEPazGnf4UBPc4FKk4b212KJ6hCbRG4BbC8pa1TkZPrWutwNtQd9EF4iCQM3LHnoS96I-N0j1Pg0CwINgi005ffIkrNPK3ucH_cOOKWVEgdxLeOrXKsd7XZNKqjFcEGjVtb7fO6nbtjlbNCl-FcDeoA2u2GTwb46A2QUpiPOpq0pCiX0yMFhinE3V-q3xg9M1Xik7bp2nDeOaLhAbTbLtfkXVO0njwu2_JegcZpaGqI-e0_8ZErjShJLE--IaCaAuqrFA2f17ZnQ"
     }
   },
   "accounts": [
@@ -94,12 +95,12 @@
       "platform": "linkedin",
       "name": "LinkedIn Page - Lexa Trip Jaisalmer",
       "destination": "Jaisalmer",
-      "handle": "linkedin.com/company/lexatripjaisalmer",
-      "connected": false,
+      "handle": "linkedin.com/company/144152014",
+      "connected": true,
       "authType": "api_token",
       "credentials": {
-        "accessToken": "",
-        "organizationUrn": ""
+        "accessToken": "AQVEUNZLO91zZlJbtdlyj3W5JBu4Ms4M7vi9BRnkplrAvMEpX0NzbwFAVm-Z9Zw6CZi7Nns1jUkdGnsBJqqEPazGnf4UBPc4FKk4b212KJ6hCbRG4BbC8pa1TkZPrWutwNtQd9EF4iCQM3LHnoS96I-N0j1Pg0CwINgi005ffIkrNPK3ucH_cOOKWVEgdxLeOrXKsd7XZNKqjFcEGjVtb7fO6nbtjlbNCl-FcDeoA2u2GTwb46A2QUpiPOpq0pCiX0yMFhinE3V-q3xg9M1Xik7bp2nDeOaLhAbTbLtfkXVO0njwu2_JegcZpaGqI-e0_8ZErjShJLE--IaCaAuqrFA2f17ZnQ",
+        "organizationUrn": "urn:li:organization:144152014"
       },
       "proxy": ""
     },
@@ -7849,17 +7850,9 @@
           "enabled": true,
           "name": "LinkedIn - Lexa Trip",
           "handle": "linkedin.com/company/144152014",
-          "authType": "smart_oauth",
+          "authType": "api_token",
           "credentials": {
-            "isSmartConnect": true,
-            "destinationSlug": "jaisalmer",
-            "accessToken": "smart_linkedin_token_1794891558385",
-            "pageAccessToken": "smart_linkedin_token_1794891558385",
-            "apiKey": "smart_linkedin_key_1794891558385",
-            "pageId": "page_jaisalmer_15816",
-            "instagramAccountId": "ig_jaisalmer_18418",
-            "boardId": "board_jaisalmer",
-            "channelId": "UC_jaisalmer_official",
+            "accessToken": "AQVEUNZLO91zZlJbtdlyj3W5JBu4Ms4M7vi9BRnkplrAvMEpX0NzbwFAVm-Z9Zw6CZi7Nns1jUkdGnsBJqqEPazGnf4UBPc4FKk4b212KJ6hCbRG4BbC8pa1TkZPrWutwNtQd9EF4iCQM3LHnoS96I-N0j1Pg0CwINgi005ffIkrNPK3ucH_cOOKWVEgdxLeOrXKsd7XZNKqjFcEGjVtb7fO6nbtjlbNCl-FcDeoA2u2GTwb46A2QUpiPOpq0pCiX0yMFhinE3V-q3xg9M1Xik7bp2nDeOaLhAbTbLtfkXVO0njwu2_JegcZpaGqI-e0_8ZErjShJLE--IaCaAuqrFA2f17ZnQ",
             "organizationUrn": "urn:li:organization:144152014"
           },
           "supports": [
