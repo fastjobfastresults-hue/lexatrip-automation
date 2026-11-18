@@ -7848,12 +7848,12 @@
         },
         "linkedin": {
           "enabled": true,
-          "name": "LinkedIn - Lexa Trip",
-          "handle": "linkedin.com/company/144152014",
+          "name": "LinkedIn - LexaTrip Jaisalmer",
+          "handle": "linkedin.com/company/lexatrip-jaisalmer",
           "authType": "api_token",
           "credentials": {
             "accessToken": "AQVEUNZLO91zZlJbtdlyj3W5JBu4Ms4M7vi9BRnkplrAvMEpX0NzbwFAVm-Z9Zw6CZi7Nns1jUkdGnsBJqqEPazGnf4UBPc4FKk4b212KJ6hCbRG4BbC8pa1TkZPrWutwNtQd9EF4iCQM3LHnoS96I-N0j1Pg0CwINgi005ffIkrNPK3ucH_cOOKWVEgdxLeOrXKsd7XZNKqjFcEGjVtb7fO6nbtjlbNCl-FcDeoA2u2GTwb46A2QUpiPOpq0pCiX0yMFhinE3V-q3xg9M1Xik7bp2nDeOaLhAbTbLtfkXVO0njwu2_JegcZpaGqI-e0_8ZErjShJLE--IaCaAuqrFA2f17ZnQ",
-            "organizationUrn": "urn:li:organization:144152014"
+            "organizationUrn": "urn:li:organization:144145872"
           },
           "supports": [
             "post",
