@@ -33,103 +33,124 @@
     }
   </script>
   <style>
-    body { background-color: #050508; color: #F3F4F6; }
+    body {
+      background-color: #06070B;
+      background-image: 
+        radial-gradient(at 10% 10%, rgba(212, 175, 55, 0.08) 0px, transparent 45%),
+        radial-gradient(at 90% 12%, rgba(59, 130, 246, 0.07) 0px, transparent 45%),
+        radial-gradient(at 50% 80%, rgba(16, 185, 129, 0.06) 0px, transparent 55%);
+      background-attachment: fixed;
+      color: #F3F4F6;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Plus Jakarta Sans", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
     .glass-card {
-      background: rgba(18, 20, 29, 0.7);
-      backdrop-filter: blur(28px);
-      -webkit-backdrop-filter: blur(28px);
+      background: rgba(18, 20, 30, 0.65);
+      backdrop-filter: blur(36px) saturate(180%);
+      -webkit-backdrop-filter: blur(36px) saturate(180%);
       border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
     .glass-card-elevated {
-      background: rgba(22, 24, 35, 0.85);
-      backdrop-filter: blur(32px);
-      -webkit-backdrop-filter: blur(32px);
+      background: rgba(22, 25, 38, 0.82);
+      backdrop-filter: blur(40px) saturate(190%);
+      -webkit-backdrop-filter: blur(40px) saturate(190%);
       border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+    .apple-hero-card {
+      background: rgba(16, 18, 28, 0.75);
+      backdrop-filter: blur(40px) saturate(200%);
+      -webkit-backdrop-filter: blur(40px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .apple-hero-card:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 28px 55px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.25);
     }
     .gold-btn {
-      background: linear-gradient(135deg, #E6C25B 0%, #D4AF37 60%, #B88B22 100%);
-      color: #08080C;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      background: linear-gradient(135deg, #F5E6B3 0%, #D4AF37 50%, #A97C19 100%);
+      color: #05060A;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .gold-btn:hover {
-      box-shadow: 0 0 25px rgba(212, 175, 55, 0.35);
-      transform: translateY(-1px);
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.45);
+      transform: translateY(-1px) scale(1.01);
     }
     .dest-pill.active {
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(212, 175, 55, 0.05) 100%);
-      border-color: rgba(212, 175, 55, 0.6);
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.22) 0%, rgba(212, 175, 55, 0.08) 100%);
+      border-color: rgba(212, 175, 55, 0.7);
       color: #FFF;
-      box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
-    }
-    .channel-card {
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .channel-card:hover {
-      border-color: rgba(212, 175, 55, 0.5);
-      background: rgba(255, 255, 255, 0.06);
-      transform: translateY(-2px);
+      box-shadow: 0 0 18px rgba(212, 175, 55, 0.2);
     }
     .matrix-chip.active {
-      border-color: rgba(212, 175, 55, 0.7);
-      background: rgba(212, 175, 55, 0.15);
+      border-color: rgba(212, 175, 55, 0.75);
+      background: rgba(212, 175, 55, 0.18);
       color: #FFF;
-      box-shadow: 0 0 12px rgba(212, 175, 55, 0.2);
+      box-shadow: 0 0 12px rgba(212, 175, 55, 0.25);
     }
   </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-apple-gold selection:text-black">
 
-  <!-- TOP HEADER -->
-  <header class="sticky top-0 z-50 border-b border-apple-border/60 bg-[#050508]/85 backdrop-blur-xl px-6 py-3.5">
+  <!-- TOP HEADER (APPLE VISION / iOS 18 FLOATING DOCK) -->
+  <header class="sticky top-0 z-50 border-b border-white/10 bg-[#06070B]/85 backdrop-blur-2xl px-6 py-3.5">
     <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
       
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-600 via-apple-gold to-yellow-200 flex items-center justify-center text-apple-bg font-black text-xl shadow-lg">
+      <!-- Brand Logo -->
+      <div class="flex items-center space-x-3.5">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-600 via-apple-gold to-yellow-200 flex items-center justify-center text-apple-bg font-black text-xl shadow-lg shadow-amber-500/20">
           <i class="fa-solid fa-compass"></i>
         </div>
         <div>
           <div class="flex items-center space-x-2">
             <h1 class="text-base font-extrabold tracking-tight text-white">LEXA TRIP</h1>
-            <span class="text-[10px] px-2 py-0.5 rounded-full bg-apple-gold/10 text-apple-gold border border-apple-gold/20 font-bold">Futuristic Social OS</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-apple-gold/15 text-apple-gold border border-apple-gold/30 font-bold uppercase tracking-wider">Social OS</span>
           </div>
           <p class="text-[11px] text-gray-400">1 Destination ➔ 1 Post Set ➔ All Connected Social Media</p>
         </div>
       </div>
 
-      <div class="flex items-center space-x-3 text-xs">
-        <!-- Tunnel Badge -->
-        <div class="hidden md:flex items-center space-x-2 bg-white/[0.04] border border-apple-border px-3 py-1.5 rounded-full">
+      <!-- Action Navigation Buttons -->
+      <div class="flex items-center space-x-2.5 text-xs">
+        
+        <!-- Public Cloud Status Pill -->
+        <div class="hidden lg:flex items-center space-x-2 bg-white/[0.04] border border-white/10 px-3.5 py-1.5 rounded-full">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span class="text-gray-300 text-[11px]" id="tunnel-status-text">Public HTTPS Tunnel: Active</span>
+          <span class="text-gray-300 text-[11px]" id="tunnel-status-text">Cloud 24/7: Active</span>
         </div>
 
-        <!-- Google SSO Pill -->
-        <div id="user-auth-pill" onclick="openGoogleModal()" class="cursor-pointer flex items-center space-x-2 bg-white/[0.04] hover:bg-white/[0.08] border border-apple-border px-3 py-1.5 rounded-full transition">
-          <img id="user-auth-avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80" class="w-5 h-5 rounded-full object-cover border border-amber-400/40" />
-          <span class="text-gray-200 font-medium text-xs hidden sm:inline" id="user-auth-name">Lexa Trip Admin</span>
-          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-        </div>
-
-        <!-- CRM & Auto-Reply Pill -->
-        <button onclick="openCRMModal()" class="px-3.5 py-1.5 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold transition flex items-center space-x-1.5 shadow-sm">
-          <i class="fa-solid fa-comments text-[11px]"></i>
+        <!-- 💬 Social CRM & Auto-DM Apple Pill (HIGH VISIBILITY) -->
+        <button onclick="openCRMModal()" class="px-4 py-2 rounded-full bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/40 text-xs font-bold transition flex items-center space-x-2 shadow-lg shadow-emerald-500/10 hover:scale-[1.02]">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          <i class="fa-solid fa-comments text-emerald-400 text-xs"></i>
           <span>💬 Social CRM & Auto-DM</span>
         </button>
 
-        <!-- Settings Button -->
-        <button onclick="openSettingsModal()" class="px-3.5 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] text-gray-300 border border-apple-border text-xs font-semibold transition flex items-center space-x-1.5">
-          <i class="fa-solid fa-sliders text-[11px]"></i>
-          <span class="hidden sm:inline">Settings</span>
+        <!-- ⚙️ Settings & API Keys Button (HIGH VISIBILITY) -->
+        <button onclick="openSettingsModal()" class="px-4 py-2 rounded-full bg-blue-500/15 hover:bg-blue-500/25 text-blue-300 border border-blue-500/40 text-xs font-bold transition flex items-center space-x-1.5 shadow-lg shadow-blue-500/10 hover:scale-[1.02]">
+          <i class="fa-solid fa-sliders text-blue-400 text-xs"></i>
+          <span>⚙️ Settings & API Keys</span>
         </button>
+
+        <!-- User Profile Pill -->
+        <div id="user-auth-pill" onclick="openGoogleModal()" class="cursor-pointer hidden sm:flex items-center space-x-2 bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 px-3 py-1.5 rounded-full transition">
+          <img id="user-auth-avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80" class="w-5 h-5 rounded-full object-cover border border-amber-400/40" />
+          <span class="text-gray-200 font-semibold text-xs hidden md:inline" id="user-auth-name">Lexa Admin</span>
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        </div>
+
       </div>
 
     </div>
   </header>
 
   <!-- DESTINATIONS BAR -->
-  <section class="border-b border-apple-border/40 bg-[#0a0b12]/60 px-6 py-3">
+  <section class="border-b border-white/10 bg-[#080910]/70 px-6 py-3">
     <div class="max-w-7xl mx-auto flex items-center justify-between gap-3 overflow-x-auto">
       <div class="flex items-center space-x-2" id="destinations-pills-container">
         <!-- Rendered by JS -->
@@ -143,6 +164,122 @@
 
   <!-- MAIN DESTINATION WORKSPACE -->
   <main class="flex-1 max-w-7xl w-full mx-auto p-6 space-y-6">
+
+    <!-- =================================================================== -->
+    <!-- 🍎 APPLE iOS 18 HERO CONTROL CENTER (PROMINENT HOME SCREEN WIDGETS) -->
+    <!-- =================================================================== -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      
+      <!-- HERO WIDGET 1: SOCIAL CRM & AUTO-REPLY HUB -->
+      <div class="apple-hero-card rounded-[26px] p-5 relative overflow-hidden group">
+        <div class="absolute -top-12 -right-12 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="flex items-start justify-between gap-3 relative z-10">
+          <div class="flex items-center space-x-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-black text-xl shadow-lg shadow-emerald-500/20">
+              <i class="fa-solid fa-comments"></i>
+            </div>
+            <div>
+              <div class="flex items-center space-x-2">
+                <h3 class="text-base font-extrabold text-white tracking-tight">Social CRM & Auto-DM Hub</h3>
+                <span class="px-2 py-0.5 rounded-full bg-emerald-400/15 text-emerald-300 border border-emerald-400/30 text-[10px] font-bold uppercase tracking-wider flex items-center space-x-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span>Active</span>
+                </span>
+              </div>
+              <p class="text-xs text-gray-400 mt-0.5">1-Master Token for All Pages · Auto-Reply to Comments · Instant Auto-DM</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Stats / Toggles Status -->
+        <div class="grid grid-cols-3 gap-2 my-4 relative z-10 text-xs">
+          <div class="p-2.5 rounded-2xl bg-white/[0.03] border border-white/5 flex flex-col items-center text-center">
+            <span class="text-[10px] text-gray-400 font-semibold uppercase">Auto-Reply</span>
+            <span class="text-emerald-400 font-bold text-xs mt-0.5 flex items-center space-x-1">
+              <i class="fa-solid fa-circle-check text-[10px]"></i>
+              <span id="hero-autoreply-status">Enabled</span>
+            </span>
+          </div>
+          <div class="p-2.5 rounded-2xl bg-white/[0.03] border border-white/5 flex flex-col items-center text-center">
+            <span class="text-[10px] text-gray-400 font-semibold uppercase">Instant Auto-DM</span>
+            <span class="text-emerald-400 font-bold text-xs mt-0.5 flex items-center space-x-1">
+              <i class="fa-solid fa-circle-check text-[10px]"></i>
+              <span id="hero-autodm-status">Enabled</span>
+            </span>
+          </div>
+          <div class="p-2.5 rounded-2xl bg-white/[0.03] border border-white/5 flex flex-col items-center text-center">
+            <span class="text-[10px] text-gray-400 font-semibold uppercase">Master Key</span>
+            <span class="text-emerald-400 font-bold text-xs mt-0.5 flex items-center space-x-1">
+              <i class="fa-solid fa-infinity text-[10px]"></i>
+              <span id="hero-token-status">Lifetime Active</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex items-center space-x-2 relative z-10">
+          <button onclick="openCRMModal()" class="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-black font-extrabold text-xs transition shadow-md shadow-emerald-500/20 flex items-center justify-center space-x-2">
+            <i class="fa-solid fa-headset text-sm"></i>
+            <span>Open Social CRM Console & Link Pages ➔</span>
+          </button>
+          <button onclick="testCRMLeadSimulation()" title="Click to test live customer auto-reply & auto-DM" class="py-2.5 px-3.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-white font-bold text-xs transition flex items-center space-x-1.5">
+            <i class="fa-solid fa-flask text-apple-gold"></i>
+            <span>🧪 Simulate Lead</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- HERO WIDGET 2: MASTER SETTINGS & API KEYS CENTRAL -->
+      <div class="apple-hero-card rounded-[26px] p-5 relative overflow-hidden group">
+        <div class="absolute -top-12 -right-12 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="flex items-start justify-between gap-3 relative z-10">
+          <div class="flex items-center space-x-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-sky-400 flex items-center justify-center text-white text-xl shadow-lg shadow-blue-500/20">
+              <i class="fa-solid fa-sliders"></i>
+            </div>
+            <div>
+              <div class="flex items-center space-x-2">
+                <h3 class="text-base font-extrabold text-white tracking-tight">Settings & Master API Keys</h3>
+                <span class="px-2 py-0.5 rounded-full bg-blue-400/15 text-blue-300 border border-blue-400/30 text-[10px] font-bold uppercase tracking-wider flex items-center space-x-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span>
+                  <span>Connected</span>
+                </span>
+              </div>
+              <p class="text-xs text-gray-400 mt-0.5">Meta Graph API · Telegram Master Bot · Public Cloud URL · Anti-Spam</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Key Stats -->
+        <div class="grid grid-cols-3 gap-2 my-4 relative z-10 text-xs">
+          <div class="p-2.5 rounded-2xl bg-white/[0.03] border border-white/5 flex flex-col items-center text-center">
+            <span class="text-[10px] text-gray-400 font-semibold uppercase">Meta App ID</span>
+            <span class="text-blue-400 font-mono font-bold text-[11px] mt-0.5">161047578679...</span>
+          </div>
+          <div class="p-2.5 rounded-2xl bg-white/[0.03] border border-white/5 flex flex-col items-center text-center">
+            <span class="text-[10px] text-gray-400 font-semibold uppercase">Telegram Bot</span>
+            <span class="text-sky-400 font-bold text-[11px] mt-0.5">@lexatrip_auto_bot</span>
+          </div>
+          <div class="p-2.5 rounded-2xl bg-white/[0.03] border border-white/5 flex flex-col items-center text-center">
+            <span class="text-[10px] text-gray-400 font-semibold uppercase">Cloud Host</span>
+            <span class="text-purple-400 font-bold text-[11px] mt-0.5">Render 24/7 Live</span>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex items-center space-x-2 relative z-10">
+          <button onclick="openSettingsModal()" class="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold text-xs transition shadow-md shadow-blue-500/20 flex items-center justify-center space-x-2">
+            <i class="fa-solid fa-key text-sm"></i>
+            <span>Open Settings & API Keys Suite ➔</span>
+          </button>
+          <button onclick="testTelegramAlert()" title="Click to send test alert to Telegram Master Bot" class="py-2.5 px-3.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-white font-bold text-xs transition flex items-center space-x-1.5">
+            <i class="fa-brands fa-telegram text-sky-400"></i>
+            <span>📡 Test Bot Ping</span>
+          </button>
+        </div>
+      </div>
+
+    </section>
 
     <!-- 1. DESTINATION STATUS & INTERACTIVE CLICKABLE SOCIAL CHANNELS -->
     <div class="glass-card rounded-3xl p-5 space-y-5">
@@ -702,16 +839,92 @@ Title: 800-Year-Old Golden Living Fort (Sonar Qila)
     </div>
   </div>
 
-  <!-- MODAL: SETTINGS -->
+  <!-- MODAL: SETTINGS & MASTER API KEYS SUITE -->
   <div id="settings-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
-    <div class="glass-card-elevated rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+    <div class="glass-card-elevated rounded-3xl max-w-2xl w-full p-6 space-y-5 shadow-2xl max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between pb-3 border-b border-apple-border">
-        <h3 class="text-sm font-bold text-white">System Settings & Anti-Spam Jitter</h3>
-        <button onclick="closeSettingsModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+        <div class="flex items-center space-x-2.5">
+          <div class="w-9 h-9 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-base">
+            <i class="fa-solid fa-sliders"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-white flex items-center space-x-2">
+              <span>Settings & Master API Keys Suite</span>
+              <span class="px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 font-mono text-[9px] uppercase">Centralized Control</span>
+            </h3>
+            <p class="text-[11px] text-gray-400">Meta Graph API, Telegram Master Bot, Cloud HTTPS Callback & Anti-Spam Timers</p>
+          </div>
+        </div>
+        <button onclick="closeSettingsModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
 
-      <div class="space-y-4 text-xs">
-        <div class="grid grid-cols-2 gap-3">
+      <!-- SECTION 1: META / INSTAGRAM MASTER SUITE -->
+      <div class="p-4 rounded-2xl bg-white/[0.03] border border-apple-border space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-white flex items-center space-x-1.5">
+            <i class="fa-brands fa-meta text-blue-400"></i>
+            <span>1. Meta (Facebook & Instagram) Official API</span>
+          </span>
+          <span class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 flex items-center space-x-1">
+            <i class="fa-solid fa-circle-check text-[9px]"></i>
+            <span>Lifetime Token Active (Never-Expiring)</span>
+          </span>
+        </div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div>
+            <label class="block font-semibold text-gray-300 mb-1">Meta App ID</label>
+            <input type="text" id="setting-meta-appid" value="1610475786797567" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono" />
+          </div>
+          <div>
+            <label class="block font-semibold text-gray-300 mb-1">Meta App Secret</label>
+            <input type="password" id="setting-meta-appsecret" value="c3c76a1853a1a213e67c2c9655914caf" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-gray-300 mb-1">Master Lifetime Access Token (Controls ALL Destination Pages)</label>
+          <input type="password" id="setting-meta-lifetime-token" placeholder="EAAW4uB0xAf8BT..." class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-xs text-emerald-300 font-mono" />
+          <p class="text-[10px] text-gray-400 mt-1">यह टोकन आपके Facebook व Instagram के सभी पेजेस को 1-क्लिक में कंट्रोल करता है।</p>
+        </div>
+      </div>
+
+      <!-- SECTION 2: TELEGRAM MASTER BOT SUITE -->
+      <div class="p-4 rounded-2xl bg-white/[0.03] border border-apple-border space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-white flex items-center space-x-1.5">
+            <i class="fa-brands fa-telegram text-sky-400"></i>
+            <span>2. Telegram Master Bot (@lexatrip_auto_bot)</span>
+          </span>
+          <span class="text-[10px] text-sky-400 font-semibold bg-sky-500/10 px-2 py-0.5 rounded-full border border-sky-500/20">Active Polling</span>
+        </div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div>
+            <label class="block font-semibold text-gray-300 mb-1">Telegram Bot Token</label>
+            <input type="password" id="setting-telegram-token" value="9283650493:AAEbHNXPtWnej_39TBrCQ3y8yXZUESR2D7E" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono" />
+          </div>
+          <div>
+            <label class="block font-semibold text-gray-300 mb-1">Master Bot Username</label>
+            <input type="text" id="setting-telegram-botusername" value="lexatrip_auto_bot" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-gray-300 mb-1">Authorized Telegram User / Admin Chat ID</label>
+          <input type="text" id="setting-telegram-allowedchatid" value="8455865796" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono" />
+          <p class="text-[10px] text-gray-400 mt-1">इस ID के अलावा कोई अन्य यूजर बॉट को कमांड नहीं दे सकता (Security Lock)।</p>
+        </div>
+      </div>
+
+      <!-- SECTION 3: ANTI-SPAM DISPATCH TIMERS & PUBLIC CLOUD URL -->
+      <div class="p-4 rounded-2xl bg-white/[0.03] border border-apple-border space-y-3">
+        <span class="text-xs font-bold text-white flex items-center space-x-1.5">
+          <i class="fa-solid fa-clock text-amber-400"></i>
+          <span>3. Anti-Spam Human Jitter & Cloud Server</span>
+        </span>
+        
+        <div class="grid grid-cols-2 gap-3 text-xs">
           <div>
             <label class="block font-semibold text-gray-300 mb-1">Min Post Interval</label>
             <input type="number" id="setting-min-interval" value="60" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200" />
@@ -725,15 +938,21 @@ Title: 800-Year-Old Golden Living Fort (Sonar Qila)
         </div>
 
         <div>
-          <label class="block font-semibold text-gray-300 mb-1">Public HTTPS Tunnel URL (for Meta Graph API)</label>
-          <input type="text" id="setting-public-url" placeholder="https://lexatrip.loca.lt" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono" />
-          <p class="text-[10px] text-gray-500 mt-0.5">Auto-generated for Meta Graph API image callbacks.</p>
+          <label class="block font-semibold text-gray-300 mb-1">Public Cloud URL (for Meta Graph API Image Callbacks)</label>
+          <input type="text" id="setting-public-url" value="https://lexa-trip-automation.onrender.com" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono" />
+          <p class="text-[10px] text-gray-500 mt-0.5">Render 24/7 Cloud Permanent HTTPS Endpoint.</p>
         </div>
       </div>
 
-      <div class="flex items-center justify-end space-x-2 pt-3 border-t border-apple-border">
-        <button onclick="closeSettingsModal()" class="px-4 py-2 text-xs text-gray-400 hover:text-white">Cancel</button>
-        <button onclick="saveSettingsModal()" class="gold-btn px-5 py-2 rounded-full font-bold text-xs">Save Settings</button>
+      <div class="flex items-center justify-between pt-3 border-t border-apple-border">
+        <button onclick="testTelegramAlert()" class="px-4 py-2 text-xs rounded-xl bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 border border-sky-500/30 font-bold transition flex items-center space-x-1.5">
+          <i class="fa-brands fa-telegram"></i>
+          <span>Test Bot Ping</span>
+        </button>
+        <div class="flex items-center space-x-2">
+          <button onclick="closeSettingsModal()" class="px-4 py-2 text-xs text-gray-400 hover:text-white">Cancel</button>
+          <button onclick="saveSettingsModal()" class="gold-btn px-6 py-2.5 rounded-full font-bold text-xs shadow-lg">Save & Apply All Keys</button>
+        </div>
       </div>
     </div>
   </div>
@@ -937,6 +1156,6 @@ Title: 800-Year-Old Golden Living Fort (Sonar Qila)
     </div>
   </div>
 
-  <script src="/app.js?v=7.0"></script>
+  <script src="/app.js?v=11.0"></script>
 </body>
 </html>

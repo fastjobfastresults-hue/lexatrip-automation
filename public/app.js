@@ -314,21 +314,21 @@ async function toggleDefaultChannel(type, channelKey) {
   }
 }
 
-// --- CLICKABLE INTERACTIVE SOCIAL MEDIA CHANNELS ---
+// --- CLICKABLE INTERACTIVE SOCIAL MEDIA CHANNELS (APPLE iOS APP ICONS) ---
 function renderInteractiveChannels() {
   const container = document.getElementById('interactive-channels-grid');
   if (!container) return;
   container.innerHTML = '';
 
   const platforms = [
-    { key: 'instagram', name: 'Instagram', icon: 'fa-instagram', color: 'from-pink-600 to-rose-600', iconColor: 'text-pink-500' },
-    { key: 'facebook', name: 'Facebook', icon: 'fa-facebook', color: 'from-blue-600 to-indigo-600', iconColor: 'text-blue-500' },
-    { key: 'youtube', name: 'YouTube Shorts', icon: 'fa-youtube', color: 'from-red-600 to-amber-600', iconColor: 'text-red-500' },
-    { key: 'linkedin', name: 'LinkedIn', icon: 'fa-linkedin', color: 'from-sky-600 to-blue-700', iconColor: 'text-sky-500' },
-    { key: 'pinterest', name: 'Pinterest', icon: 'fa-pinterest', color: 'from-red-600 to-rose-700', iconColor: 'text-rose-500' },
-    { key: 'blogger', name: 'Blogger', icon: 'fa-blogger-b', color: 'from-amber-600 to-orange-600', iconColor: 'text-amber-500' },
-    { key: 'telegram', name: 'Telegram Bot', icon: 'fa-telegram', color: 'from-sky-500 to-cyan-600', iconColor: 'text-sky-400' },
-    { key: 'twitter', name: 'X / Twitter', icon: 'fa-x-twitter', color: 'from-gray-700 to-gray-900', iconColor: 'text-gray-300' }
+    { key: 'instagram', name: 'Instagram', icon: 'fa-instagram', bg: 'bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600', shadow: 'shadow-pink-500/25' },
+    { key: 'facebook', name: 'Facebook', icon: 'fa-facebook-f', bg: 'bg-gradient-to-tr from-blue-700 via-blue-600 to-sky-500', shadow: 'shadow-blue-500/25' },
+    { key: 'youtube', name: 'YouTube Shorts', icon: 'fa-youtube', bg: 'bg-gradient-to-tr from-red-700 via-red-600 to-rose-500', shadow: 'shadow-red-500/25' },
+    { key: 'linkedin', name: 'LinkedIn', icon: 'fa-linkedin-in', bg: 'bg-gradient-to-tr from-blue-800 via-blue-700 to-sky-600', shadow: 'shadow-sky-500/25' },
+    { key: 'pinterest', name: 'Pinterest', icon: 'fa-pinterest-p', bg: 'bg-gradient-to-tr from-rose-800 via-red-600 to-rose-500', shadow: 'shadow-red-500/25' },
+    { key: 'blogger', name: 'Blogger', icon: 'fa-blogger-b', bg: 'bg-gradient-to-tr from-amber-600 via-orange-500 to-amber-400', shadow: 'shadow-orange-500/25' },
+    { key: 'telegram', name: 'Telegram Bot', icon: 'fa-telegram', bg: 'bg-gradient-to-tr from-sky-600 via-sky-500 to-cyan-400', shadow: 'shadow-sky-500/25' },
+    { key: 'twitter', name: 'X / Twitter', icon: 'fa-x-twitter', bg: 'bg-gradient-to-tr from-gray-950 via-gray-900 to-neutral-900 border border-white/10', shadow: 'shadow-black/40' }
   ];
 
   platforms.forEach(p => {
@@ -359,15 +359,15 @@ function renderInteractiveChannels() {
     }
 
     const card = document.createElement('div');
-    const borderColor = isLiveOfficial 
-      ? 'border-emerald-500/50 bg-emerald-500/[0.05]' 
-      : (isConnected ? 'border-amber-500/40 bg-amber-500/[0.04]' : 'border-apple-border');
+    const borderStyle = isLiveOfficial 
+      ? 'border-emerald-500/40 bg-emerald-500/[0.04]' 
+      : (isConnected ? 'border-amber-500/40 bg-amber-500/[0.03]' : 'border-white/10 bg-white/[0.02]');
 
-    card.className = `channel-card glass-card rounded-2xl p-3 flex flex-col justify-between border ${borderColor}`;
+    card.className = `channel-card apple-hero-card rounded-2xl p-3.5 flex flex-col justify-between border ${borderStyle} group cursor-pointer`;
     card.onclick = () => openChannelModal(p.key);
 
     const statusBadge = isLiveOfficial
-      ? `<span class="text-emerald-400 font-semibold flex items-center space-x-1"><span>● Live Official</span></span>`
+      ? `<span class="text-emerald-400 font-bold flex items-center space-x-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span>Live Official</span></span>`
       : (isConnected 
           ? `<span class="text-amber-400 font-semibold flex items-center space-x-1"><i class="fa-solid fa-flask text-[9px]"></i> <span>Sandbox Demo</span></span>` 
           : `<span class="text-gray-400 font-semibold">+ Connect Live</span>`);
@@ -378,18 +378,18 @@ function renderInteractiveChannels() {
 
     card.innerHTML = `
       <div class="flex items-start justify-between">
-        <div class="w-8 h-8 rounded-xl bg-white/[0.06] flex items-center justify-center text-base">
-          <i class="fa-brands ${p.icon} ${p.iconColor}"></i>
+        <div class="w-10 h-10 rounded-2xl ${p.bg} ${p.shadow} flex items-center justify-center text-white text-lg shadow-md group-hover:scale-105 transition-transform duration-200">
+          <i class="fa-brands ${p.icon}"></i>
         </div>
-        <span class="w-2.5 h-2.5 rounded-full ${dotClass}"></span>
+        <span class="w-2.5 h-2.5 rounded-full ${dotClass} mt-1"></span>
       </div>
-      <div class="mt-2.5">
-        <h4 class="text-xs font-bold text-white">${p.name}</h4>
+      <div class="mt-3">
+        <h4 class="text-xs font-extrabold text-white tracking-tight">${p.name}</h4>
         <p class="text-[10px] text-gray-400 truncate font-mono mt-0.5">${handle}</p>
       </div>
-      <div class="mt-2 pt-1.5 border-t border-apple-border/40 flex items-center justify-between text-[10px]">
+      <div class="mt-2.5 pt-2 border-t border-white/5 flex items-center justify-between text-[10px]">
         ${statusBadge}
-        <i class="fa-solid fa-chevron-right text-[9px] text-gray-500"></i>
+        <i class="fa-solid fa-chevron-right text-[9px] text-gray-500 group-hover:text-white transition-colors"></i>
       </div>
     `;
     container.appendChild(card);
@@ -400,7 +400,7 @@ function renderInteractiveChannels() {
 async function quickConnectAllChannels() {
   if (!currentDestination) return;
   const platforms = ['instagram', 'facebook', 'youtube', 'linkedin', 'pinterest', 'telegram'];
-  const btn = event?.currentTarget;
+  const btn = window.event ? window.event.target?.closest('button') : null;
   if (btn) {
     btn.disabled = true;
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Activating Sandbox...</span>';
@@ -981,12 +981,21 @@ async function saveCurrentChannelCredentials() {
 
 // TEST TELEGRAM ALERT
 async function testTelegramAlert() {
-  if (!currentDestination) return;
   try {
-    const res = await fetch(`/api/destinations/${currentDestination.id}/test-telegram`, { method: 'POST' });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error);
-    alert(data.message || 'Telegram test alert sent successfully! Check your phone.');
+    let res = null;
+    let data = null;
+    if (currentDestination?.id) {
+      try {
+        res = await fetch(`/api/destinations/${currentDestination.id}/test-telegram`, { method: 'POST' });
+        data = await res.json();
+      } catch (e) {}
+    }
+    if (!res || !res.ok) {
+      res = await fetch('/api/telegram/test-alert', { method: 'POST' });
+      data = await res.json();
+    }
+    if (!res.ok) throw new Error(data?.error || 'Failed to send alert');
+    alert(data.message || '🔔 Telegram test alert sent successfully! Check your Telegram phone/desktop.');
   } catch (err) {
     alert(`Telegram Alert Error: ${err.message}`);
   }
@@ -1152,7 +1161,7 @@ function generateSmartSEO(index, slug) {
 
 // 1-Click Demo Sample Batch
 async function loadSampleDemoBatch() {
-  const btn = event.target.closest('button');
+  const btn = window.event ? window.event.target?.closest('button') : null;
   if (btn) btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Loading Samples...</span>';
 
   const demoImages = [
@@ -1730,37 +1739,100 @@ async function saveNewDestination() {
   }
 }
 
-// --- SETTINGS MODAL ---
+// --- SETTINGS & MASTER API KEYS MODAL ---
 async function loadSettings() {
   try {
     const res = await fetch('/api/settings');
     const s = await res.json();
+    
     const minEl = document.getElementById('setting-min-interval');
     const maxEl = document.getElementById('setting-max-interval');
     if (minEl) minEl.value = s.minIntervalMinutes || 60;
     if (maxEl) maxEl.value = s.maxIntervalMinutes || 90;
-  } catch (e) {}
+
+    const pubEl = document.getElementById('setting-public-url');
+    if (pubEl) pubEl.value = s.publicBaseUrl || window.location.origin;
+
+    const metaAppIdEl = document.getElementById('setting-meta-appid');
+    const metaAppSecretEl = document.getElementById('setting-meta-appsecret');
+    const metaLifetimeTokenEl = document.getElementById('setting-meta-lifetime-token');
+    if (metaAppIdEl) metaAppIdEl.value = s.meta?.appId || '';
+    if (metaAppSecretEl) metaAppSecretEl.value = s.meta?.appSecret || '';
+    if (metaLifetimeTokenEl) metaLifetimeTokenEl.value = s.meta?.lifetimePageToken || s.meta?.masterUserToken || '';
+
+    const tgTokenEl = document.getElementById('setting-telegram-token');
+    const tgUserEl = document.getElementById('setting-telegram-botusername');
+    const tgChatEl = document.getElementById('setting-telegram-allowedchatid');
+    if (tgTokenEl) tgTokenEl.value = s.telegram?.botToken || '';
+    if (tgUserEl) tgUserEl.value = s.telegram?.botUsername || 'lexatrip_auto_bot';
+    if (tgChatEl) tgChatEl.value = s.telegram?.allowedChatId || '8455865796';
+
+    const heroTokenStatus = document.getElementById('hero-token-status');
+    if (heroTokenStatus) {
+      if (s.meta?.lifetimePageToken) {
+        heroTokenStatus.innerHTML = '<i class="fa-solid fa-circle-check text-[10px]"></i> <span>Lifetime Active</span>';
+        heroTokenStatus.className = 'text-emerald-400 font-bold text-xs mt-0.5 flex items-center space-x-1';
+      } else {
+        heroTokenStatus.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-[10px]"></i> <span>Connect Token</span>';
+        heroTokenStatus.className = 'text-amber-400 font-bold text-xs mt-0.5 flex items-center space-x-1';
+      }
+    }
+  } catch (e) {
+    console.error('Error loading settings:', e);
+  }
 }
 
 function openSettingsModal() {
+  loadSettings();
   document.getElementById('settings-modal').classList.remove('hidden');
 }
+
 function closeSettingsModal() {
   document.getElementById('settings-modal').classList.add('hidden');
 }
+
 async function saveSettingsModal() {
-  const minInterval = parseInt(document.getElementById('setting-min-interval').value, 10) || 60;
-  const maxInterval = parseInt(document.getElementById('setting-max-interval').value, 10) || 90;
+  const minInterval = parseInt(document.getElementById('setting-min-interval')?.value, 10) || 60;
+  const maxInterval = parseInt(document.getElementById('setting-max-interval')?.value, 10) || 90;
+  const publicBaseUrl = document.getElementById('setting-public-url')?.value?.trim() || window.location.origin;
+
+  const metaAppId = document.getElementById('setting-meta-appid')?.value?.trim() || '';
+  const metaAppSecret = document.getElementById('setting-meta-appsecret')?.value?.trim() || '';
+  const metaLifetimeToken = document.getElementById('setting-meta-lifetime-token')?.value?.trim() || '';
+
+  const tgToken = document.getElementById('setting-telegram-token')?.value?.trim() || '';
+  const tgUser = document.getElementById('setting-telegram-botusername')?.value?.trim() || 'lexatrip_auto_bot';
+  const tgChat = document.getElementById('setting-telegram-allowedchatid')?.value?.trim() || '8455865796';
+
   try {
-    await fetch('/api/settings', {
+    const res = await fetch('/api/settings', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ minIntervalMinutes: minInterval, maxIntervalMinutes: maxInterval })
+      body: JSON.stringify({
+        minIntervalMinutes: minInterval,
+        maxIntervalMinutes: maxInterval,
+        publicBaseUrl: publicBaseUrl,
+        meta: {
+          appId: metaAppId,
+          appSecret: metaAppSecret,
+          lifetimePageToken: metaLifetimeToken,
+          masterUserToken: metaLifetimeToken
+        },
+        telegram: {
+          enabled: true,
+          botToken: tgToken,
+          botUsername: tgUser,
+          allowedChatId: tgChat
+        }
+      })
     });
+    if (!res.ok) throw new Error('Failed to update settings');
     closeSettingsModal();
-    alert('Settings updated successfully!');
+    alert('✅ Settings & Master API Keys saved and applied successfully!');
+    await loadSettings();
+    await loadDestinations();
   } catch (e) {
-    alert(e.message);
+    alert('Error saving settings: ' + e.message);
   }
 }
 

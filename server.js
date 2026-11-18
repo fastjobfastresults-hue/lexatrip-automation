@@ -347,6 +347,22 @@ app.post('/api/destinations/:id/telegram-inbox/clear', (req, res) => {
 });
 
 // Test Telegram Notification
+app.post('/api/telegram/test-alert', async (req, res) => {
+  try {
+    const s = db.getSettings();
+    const token = s.telegram?.botToken || process.env.TELEGRAM_BOT_TOKEN;
+    const chatId = s.telegram?.allowedChatId || '8455865796';
+    if (!token) return res.status(400).json({ error: 'Telegram Bot Token not configured.' });
+    const TelegramBot = require('node-telegram-bot-api');
+    const bot = new TelegramBot(token, { polling: false });
+    await bot.sendMessage(chatId, `🔔 *[Lexa Trip Master Bot Ping]*\n\n✅ Master Telegram Bot (@${s.telegram?.botUsername || 'lexatrip_auto_bot'}) is LIVE and successfully connected!\n\nAll destinations are synchronized with this Master Channel. 🚀`, { parse_mode: 'Markdown' });
+    res.json({ success: true, message: `Ping sent successfully to Telegram user ${chatId}!` });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Test Destination Telegram Notification
 app.post('/api/destinations/:id/test-telegram', async (req, res) => {
   try {
     const dest = db.getDestination(req.params.id);
