@@ -246,17 +246,36 @@ class ChannelTester {
   /**
    * Auto-detect Facebook Pages & Linked Instagram Business Accounts
    * from a single Meta User/System Access Token
+   * Automatically exchanges for Long-Lived / Lifetime Never-Expiring Page Tokens
    */
   async detectMetaAccounts(accessToken) {
     if (!accessToken) {
       throw new Error('Access Token is required to detect Meta accounts.');
     }
 
+    const appId = process.env.META_APP_ID || '1610475786797567';
+    const appSecret = process.env.META_APP_SECRET || 'c3c76a1853a1a213e67c2c9655914caf';
+    let activeToken = accessToken;
+
+    // 1. Automatically exchange for Long-Lived Master Token if possible
+    if (appId && appSecret) {
+      try {
+        const exchangeUrl = `https://graph.facebook.com/v21.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${appId}&client_secret=${appSecret}&fb_exchange_token=${accessToken}`;
+        const exRes = await axios.get(exchangeUrl);
+        if (exRes.data?.access_token) {
+          activeToken = exRes.data.access_token;
+          console.log('✅ Master Token successfully converted to Long-Lived Lifetime Token!');
+        }
+      } catch (exErr) {
+        // If already long-lived or direct system token, continue with activeToken
+      }
+    }
+
     try {
-      const res = await axios.get('https://graph.facebook.com/v19.0/me/accounts', {
+      const res = await axios.get('https://graph.facebook.com/v21.0/me/accounts', {
         params: {
           fields: 'id,name,category,access_token,instagram_business_account{id,username,name,profile_picture_url}',
-          access_token: accessToken
+          access_token: activeToken
         },
         timeout: 12000
       });
@@ -264,7 +283,7 @@ class ChannelTester {
       const pages = (res.data.data || []).map(page => ({
         pageId: page.id,
         pageName: page.name,
-        pageAccessToken: page.access_token,
+        pageAccessToken: page.access_token, // Permanent Lifetime Page Token (Never Expires)
         hasInstagram: !!page.instagram_business_account,
         instagram: page.instagram_business_account ? {
           id: page.instagram_business_account.id,
@@ -277,7 +296,8 @@ class ChannelTester {
       return {
         success: true,
         count: pages.length,
-        pages
+        pages,
+        masterToken: activeToken
       };
     } catch (err) {
       const errMsg = err.response?.data?.error?.message || err.message;

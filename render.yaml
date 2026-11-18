@@ -12,4 +12,8 @@ services:
         value: 10000
       - key: TELEGRAM_BOT_TOKEN
         value: 9283650493:AAEbHNXPtWnej_39TBrCQ3y8yXZUESR2D7E
+      - key: META_APP_ID
+        value: "1610475786797567"
+      - key: META_APP_SECRET
+        value: "c3c76a1853a1a213e67c2c9655914caf"
     autoDeploy: true
