@@ -45,6 +45,11 @@
       "appSecret": "c3c76a1853a1a213e67c2c9655914caf",
       "masterUserToken": "EAAW4uB0xAf8BTHA6TYNUR2vfDmnHgZA37hBhzZAkbZCM8pAULiKHHxgVmDYrJies7NGTQm4ZAcwB2ijVtGRr0aaVcRFgZCZCbnUhi2mLzuGxAvmKc9gVKqG95PmrixwzrvsVN0vR1YgpujXzycO43iMFgsAtuyzWM6ZAF7QjEIWBms7Rx1dnvZAexzVfha7YHPrf",
       "lifetimePageToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK"
+    },
+    "youtube": {
+      "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+      "projectId": "caramel-slice-514503-k0",
+      "projectName": "Lexa Artificial Automation"
     }
   },
   "accounts": [
@@ -94,15 +99,14 @@
     {
       "id": "acc_youtube",
       "platform": "youtube",
-      "name": "YouTube Channel - Lexa Trip Jaisalmer",
+      "name": "YouTube - Lexa Trip Jaisalmer",
       "destination": "Jaisalmer",
-      "handle": "youtube.com/@lexatripjaisalmer",
-      "connected": false,
+      "handle": "@lexatripjaisalmer",
+      "connected": true,
       "authType": "api_token",
       "credentials": {
-        "apiKey": "",
-        "channelId": "",
-        "refreshToken": ""
+        "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+        "channelId": "UCGoH0bF9aH2MVV0RupzsGqQ"
       },
       "proxy": ""
     },
@@ -7880,20 +7884,12 @@
         },
         "youtube": {
           "enabled": true,
-          "name": "Lexa Trip YouTube Official",
-          "handle": "youtube.com/@lexatripjaisalmer",
-          "authType": "smart_oauth",
+          "name": "Lexa Trip Jaisalmer ",
+          "handle": "@lexatripjaisalmer",
+          "authType": "api_token",
           "credentials": {
-            "isSmartConnect": true,
-            "destinationSlug": "jaisalmer",
-            "accessToken": "smart_youtube_token_1794891558374",
-            "pageAccessToken": "smart_youtube_token_1794891558374",
-            "apiKey": "smart_youtube_key_1794891558374",
-            "pageId": "page_jaisalmer_97680",
-            "instagramAccountId": "ig_jaisalmer_79694",
-            "boardId": "board_jaisalmer",
-            "channelId": "UC_jaisalmer_official",
-            "organizationUrn": "urn:li:organization:lexatripjaisalmer"
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "channelId": "UCGoH0bF9aH2MVV0RupzsGqQ"
           },
           "supports": [
             "reel"
