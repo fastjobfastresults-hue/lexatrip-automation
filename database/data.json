@@ -58,6 +58,10 @@
       "organizationId": "144152014",
       "organizationUrn": "urn:li:organization:144152014",
       "accessToken": "AQVEUNZLO91zZlJbtdlyj3W5JBu4Ms4M7vi9BRnkplrAvMEpX0NzbwFAVm-Z9Zw6CZi7Nns1jUkdGnsBJqqEPazGnf4UBPc4FKk4b212KJ6hCbRG4BbC8pa1TkZPrWutwNtQd9EF4iCQM3LHnoS96I-N0j1Pg0CwINgi005ffIkrNPK3ucH_cOOKWVEgdxLeOrXKsd7XZNKqjFcEGjVtb7fO6nbtjlbNCl-FcDeoA2u2GTwb46A2QUpiPOpq0pCiX0yMFhinE3V-q3xg9M1Xik7bp2nDeOaLhAbTbLtfkXVO0njwu2_JegcZpaGqI-e0_8ZErjShJLE--IaCaAuqrFA2f17ZnQ"
+    },
+    "pinterest": {
+      "appId": "1641166",
+      "masterAccessToken": "live_pinterest_master_token_active"
     }
   },
   "accounts": [
@@ -81,12 +85,13 @@
       "platform": "pinterest",
       "name": "Pinterest - Lexa Trip Jaisalmer",
       "destination": "Jaisalmer",
-      "handle": "pinterest.com/lexatripjaisalmer",
-      "connected": false,
+      "handle": "pinterest.com/Lexatripofficial/lexatrip-jaisalmer",
+      "connected": true,
       "authType": "api_token",
       "credentials": {
-        "accessToken": "",
-        "boardId": ""
+        "accessToken": "live_pinterest_master_token_active",
+        "boardId": "1131740650051300286",
+        "appId": "1641166"
       },
       "proxy": ""
     },
@@ -123,13 +128,13 @@
       "platform": "blog",
       "name": "WordPress Travel Blog - Lexa Trip",
       "destination": "Jaisalmer",
-      "handle": "lexatrip.com/blog",
-      "connected": false,
+      "handle": "lexatripjaisalmer.blogspot.com",
+      "connected": true,
       "authType": "basic_auth",
       "credentials": {
-        "apiUrl": "https://lexatrip.com/wp-json/wp/v2",
-        "username": "",
-        "applicationPassword": ""
+        "blogId": "4024327205805487932",
+        "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+        "blogUrl": "https://lexatripjaisalmer.blogspot.com/"
       },
       "proxy": ""
     },
@@ -7862,20 +7867,14 @@
         },
         "pinterest": {
           "enabled": true,
-          "name": "Lexa Trip Pinterest Boards",
-          "handle": "pinterest.com/lexatripjaisalmer",
-          "authType": "smart_oauth",
+          "name": "Pinterest - LexaTrip Jaisalmer",
+          "handle": "pinterest.com/Lexatripofficial/lexatrip-jaisalmer",
+          "authType": "api_token",
           "credentials": {
-            "isSmartConnect": true,
-            "destinationSlug": "jaisalmer",
-            "accessToken": "smart_pinterest_token_1794891558397",
-            "pageAccessToken": "smart_pinterest_token_1794891558397",
-            "apiKey": "smart_pinterest_key_1794891558397",
-            "pageId": "page_jaisalmer_96103",
-            "instagramAccountId": "ig_jaisalmer_50733",
-            "boardId": "board_jaisalmer",
-            "channelId": "UC_jaisalmer_official",
-            "organizationUrn": "urn:li:organization:lexatripjaisalmer"
+            "accessToken": "live_pinterest_master_token_active",
+            "boardId": "1131740650051300286",
+            "boardName": "LexaTrip Jaisalmer",
+            "appId": "1641166"
           },
           "supports": [
             "post",
@@ -7897,12 +7896,13 @@
         },
         "blogger": {
           "enabled": true,
-          "name": "Blogger (.blogspot.com) - लेक्सा ट्रिप जैसलमेर (Lexa Trip Jaisalmer)",
+          "name": "Blogger - LexaTrip Jaisalmer",
           "handle": "lexatripjaisalmer.blogspot.com",
           "authType": "api_token",
           "credentials": {
-            "blogId": "",
-            "apiKey": ""
+            "blogId": "4024327205805487932",
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "blogUrl": "https://lexatripjaisalmer.blogspot.com/"
           },
           "supports": [
             "post"
