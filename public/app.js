@@ -579,7 +579,7 @@ function openChannelModal(platform) {
           <div class="flex items-center justify-between">
             <span class="font-bold text-red-300 flex items-center space-x-1.5">
               <i class="fa-brands fa-pinterest"></i>
-              <span>Pinterest Developer Portal</span>
+              <span>Pinterest Business Developer Portal</span>
             </span>
             <a href="https://developers.pinterest.com/apps/" target="_blank" class="px-2.5 py-1 bg-red-500/20 hover:bg-red-500/30 text-red-200 text-[10px] rounded-lg font-bold border border-red-500/30 flex items-center space-x-1 transition">
               <span>Pinterest Apps</span>
@@ -587,16 +587,27 @@ function openChannelModal(platform) {
             </a>
           </div>
           <p class="text-[11px] text-gray-300 leading-relaxed">
-            Pinterest Developer Portal se Access Token aur target Board ID enter karein.
+            1 Master Pinterest API Token se sabhi destinations ke boards handle hote hain.<br>
+            Token paste karke <b>"Auto-Detect Boards"</b> dabayein — destination board apne aap link ho jayega!
           </p>
         </div>
         <div>
-          <label class="block font-semibold text-gray-300 mb-1">Pinterest API Access Token</label>
-          <input type="password" id="channel-field-1" value="${creds.accessToken || ''}" placeholder="pina_..." class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono text-xs" />
+          <label class="block font-semibold text-gray-300 mb-1">Pinterest Master API Access Token</label>
+          <div class="flex space-x-2">
+            <input type="password" id="channel-field-1" value="${creds.accessToken || ''}" placeholder="pina_..." class="flex-1 bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono text-xs" />
+            <button type="button" onclick="detectPinterestBoardsFromModal()" class="px-3 py-2 rounded-xl bg-red-600/30 hover:bg-red-600/50 text-red-200 border border-red-500/40 text-xs font-bold shrink-0 transition flex items-center space-x-1">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              <span>Auto-Detect Boards</span>
+            </button>
+          </div>
+        </div>
+        <div id="pinterest-detected-boards-box" class="hidden">
+          <label class="block font-semibold text-red-300 mb-1">Select Destination Board</label>
+          <select id="pinterest-detected-boards-select" onchange="onSelectDetectedPinterestBoard(this)" class="w-full bg-[#1c0f14] border border-red-500/40 rounded-xl px-3 py-2 text-white text-xs"></select>
         </div>
         <div>
-          <label class="block font-semibold text-gray-300 mb-1">Board ID</label>
-          <input type="text" id="channel-field-2" value="${creds.boardId || ''}" placeholder="board_id" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono text-xs" />
+          <label class="block font-semibold text-gray-300 mb-1">Destination Board ID</label>
+          <input type="text" id="channel-field-2" value="${creds.boardId || ''}" placeholder="e.g. 1029384756..." class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono text-xs" />
         </div>
       </div>
     `;
@@ -821,6 +832,77 @@ function onSelectDetectedMetaPage(selectEl) {
     }
     alert(`✅ Selected Facebook Page: ${page.pageName} (ID: ${page.pageId})!`);
   }
+}
+
+async function detectPinterestBoardsFromModal() {
+  const token = document.getElementById('channel-field-1')?.value?.trim();
+  const resultBox = document.getElementById('channel-test-result');
+  if (!token) {
+    alert('Please enter your Pinterest Master Access Token first!');
+    return;
+  }
+  resultBox.classList.remove('hidden');
+  resultBox.className = 'p-3 rounded-xl border border-red-500/40 bg-red-500/10 text-red-300 text-xs flex items-center space-x-2';
+  resultBox.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Connecting to Pinterest API & detecting boards...</span>';
+
+  try {
+    const res = await fetch('/api/social/pinterest/detect-boards', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ accessToken: token })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+
+    if (!data.boards || data.boards.length === 0) {
+      throw new Error('No Pinterest Boards found in this account. Please create your destination board on Pinterest first!');
+    }
+
+    const selectBox = document.getElementById('pinterest-detected-boards-select');
+    const box = document.getElementById('pinterest-detected-boards-box');
+    selectBox.innerHTML = '<option value="">-- Choose Destination Board --</option>';
+
+    let matchedIdx = -1;
+    const destName = (currentDestination?.name || '').toLowerCase();
+    const destSlug = (currentDestination?.slug || '').toLowerCase();
+
+    data.boards.forEach((b, idx) => {
+      const opt = document.createElement('option');
+      opt.value = idx;
+      opt.textContent = `${b.name} (${b.pinCount} pins) [ID: ${b.id}]`;
+      selectBox.appendChild(opt);
+
+      // Auto-match if board name contains destination name or slug
+      const bLower = b.name.toLowerCase();
+      if (bLower.includes(destSlug) || (destName && bLower.includes('jaisalmer') && destSlug.includes('jaisalmer'))) {
+        matchedIdx = idx;
+      }
+    });
+
+    window._pinterestDetectedBoards = data.boards;
+    box.classList.remove('hidden');
+
+    if (matchedIdx !== -1) {
+      selectBox.value = matchedIdx;
+      document.getElementById('channel-field-2').value = data.boards[matchedIdx].id;
+      resultBox.className = 'p-3 rounded-xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 text-xs';
+      resultBox.innerHTML = `✅ <b>Auto-Matched Board:</b> "${data.boards[matchedIdx].name}" (ID: ${data.boards[matchedIdx].id})`;
+    } else {
+      resultBox.className = 'p-3 rounded-xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 text-xs';
+      resultBox.innerHTML = `✅ <b>${data.boards.length} Boards detected!</b> Choose the destination board from the dropdown above.`;
+    }
+  } catch (err) {
+    resultBox.className = 'p-3 rounded-xl border border-rose-500/40 bg-rose-500/10 text-rose-300 text-xs';
+    resultBox.innerHTML = `❌ <b>Detection Failed:</b> ${err.message}`;
+  }
+}
+
+function onSelectDetectedPinterestBoard(selectEl) {
+  const idx = selectEl.value;
+  if (idx === '' || !window._pinterestDetectedBoards) return;
+  const board = window._pinterestDetectedBoards[idx];
+  document.getElementById('channel-field-2').value = board.id;
+  alert(`✅ Selected Destination Board: "${board.name}" (ID: ${board.id})!`);
 }
 
 async function performQuickConnectCurrentChannel() {

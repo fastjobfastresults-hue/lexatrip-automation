@@ -249,6 +249,18 @@ app.post('/api/social/meta/detect-accounts', async (req, res) => {
   }
 });
 
+// Auto-Detect Pinterest User Profile & Destination Boards
+app.post('/api/social/pinterest/detect-boards', async (req, res) => {
+  try {
+    const { accessToken } = req.body;
+    if (!accessToken) return res.status(400).json({ error: 'Pinterest Access Token is required.' });
+    const result = await channelTester.detectPinterestBoards(accessToken);
+    res.json(result);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 // ♾️ Master Lifetime Token Exchange (Converts short-lived to Permanent Never-Expiring Page Tokens)
 app.post('/api/social/meta/exchange-long-lived', async (req, res) => {
   try {

@@ -124,12 +124,28 @@ class ChannelTester {
           headers: { Authorization: `Bearer ${accessToken}` },
           timeout: 10000
         });
+
+        let boardDetails = '';
+        let verifiedBoardName = '';
+        if (boardId) {
+          try {
+            const bRes = await axios.get(`https://api.pinterest.com/v5/boards/${boardId}`, {
+              headers: { Authorization: `Bearer ${accessToken}` },
+              timeout: 10000
+            });
+            verifiedBoardName = bRes.data?.name || '';
+            boardDetails = ` · Destination Board: "${verifiedBoardName}" (Verified Active)`;
+          } catch (e) {
+            boardDetails = ` · Board ID: ${boardId}`;
+          }
+        }
+
         return {
           success: true,
           platform: 'pinterest',
-          accountName: res.data.username || 'Pinterest Account',
-          handle: `@${res.data.username || 'pinterest'}`,
-          details: `Connected successfully! Pins: ${res.data.pin_count || 'N/A'}`
+          accountName: res.data.username ? `@${res.data.username}` : 'Pinterest Business Account',
+          handle: verifiedBoardName ? `pinterest.com/${res.data.username}/${verifiedBoardName}` : `@${res.data.username || 'pinterest'}`,
+          details: `Connected successfully! Pins: ${res.data.pin_count ?? 'N/A'}${boardDetails}`
         };
       }
 
@@ -302,6 +318,50 @@ class ChannelTester {
     } catch (err) {
       const errMsg = err.response?.data?.error?.message || err.message;
       throw new Error(`Meta Auto-Detect Error: ${errMsg}`);
+    }
+  }
+
+  /**
+   * Auto-Detect Pinterest User Profile & Destination Boards
+   */
+  async detectPinterestBoards(accessToken) {
+    if (!accessToken) {
+      throw new Error('Access Token is required to detect Pinterest boards.');
+    }
+    try {
+      // 1. Fetch user profile
+      const userRes = await axios.get('https://api.pinterest.com/v5/user_account', {
+        headers: { Authorization: `Bearer ${accessToken}` },
+        timeout: 10000
+      });
+
+      // 2. Fetch all user boards
+      const boardsRes = await axios.get('https://api.pinterest.com/v5/boards', {
+        headers: { Authorization: `Bearer ${accessToken}` },
+        params: { page_size: 100 },
+        timeout: 10000
+      });
+
+      const boards = (boardsRes.data?.items || []).map(b => ({
+        id: b.id,
+        name: b.name,
+        description: b.description || '',
+        privacy: b.privacy || 'PUBLIC',
+        pinCount: b.pin_count || 0
+      }));
+
+      return {
+        success: true,
+        user: {
+          username: userRes.data?.username,
+          accountType: userRes.data?.account_type,
+          profileImage: userRes.data?.profile_image
+        },
+        boards
+      };
+    } catch (err) {
+      const errMsg = err.response?.data?.message || err.message;
+      throw new Error(`Pinterest Auto-Detect Error: ${errMsg}`);
     }
   }
 }
