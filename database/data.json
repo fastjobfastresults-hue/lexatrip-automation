@@ -50,6 +50,13 @@
       "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
       "projectId": "caramel-slice-514503-k0",
       "projectName": "Lexa Artificial Automation"
+    },
+    "linkedin": {
+      "appId": "264267767",
+      "clientId": "86tq0bei3rlo84",
+      "clientSecret": "V1BMX0FQMS5tUEVLcXFzNkdFb0RQRmV1LmYweVkrdz09",
+      "organizationId": "144152014",
+      "organizationUrn": "urn:li:organization:144152014"
     }
   },
   "accounts": [
@@ -7840,8 +7847,8 @@
         },
         "linkedin": {
           "enabled": true,
-          "name": "Lexa Trip Company Page",
-          "handle": "linkedin.com/company/lexatripjaisalmer",
+          "name": "LinkedIn - Lexa Trip",
+          "handle": "linkedin.com/company/144152014",
           "authType": "smart_oauth",
           "credentials": {
             "isSmartConnect": true,
@@ -7853,7 +7860,7 @@
             "instagramAccountId": "ig_jaisalmer_18418",
             "boardId": "board_jaisalmer",
             "channelId": "UC_jaisalmer_official",
-            "organizationUrn": "urn:li:organization:lexatripjaisalmer"
+            "organizationUrn": "urn:li:organization:144152014"
           },
           "supports": [
             "post",
