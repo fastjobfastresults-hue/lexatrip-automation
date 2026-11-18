@@ -369,8 +369,8 @@ function renderInteractiveChannels() {
     const statusBadge = isLiveOfficial
       ? `<span class="text-emerald-400 font-bold flex items-center space-x-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span>Live Official</span></span>`
       : (isConnected 
-          ? `<span class="text-amber-400 font-semibold flex items-center space-x-1"><i class="fa-solid fa-flask text-[9px]"></i> <span>Sandbox Demo</span></span>` 
-          : `<span class="text-gray-400 font-semibold">+ Connect Live</span>`);
+          ? `<span class="text-amber-400 font-semibold flex items-center space-x-1"><i class="fa-solid fa-flask text-[9px]"></i> <span>Free Demo Mode</span></span>` 
+          : `<span class="text-sky-400 font-semibold flex items-center space-x-1"><i class="fa-solid fa-plus text-[9px]"></i> <span>Connect Free API</span></span>`);
 
     const dotClass = isLiveOfficial
       ? 'bg-emerald-400 shadow-[0_0_10px_#34d399]'
@@ -1767,6 +1767,30 @@ async function loadSettings() {
     if (tgUserEl) tgUserEl.value = s.telegram?.botUsername || 'lexatrip_auto_bot';
     if (tgChatEl) tgChatEl.value = s.telegram?.allowedChatId || '8455865796';
 
+    // Restore Custom Brand Logo if saved
+    const savedLogo = localStorage.getItem('lexatrip_brand_logo') || s.customLogoUrl;
+    if (savedLogo) {
+      const img = document.getElementById('brand-logo-img');
+      const icon = document.getElementById('brand-logo-icon');
+      if (img) {
+        img.src = savedLogo;
+        img.classList.remove('hidden');
+      }
+      if (icon) icon.classList.add('hidden');
+    }
+
+    // Restore Admin Profile if saved
+    const savedAdminName = localStorage.getItem('lexatrip_admin_name') || s.adminProfile?.name;
+    const savedAdminAvatar = localStorage.getItem('lexatrip_admin_avatar') || s.adminProfile?.avatar;
+    if (savedAdminName) {
+      const el = document.getElementById('user-auth-name');
+      if (el) el.textContent = savedAdminName;
+    }
+    if (savedAdminAvatar) {
+      const el = document.getElementById('user-auth-avatar');
+      if (el) el.src = savedAdminAvatar;
+    }
+
     const heroTokenStatus = document.getElementById('hero-token-status');
     if (heroTokenStatus) {
       if (s.meta?.lifetimePageToken) {
@@ -1834,6 +1858,118 @@ async function saveSettingsModal() {
   } catch (e) {
     alert('Error saving settings: ' + e.message);
   }
+}
+
+// --- BRAND LOGO UPLOAD & CUSTOMIZATION ---
+function triggerLogoUpload() {
+  document.getElementById('brand-logo-file')?.click();
+}
+
+function uploadBrandLogo(event) {
+  const file = event.target.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const dataUrl = e.target.result;
+    const img = document.getElementById('brand-logo-img');
+    const icon = document.getElementById('brand-logo-icon');
+    if (img) {
+      img.src = dataUrl;
+      img.classList.remove('hidden');
+    }
+    if (icon) icon.classList.add('hidden');
+    localStorage.setItem('lexatrip_brand_logo', dataUrl);
+    try {
+      await fetch('/api/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ customLogoUrl: dataUrl })
+      });
+    } catch (err) {}
+    alert('🎉 ब्रांड लोगो सफलतापूर्वक अपलोड व अपडेट हो गया!');
+  };
+  reader.readAsDataURL(file);
+}
+
+// --- ADMIN PROFILE MODAL & CUSTOMIZATION ---
+function openAdminProfileModal() {
+  const name = localStorage.getItem('lexatrip_admin_name') || document.getElementById('user-auth-name')?.textContent || 'Lexa Admin';
+  const avatar = localStorage.getItem('lexatrip_admin_avatar') || document.getElementById('user-auth-avatar')?.src || '';
+  const nameInp = document.getElementById('admin-name-input');
+  const prev = document.getElementById('admin-modal-avatar-preview');
+  const urlInp = document.getElementById('admin-photo-url-input');
+  if (nameInp) nameInp.value = name;
+  if (prev && avatar) prev.src = avatar;
+  if (urlInp) urlInp.value = avatar.startsWith('data:') ? '' : avatar;
+  document.getElementById('admin-profile-modal')?.classList.remove('hidden');
+}
+
+function closeAdminProfileModal() {
+  document.getElementById('admin-profile-modal')?.classList.add('hidden');
+}
+
+function handleAdminPhotoUpload(event) {
+  const file = event.target.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    const prev = document.getElementById('admin-modal-avatar-preview');
+    if (prev) prev.src = dataUrl;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function saveAdminProfile() {
+  const name = document.getElementById('admin-name-input')?.value?.trim() || 'Lexa Admin';
+  const urlInp = document.getElementById('admin-photo-url-input')?.value?.trim();
+  const prev = document.getElementById('admin-modal-avatar-preview');
+  const avatar = urlInp || prev?.src || '';
+
+  const nameEl = document.getElementById('user-auth-name');
+  const avatarEl = document.getElementById('user-auth-avatar');
+  if (nameEl) nameEl.textContent = name;
+  if (avatarEl && avatar) avatarEl.src = avatar;
+
+  localStorage.setItem('lexatrip_admin_name', name);
+  if (avatar) localStorage.setItem('lexatrip_admin_avatar', avatar);
+
+  try {
+    await fetch('/api/settings', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ adminProfile: { name, avatar } })
+    });
+  } catch (e) {}
+
+  closeAdminProfileModal();
+  alert('✅ एडमिनिस्ट्रेटर प्रोफाइल (नाम व फोटो) सफलतापूर्वक अपडेट हो गई!');
+}
+
+// --- DESTINATION SPECIFIC ACTIONS (DELETE & CRM TRACKER) ---
+async function deleteCurrentDestination() {
+  if (!currentDestination) return;
+  if (destinations.length <= 1) {
+    alert('⚠️ कम से कम 1 डेस्टिनेशन होना आवश्यक है! आप अंतिम डेस्टिनेशन को डिलीट नहीं कर सकते।');
+    return;
+  }
+  const ok = confirm(`क्या आप सचमुच "${currentDestination.name}" डेस्टिनेशन को हटाना चाहते हैं?`);
+  if (!ok) return;
+  try {
+    const res = await fetch(`/api/destinations/${currentDestination.id}`, { method: 'DELETE' });
+    if (!res.ok) throw new Error('Failed to delete destination');
+    alert(`✅ डेस्टिनेशन "${currentDestination.name}" सफलतापूर्वक हटा दिया गया!`);
+    await loadDestinations();
+  } catch (e) {
+    alert('Delete Error: ' + e.message);
+  }
+}
+
+function openDestinationCRM() {
+  if (!currentDestination) return;
+  openCRMModal();
+  const dName = document.getElementById('crm-active-dest-name');
+  if (dName) dName.textContent = currentDestination.name;
 }
 
 // ==========================================
