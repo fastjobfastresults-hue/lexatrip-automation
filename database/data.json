@@ -39,6 +39,12 @@
         "apiKey": "",
         "model": "gpt-4o-mini"
       }
+    },
+    "meta": {
+      "appId": "1610475786797567",
+      "appSecret": "c3c76a1853a1a213e67c2c9655914caf",
+      "masterUserToken": "EAAW4uB0xAf8BTHA6TYNUR2vfDmnHgZA37hBhzZAkbZCM8pAULiKHHxgVmDYrJies7NGTQm4ZAcwB2ijVtGRr0aaVcRFgZCZCbnUhi2mLzuGxAvmKc9gVKqG95PmrixwzrvsVN0vR1YgpujXzycO43iMFgsAtuyzWM6ZAF7QjEIWBms7Rx1dnvZAexzVfha7YHPrf",
+      "lifetimePageToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK"
     }
   },
   "accounts": [
@@ -7799,20 +7805,13 @@
       "channels": {
         "facebook": {
           "enabled": true,
-          "name": "Lexa Trip Facebook Page",
-          "handle": "facebook.com/lexatripjaisalmer",
-          "authType": "smart_oauth",
+          "name": "Facebook Page (Lexa Trip)",
+          "handle": "facebook.com/1385624654624388",
+          "authType": "lifetime_page_token",
           "credentials": {
-            "isSmartConnect": true,
-            "destinationSlug": "jaisalmer",
-            "accessToken": "smart_facebook_token_1794891558362",
-            "pageAccessToken": "smart_facebook_token_1794891558362",
-            "apiKey": "smart_facebook_key_1794891558362",
-            "pageId": "page_jaisalmer_39200",
-            "instagramAccountId": "ig_jaisalmer_95620",
-            "boardId": "board_jaisalmer",
-            "channelId": "UC_jaisalmer_official",
-            "organizationUrn": "urn:li:organization:lexatripjaisalmer"
+            "pageId": "1385624654624388",
+            "pageAccessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
           },
           "supports": [
             "post",
@@ -7822,20 +7821,12 @@
         },
         "instagram": {
           "enabled": true,
-          "name": "Lexa Trip Instagram Business",
+          "name": "Instagram Business (@lexatripjaisalmer)",
           "handle": "@lexatripjaisalmer",
-          "authType": "smart_oauth",
+          "authType": "lifetime_page_token",
           "credentials": {
-            "isSmartConnect": true,
-            "destinationSlug": "jaisalmer",
-            "accessToken": "smart_instagram_token_1794896323222",
-            "pageAccessToken": "smart_instagram_token_1794896323222",
-            "apiKey": "smart_instagram_key_1794896323222",
-            "pageId": "page_jaisalmer_91321",
-            "instagramAccountId": "ig_jaisalmer_52729",
-            "boardId": "board_jaisalmer",
-            "channelId": "UC_jaisalmer_official",
-            "organizationUrn": "urn:li:organization:lexatripjaisalmer"
+            "accessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
           },
           "supports": [
             "post",
