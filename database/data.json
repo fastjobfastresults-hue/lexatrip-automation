@@ -8002,22 +8002,22 @@
           "connected": true,
           "status": "🟢 Live Official",
           "name": "Reddit Official",
-          "handle": "u/LexaTripOfficial",
-          "url": "https://www.reddit.com/user/LexaTripOfficial/",
+          "handle": "u/Logical_Forever_4242",
+          "url": "https://www.reddit.com/user/Logical_Forever_4242/",
           "credentials": {
-            "username": "LexaTripOfficial",
-            "clientId": "",
-            "clientSecret": ""
+            "username": "Logical_Forever_4242",
+            "displayName": "Lexa Trip - Luxury Desert and Travel Experiences"
           }
         },
         "quora": {
           "connected": true,
           "status": "🟢 Live Official",
           "name": "Quora Official & Space",
-          "handle": "Lexa Trip Space",
-          "url": "https://www.quora.com/q/lexatrip",
+          "handle": "lexatrip.quora.com",
+          "url": "https://lexatrip.quora.com/",
+          "profileUrl": "https://www.quora.com/profile/IMRAN-KHAN-42350",
           "credentials": {
-            "spaceUrl": "https://www.quora.com/q/lexatrip"
+            "spaceUrl": "https://lexatrip.quora.com/"
           }
         }
       },
@@ -8195,22 +8195,22 @@
           "connected": true,
           "status": "🟢 Live Official",
           "name": "Reddit Official",
-          "handle": "u/LexaTripOfficial",
-          "url": "https://www.reddit.com/user/LexaTripOfficial/",
+          "handle": "u/Logical_Forever_4242",
+          "url": "https://www.reddit.com/user/Logical_Forever_4242/",
           "credentials": {
-            "username": "LexaTripOfficial",
-            "clientId": "",
-            "clientSecret": ""
+            "username": "Logical_Forever_4242",
+            "displayName": "Lexa Trip - Luxury Desert and Travel Experiences"
           }
         },
         "quora": {
           "connected": true,
           "status": "🟢 Live Official",
           "name": "Quora Official & Space",
-          "handle": "Lexa Trip Space",
-          "url": "https://www.quora.com/q/lexatrip",
+          "handle": "lexatrip.quora.com",
+          "url": "https://lexatrip.quora.com/",
+          "profileUrl": "https://www.quora.com/profile/IMRAN-KHAN-42350",
           "credentials": {
-            "spaceUrl": "https://www.quora.com/q/lexatrip"
+            "spaceUrl": "https://lexatrip.quora.com/"
           }
         }
       },
