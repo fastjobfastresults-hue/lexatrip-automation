@@ -301,7 +301,8 @@ app.post('/api/social/meta/exchange-long-lived', async (req, res) => {
 
 // --- CRM & AUTO-REPLY / AUTO-DM ENDPOINTS ---
 app.get('/api/crm', (req, res) => {
-  res.json(crmEngine.getCRMData());
+  const destId = req.query.destinationId || 'dest_jaisalmer';
+  res.json(crmEngine.getCRMData(destId));
 });
 
 app.put('/api/crm/settings', (req, res) => {

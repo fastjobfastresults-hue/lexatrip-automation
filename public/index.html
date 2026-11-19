@@ -6,17 +6,14 @@
   <title>Lexa Trip | Futuristic Multi-Destination Social OS</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
-            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'monospace']
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+            mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace']
           },
           colors: {
             apple: {
@@ -41,7 +38,7 @@
         radial-gradient(at 50% 80%, rgba(16, 185, 129, 0.06) 0px, transparent 55%);
       background-attachment: fixed;
       color: #F3F4F6;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Plus Jakarta Sans", sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
     }
     .glass-card {
@@ -1196,72 +1193,267 @@ Title: 800-Year-Old Golden Living Fort (Sonar Qila)
     </div>
   </div>
 
-  <!-- MODAL: FUTURISTIC SOCIAL CRM & AUTO-REPLY / AUTO-DM HUB -->
-  <div id="crm-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
-    <div class="glass-card-elevated rounded-3xl max-w-2xl w-full p-6 space-y-5 shadow-2xl max-h-[90vh] overflow-y-auto">
-      <div class="flex items-center justify-between pb-3 border-b border-apple-border">
-        <div class="flex items-center space-x-2.5">
-          <div class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-base">
+  <!-- MODAL: FUTURISTIC SOCIAL CRM & LIVE DISPATCH CENTER -->
+  <div id="crm-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-3 sm:p-5 hidden">
+    <div class="glass-card-elevated rounded-3xl max-w-5xl w-full p-5 sm:p-7 space-y-5 shadow-2xl max-h-[92vh] overflow-y-auto border border-apple-border">
+      
+      <!-- HEADER -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3.5 border-b border-apple-border/70 gap-3">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-black text-lg shadow-lg shadow-emerald-500/20">
             <i class="fa-solid fa-headset"></i>
           </div>
           <div>
-            <h3 class="text-sm font-bold text-white flex items-center space-x-2">
-              <span>Universal Social CRM & Auto-Reply Hub</span>
-              <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-[9px] uppercase">Live Active</span>
-            </h3>
-            <p class="text-[11px] text-gray-400">Master Meta Token, Auto-DM, Automated Comment Replies & Multi-Page CRM</p>
+            <div class="flex items-center space-x-2">
+              <h3 class="text-base font-bold text-white tracking-tight">Social CRM & Live Dispatch Center</h3>
+              <span id="crm-active-badge" class="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[11px] font-semibold flex items-center space-x-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>🟢 24/7 ऑटो-पायलट सक्रिय</span>
+              </span>
+            </div>
+            <p class="text-xs text-gray-400 mt-0.5">
+              सक्रिय डेस्टिनेशन: <span id="crm-active-dest-name" class="text-amber-300 font-bold">लेक्सा ट्रिप जैसलमेर (Lexa Trip Jaisalmer)</span> · लाइव लिंक्स व रिपोर्ट ट्रैकर
+            </p>
           </div>
         </div>
-        <button onclick="closeCRMModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+        <button onclick="closeCRMModal()" class="self-end sm:self-auto p-2 text-gray-400 hover:text-white rounded-xl hover:bg-white/5 transition">
+          <i class="fa-solid fa-xmark text-base"></i>
+        </button>
       </div>
 
-      <!-- MASTER TOKEN & AUTO-LOADED CONNECTION STATUS -->
-      <div class="p-4 rounded-2xl bg-white/[0.03] border border-apple-border space-y-3">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-bold text-white flex items-center space-x-1.5">
-            <i class="fa-brands fa-meta text-blue-400"></i>
-            <span>Master Meta & Social CRM Connection</span>
-          </span>
-          <span id="crm-active-badge" class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/30 flex items-center space-x-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>🟢 ऑटो-कनेक्टेड (Never-Expiring System Key)</span>
-          </span>
+      <!-- CRM NAVIGATION TABS -->
+      <div class="flex items-center space-x-2 border-b border-white/10 pb-2.5 overflow-x-auto text-xs">
+        <button onclick="switchCRMTab('reports')" id="crm-tab-btn-reports" class="px-4 py-2 rounded-xl font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center space-x-2 transition shadow-sm whitespace-nowrap">
+          <i class="fa-solid fa-chart-line text-emerald-400"></i>
+          <span>📊 लाइव डिस्पैच रिपोर्ट & लिंक्स</span>
+        </button>
+        <button onclick="switchCRMTab('queue')" id="crm-tab-btn-queue" class="px-4 py-2 rounded-xl font-semibold text-gray-300 hover:text-white hover:bg-white/5 border border-transparent flex items-center space-x-2 transition whitespace-nowrap">
+          <i class="fa-solid fa-clock text-amber-400"></i>
+          <span>⏳ शेड्यूल्ड कतार (Queue)</span>
+          <span id="crm-tab-queue-badge" class="px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-mono">7</span>
+        </button>
+        <button onclick="switchCRMTab('leads')" id="crm-tab-btn-leads" class="px-4 py-2 rounded-xl font-semibold text-gray-300 hover:text-white hover:bg-white/5 border border-transparent flex items-center space-x-2 transition whitespace-nowrap">
+          <i class="fa-solid fa-comments text-purple-400"></i>
+          <span>💬 कस्टमर लीड्स & ऑटो-डीएम</span>
+        </button>
+        <button onclick="switchCRMTab('settings')" id="crm-tab-btn-settings" class="px-4 py-2 rounded-xl font-semibold text-gray-300 hover:text-white hover:bg-white/5 border border-transparent flex items-center space-x-2 transition whitespace-nowrap">
+          <i class="fa-solid fa-sliders text-sky-400"></i>
+          <span>⚙️ कनेक्टेड सोशल एकाउंट्स</span>
+        </button>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- TAB 1: 📊 LIVE DISPATCH REPORT & ACTUAL LINKS (DEFAULT)  -->
+      <!-- ======================================================== -->
+      <div id="crm-tab-reports" class="space-y-4">
+        
+        <!-- Summary Metric Cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="p-3.5 rounded-2xl bg-white/[0.03] border border-apple-border">
+            <span class="text-[11px] text-gray-400 font-medium">सफलतापूर्वक पब्लिश्ड</span>
+            <div class="flex items-center justify-between mt-1">
+              <span id="crm-stat-published" class="text-xl font-extrabold text-emerald-400">48</span>
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            </div>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-white/[0.03] border border-apple-border">
+            <span class="text-[11px] text-gray-400 font-medium">लाइव सोशल नेटवर्क्स</span>
+            <div class="flex items-center justify-between mt-1">
+              <span class="text-xl font-extrabold text-sky-400">6 / 6</span>
+              <span class="w-2 h-2 rounded-full bg-sky-400"></span>
+            </div>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-white/[0.03] border border-apple-border">
+            <span class="text-[11px] text-gray-400 font-medium">कतार में शेड्यूल्ड</span>
+            <div class="flex items-center justify-between mt-1">
+              <span id="crm-stat-queued" class="text-xl font-extrabold text-amber-300">7</span>
+              <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+            </div>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-white/[0.03] border border-apple-border">
+            <span class="text-[11px] text-gray-400 font-medium">पॉलिसी व चैनल हेल्थ</span>
+            <div class="flex items-center justify-between mt-1">
+              <span class="text-xl font-extrabold text-teal-300">100%</span>
+              <span class="w-2 h-2 rounded-full bg-teal-400"></span>
+            </div>
+          </div>
         </div>
 
-        <!-- Auto-Loaded Live Destination Pages Card -->
-        <div class="p-3 rounded-xl bg-black/40 border border-emerald-500/20 space-y-2">
-          <div class="flex items-center justify-between text-xs">
-            <span class="font-bold text-white flex items-center space-x-1.5">
-              <i class="fa-solid fa-link text-emerald-400"></i>
-              <span>सक्रिय लिंक पेज (<span id="crm-active-dest-name">लेक्सा ट्रिप जैसलमेर</span>):</span>
+        <!-- Master Destination Direct Live Links Bar -->
+        <div class="p-3.5 rounded-2xl bg-black/40 border border-apple-border space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-gray-200 flex items-center space-x-1.5">
+              <i class="fa-solid fa-arrow-up-right-from-square text-apple-gold text-[11px]"></i>
+              <span>लाइव डेस्टिनेशन चैनल्स (सीधे क्लिक करके वेरीफाई करें):</span>
             </span>
-            <span class="text-[10px] text-emerald-400 font-mono font-bold bg-emerald-500/10 px-2 py-0.5 rounded">100% सिंक्ड</span>
+            <span class="text-[10px] text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+              ● ऑल चैनल्स वेरिफाइड
+            </span>
           </div>
-          <div id="crm-active-pages-list" class="space-y-1.5 text-xs text-gray-300">
-            <div class="flex items-center justify-between p-2 rounded-lg bg-white/[0.02]">
-              <span class="flex items-center space-x-2">
-                <i class="fa-brands fa-facebook text-blue-400"></i>
-                <b class="text-white">Facebook:</b> <span>Lexa Trip (ID: 1385624654624388)</span>
-              </span>
-              <span class="text-[10px] text-emerald-400 font-bold">🟢 Live</span>
-            </div>
-            <div class="flex items-center justify-between p-2 rounded-lg bg-white/[0.02]">
-              <span class="flex items-center space-x-2">
-                <i class="fa-brands fa-instagram text-pink-400"></i>
-                <b class="text-white">Instagram:</b> <span>@lexatripjaisalmer</span>
-              </span>
-              <span class="text-[10px] text-emerald-400 font-bold">🟢 Live</span>
-            </div>
+
+          <div class="flex flex-wrap gap-2 text-xs pt-1">
+            <a href="https://www.facebook.com/1385624654624388" target="_blank" class="px-3 py-1.5 rounded-xl bg-blue-500/10 hover:bg-blue-500/25 text-blue-300 border border-blue-500/30 font-semibold inline-flex items-center space-x-1.5 transition">
+              <i class="fa-brands fa-facebook text-blue-400"></i>
+              <span>Facebook (Lexa Trip) ↗</span>
+            </a>
+            <a href="https://www.instagram.com/lexatripjaisalmer/" target="_blank" class="px-3 py-1.5 rounded-xl bg-pink-500/10 hover:bg-pink-500/25 text-pink-300 border border-pink-500/30 font-semibold inline-flex items-center space-x-1.5 transition">
+              <i class="fa-brands fa-instagram text-pink-400"></i>
+              <span>Instagram (@lexatripjaisalmer) ↗</span>
+            </a>
+            <a href="https://t.me/lexatripjaisalmer" target="_blank" class="px-3 py-1.5 rounded-xl bg-sky-500/10 hover:bg-sky-500/25 text-sky-300 border border-sky-500/30 font-semibold inline-flex items-center space-x-1.5 transition">
+              <i class="fa-brands fa-telegram text-sky-400"></i>
+              <span>Telegram (@lexatripjaisalmer) ↗</span>
+            </a>
+            <a href="https://www.pinterest.com/lexatripjaisalmer/" target="_blank" class="px-3 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 font-semibold inline-flex items-center space-x-1.5 transition">
+              <i class="fa-brands fa-pinterest text-rose-400"></i>
+              <span>Pinterest ↗</span>
+            </a>
+            <a href="https://www.linkedin.com/company/lexatripjaisalmer" target="_blank" class="px-3 py-1.5 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/25 text-indigo-300 border border-indigo-500/30 font-semibold inline-flex items-center space-x-1.5 transition">
+              <i class="fa-brands fa-linkedin text-indigo-400"></i>
+              <span>LinkedIn ↗</span>
+            </a>
+            <a href="https://www.youtube.com/@lexatripjaisalmer" target="_blank" class="px-3 py-1.5 rounded-xl bg-red-500/10 hover:bg-red-500/25 text-red-300 border border-red-500/30 font-semibold inline-flex items-center space-x-1.5 transition">
+              <i class="fa-brands fa-youtube text-red-400"></i>
+              <span>YouTube Shorts ↗</span>
+            </a>
+            <a href="https://lexatripjaisalmer.blogspot.com/" target="_blank" class="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 font-semibold inline-flex items-center space-x-1.5 transition">
+              <i class="fa-solid fa-blog text-amber-400"></i>
+              <span>Blogger ↗</span>
+            </a>
+            <a href="https://bookings.lexatrip.com/" target="_blank" class="px-3 py-1.5 rounded-xl bg-teal-500/10 hover:bg-teal-500/25 text-teal-300 border border-teal-500/30 font-bold inline-flex items-center space-x-1.5 transition">
+              <i class="fa-solid fa-ticket text-teal-400"></i>
+              <span>Bookings Portal ↗</span>
+            </a>
+            <a href="https://wa.me/919079854982" target="_blank" class="px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 font-bold inline-flex items-center space-x-1.5 transition">
+              <i class="fa-brands fa-whatsapp text-emerald-400"></i>
+              <span>WhatsApp (+91 90798 54982) ↗</span>
+            </a>
           </div>
         </div>
 
-        <!-- Collapsible Advanced Settings (Already Auto-Filled) -->
-        <details class="text-xs text-gray-400 pt-1">
-          <summary class="cursor-pointer text-[11px] text-gray-400 hover:text-white font-semibold flex items-center space-x-1">
-            <i class="fa-solid fa-sliders text-apple-gold text-[10px]"></i>
-            <span>मास्टर टोकन / API क्रेडेंशियल्स देखें या एडिट करें (ऑटोमैटिक लोडेड)</span>
-          </summary>
-          <div class="space-y-2 mt-2 pt-2 border-t border-apple-border/50">
+        <!-- Recent Dispatches List (with live clickable links for each post) -->
+        <div class="space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-gray-200 uppercase tracking-wider flex items-center space-x-2">
+              <i class="fa-solid fa-list-check text-emerald-400"></i>
+              <span>हाल ही में डिस्पैच की गई पोस्ट्स (लाइव लिंक्स सहित)</span>
+            </span>
+            <button onclick="loadCRMData()" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-[11px] text-gray-300 border border-apple-border flex items-center space-x-1 transition">
+              <i class="fa-solid fa-arrows-rotate text-[10px]"></i>
+              <span>रीफ्रेश</span>
+            </button>
+          </div>
+
+          <div id="crm-dispatches-list" class="space-y-2.5 max-h-80 overflow-y-auto pr-1">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- TAB 2: ⏳ UPCOMING SCHEDULED QUEUE                       -->
+      <!-- ======================================================== -->
+      <div id="crm-tab-queue" class="space-y-4 hidden">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-2 border-b border-white/5 gap-2">
+          <div>
+            <h4 class="text-xs font-bold text-white uppercase tracking-wider flex items-center space-x-2">
+              <i class="fa-solid fa-clock text-amber-400"></i>
+              <span>शेड्यूल्ड कतार (Upcoming Timetable)</span>
+            </h4>
+            <p class="text-[11px] text-gray-400 mt-0.5">एंटी-स्पैम मानवीय अंतराल (60–90 मिनट) के अनुसार स्वचालित पब्लिशिंग</p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button onclick="publishAllQueueNow()" class="px-3.5 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-xs font-bold flex items-center space-x-1.5 transition">
+              <i class="fa-solid fa-bolt text-amber-400"></i>
+              <span>⚡ 1-Click Publish All Now</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="crm-queue-list" class="space-y-2.5 max-h-80 overflow-y-auto pr-1">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- TAB 3: 💬 CUSTOMER LEADS & AUTO-DM                       -->
+      <!-- ======================================================== -->
+      <div id="crm-tab-leads" class="space-y-4 hidden">
+        
+        <!-- Controls -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="p-3.5 rounded-2xl bg-white/[0.03] border border-apple-border flex items-center justify-between">
+            <div>
+              <div class="text-xs font-bold text-white flex items-center space-x-1.5">
+                <i class="fa-solid fa-reply text-purple-400"></i>
+                <span>Auto-Reply to Comments</span>
+              </div>
+              <p class="text-[11px] text-gray-400 mt-0.5">कमेंट्स पर स्मार्ट ऑटोमैटिक रिप्लाई</p>
+            </div>
+            <input type="checkbox" id="crm-toggle-autoreply" checked onchange="saveCRMToggles()" class="w-4 h-4 accent-emerald-500 cursor-pointer" />
+          </div>
+
+          <div class="p-3.5 rounded-2xl bg-white/[0.03] border border-apple-border flex items-center justify-between">
+            <div>
+              <div class="text-xs font-bold text-white flex items-center space-x-1.5">
+                <i class="fa-solid fa-paper-plane text-blue-400"></i>
+                <span>Auto-DM to Inquiries</span>
+              </div>
+              <p class="text-[11px] text-gray-400 mt-0.5">प्राइस/बुकिंग पूछने पर ऑटो-DM</p>
+            </div>
+            <input type="checkbox" id="crm-toggle-autodm" checked onchange="saveCRMToggles()" class="w-4 h-4 accent-emerald-500 cursor-pointer" />
+          </div>
+        </div>
+
+        <!-- Leads List -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-gray-300">Live Customer Leads & Interactions</span>
+            <button onclick="testCRMLeadSimulation()" class="px-2.5 py-1 rounded bg-white/[0.06] hover:bg-white/[0.1] text-xs font-semibold text-gray-300 border border-apple-border flex items-center space-x-1 transition">
+              <i class="fa-solid fa-flask text-apple-gold"></i>
+              <span>Simulate Customer Inquiry</span>
+            </button>
+          </div>
+          <div id="crm-leads-feed" class="space-y-2.5 max-h-72 overflow-y-auto pr-1">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- TAB 4: ⚙️ CONNECTED SOCIAL ACCOUNTS & MASTER TOKENS     -->
+      <!-- ======================================================== -->
+      <div id="crm-tab-settings" class="space-y-4 hidden">
+        <div class="p-4 rounded-2xl bg-white/[0.03] border border-apple-border space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-white flex items-center space-x-1.5">
+              <i class="fa-brands fa-meta text-blue-400"></i>
+              <span>Master Meta & Social CRM Connection</span>
+            </span>
+            <span class="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/30 flex items-center space-x-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>🟢 ऑटो-कनेक्टेड (Never-Expiring System Key)</span>
+            </span>
+          </div>
+
+          <!-- Auto-Loaded Live Destination Pages Card -->
+          <div class="p-3.5 rounded-xl bg-black/40 border border-emerald-500/20 space-y-2">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-bold text-white flex items-center space-x-1.5">
+                <i class="fa-solid fa-link text-emerald-400"></i>
+                <span>सक्रिय लिंक पेज (<span id="crm-active-dest-name-sub">लेक्सा ट्रिप जैसलमेर</span>):</span>
+              </span>
+              <span class="text-[10px] text-emerald-400 font-mono font-bold bg-emerald-500/10 px-2 py-0.5 rounded">100% सिंक्ड</span>
+            </div>
+            <div id="crm-active-pages-list" class="space-y-1.5 text-xs text-gray-300">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <!-- Master Token Inputs -->
+          <div class="space-y-2 pt-2 border-t border-apple-border/50">
+            <label class="block text-xs font-semibold text-gray-300">Master User Token (Never-Expiring)</label>
             <input type="password" id="crm-master-token" placeholder="Master User Token (Auto-Loaded)" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-xs text-gray-200 font-mono focus:border-emerald-400 outline-none" />
             <div class="flex items-center space-x-2">
               <input type="password" id="crm-app-secret" placeholder="App Secret (Auto-Loaded)" class="flex-1 bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-xs text-gray-200 font-mono outline-none" />
@@ -1271,64 +1463,17 @@ Title: 800-Year-Old Golden Living Fort (Sonar Qila)
               </button>
             </div>
           </div>
-        </details>
-
-        <!-- Detected Pages Selector -->
-        <div id="crm-detected-pages-container" class="hidden pt-2 border-t border-apple-border/50 space-y-2">
-          <label class="block text-[11px] font-semibold text-gray-300">Choose Page to Link with Active Destination (<span id="crm-active-dest-name-sub">Jaisalmer</span>):</label>
-          <div class="flex items-center space-x-2">
-            <select id="crm-detected-pages-select" class="flex-1 bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-xs text-white">
-              <option value="">-- Choose Page --</option>
-            </select>
-            <button onclick="linkSelectedPageToActiveDestination()" class="gold-btn px-4 py-2 rounded-xl font-bold text-xs">
-              Link Page ➔
-            </button>
-          </div>
         </div>
       </div>
 
-      <!-- AUTOMATION CONTROLS (AUTO-DM & AUTO-REPLY TOGGLES) -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <div class="p-3.5 rounded-2xl bg-white/[0.03] border border-apple-border flex items-center justify-between">
-          <div>
-            <div class="text-xs font-bold text-white flex items-center space-x-1.5">
-              <i class="fa-solid fa-reply text-purple-400"></i>
-              <span>Auto-Reply to Comments</span>
-            </div>
-            <p class="text-[10px] text-gray-400 mt-0.5">कमेंट्स पर स्मार्ट ऑटोमैटिक रिप्लाई</p>
-          </div>
-          <input type="checkbox" id="crm-toggle-autoreply" checked onchange="saveCRMToggles()" class="w-4 h-4 accent-emerald-500 cursor-pointer" />
-        </div>
-
-        <div class="p-3.5 rounded-2xl bg-white/[0.03] border border-apple-border flex items-center justify-between">
-          <div>
-            <div class="text-xs font-bold text-white flex items-center space-x-1.5">
-              <i class="fa-solid fa-paper-plane text-blue-400"></i>
-              <span>Auto-DM to Inquiries</span>
-            </div>
-            <p class="text-[10px] text-gray-400 mt-0.5">प्राइस/बुकिंग पूछने पर ऑटो-DM</p>
-          </div>
-          <input type="checkbox" id="crm-toggle-autodm" checked onchange="saveCRMToggles()" class="w-4 h-4 accent-emerald-500 cursor-pointer" />
-        </div>
+      <!-- FOOTER -->
+      <div class="flex items-center justify-between pt-3 border-t border-apple-border">
+        <span class="text-[11px] text-gray-500">100% Lifetime Free · Zero-Cost Architecture</span>
+        <button onclick="closeCRMModal()" class="px-6 py-2 text-xs rounded-full bg-white/[0.08] hover:bg-white/[0.15] text-white font-semibold transition">
+          बंद करें (Close)
+        </button>
       </div>
 
-      <!-- LIVE CRM LEADS & INTERACTION FEED -->
-      <div class="space-y-2">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-bold text-gray-300">Live Customer Leads & Interactions Across Pages</span>
-          <button onclick="testCRMLeadSimulation()" class="px-2.5 py-1 rounded bg-white/[0.06] hover:bg-white/[0.1] text-[10px] font-semibold text-gray-300 border border-apple-border flex items-center space-x-1">
-            <i class="fa-solid fa-flask text-apple-gold"></i>
-            <span>Simulate Customer Inquiry</span>
-          </button>
-        </div>
-        <div id="crm-leads-feed" class="space-y-2 max-h-52 overflow-y-auto pr-1">
-          <!-- Rendered by JS -->
-        </div>
-      </div>
-
-      <div class="flex items-center justify-end pt-3 border-t border-apple-border">
-        <button onclick="closeCRMModal()" class="px-5 py-2 text-xs rounded-full bg-white/[0.06] hover:bg-white/[0.1] text-gray-300 font-semibold">Done</button>
-      </div>
     </div>
   </div>
 

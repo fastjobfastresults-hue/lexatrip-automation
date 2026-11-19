@@ -156,12 +156,21 @@ class TelegramNotifier {
         platformList += `  ${icon} *${r.platform.toUpperCase()}:* ${r.status.toUpperCase()} ${r.details?.simulated ? '(Simulation Ready)' : ''}\n`;
       });
 
+      const directLinks = `\n🔗 *वेरिफिकेशन लिंक्स (सीधे लाइव देखें):*\n` +
+        `• [📘 Facebook Live](https://www.facebook.com/1385624654624388)\n` +
+        `• [📸 Instagram (@lexatripjaisalmer)](https://www.instagram.com/lexatripjaisalmer/)\n` +
+        `• [📢 Telegram Channel](https://t.me/lexatripjaisalmer)\n` +
+        `• [📌 Pinterest Board](https://www.pinterest.com/lexatripjaisalmer/)\n` +
+        `• [💼 LinkedIn Company](https://www.linkedin.com/company/lexatripjaisalmer)\n` +
+        `• [🌐 Bookings Portal](https://bookings.lexatrip.com/)\n` +
+        `• [💬 WhatsApp Chat](https://wa.me/919079854982)`;
+
       const msg = `🎉 *[सफल पब्लिश रिपोर्ट]* ${destination?.name || 'Lexa Trip'}\n\n` +
         `📌 *कंटेंट:* ${typeLabel}\n` +
         `📝 *टाइटल:* ${item.title}\n` +
         `🕒 *समय:* ${new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}\n\n` +
-        `*सोशल मीडिया स्टेटस:*\n${platformList}\n` +
-        `💬 *कैप्शन:* ${item.caption.slice(0, 140)}...\n\n` +
+        `*सोशल मीडिया स्टेटस:*\n${platformList}` +
+        `${directLinks}\n\n` +
         `🌐 *लाइव डैशबोर्ड:* https://lexa-trip-automation.onrender.com`;
 
       const targets = [adminChatId, channelId].filter(Boolean);

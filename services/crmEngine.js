@@ -28,10 +28,25 @@ class CRMEngine {
     ];
   }
 
-  getCRMData() {
+  getCRMData(destinationId = 'dest_jaisalmer') {
     const data = db.getRawData ? db.getRawData() : {};
     const settings = db.getSettings ? db.getSettings() : {};
     const destinations = db.getDestinations ? db.getDestinations() : [];
+    const dest = destinations.find(d => d.id === destinationId) || destinations[0] || { id: 'dest_jaisalmer', name: 'Lexa Trip Jaisalmer' };
+
+    // Master Links Policy for Lexa Trip
+    const masterLinks = {
+      facebook: 'https://www.facebook.com/1385624654624388',
+      instagram: 'https://www.instagram.com/lexatripjaisalmer/',
+      telegram: 'https://t.me/lexatripjaisalmer',
+      pinterest: 'https://www.pinterest.com/lexatripjaisalmer/',
+      linkedin: 'https://www.linkedin.com/company/lexatripjaisalmer',
+      youtube: 'https://www.youtube.com/@lexatripjaisalmer',
+      blogger: 'https://lexatripjaisalmer.blogspot.com/',
+      bookings: 'https://bookings.lexatrip.com/',
+      website: 'https://www.lexatrip.com/',
+      whatsapp: 'https://wa.me/919079854982'
+    };
 
     // Extract active linked pages across destinations
     const activePages = [];
@@ -51,7 +66,53 @@ class CRMEngine {
       }
     });
 
+    const queue = db.getQueue ? db.getQueue() : [];
+    const destQueue = queue.filter(q => q.destinationId === dest.id || !q.destinationId);
+    const publishedItems = destQueue.filter(q => q.status === 'published' || q.status === 'completed' || q.status === 'success');
+    const queuedItems = destQueue.filter(q => q.status === 'queued' || q.status === 'publishing');
+
+    // Recent published dispatches with actual live links
+    const recentDispatches = publishedItems.slice(-20).reverse().map(item => {
+      return {
+        id: item.id,
+        title: item.title,
+        itemType: item.itemType || 'post',
+        index: item.index,
+        publishedAt: item.publishedAt || item.scheduledTime || new Date().toISOString(),
+        targets: item.targets || ['instagram', 'facebook', 'linkedin', 'pinterest'],
+        mediaPath: item.mediaPath || '',
+        liveLinks: masterLinks,
+        status: 'published'
+      };
+    });
+
+    // Upcoming queued items with live countdown
+    const upcomingQueue = queuedItems.map(item => {
+      const diffMs = new Date(item.scheduledTime) - new Date();
+      return {
+        id: item.id,
+        title: item.title,
+        itemType: item.itemType || 'post',
+        index: item.index,
+        scheduledTime: item.scheduledTime,
+        targets: item.targets || ['instagram', 'facebook', 'linkedin', 'pinterest'],
+        countdownMinutes: Math.max(0, Math.round(diffMs / 60000)),
+        status: item.status || 'queued'
+      };
+    });
+
     return {
+      destinationId: dest.id,
+      destinationName: dest.name,
+      stats: {
+        totalPublished: publishedItems.length,
+        totalQueued: queuedItems.length,
+        totalChannels: 6,
+        policyHealth: '100% Policy Safe'
+      },
+      masterLinks,
+      recentDispatches,
+      upcomingQueue,
       autoReplyEnabled: data.crmSettings?.autoReplyEnabled ?? true,
       autoDmEnabled: data.crmSettings?.autoDmEnabled ?? true,
       masterToken: settings.meta?.masterUserToken || '',

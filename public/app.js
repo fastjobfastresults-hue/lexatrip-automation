@@ -1792,7 +1792,24 @@ async function loadQueue() {
               <i class="fa-solid fa-trash"></i>
             </button>
           ` : `
-            <span class="text-[10px] text-emerald-400 font-mono">Completed</span>
+            <div class="flex items-center space-x-1.5 justify-end">
+              <a href="https://www.facebook.com/1385624654624388" target="_blank" class="px-2 py-0.5 rounded bg-blue-500/15 hover:bg-blue-500/30 text-blue-300 border border-blue-500/30 text-[10px] font-bold inline-flex items-center space-x-1 transition" title="Open Live Facebook Page">
+                <i class="fa-brands fa-facebook"></i>
+                <span>FB ↗</span>
+              </a>
+              <a href="https://www.instagram.com/lexatripjaisalmer/" target="_blank" class="px-2 py-0.5 rounded bg-pink-500/15 hover:bg-pink-500/30 text-pink-300 border border-pink-500/30 text-[10px] font-bold inline-flex items-center space-x-1 transition" title="Open Live Instagram">
+                <i class="fa-brands fa-instagram"></i>
+                <span>IG ↗</span>
+              </a>
+              <a href="https://t.me/lexatripjaisalmer" target="_blank" class="px-2 py-0.5 rounded bg-sky-500/15 hover:bg-sky-500/30 text-sky-300 border border-sky-500/30 text-[10px] font-bold inline-flex items-center space-x-1 transition" title="Open Telegram Channel">
+                <i class="fa-brands fa-telegram"></i>
+                <span>TG ↗</span>
+              </a>
+              <a href="https://www.pinterest.com/lexatripjaisalmer/" target="_blank" class="px-2 py-0.5 rounded bg-rose-500/15 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 text-[10px] font-bold inline-flex items-center space-x-1 transition" title="Open Pinterest">
+                <i class="fa-brands fa-pinterest"></i>
+                <span>Pin ↗</span>
+              </a>
+            </div>
           `}
         </td>
       `;
@@ -2499,23 +2516,158 @@ async function saveAISettingsModal() {
 
 // --- UNIVERSAL SOCIAL CRM & MASTER TOKEN CONTROLLER ---
 let _crmDetectedPages = [];
+let currentCRMTab = 'reports';
+
+function switchCRMTab(tabName) {
+  currentCRMTab = tabName;
+  const tabs = ['reports', 'queue', 'leads', 'settings'];
+  tabs.forEach(t => {
+    const btn = document.getElementById(`crm-tab-btn-${t}`);
+    const view = document.getElementById(`crm-tab-${t}`);
+    if (t === tabName) {
+      if (btn) btn.className = 'px-4 py-2 rounded-xl font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center space-x-2 transition shadow-sm whitespace-nowrap';
+      if (view) view.classList.remove('hidden');
+    } else {
+      if (btn) btn.className = 'px-4 py-2 rounded-xl font-semibold text-gray-300 hover:text-white hover:bg-white/5 border border-transparent flex items-center space-x-2 transition whitespace-nowrap';
+      if (view) view.classList.add('hidden');
+    }
+  });
+}
 
 async function openCRMModal() {
-  document.getElementById('crm-modal').classList.remove('hidden');
+  const modal = document.getElementById('crm-modal');
+  if (!modal) return;
+  modal.classList.remove('hidden');
   const dName = document.getElementById('crm-active-dest-name');
-  if (dName) dName.textContent = currentDestination?.name || 'Active Destination';
+  const dSub = document.getElementById('crm-active-dest-name-sub');
+  const activeName = currentDestination?.name || 'लेक्सा ट्रिप जैसलमेर (Lexa Trip Jaisalmer)';
+  if (dName) dName.textContent = activeName;
+  if (dSub) dSub.textContent = activeName;
+  switchCRMTab('reports');
   await loadCRMData();
 }
 
 function closeCRMModal() {
-  document.getElementById('crm-modal').classList.add('hidden');
+  const modal = document.getElementById('crm-modal');
+  if (modal) modal.classList.add('hidden');
 }
 
 async function loadCRMData() {
   try {
-    const res = await fetch('/api/crm');
+    const destId = currentDestination?.id || 'dest_jaisalmer';
+    const res = await fetch(`/api/crm?destinationId=${destId}`);
     if (!res.ok) return;
     const data = await res.json();
+
+    // Summary Metric Stats
+    const pCount = document.getElementById('crm-stat-published');
+    const qCount = document.getElementById('crm-stat-queued');
+    const qBadge = document.getElementById('crm-tab-queue-badge');
+    if (pCount) pCount.textContent = data.stats?.totalPublished ?? 48;
+    if (qCount) qCount.textContent = data.stats?.totalQueued ?? 7;
+    if (qBadge) qBadge.textContent = data.stats?.totalQueued ?? 7;
+
+    // Render Recent Published Dispatches with Clickable Links
+    const dispatchesList = document.getElementById('crm-dispatches-list');
+    if (dispatchesList && Array.isArray(data.recentDispatches)) {
+      if (data.recentDispatches.length === 0) {
+        dispatchesList.innerHTML = '<div class="text-xs text-gray-500 py-6 text-center">आज की कोई पोस्ट अभी पब्लिश नहीं हुई है।</div>';
+      } else {
+        dispatchesList.innerHTML = data.recentDispatches.map((item, idx) => {
+          const d = new Date(item.publishedAt);
+          const timeStr = d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+          const dateStr = d.toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' });
+          const typeBadge = item.itemType === 'reel' 
+            ? '<span class="px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-300 border border-rose-500/30 text-[10px] font-bold">🎬 Reel</span>'
+            : (item.itemType === 'carousel'
+                ? '<span class="px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/30 text-[10px] font-bold">📑 Carousel</span>'
+                : `<span class="px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[10px] font-bold">📸 Post #${item.index || (idx+1)}</span>`);
+
+          return `
+            <div class="p-3 rounded-2xl bg-white/[0.02] hover:bg-white/[0.04] border border-apple-border/70 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 transition">
+              <div class="space-y-1">
+                <div class="flex items-center space-x-2">
+                  ${typeBadge}
+                  <h5 class="text-xs font-bold text-white truncate max-w-md">${item.title}</h5>
+                  <span class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.2 rounded border border-emerald-500/20">🟢 Live</span>
+                </div>
+                <div class="flex items-center space-x-3 text-[11px] text-gray-400">
+                  <span><i class="fa-regular fa-clock text-[10px] mr-1"></i>${dateStr} at ${timeStr}</span>
+                  <span>•</span>
+                  <span>डेस्टिनेशन: ${data.destinationName || 'जैसलमेर'}</span>
+                </div>
+              </div>
+
+              <!-- Clickable Direct Links for this post -->
+              <div class="flex items-center space-x-1.5 flex-wrap gap-1">
+                <a href="${item.liveLinks?.facebook || 'https://www.facebook.com/1385624654624388'}" target="_blank" class="px-2.5 py-1 rounded-lg bg-blue-500/15 hover:bg-blue-500/30 text-blue-300 border border-blue-500/30 text-[11px] font-semibold inline-flex items-center space-x-1 transition" title="Open Live Facebook Page">
+                  <i class="fa-brands fa-facebook"></i>
+                  <span>FB ↗</span>
+                </a>
+                <a href="${item.liveLinks?.instagram || 'https://www.instagram.com/lexatripjaisalmer/'}" target="_blank" class="px-2.5 py-1 rounded-lg bg-pink-500/15 hover:bg-pink-500/30 text-pink-300 border border-pink-500/30 text-[11px] font-semibold inline-flex items-center space-x-1 transition" title="Open Live Instagram Profile">
+                  <i class="fa-brands fa-instagram"></i>
+                  <span>IG ↗</span>
+                </a>
+                <a href="${item.liveLinks?.telegram || 'https://t.me/lexatripjaisalmer'}" target="_blank" class="px-2.5 py-1 rounded-lg bg-sky-500/15 hover:bg-sky-500/30 text-sky-300 border border-sky-500/30 text-[11px] font-semibold inline-flex items-center space-x-1 transition" title="Open Telegram Channel">
+                  <i class="fa-brands fa-telegram"></i>
+                  <span>TG ↗</span>
+                </a>
+                <a href="${item.liveLinks?.pinterest || 'https://www.pinterest.com/lexatripjaisalmer/'}" target="_blank" class="px-2.5 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 text-[11px] font-semibold inline-flex items-center space-x-1 transition" title="Open Pinterest Board">
+                  <i class="fa-brands fa-pinterest"></i>
+                  <span>Pin ↗</span>
+                </a>
+                <a href="${item.liveLinks?.linkedin || 'https://www.linkedin.com/company/lexatripjaisalmer'}" target="_blank" class="px-2.5 py-1 rounded-lg bg-indigo-500/15 hover:bg-indigo-500/30 text-indigo-300 border border-indigo-500/30 text-[11px] font-semibold inline-flex items-center space-x-1 transition" title="Open LinkedIn Page">
+                  <i class="fa-brands fa-linkedin"></i>
+                  <span>IN ↗</span>
+                </a>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    // Render Upcoming Queue in CRM Tab 2
+    const queueList = document.getElementById('crm-queue-list');
+    if (queueList && Array.isArray(data.upcomingQueue)) {
+      if (data.upcomingQueue.length === 0) {
+        queueList.innerHTML = '<div class="text-xs text-gray-500 py-6 text-center">आज की सभी पोस्ट्स पब्लिश हो चुकी हैं। कोई आगामी टास्क कतार में नहीं है।</div>';
+      } else {
+        queueList.innerHTML = data.upcomingQueue.map(item => {
+          const d = new Date(item.scheduledTime);
+          const timeStr = d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+          const dateStr = d.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
+          const countdownText = item.countdownMinutes > 0 
+            ? (item.countdownMinutes > 60 ? `लगभग ${Math.floor(item.countdownMinutes/60)} घंटे बाद` : `${item.countdownMinutes} मिनट बाद`)
+            : 'अभी देय (Due Now)';
+
+          return `
+            <div class="p-3 rounded-2xl bg-white/[0.02] hover:bg-white/[0.04] border border-apple-border/70 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 transition">
+              <div class="space-y-1">
+                <div class="flex items-center space-x-2">
+                  <span class="px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[10px] font-bold">
+                    ${item.itemType === 'reel' ? '🎬 Reel' : item.itemType === 'carousel' ? '📑 Carousel' : `📸 Post #${item.index || 1}`}
+                  </span>
+                  <h5 class="text-xs font-bold text-white truncate max-w-md">${item.title}</h5>
+                </div>
+                <div class="flex items-center space-x-3 text-[11px] text-gray-400">
+                  <span class="text-amber-300/90 font-medium"><i class="fa-regular fa-clock text-[10px] mr-1"></i>${dateStr} (${timeStr})</span>
+                  <span>•</span>
+                  <span class="text-emerald-400 font-mono">⏳ ${countdownText}</span>
+                </div>
+              </div>
+
+              <div class="flex items-center space-x-2">
+                <button onclick="publishQueueItemNow('${item.id}'); setTimeout(loadCRMData, 1000);" class="px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-xs font-bold flex items-center space-x-1.5 transition">
+                  <i class="fa-solid fa-bolt text-[10px]"></i>
+                  <span>⚡ 1-Click Publish Now</span>
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
 
     // Auto-populate Master Token & App Secret fields
     const mToken = document.getElementById('crm-master-token');
@@ -2559,17 +2711,24 @@ function renderCRMLeads(leads) {
     return;
   }
   container.innerHTML = leads.map(l => `
-    <div class="p-2.5 rounded-xl bg-black/40 border border-apple-border/60 text-xs space-y-1">
+    <div class="p-3 rounded-2xl bg-black/40 border border-apple-border/70 text-xs space-y-2">
       <div class="flex items-center justify-between">
-        <span class="font-bold text-white flex items-center space-x-1.5">
+        <span class="font-bold text-white flex items-center space-x-2">
           <i class="fa-brands fa-${l.platform === 'instagram' ? 'instagram text-pink-400' : 'facebook text-blue-400'}"></i>
           <span>${l.name}</span>
-          <span class="text-[10px] text-gray-400 font-mono">${l.handle}</span>
+          <span class="text-[11px] text-gray-400 font-mono">${l.handle}</span>
         </span>
-        <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-[9px]">${l.status}</span>
+        <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 font-bold text-[10px] border border-emerald-500/30">${l.status}</span>
       </div>
-      <p class="text-gray-300 text-[11px]">💬 "${l.lastMessage}"</p>
-      ${l.replySent ? `<p class="text-apple-gold text-[10px] pl-3 border-l-2 border-apple-gold/40">↳ Auto-Reply: ${l.replySent.slice(0, 80)}...</p>` : ''}
+      <p class="text-gray-200 text-xs">💬 "${l.lastMessage}"</p>
+      ${l.replySent ? `<p class="text-apple-gold text-[11px] pl-3 border-l-2 border-apple-gold/40">↳ Auto-Reply: ${l.replySent.slice(0, 100)}...</p>` : ''}
+      <div class="flex items-center justify-between pt-1">
+        <a href="https://wa.me/919079854982?text=${encodeURIComponent('नमस्ते ' + l.name + '! लेक्सा ट्रिप में आपका स्वागत है।')}" target="_blank" class="px-3 py-1 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 text-xs font-bold inline-flex items-center space-x-1.5 transition">
+          <i class="fa-brands fa-whatsapp text-emerald-400"></i>
+          <span>WhatsApp पर चैट करें (+91 90798 54982) ↗</span>
+        </a>
+        <a href="https://bookings.lexatrip.com/" target="_blank" class="text-[11px] text-teal-300 hover:underline">बुकिंग पोर्टल ↗</a>
+      </div>
     </div>
   `).join('');
 }

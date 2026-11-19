@@ -498,7 +498,14 @@ class TelegramBotService {
         reply += `\n✨ *अभी कोई पेंडिंग पोस्ट नहीं है। नया बैच भेजने के लिए 5 फ़ोटोज़ + कंबाइंड SEO भेजें।*`;
       }
 
-      reply += `\n🌐 *लाइव डैशबोर्ड:* https://lexa-trip-automation.onrender.com`;
+      reply += `\n\n🔗 *वेरिफाइड लाइव चैनल्स (क्लिक करके देखें):*\n` +
+        `• [📘 Facebook Page](https://www.facebook.com/1385624654624388)\n` +
+        `• [📸 Instagram (@lexatripjaisalmer)](https://www.instagram.com/lexatripjaisalmer/)\n` +
+        `• [📢 Telegram Channel](https://t.me/lexatripjaisalmer)\n` +
+        `• [📌 Pinterest Board](https://www.pinterest.com/lexatripjaisalmer/)\n` +
+        `• [🌐 Bookings Portal](https://bookings.lexatrip.com/)\n` +
+        `• [💬 WhatsApp Support](https://wa.me/919079854982)\n\n` +
+        `🌐 *लाइव वेब डैशबोर्ड:* https://lexa-trip-automation.onrender.com`;
 
       await this.bot.sendMessage(chatId, reply, {
         parse_mode: 'Markdown',
@@ -611,7 +618,7 @@ class TelegramBotService {
         await this.bot.answerCallbackQuery(cbQuery.id, '📅 शेड्यूल लोड हो रहा है...');
         const queue = db.getQueue();
         const pending = queue.filter(q => q.status === 'queued');
-        let scheduleMsg = `📅 *[आज का लाइव शेड्यूल]* 🐪\n\n`;
+        let scheduleMsg = `📅 *[आज का लाइव शेड्यूल & कतार]* 🐪\n\n`;
         if (pending.length === 0) {
           scheduleMsg += `आज की सभी पोस्ट्स पब्लिश हो चुकी हैं।`;
         } else {
@@ -619,19 +626,32 @@ class TelegramBotService {
             const time = new Date(item.scheduledTime).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
             scheduleMsg += `${i + 1}. *${item.title.slice(0, 35)}...*\n   ⏰ समय: *${time}* | चैनल्स: ${(item.targets || []).join(', ')}\n\n`;
           });
+          scheduleMsg += `🔗 *लाइव वेरिफिकेशन लिंक्स:*\n` +
+            `• [📘 Facebook](https://www.facebook.com/1385624654624388) | [📸 Instagram](https://www.instagram.com/lexatripjaisalmer/)\n` +
+            `• [📢 Telegram Channel](https://t.me/lexatripjaisalmer) | [🌐 Bookings](https://bookings.lexatrip.com/)\n\n` +
+            `🌐 *लाइव डैशबोर्ड:* https://lexa-trip-automation.onrender.com`;
         }
         await this.bot.sendMessage(chatId, scheduleMsg, { parse_mode: 'Markdown', reply_markup: this.buildDashboardKeyboard() });
       } else if (data === 'action_archive') {
         await this.bot.answerCallbackQuery(cbQuery.id, '✅ पब्लिश्ड आर्काइव...');
         const queue = db.getQueue();
         const published = queue.filter(q => q.status === 'published' || q.status === 'completed').slice(-6);
-        let archiveMsg = `✅ *[हाल ही में पब्लिश की गई पोस्ट्स]*\n\n`;
+        let archiveMsg = `✅ *[हाल ही में पब्लिश की गई पोस्ट्स व लाइव लिंक्स]*\n\n`;
         if (published.length === 0) {
           archiveMsg += `आज अभी तक कोई पोस्ट पब्लिश नहीं हुई है।`;
         } else {
           published.forEach((item, i) => {
-            archiveMsg += `${i + 1}. *${item.title.slice(0, 35)}...*\n   ✅ स्टेटस: पब्लिश्ड | प्रकार: ${item.itemType.toUpperCase()}\n\n`;
+            archiveMsg += `${i + 1}. *${item.title.slice(0, 35)}...*\n   ✅ स्टेटस: पब्लिश्ड | प्रकार: ${item.itemType.toUpperCase()}\n`;
           });
+          archiveMsg += `\n🔗 *वेरिफिकेशन लिंक्स (सीधे क्लिक करें):*\n` +
+            `• [📘 Facebook Page](https://www.facebook.com/1385624654624388)\n` +
+            `• [📸 Instagram Profile](https://www.instagram.com/lexatripjaisalmer/)\n` +
+            `• [📢 Telegram Channel](https://t.me/lexatripjaisalmer)\n` +
+            `• [📌 Pinterest Board](https://www.pinterest.com/lexatripjaisalmer/)\n` +
+            `• [💼 LinkedIn Company](https://www.linkedin.com/company/lexatripjaisalmer)\n` +
+            `• [🌐 Bookings Portal](https://bookings.lexatrip.com/)\n` +
+            `• [💬 WhatsApp Chat](https://wa.me/919079854982)\n\n` +
+            `🌐 *लाइव डैशबोर्ड:* https://lexa-trip-automation.onrender.com`;
         }
         await this.bot.sendMessage(chatId, archiveMsg, { parse_mode: 'Markdown', reply_markup: this.buildDashboardKeyboard() });
       } else if (data === 'action_daily_report') {
