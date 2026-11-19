@@ -1,4 +1,3 @@
-const TelegramBot = require('node-telegram-bot-api');
 const path = require('path');
 const fs = require('fs');
 const axios = require('axios');
@@ -9,12 +8,141 @@ const seoGenerator = require('./seoGenerator');
 const scheduler = require('./scheduler');
 const telegramNotifier = require('./telegramNotifier');
 
+class NativeTelegramBot {
+  constructor(token) {
+    this.token = token;
+    this.baseUrl = `https://api.telegram.org/bot${token}`;
+    this.fileBaseUrl = `https://api.telegram.org/file/bot${token}`;
+    this.offset = 0;
+    this.isPolling = false;
+    this.handlers = {
+      photo: [],
+      text: [],
+      message: [],
+      channel_post: [],
+      polling_error: []
+    };
+    this.textHandlers = [];
+  }
+
+  on(event, callback) {
+    if (this.handlers[event]) {
+      this.handlers[event].push(callback);
+    }
+  }
+
+  onText(regex, callback) {
+    this.textHandlers.push({ regex, callback });
+  }
+
+  async getFileLink(fileId) {
+    const res = await axios.get(`${this.baseUrl}/getFile`, {
+      params: { file_id: fileId },
+      timeout: 15000
+    });
+    if (res.data?.ok && res.data.result?.file_path) {
+      return `${this.fileBaseUrl}/${res.data.result.file_path}`;
+    }
+    throw new Error('Telegram getFile failed: ' + JSON.stringify(res.data));
+  }
+
+  async sendMessage(chatId, text, options = {}) {
+    const payload = {
+      chat_id: chatId,
+      text: text,
+      ...options
+    };
+    try {
+      const res = await axios.post(`${this.baseUrl}/sendMessage`, payload, { timeout: 15000 });
+      return res.data;
+    } catch (err) {
+      if (options.parse_mode) {
+        try {
+          delete payload.parse_mode;
+          const retryRes = await axios.post(`${this.baseUrl}/sendMessage`, payload, { timeout: 15000 });
+          return retryRes.data;
+        } catch (e) {
+          console.error('[NativeTelegramBot] sendMessage retry error:', e.response?.data || e.message);
+        }
+      } else {
+        console.error('[NativeTelegramBot] sendMessage error:', err.response?.data || err.message);
+      }
+    }
+  }
+
+  startPolling() {
+    if (this.isPolling) return;
+    this.isPolling = true;
+    this.pollLoop();
+  }
+
+  stopPolling() {
+    this.isPolling = false;
+  }
+
+  async pollLoop() {
+    while (this.isPolling) {
+      try {
+        const res = await axios.get(`${this.baseUrl}/getUpdates`, {
+          params: {
+            offset: this.offset,
+            timeout: 20,
+            allowed_updates: JSON.stringify(['message', 'channel_post'])
+          },
+          timeout: 25000
+        });
+
+        if (res.data?.ok && Array.isArray(res.data.result)) {
+          for (const update of res.data.result) {
+            this.offset = update.update_id + 1;
+            const msg = update.channel_post || update.message;
+            if (!msg) continue;
+
+            if (update.channel_post) {
+              for (const cb of this.handlers.channel_post) {
+                try { await cb(msg); } catch (e) { console.error('Channel post handler error:', e); }
+              }
+            } else if (update.message) {
+              for (const cb of this.handlers.message) {
+                try { await cb(msg); } catch (e) { console.error('Message handler error:', e); }
+              }
+            }
+
+            if (msg.photo && msg.photo.length > 0) {
+              for (const cb of this.handlers.photo) {
+                try { await cb(msg); } catch (e) { console.error('Photo handler error:', e); }
+              }
+            }
+
+            const text = (msg.text || '').trim();
+            if (text) {
+              for (const cb of this.handlers.text) {
+                try { await cb(msg); } catch (e) { console.error('Text handler error:', e); }
+              }
+              for (const { regex, callback } of this.textHandlers) {
+                const match = text.match(regex);
+                if (match) {
+                  try { await callback(msg, match); } catch (e) { console.error('onText handler error:', e); }
+                }
+              }
+            }
+          }
+        }
+      } catch (err) {
+        for (const cb of this.handlers.polling_error) {
+          try { cb(err); } catch (e) {}
+        }
+        await new Promise(r => setTimeout(r, 2000));
+      }
+    }
+  }
+}
+
 class TelegramBotService {
   constructor() {
     this.bot = null;
-    // Map: key = destinationId || chatId -> { photos: [{ localPath, seo, rawCaption }], combinedSeo: null, batchDate: string }
     this.sessions = new Map();
-    this.inbox = new Map(); // destinationId -> Array<{ path, url, timestamp }>
+    this.inbox = new Map();
   }
 
   start() {
@@ -27,11 +155,9 @@ class TelegramBotService {
     }
 
     try {
-      this.bot = new TelegramBot(token, { polling: true });
-      this.bot.on('polling_error', (err) => {
-        // Quietly handle routine network/polling jitter
-      });
+      this.bot = new NativeTelegramBot(token);
       this.setupHandlers();
+      this.bot.startPolling();
       console.log('🤖 Telegram Bot active: 5-Post + Combined SEO Pipeline Listening!');
     } catch (err) {
       console.error('Error starting Telegram Bot:', err.message);
@@ -76,7 +202,6 @@ class TelegramBotService {
       const name = (d.name || '').toLowerCase();
       const city = name.replace(/lexa\s*trip/i, '').trim();
       if (city && (chatTitle.includes(city) || chatUsername.includes(city))) {
-        // Auto-bind channel ID to this destination for future
         d.telegram = d.telegram || {};
         d.telegram.channelId = chatId;
         d.telegram.channelUsername = msg.chat?.username ? `@${msg.chat.username}` : '';
@@ -129,15 +254,13 @@ class TelegramBotService {
     let mainCaption = caption;
     let hashtags = [];
 
-    // Extract hashtags
     const hashRegex = /#[\w\u0900-\u097F_]+/g;
     const foundHashes = caption.match(hashRegex) || [];
     hashtags = foundHashes;
 
-    // Check if first line contains title
     if (lines.length > 0) {
       const firstLine = lines[0].replace(/^(शीर्षक|टाइटल|title)\s*[:：\-]\s*/i, '').trim();
-      if (firstLine.length > 3 && firstLine.length < 120) {
+      if (firstLine.length > 3 && firstLine.length < 160) {
         title = firstLine;
       }
     }
@@ -147,6 +270,15 @@ class TelegramBotService {
       caption: lines.join('\n'),
       hashtags
     };
+  }
+
+  async sendDualMessage(chatId, text, options = {}) {
+    await this.bot.sendMessage(chatId, text, options);
+    const settings = db.getSettings();
+    const adminChatId = settings.telegram?.allowedChatId;
+    if (adminChatId && String(adminChatId) !== String(chatId)) {
+      await this.bot.sendMessage(adminChatId, text, options);
+    }
   }
 
   setupHandlers() {
@@ -174,7 +306,7 @@ class TelegramBotService {
         `• /destinations - सभी डेस्टिनेशन्स की लिस्ट देखें\n` +
         `• /switch <id> - डेस्टिनेशन बदलें (जैसे /switch dest_jaisalmer)`;
 
-      this.bot.sendMessage(chatId, welcome, { parse_mode: 'Markdown' });
+      this.sendDualMessage(chatId, welcome, { parse_mode: 'Markdown' });
     });
 
     // 2. View Status
@@ -197,13 +329,13 @@ class TelegramBotService {
         });
       }
 
-      this.bot.sendMessage(msg.chat.id, reply, { parse_mode: 'Markdown' });
+      this.sendDualMessage(msg.chat.id, reply, { parse_mode: 'Markdown' });
     });
 
     // 3. Reset command
     this.bot.onText(/\/reset/, (msg) => {
       this.resetSession(msg.chat.id);
-      this.bot.sendMessage(msg.chat.id, '🔄 आपका फ़ोटो व SEO बफ़र रीसेट कर दिया गया है। नई 5 फोटोज़ भेजना शुरू करें।');
+      this.sendDualMessage(msg.chat.id, '🔄 आपका फ़ोटो व SEO बफ़र रीसेट कर दिया गया है। नई 5 फोटोज़ भेजना शुरू करें।');
     });
 
     // 4. Switch Destination
@@ -211,11 +343,11 @@ class TelegramBotService {
       const destId = match[1].trim();
       const dest = db.getDestination(destId);
       if (!dest) {
-        return this.bot.sendMessage(msg.chat.id, `❌ डेस्टिनेशन '${destId}' नहीं मिला। /destinations टाइप करके मान्य ID देखें।`);
+        return this.sendDualMessage(msg.chat.id, `❌ डेस्टिनेशन '${destId}' नहीं मिला। /destinations टाइप करके मान्य ID देखें।`);
       }
       const session = this.getSession(msg.chat.id);
       session.destinationId = dest.id;
-      this.bot.sendMessage(msg.chat.id, `✅ सक्रिय डेस्टिनेशन अब बदल दिया गया है: *${dest.name}*`, { parse_mode: 'Markdown' });
+      this.sendDualMessage(msg.chat.id, `✅ सक्रिय डेस्टिनेशन अब बदल दिया गया है: *${dest.name}*`, { parse_mode: 'Markdown' });
     });
 
     // 5. Destination List
@@ -226,7 +358,7 @@ class TelegramBotService {
         reply += `${i + 1}. *${d.name}* (ID: \`${d.id}\`)\n   टैगलाइन: ${d.tagline}\n\n`;
       });
       reply += `स्विच करने के लिए टाइप करें: \`/switch <id>\``;
-      this.bot.sendMessage(msg.chat.id, reply, { parse_mode: 'Markdown' });
+      this.sendDualMessage(msg.chat.id, reply, { parse_mode: 'Markdown' });
     });
 
     // 6. Incoming Photo Handler (Single Post with SEO Caption)
@@ -256,7 +388,6 @@ class TelegramBotService {
           writer.on('error', reject);
         });
 
-        // Parse Caption if provided
         const rawCaption = msg.caption || '';
         const parsedSeo = this.parseCaptionToSeo(rawCaption, `${dest.name} - Post ${session.photos.length + 1}`);
 
@@ -280,15 +411,14 @@ class TelegramBotService {
             `इसके बाद ऑटोमैटिक शेड्यूलिंग शुरू हो जाएगी!`;
         }
 
-        await this.bot.sendMessage(chatId, responseMsg, { parse_mode: 'Markdown' });
+        await this.sendDualMessage(chatId, responseMsg, { parse_mode: 'Markdown' });
 
-        // If 5 photos + combined SEO already present, trigger batch!
         if (session.photos.length >= 5 && session.combinedSeo) {
           await this.triggerFullPipeline(chatId, session, dest);
         }
       } catch (err) {
         console.error('Telegram photo download error:', err);
-        this.bot.sendMessage(chatId, `⚠️ फ़ोटो डाउनलोड में त्रुटि: ${err.message}`);
+        this.sendDualMessage(chatId, `⚠️ फ़ोटो डाउनलोड में त्रुटि: ${err.message}`);
       }
     };
 
@@ -301,18 +431,17 @@ class TelegramBotService {
       const dest = this.resolveDestination(msg);
       const session = this.getSession(chatId, dest);
 
-      // Check if this is the Combined SEO message
       const isCombinedSeo = /^(कंबाइंड\s*SEO|combined\s*seo|combinedseo)/i.test(text);
 
       if (isCombinedSeo) {
-        const cleanedText = text.replace(/^(कंबाइंड\s*SEO|combined\s*seo)\s*[:：\-]\s*/i, '').trim();
+        const cleanedText = text.replace(/^(कंबाइंड\s*SEO|combined\s*seo)\s*[:：\-]?\s*/i, '').trim();
         const parsedCombinedSeo = this.parseCaptionToSeo(cleanedText, `5 Highlights of ${dest.name} [Carousel & Reel]`);
 
         session.combinedSeo = parsedCombinedSeo;
 
         if (session.photos.length < 5) {
           const remaining = 5 - session.photos.length;
-          return this.bot.sendMessage(
+          return this.sendDualMessage(
             chatId,
             `📑 *कंबाइंड SEO सेव हो गया!*\n` +
             `टाइटल: *${parsedCombinedSeo.title}*\n\n` +
@@ -321,7 +450,6 @@ class TelegramBotService {
           );
         }
 
-        // We have 5 photos AND combined SEO! Trigger full pipeline!
         await this.triggerFullPipeline(chatId, session, dest);
       }
     };
@@ -329,7 +457,6 @@ class TelegramBotService {
     this.bot.on('photo', handlePhotoMessage);
     this.bot.on('text', handleTextMessage);
 
-    // Also support Telegram Channels where the bot is added as Administrator!
     this.bot.on('channel_post', async (msg) => {
       if (msg.photo) {
         await handlePhotoMessage(msg);
@@ -344,7 +471,7 @@ class TelegramBotService {
    */
   async triggerFullPipeline(chatId, session, dest) {
     try {
-      this.bot.sendMessage(
+      await this.sendDualMessage(
         chatId,
         `🚀 *[ऑटोमेशन शुरू]* 5 फोटोज़ और कंबाइंड SEO मिल चुके हैं!\n` +
         `⏳ 4:5 इमेजेस, कर्सल, 5 रील्स और 12s अल्ट्रा HD रील बनाई जा रही है... कृपया 1 मिनट इंतज़ार करें।`,
@@ -354,6 +481,10 @@ class TelegramBotService {
       const batchId = 'batch_' + Date.now();
       const batchDir = path.join(__dirname, '..', 'generated', batchId);
       fs.mkdirSync(batchDir, { recursive: true });
+
+      // Clean ASCII brand text for FFmpeg drawtext compatibility
+      const englishBrand = (dest.name.match(/\((.*?)\)/)?.[1] || dest.name).replace(/[^a-zA-Z0-9\s]/g, '').trim().toUpperCase() || 'LEXA TRIP';
+      const cleanTagline = '✦ LUXURY TRAVEL & EXPERIENCES ✦';
 
       // 1. Process 5 Images to 4:5
       const processedPosts = [];
@@ -389,36 +520,46 @@ class TelegramBotService {
         const reelFilename = `reel_${i + 1}_1080x1920.mp4`;
         const reelDiskPath = path.join(batchDir, reelFilename);
 
-        await videoEngine.generateSingleReel({
-          imagePath: processedPosts[i].diskPath,
-          outputPath: reelDiskPath,
-          duration: 11.5,
-          brandText: dest.name.split('(')[0].trim().toUpperCase(),
-          tagline: `✦ ${dest.tagline.slice(0, 35)} ✦`
-        });
+        try {
+          await videoEngine.generateSingleReel({
+            imagePath: processedPosts[i].diskPath,
+            outputPath: reelDiskPath,
+            duration: 11.5,
+            brandText: englishBrand,
+            tagline: cleanTagline
+          });
 
-        generatedSingleReels.push({
-          index: i + 1,
-          reelPath: `/generated/${batchId}/${reelFilename}`,
-          reelDiskPath: reelDiskPath,
-          duration: 11.5,
-          seo: processedPosts[i].seo,
-          targetChannels: dest.defaultChannels?.reel || ['instagram', 'facebook', 'youtube', 'pinterest']
-        });
+          generatedSingleReels.push({
+            index: i + 1,
+            reelPath: `/generated/${batchId}/${reelFilename}`,
+            reelDiskPath: reelDiskPath,
+            duration: 11.5,
+            seo: processedPosts[i].seo,
+            targetChannels: dest.defaultChannels?.reel || ['instagram', 'facebook', 'youtube', 'pinterest']
+          });
+        } catch (reelErr) {
+          console.warn(`Single Reel ${i + 1} render notice:`, reelErr.message);
+        }
       }
 
       // 4. Render 1 Combined 12s Reel
       const combinedReelFilename = `combined_12s_reel.mp4`;
       const combinedReelDiskPath = path.join(batchDir, combinedReelFilename);
 
-      await videoEngine.generateCombined12sReel({
-        imagePaths: processedPosts.map(p => p.diskPath),
-        outputPath: combinedReelDiskPath,
-        durations: [2, 2, 2, 2, 4],
-        brandText: dest.name.split('(')[0].trim().toUpperCase(),
-        tagline: `✦ ${dest.tagline.slice(0, 35)} ✦`,
-        style: 'contain_blur'
-      });
+      let hasCombinedReel = false;
+      try {
+        await videoEngine.generateCombined12sReel({
+          imagePaths: processedPosts.map(p => p.diskPath),
+          outputPath: combinedReelDiskPath,
+          durations: [2, 2, 2, 2, 4],
+          brandText: englishBrand,
+          tagline: cleanTagline,
+          style: 'contain_blur'
+        });
+        hasCombinedReel = true;
+      } catch (combErr) {
+        console.warn('Combined 12s Reel render notice:', combErr.message);
+      }
 
       // 5. Construct Batch Record
       const newBatch = {
@@ -438,14 +579,14 @@ class TelegramBotService {
           targetChannels: dest.defaultChannels?.carousel || ['instagram', 'facebook', 'linkedin']
         },
         reels: generatedSingleReels,
-        combined12sReel: {
+        combined12sReel: hasCombinedReel ? {
           title: `12s Cinematic Highlight: ${dest.name}`,
           duration: 12.0,
           videoPath: `/generated/${batchId}/${combinedReelFilename}`,
           diskPath: combinedReelDiskPath,
           seo: session.combinedSeo,
           targetChannels: dest.defaultChannels?.reel || ['instagram', 'facebook', 'youtube']
-        }
+        } : null
       };
 
       db.saveBatch(newBatch);
@@ -456,7 +597,7 @@ class TelegramBotService {
       // 7. Reset session for next day
       this.resetSession(chatId);
 
-      // 8. Send Telegram Report
+      // 8. Send Telegram Report to both Channel and Admin
       let timetableMsg = `🎉 *[सफलतापूर्वक शेड्यूल्ड!]* ${dest.name}\n\n` +
         `📁 *बैच ID:* \`${batchId}\`\n` +
         `📸 *5 पोस्ट्स + 📑 1 कर्सल + 🎬 12s रील* तैयार होकर एंटी-स्पैम टाइमिंग में शेड्यूल हो गई हैं।\n\n` +
@@ -471,10 +612,10 @@ class TelegramBotService {
       timetableMsg += `\n🛡️ *हर पोस्ट पब्लिश होते ही आपको यहाँ लाइव रिपोर्ट व प्रीव्यू मिल जाएगा।*\n` +
         `🌐 *लाइव डैशबोर्ड:* https://lexa-trip-automation.onrender.com`;
 
-      await this.bot.sendMessage(chatId, timetableMsg, { parse_mode: 'Markdown' });
+      await this.sendDualMessage(chatId, timetableMsg, { parse_mode: 'Markdown' });
     } catch (err) {
       console.error('triggerFullPipeline error:', err);
-      this.bot.sendMessage(chatId, `⚠️ ऑटोमेशन प्रोसेस में त्रुटि: ${err.message}`);
+      this.sendDualMessage(chatId, `⚠️ ऑटोमेशन प्रोसेस में त्रुटि: ${err.message}`);
     }
   }
 }
