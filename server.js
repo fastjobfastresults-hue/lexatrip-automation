@@ -19,6 +19,8 @@ const channelTester = require('./services/channelTester');
 const tunnelService = require('./services/tunnelService');
 const aiEngine = require('./services/aiEngine');
 const crmEngine = require('./services/crmEngine');
+const QAEngine = require('./services/qaEngine');
+const qaEngine = new QAEngine();
 
 const app = express();
 const server = http.createServer(app);
@@ -342,6 +344,68 @@ app.post('/api/ai/config', (req, res) => {
   try {
     const updated = aiEngine.saveConfig(req.body);
     res.json({ success: true, config: updated });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 🤖 Reddit & Quora AI Community Q&A & Anti-Spam Drip Engine Endpoints
+app.post('/api/qa/generate', async (req, res) => {
+  try {
+    const { question, destination, category, customNotes, platform } = req.body;
+    const result = await qaEngine.generateAnswer({ question, destination, category, customNotes, platform });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/qa/queue', (req, res) => {
+  try {
+    const queue = qaEngine.getQueue();
+    res.json(queue);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/qa/queue', (req, res) => {
+  try {
+    const item = qaEngine.addToQueue(req.body);
+    res.json({ success: true, item });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.put('/api/qa/queue/:id', (req, res) => {
+  try {
+    const updated = qaEngine.updateQueueItem(req.params.id, req.body);
+    if (!updated) return res.status(404).json({ error: 'Item not found' });
+    res.json({ success: true, item: updated });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete('/api/qa/queue/:id', (req, res) => {
+  try {
+    qaEngine.deleteQueueItem(req.params.id);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/qa/knowledge', (req, res) => {
+  try {
+    const destination = req.query.destination;
+    const kb = qaEngine.getKnowledgeBase(destination);
+    res.json({
+      totalLearned: kb.length,
+      knowledge: kb.slice(-20),
+      masterLinks: qaEngine.masterLinks
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

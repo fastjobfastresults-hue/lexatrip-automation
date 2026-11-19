@@ -2574,3 +2574,271 @@ async function testCRMLeadSimulation() {
     alert('Simulation error: ' + err.message);
   }
 }
+
+// ==========================================
+// 🤖 REDDIT & QUORA AI Q&A & ANTI-SPAM DRIP ENGINE
+// ==========================================
+
+function openQAModal() {
+  const modal = document.getElementById('qa-modal');
+  if (!modal) return;
+  modal.classList.remove('hidden');
+
+  // Sync destination if selected
+  if (currentDestination && currentDestination.name) {
+    const destSelect = document.getElementById('qa-destination-select');
+    if (destSelect) {
+      if (currentDestination.name.includes('Mount Abu')) destSelect.value = 'Mount Abu';
+      else if (currentDestination.name.includes('Jaisalmer')) destSelect.value = 'Jaisalmer';
+    }
+  }
+
+  // Load sample question if empty
+  const qInput = document.getElementById('qa-question-input');
+  if (qInput && !qInput.value.trim()) {
+    loadSampleQA(1);
+  }
+
+  refreshQAQueue();
+}
+
+function closeQAModal() {
+  const modal = document.getElementById('qa-modal');
+  if (modal) modal.classList.add('hidden');
+}
+
+function loadSampleQA(type) {
+  const qInput = document.getElementById('qa-question-input');
+  const catSelect = document.getElementById('qa-category-select');
+  if (!qInput) return;
+
+  if (type === 1) {
+    qInput.value = "Which is the best and cleanest desert camp in Sam Sand Dunes Jaisalmer for family with kids? Looking for authentic Rajasthani cultural music and clean private dunes.";
+    if (catSelect) catSelect.value = 'family';
+  } else if (type === 2) {
+    qInput.value = "We are planning a 3-day corporate offsite in Jaisalmer for 60 employees. Do luxury camps have proper Wi-Fi/conference setup, team building activities, and GST corporate invoicing?";
+    if (catSelect) catSelect.value = 'corporate';
+  } else if (type === 3) {
+    qInput.value = "How much does camel safari and jeep dune bashing actually cost in Jaisalmer? What is the best sunset timing and how to avoid roadside tourist traps?";
+    if (catSelect) catSelect.value = 'budget';
+  }
+}
+
+async function generateAIAnswer() {
+  const qInput = document.getElementById('qa-question-input');
+  const destSelect = document.getElementById('qa-destination-select');
+  const catSelect = document.getElementById('qa-category-select');
+  const platformSelect = document.getElementById('qa-platform-select');
+  const notesInput = document.getElementById('qa-custom-notes');
+  const btn = document.getElementById('qa-generate-btn');
+  const preview = document.getElementById('qa-answer-preview');
+  const targetLinkBtn = document.getElementById('qa-target-link-btn');
+
+  if (!qInput || !qInput.value.trim()) {
+    alert('Please enter or select a traveler question to answer.');
+    return;
+  }
+
+  const question = qInput.value.trim();
+  const destination = destSelect ? destSelect.value : 'Jaisalmer';
+  const category = catSelect ? catSelect.value : 'general';
+  const platform = platformSelect ? platformSelect.value : 'reddit';
+  const customNotes = notesInput ? notesInput.value.trim() : '';
+
+  const originalBtnText = btn ? btn.innerHTML : '';
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Generating Human-Friendly 80/20 Value Answer...`;
+  }
+
+  try {
+    const res = await fetch('/api/qa/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question, destination, category, platform, customNotes })
+    });
+    const data = await res.json();
+
+    if (data.answer) {
+      if (preview) preview.value = data.answer;
+
+      // Update target forum link
+      if (targetLinkBtn) {
+        if (platform === 'reddit') {
+          const sub = destination.toLowerCase().includes('jaisalmer') ? 'rajasthan' : (destination.toLowerCase().includes('manali') ? 'himachal' : 'IndiaTravel');
+          targetLinkBtn.href = `https://www.reddit.com/r/${sub}/`;
+          targetLinkBtn.innerHTML = `<i class="fa-brands fa-reddit text-rose-400 mr-1.5"></i> Open r/${sub}`;
+        } else {
+          targetLinkBtn.href = `https://www.quora.com/search?q=${encodeURIComponent(destination + ' travel')}`;
+          targetLinkBtn.innerHTML = `<i class="fa-brands fa-quora text-red-500 mr-1.5"></i> Open Quora`;
+        }
+      }
+    } else {
+      alert('Failed to generate answer. Please check AI key in Settings.');
+    }
+  } catch (err) {
+    alert('Error generating answer: ' + err.message);
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = originalBtnText;
+    }
+  }
+}
+
+function copyQAAnswer() {
+  const preview = document.getElementById('qa-answer-preview');
+  if (!preview || !preview.value.trim()) {
+    alert('No answer to copy! Please generate an answer first.');
+    return;
+  }
+  navigator.clipboard.writeText(preview.value).then(() => {
+    alert('✅ Formatted answer copied to clipboard!\n\nYou can now paste it directly into Reddit or Quora with 100% human-looking authenticity.');
+  }).catch(() => {
+    preview.select();
+    document.execCommand('copy');
+    alert('✅ Copied to clipboard!');
+  });
+}
+
+async function addToQADripQueue() {
+  const qInput = document.getElementById('qa-question-input');
+  const preview = document.getElementById('qa-answer-preview');
+  const destSelect = document.getElementById('qa-destination-select');
+  const catSelect = document.getElementById('qa-category-select');
+  const platformSelect = document.getElementById('qa-platform-select');
+
+  if (!preview || !preview.value.trim()) {
+    alert('Please generate an answer first before adding to queue.');
+    return;
+  }
+
+  const payload = {
+    platform: platformSelect ? platformSelect.value : 'reddit',
+    destination: destSelect ? destSelect.value : 'Jaisalmer',
+    category: catSelect ? catSelect.value : 'general',
+    question: qInput ? qInput.value.trim() : 'Travel Query',
+    answer: preview.value.trim(),
+    autoSchedule: true
+  };
+
+  try {
+    const res = await fetch('/api/qa/queue', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const result = await res.json();
+    if (result.success) {
+      alert(`⏳ Added to Anti-Spam Drip Queue!\n\nScheduled for: ${new Date(result.item.scheduledTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}\n\nSpaced out by 45-60 minutes to protect your account reputation.`);
+      refreshQAQueue();
+    }
+  } catch (err) {
+    alert('Queue error: ' + err.message);
+  }
+}
+
+async function refreshQAQueue() {
+  const tbody = document.getElementById('qa-queue-tbody');
+  const countEl = document.getElementById('qa-queue-count');
+  if (!tbody) return;
+
+  try {
+    const res = await fetch('/api/qa/queue');
+    const queue = await res.json();
+
+    if (countEl) countEl.innerText = `${queue.length} item${queue.length === 1 ? '' : 's'}`;
+
+    if (!queue || queue.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" class="px-3 py-4 text-center text-gray-500">
+            No queued responses yet. Generate and add Q&A above to activate anti-spam drip scheduling.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = queue.map(item => {
+      const scheduledDate = new Date(item.scheduledTime);
+      const isPast = scheduledDate < new Date();
+      const statusColor = item.status === 'published' 
+        ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30' 
+        : (item.status === 'scheduled' ? 'bg-amber-500/15 text-amber-300 border-amber-500/30' : 'bg-rose-500/15 text-rose-300 border-rose-500/30');
+
+      return `
+        <tr class="hover:bg-white/[0.02] transition">
+          <td class="px-3 py-2.5 font-bold flex items-center space-x-1.5">
+            ${item.platform === 'reddit' 
+              ? '<i class="fa-brands fa-reddit text-rose-400 text-sm"></i><span class="text-white">Reddit</span>' 
+              : '<i class="fa-brands fa-quora text-red-500 text-sm"></i><span class="text-white">Quora</span>'}
+          </td>
+          <td class="px-3 py-2.5 text-gray-300">${item.destination || 'All'}</td>
+          <td class="px-3 py-2.5">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-white/5 border border-apple-border text-gray-300 uppercase">${item.category || 'General'}</span>
+          </td>
+          <td class="px-3 py-2.5 text-gray-200 max-w-xs truncate" title="${item.question}">${item.question}</td>
+          <td class="px-3 py-2.5 font-mono text-[11px] text-gray-400">
+            ${scheduledDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            <span class="text-[9px] text-gray-500 block">${scheduledDate.toLocaleDateString()}</span>
+          </td>
+          <td class="px-3 py-2.5">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold border ${statusColor} capitalize">${item.status}</span>
+          </td>
+          <td class="px-3 py-2.5 text-right space-x-1">
+            <button onclick="copyQueueItemAnswer('${item.id}')" title="Copy Answer" class="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-300 transition text-xs">
+              <i class="fa-regular fa-copy"></i>
+            </button>
+            <button onclick="approveQueueItem('${item.id}')" title="Mark Published / Approved" class="p-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 transition text-xs">
+              <i class="fa-solid fa-check"></i>
+            </button>
+            <button onclick="deleteQueueItem('${item.id}')" title="Delete" class="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 transition text-xs">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  } catch (err) {
+    console.error('refreshQAQueue error:', err);
+  }
+}
+
+async function copyQueueItemAnswer(id) {
+  try {
+    const res = await fetch('/api/qa/queue');
+    const queue = await res.json();
+    const item = queue.find(q => q.id === id);
+    if (item && item.answer) {
+      navigator.clipboard.writeText(item.answer).then(() => {
+        alert('✅ Formatted answer copied to clipboard!');
+      });
+    }
+  } catch (e) {
+    alert('Copy error: ' + e.message);
+  }
+}
+
+async function approveQueueItem(id) {
+  try {
+    const res = await fetch(`/api/qa/queue/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: 'published' })
+    });
+    if (res.ok) refreshQAQueue();
+  } catch (e) {
+    alert('Error updating status: ' + e.message);
+  }
+}
+
+async function deleteQueueItem(id) {
+  if (!confirm('Are you sure you want to delete this queued response?')) return;
+  try {
+    const res = await fetch(`/api/qa/queue/${id}`, { method: 'DELETE' });
+    if (res.ok) refreshQAQueue();
+  } catch (e) {
+    alert('Error deleting item: ' + e.message);
+  }
+}

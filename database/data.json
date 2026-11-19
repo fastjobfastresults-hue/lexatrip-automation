@@ -8205,5 +8205,30 @@
     "email": "admin@lexatrip.com",
     "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80",
     "connectedAt": "2026-11-17T04:43:32.618Z"
-  }
+  },
+  "qaKnowledgeBase": [
+    {
+      "question": "How much does a desert safari cost in Jaisalmer?",
+      "answer": "Planning a trip to Jaisalmer? Here is honest, practical advice to help you get the most memorable and safe experience:\n\n1. **Choosing the Right Camp**: Avoid roadside commercial camps where loud noise spoils the evening. Always pick desert glamping situated deep in private dunes with clean, attached hygienic western bathrooms and 24/7 running water.\n2. **Best Safari Timing**: Skip the afternoon heat! The best safari window is between 5:00 PM and 6:30 PM for breathtaking sunset photography and cooler breeze.\n3. **Authentic Hospitality**: Look for camps that host traditional Manganiyar folk musicians, Kalbelia dances, and freshly prepared Rajasthani cuisine (Dal Baati Churma, Ker Sangri) around an open campfire.\n\n💡 **Insider Tip**: To avoid last-minute touts and overpriced roadside brokers:\n- **Verified Stays & Safari**: Check verified camp options and instant confirmation at [bookings.lexatrip.com](https://bookings.lexatrip.com/).\n- **Explore More**: Learn about all experiences at [lexatrip.com](https://www.lexatrip.com/).\n- **Direct Local Help**: If you need a customized itinerary for family or couples, reach out to our team anytime at **+91 90798 54982** or [chat on WhatsApp](https://wa.me/919079854982?text=Hi%20Lexa%20Trip%2C%20I%20saw%20your%20travel%20guide%20for%20Jaisalmer%20and%20need%20help%20with%20booking%20%26%20itinerary.).",
+      "destination": "Jaisalmer",
+      "category": "budget",
+      "id": "kb_1795097243607_83nem",
+      "savedAt": "2026-11-19T14:07:23.607Z"
+    }
+  ],
+  "qaQueue": [
+    {
+      "id": "qa_1795097243589_ldsxgq",
+      "platform": "reddit",
+      "destination": "Jaisalmer",
+      "category": "budget",
+      "question": "How much does a desert safari cost in Jaisalmer?",
+      "answer": "Planning a trip to Jaisalmer? Here is honest, practical advice to help you get the most memorable and safe experience:\n\n1. **Choosing the Right Camp**: Avoid roadside commercial camps where loud noise spoils the evening. Always pick desert glamping situated deep in private dunes with clean, attached hygienic western bathrooms and 24/7 running water.\n2. **Best Safari Timing**: Skip the afternoon heat! The best safari window is between 5:00 PM and 6:30 PM for breathtaking sunset photography and cooler breeze.\n3. **Authentic Hospitality**: Look for camps that host traditional Manganiyar folk musicians, Kalbelia dances, and freshly prepared Rajasthani cuisine (Dal Baati Churma, Ker Sangri) around an open campfire.\n\n💡 **Insider Tip**: To avoid last-minute touts and overpriced roadside brokers:\n- **Verified Stays & Safari**: Check verified camp options and instant confirmation at [bookings.lexatrip.com](https://bookings.lexatrip.com/).\n- **Explore More**: Learn about all experiences at [lexatrip.com](https://www.lexatrip.com/).\n- **Direct Local Help**: If you need a customized itinerary for family or couples, reach out to our team anytime at **+91 90798 54982** or [chat on WhatsApp](https://wa.me/919079854982?text=Hi%20Lexa%20Trip%2C%20I%20saw%20your%20travel%20guide%20for%20Jaisalmer%20and%20need%20help%20with%20booking%20%26%20itinerary.).",
+      "status": "scheduled",
+      "scheduledTime": "2026-11-19T14:17:23.588Z",
+      "createdAt": "2026-11-19T14:07:23.591Z",
+      "targetSubreddit": "rajasthan",
+      "directLink": "https://www.reddit.com/r/rajasthan/"
+    }
+  ]
 }
