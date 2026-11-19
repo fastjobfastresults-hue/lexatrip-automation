@@ -7968,6 +7968,21 @@
             "post",
             "article"
           ]
+        },
+        "google_business": {
+          "enabled": true,
+          "name": "Google Business Profile (Lexa Trip Jaisalmer)",
+          "handle": "maps.google.com/lexatripjaisalmer",
+          "authType": "google_oauth",
+          "credentials": {
+            "locationId": "locations/lexatrip_jaisalmer",
+            "businessName": "Lexa Trip Jaisalmer",
+            "websiteUrl": "https://lexatrip.com/jaisalmer",
+            "ctaType": "LEARN_MORE"
+          },
+          "supports": [
+            "post"
+          ]
         }
       },
       "customChannels": [],
@@ -8123,6 +8138,21 @@
           "supports": [
             "post",
             "article"
+          ]
+        },
+        "google_business": {
+          "enabled": true,
+          "name": "Google Business Profile (Lexa Trip Mount Abu)",
+          "handle": "maps.google.com/lexatripmountabu",
+          "authType": "google_oauth",
+          "credentials": {
+            "locationId": "locations/lexatrip_mountabu",
+            "businessName": "Lexa Trip Mount Abu",
+            "websiteUrl": "https://lexatrip.com/mountabu",
+            "ctaType": "LEARN_MORE"
+          },
+          "supports": [
+            "post"
           ]
         }
       },

@@ -6,6 +6,7 @@ const linkedinPublisher = require('./publishers/linkedin');
 const youtubePublisher = require('./publishers/youtube');
 const bloggerPublisher = require('./publishers/blogger');
 const threadsPublisher = require('./publishers/threads');
+const googleBusinessPublisher = require('./publishers/googleBusiness');
 const blogPublisher = require('./publishers/blog');
 const customPublisher = require('./publishers/custom');
 const telegramNotifier = require('./telegramNotifier');
@@ -226,6 +227,15 @@ class Scheduler {
                 res = await linkedinPublisher.publishPost({ account: accountAdapter, text: `${item.title}\n\n${item.caption}`, imageUrl: item.mediaPath });
               } else if (targetPlatform === 'blogger') {
                 res = await bloggerPublisher.publishPost({ account: accountAdapter, title: item.title, caption: item.caption, hashtags: item.hashtags || '', mediaPath: item.mediaPath, destinationName: destination.name });
+              } else if (targetPlatform === 'google_business' || targetPlatform === 'gmb') {
+                res = await googleBusinessPublisher.publishPost({
+                  account: accountAdapter,
+                  title: item.title,
+                  caption: item.caption,
+                  mediaPath: item.mediaPath,
+                  destinationName: destination.name,
+                  websiteUrl: destination.channels?.website?.credentials?.siteUrl
+                });
               } else if (targetPlatform === 'twitter') {
                 res = { success: true, simulated: true, platform: 'twitter', message: 'Twitter standing by (future ready).' };
               }

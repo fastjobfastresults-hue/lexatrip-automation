@@ -213,6 +213,7 @@ function renderMasterChannelMatrix() {
     { key: 'pinterest', label: 'Pinterest', icon: 'fa-pinterest', iconPrefix: 'fa-brands', color: 'border-rose-500/40 text-rose-400' },
     { key: 'blogger', label: 'Blogger (.blogspot)', icon: 'fa-blogger-b', iconPrefix: 'fa-brands', color: 'border-amber-500/40 text-amber-400' },
     { key: 'website', label: 'Official Website', icon: 'fa-globe', iconPrefix: 'fa-solid', color: 'border-teal-500/40 text-teal-300' },
+    { key: 'google_business', label: 'Google Business', icon: 'fa-google', iconPrefix: 'fa-brands', color: 'border-blue-500/40 text-blue-400' },
     { key: 'twitter', label: 'X (Future)', icon: 'fa-x-twitter', iconPrefix: 'fa-brands', color: 'border-gray-500/40 text-gray-400' }
   ];
 
@@ -220,7 +221,7 @@ function renderMasterChannelMatrix() {
   const postsBox = document.getElementById('matrix-posts-container');
   if (postsBox) {
     postsBox.innerHTML = '';
-    const postOptions = ['instagram', 'facebook', 'threads', 'linkedin', 'pinterest', 'blogger', 'website'];
+    const postOptions = ['instagram', 'facebook', 'threads', 'linkedin', 'pinterest', 'blogger', 'website', 'google_business'];
     postOptions.forEach(chKey => {
       const ch = allChannels.find(c => c.key === chKey);
       if (!ch) return;
@@ -334,6 +335,7 @@ function renderInteractiveChannels() {
     { key: 'pinterest', name: 'Pinterest', icon: 'fa-pinterest-p', iconPrefix: 'fa-brands', bg: 'bg-gradient-to-tr from-rose-800 via-red-600 to-rose-500', shadow: 'shadow-red-500/25' },
     { key: 'blogger', name: 'Blogger', icon: 'fa-blogger-b', iconPrefix: 'fa-brands', bg: 'bg-gradient-to-tr from-amber-600 via-orange-500 to-amber-400', shadow: 'shadow-orange-500/25' },
     { key: 'website', name: 'Official Website', icon: 'fa-globe', iconPrefix: 'fa-solid', bg: 'bg-gradient-to-tr from-emerald-700 via-teal-600 to-cyan-500', shadow: 'shadow-teal-500/25' },
+    { key: 'google_business', name: 'Google Business', icon: 'fa-google', iconPrefix: 'fa-brands', bg: 'bg-gradient-to-tr from-blue-700 via-sky-600 to-emerald-500', shadow: 'shadow-blue-500/25' },
     { key: 'telegram', name: 'Telegram Bot', icon: 'fa-telegram', iconPrefix: 'fa-brands', bg: 'bg-gradient-to-tr from-sky-600 via-sky-500 to-cyan-400', shadow: 'shadow-sky-500/25' },
     { key: 'twitter', name: 'X / Twitter', icon: 'fa-x-twitter', iconPrefix: 'fa-brands', bg: 'bg-gradient-to-tr from-gray-950 via-gray-900 to-neutral-900 border border-white/10', shadow: 'shadow-black/40' }
   ];
@@ -362,6 +364,13 @@ function renderInteractiveChannels() {
       isConnected = !!ch?.enabled || hasSite;
       isLiveOfficial = isConnected;
       handle = ch?.handle || creds.siteUrl?.replace(/^https?:\/\//, '') || 'lexatrip.com';
+    } else if (p.key === 'google_business') {
+      const ch = currentDestination.channels?.google_business || currentDestination.channels?.gmb;
+      const creds = ch?.credentials || {};
+      const hasLoc = !!(ch?.handle || creds.locationId);
+      isConnected = !!ch?.enabled || hasLoc;
+      isLiveOfficial = isConnected;
+      handle = ch?.handle || 'maps.google.com';
     } else if (p.key === 'threads') {
       const ch = currentDestination.channels?.threads;
       const metaCh = currentDestination.channels?.instagram || currentDestination.channels?.facebook;
@@ -422,7 +431,7 @@ function renderInteractiveChannels() {
 // 🧪 1-Click Sandbox Test Setup
 async function quickConnectAllChannels() {
   if (!currentDestination) return;
-  const platforms = ['instagram', 'facebook', 'threads', 'youtube', 'linkedin', 'pinterest', 'blogger', 'website', 'telegram'];
+  const platforms = ['instagram', 'facebook', 'threads', 'youtube', 'linkedin', 'pinterest', 'blogger', 'website', 'google_business', 'telegram'];
   const btn = window.event ? window.event.target?.closest('button') : null;
   if (btn) {
     btn.disabled = true;
@@ -791,6 +800,37 @@ function openChannelModal(platform) {
         </div>
       </div>
     `;
+  } else if (platform === 'google_business') {
+    title.textContent = 'Connect Google Business Profile (GMB Local Posts)';
+    icon.innerHTML = '<i class="fa-brands fa-google text-blue-400"></i>';
+    const locId = creds.locationId || ch.handle || `locations/lexatrip_${destSlug}`;
+    fieldsBox.innerHTML = `
+      <div class="space-y-3">
+        <div class="p-3 bg-blue-500/10 border border-blue-500/20 rounded-xl space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-blue-300 flex items-center space-x-1.5">
+              <i class="fa-brands fa-google"></i>
+              <span>Google Business Profile (Smart Anti-Spam Posting)</span>
+            </span>
+            <a href="https://business.google.com" target="_blank" class="px-2.5 py-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-200 text-[10px] rounded-lg font-bold border border-blue-500/30 flex items-center space-x-1 transition">
+              <span>Google Business</span>
+              <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+            </a>
+          </div>
+          <p class="text-[11px] text-gray-300 leading-relaxed">
+            Google Business Profile par roz 5 spam posts dalne ke bajaye, <b>Gemini AI</b> din ki 1 sabse behtareen What's New post banata hai with "Book Now" CTA button!
+          </p>
+        </div>
+        <div>
+          <label class="block font-semibold text-gray-300 mb-1">Location ID / Profile Name</label>
+          <input type="text" id="channel-field-1" value="${locId}" placeholder="e.g. locations/1234567890 or Lexa Trip Jaisalmer" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono text-xs" />
+        </div>
+        <div>
+          <label class="block font-semibold text-gray-300 mb-1">Google Cloud OAuth Access Token / API Key</label>
+          <input type="password" id="channel-field-2" value="${creds.accessToken || ''}" placeholder="yaad rahe: 1-Master Google Cloud token sabhi locations par kaam karta hai" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono text-xs" />
+        </div>
+      </div>
+    `;
   } else if (platform === 'twitter') {
     title.textContent = 'X / Twitter (Future Ready Module)';
     icon.innerHTML = '<i class="fa-brands fa-x-twitter text-gray-200"></i>';
@@ -1049,6 +1089,8 @@ async function testCurrentChannelConnection() {
     credentials = { threadsHandle: val1, accessToken: val2 };
   } else if (platform === 'website') {
     credentials = { siteUrl: val1, applicationPassword: val2, apiUrl: `${val1.replace(/\/$/, '')}/wp-json/wp/v2` };
+  } else if (platform === 'google_business') {
+    credentials = { locationId: val1, accessToken: val2, businessName: currentDestination.name };
   } else if (platform === 'twitter') {
     credentials = { handle: val1, apiKey: val2 };
   }
@@ -1150,6 +1192,16 @@ async function saveCurrentChannelCredentials() {
       currentDestination.channels[platform].handle = verified?.handle || val1.replace(/^https?:\/\//, '') || 'lexatrip.com';
       if (verified?.accountName) currentDestination.channels[platform].name = verified.accountName;
       currentDestination.channels[platform].supports = ['post', 'article'];
+    } else if (platform === 'google_business') {
+      currentDestination.channels[platform].credentials = { 
+        locationId: val1, 
+        accessToken: val2,
+        websiteUrl: currentDestination.channels?.website?.credentials?.siteUrl || `https://lexatrip.com/${destSlug}`,
+        ctaType: 'LEARN_MORE'
+      };
+      currentDestination.channels[platform].handle = verified?.handle || val1 || 'maps.google.com';
+      if (verified?.accountName) currentDestination.channels[platform].name = verified.accountName;
+      currentDestination.channels[platform].supports = ['post'];
     } else if (platform === 'twitter') {
       currentDestination.channels[platform].credentials = { handle: val1, apiKey: val2 };
       currentDestination.channels[platform].handle = val1 || '@lexatrip';
