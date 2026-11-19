@@ -178,141 +178,10 @@ class Scheduler {
     try {
       const now = new Date();
       const queue = db.getQueue();
-      const destinations = db.getDestinations();
-
       const dueItems = queue.filter(q => q.status === 'queued' && new Date(q.scheduledTime) <= now);
 
       for (const item of dueItems) {
-        console.log(`🚀 Dispatching: [${item.destinationName}] ${item.itemType} #${item.index} - ${item.title}`);
-        db.updateQueueItem(item.id, { status: 'publishing' });
-
-        if (this.wsBroadcast) {
-          this.wsBroadcast({ type: 'QUEUE_PROGRESS', item });
-        }
-
-        const destination = destinations.find(d => d.id === item.destinationId) || destinations[0];
-        const publishResults = [];
-        let allSuccess = true;
-        let lastError = null;
-
-        for (const targetPlatform of item.targets) {
-          const channelConfig = destination?.channels ? destination.channels[targetPlatform] : null;
-
-          if (channelConfig && channelConfig.enabled === false) {
-            publishResults.push({ platform: targetPlatform, status: 'skipped', reason: 'Channel disabled in destination settings' });
-            continue;
-          }
-
-          const accountAdapter = {
-            name: `${destination.name} - ${targetPlatform}`,
-            platform: targetPlatform,
-            credentials: channelConfig ? channelConfig.credentials : {},
-            proxy: destination.proxy || ''
-          };
-
-          try {
-            let res;
-            if (item.itemType === 'post') {
-              if (targetPlatform === 'instagram') {
-                res = await instagramPublisher.publishImage({ account: accountAdapter, mediaPath: item.mediaPath, caption: item.caption });
-              } else if (targetPlatform === 'facebook') {
-                res = await facebookPublisher.publishPhoto({ account: accountAdapter, filePath: item.mediaPath, caption: `${item.title}\n\n${item.caption}` });
-              } else if (targetPlatform === 'threads') {
-                res = await threadsPublisher.publishPost({ account: accountAdapter, text: `${item.title}\n\n${item.caption}`, imageUrl: item.mediaPath });
-              } else if (targetPlatform === 'website' || targetPlatform === 'blog') {
-                res = await blogPublisher.publishArticle({ account: accountAdapter, title: item.title, content: item.caption, excerpt: item.title });
-              } else if (targetPlatform === 'pinterest') {
-                res = await pinterestPublisher.publishPin({ account: accountAdapter, imageUrl: item.mediaPath, title: item.title, description: item.caption });
-              } else if (targetPlatform === 'linkedin') {
-                res = await linkedinPublisher.publishPost({ account: accountAdapter, text: `${item.title}\n\n${item.caption}`, imageUrl: item.mediaPath });
-              } else if (targetPlatform === 'blogger') {
-                res = await bloggerPublisher.publishPost({ account: accountAdapter, title: item.title, caption: item.caption, hashtags: item.hashtags || '', mediaPath: item.mediaPath, destinationName: destination.name });
-              } else if (targetPlatform === 'google_business' || targetPlatform === 'gmb') {
-                res = await googleBusinessPublisher.publishPost({
-                  account: accountAdapter,
-                  title: item.title,
-                  caption: item.caption,
-                  mediaPath: item.mediaPath,
-                  destinationName: destination.name,
-                  websiteUrl: destination.channels?.website?.credentials?.siteUrl
-                });
-              } else if (targetPlatform === 'twitter') {
-                res = { success: true, simulated: true, platform: 'twitter', message: 'Twitter standing by (future ready).' };
-              }
-            } else if (item.itemType === 'carousel') {
-              if (targetPlatform === 'instagram') {
-                const batch = db.getBatch(item.batchId);
-                const allImages = batch?.posts?.map(p => p.diskPath || p.imagePath) || [item.mediaPath];
-                res = await instagramPublisher.publishCarousel({ account: accountAdapter, mediaPaths: allImages, caption: item.caption });
-              } else if (targetPlatform === 'facebook') {
-                res = await facebookPublisher.publishPhoto({ account: accountAdapter, filePath: item.mediaPath, caption: item.caption });
-              } else if (targetPlatform === 'threads') {
-                res = await threadsPublisher.publishPost({ account: accountAdapter, text: item.caption, imageUrl: item.mediaPath });
-              } else if (targetPlatform === 'website' || targetPlatform === 'blog') {
-                res = await blogPublisher.publishArticle({ account: accountAdapter, title: item.title || 'Travel Photo Story', content: item.caption, excerpt: item.title });
-              } else if (targetPlatform === 'linkedin') {
-                res = await linkedinPublisher.publishPost({ account: accountAdapter, text: item.caption, imageUrl: item.mediaPath });
-              }
-            } else if (item.itemType === 'reel') {
-              if (targetPlatform === 'instagram') {
-                res = await instagramPublisher.publishReel({ account: accountAdapter, videoPath: item.mediaPath, caption: item.caption });
-              } else if (targetPlatform === 'facebook') {
-                res = await facebookPublisher.publishReel({ account: accountAdapter, videoPath: item.mediaPath, caption: item.caption });
-              } else if (targetPlatform === 'threads') {
-                res = await threadsPublisher.publishPost({ account: accountAdapter, text: `${item.title}\n\n${item.caption}`, videoUrl: item.mediaPath });
-              } else if (targetPlatform === 'youtube') {
-                res = await youtubePublisher.uploadShort({ account: accountAdapter, videoPath: item.mediaPath, title: item.title, description: item.caption });
-              } else if (targetPlatform === 'pinterest') {
-                res = await pinterestPublisher.publishPin({ account: accountAdapter, imageUrl: item.mediaPath, videoUrl: item.mediaPath, title: item.title, description: item.caption });
-              }
-            }
-
-            publishResults.push({ platform: targetPlatform, status: 'published', details: res });
-          } catch (err) {
-            console.error(`Error publishing to ${targetPlatform}:`, err.message);
-            publishResults.push({ platform: targetPlatform, status: 'failed', error: err.message });
-            allSuccess = false;
-            lastError = err.message;
-
-            // Trigger instant security & policy alert if error involves permissions, review or community guidelines
-            const isPolicyIssue = /permission|OAuthException|policy|review|deprecated|restricted|community|guideline|checkpoint|strike|blocked|auth.*fail/i.test(err.message);
-            if (isPolicyIssue) {
-              telegramNotifier.notifyPolicyAlert({
-                destination,
-                platform: targetPlatform,
-                error: err.message,
-                details: `Task: ${item.title} (Type: ${item.itemType})`
-              }).catch(e => console.error('notifyPolicyAlert error:', e));
-            }
-          }
-        }
-
-        db.updateQueueItem(item.id, {
-          status: allSuccess ? 'published' : 'partial_or_failed',
-          publishedAt: new Date().toISOString(),
-          publishResults
-        });
-
-        db.addLog({
-          type: 'publish',
-          queueId: item.id,
-          destination: destination.name,
-          itemType: item.itemType,
-          title: item.title,
-          status: allSuccess ? 'success' : 'failed',
-          results: publishResults
-        });
-
-        if (this.wsBroadcast) {
-          this.wsBroadcast({ type: 'ITEM_PUBLISHED', item, results: publishResults });
-        }
-
-        // Send Telegram Real-Time Live Report
-        if (allSuccess) {
-          telegramNotifier.notifyItemPublished(destination, item, publishResults);
-        } else {
-          telegramNotifier.notifyError(destination, item, lastError || 'One or more channels failed.');
-        }
+        await this.dispatchSingleQueueItem(item);
       }
     } catch (err) {
       console.error('Scheduler processQueue error:', err);
@@ -321,13 +190,149 @@ class Scheduler {
     }
   }
 
+  /**
+   * Dispatch a single queue item to all target platforms
+   */
+  async dispatchSingleQueueItem(item) {
+    console.log(`🚀 Dispatching: [${item.destinationName}] ${item.itemType} #${item.index} - ${item.title}`);
+    db.updateQueueItem(item.id, { status: 'publishing' });
+
+    if (this.wsBroadcast) {
+      this.wsBroadcast({ type: 'QUEUE_PROGRESS', item });
+    }
+
+    const destinations = db.getDestinations();
+    const destination = destinations.find(d => d.id === item.destinationId) || destinations[0];
+    const publishResults = [];
+    let allSuccess = true;
+    let lastError = null;
+
+    for (const targetPlatform of item.targets) {
+      const channelConfig = destination?.channels ? destination.channels[targetPlatform] : null;
+
+      if (channelConfig && channelConfig.enabled === false) {
+        publishResults.push({ platform: targetPlatform, status: 'skipped', reason: 'Channel disabled in destination settings' });
+        continue;
+      }
+
+      const accountAdapter = {
+        name: `${destination.name} - ${targetPlatform}`,
+        platform: targetPlatform,
+        credentials: channelConfig ? channelConfig.credentials : {},
+        proxy: destination.proxy || ''
+      };
+
+      try {
+        let res;
+        if (item.itemType === 'post') {
+          if (targetPlatform === 'instagram') {
+            res = await instagramPublisher.publishImage({ account: accountAdapter, mediaPath: item.mediaPath, caption: item.caption });
+          } else if (targetPlatform === 'facebook') {
+            res = await facebookPublisher.publishPhoto({ account: accountAdapter, filePath: item.mediaPath, caption: `${item.title}\n\n${item.caption}` });
+          } else if (targetPlatform === 'threads') {
+            res = await threadsPublisher.publishPost({ account: accountAdapter, text: `${item.title}\n\n${item.caption}`, imageUrl: item.mediaPath });
+          } else if (targetPlatform === 'website' || targetPlatform === 'blog') {
+            res = await blogPublisher.publishArticle({ account: accountAdapter, title: item.title, content: item.caption, excerpt: item.title });
+          } else if (targetPlatform === 'pinterest') {
+            res = await pinterestPublisher.publishPin({ account: accountAdapter, imageUrl: item.mediaPath, title: item.title, description: item.caption });
+          } else if (targetPlatform === 'linkedin') {
+            res = await linkedinPublisher.publishPost({ account: accountAdapter, text: `${item.title}\n\n${item.caption}`, imageUrl: item.mediaPath });
+          } else if (targetPlatform === 'blogger') {
+            res = await bloggerPublisher.publishPost({ account: accountAdapter, title: item.title, caption: item.caption, hashtags: item.hashtags || '', mediaPath: item.mediaPath, destinationName: destination.name });
+          } else if (targetPlatform === 'google_business' || targetPlatform === 'gmb') {
+            res = await googleBusinessPublisher.publishPost({
+              account: accountAdapter,
+              title: item.title,
+              caption: item.caption,
+              mediaPath: item.mediaPath,
+              destinationName: destination.name,
+              websiteUrl: destination.channels?.website?.credentials?.siteUrl
+            });
+          } else if (targetPlatform === 'twitter') {
+            res = { success: true, simulated: true, platform: 'twitter', message: 'Twitter standing by (future ready).' };
+          }
+        } else if (item.itemType === 'carousel') {
+          if (targetPlatform === 'instagram') {
+            const batch = db.getBatch(item.batchId);
+            const allImages = batch?.posts?.map(p => p.diskPath || p.imagePath) || [item.mediaPath];
+            res = await instagramPublisher.publishCarousel({ account: accountAdapter, mediaPaths: allImages, caption: item.caption });
+          } else if (targetPlatform === 'facebook') {
+            res = await facebookPublisher.publishPhoto({ account: accountAdapter, filePath: item.mediaPath, caption: item.caption });
+          } else if (targetPlatform === 'threads') {
+            res = await threadsPublisher.publishPost({ account: accountAdapter, text: item.caption, imageUrl: item.mediaPath });
+          } else if (targetPlatform === 'website' || targetPlatform === 'blog') {
+            res = await blogPublisher.publishArticle({ account: accountAdapter, title: item.title || 'Travel Photo Story', content: item.caption, excerpt: item.title });
+          } else if (targetPlatform === 'linkedin') {
+            res = await linkedinPublisher.publishPost({ account: accountAdapter, text: item.caption, imageUrl: item.mediaPath });
+          }
+        } else if (item.itemType === 'reel') {
+          if (targetPlatform === 'instagram') {
+            res = await instagramPublisher.publishReel({ account: accountAdapter, videoPath: item.mediaPath, caption: item.caption });
+          } else if (targetPlatform === 'facebook') {
+            res = await facebookPublisher.publishReel({ account: accountAdapter, videoPath: item.mediaPath, caption: item.caption });
+          } else if (targetPlatform === 'threads') {
+            res = await threadsPublisher.publishPost({ account: accountAdapter, text: `${item.title}\n\n${item.caption}`, videoUrl: item.mediaPath });
+          } else if (targetPlatform === 'youtube') {
+            res = await youtubePublisher.uploadShort({ account: accountAdapter, videoPath: item.mediaPath, title: item.title, description: item.caption });
+          } else if (targetPlatform === 'pinterest') {
+            res = await pinterestPublisher.publishPin({ account: accountAdapter, imageUrl: item.mediaPath, videoUrl: item.mediaPath, title: item.title, description: item.caption });
+          }
+        }
+
+        publishResults.push({ platform: targetPlatform, status: 'published', details: res });
+      } catch (err) {
+        console.error(`Error publishing to ${targetPlatform}:`, err.message);
+        publishResults.push({ platform: targetPlatform, status: 'failed', error: err.message });
+        allSuccess = false;
+        lastError = err.message;
+
+        // Trigger instant security & policy alert if error involves permissions, review or community guidelines
+        const isPolicyIssue = /permission|OAuthException|policy|review|deprecated|restricted|community|guideline|checkpoint|strike|blocked|auth.*fail/i.test(err.message);
+        if (isPolicyIssue) {
+          telegramNotifier.notifyPolicyAlert({
+            destination,
+            platform: targetPlatform,
+            error: err.message,
+            details: `Task: ${item.title} (Type: ${item.itemType})`
+          }).catch(e => console.error('notifyPolicyAlert error:', e));
+        }
+      }
+    }
+
+    const updated = db.updateQueueItem(item.id, {
+      status: allSuccess ? 'published' : 'partial_or_failed',
+      publishedAt: new Date().toISOString(),
+      publishResults
+    });
+
+    db.addLog({
+      type: 'publish',
+      queueId: item.id,
+      destination: destination.name,
+      itemType: item.itemType,
+      title: item.title,
+      status: allSuccess ? 'success' : 'failed',
+      results: publishResults
+    });
+
+    if (this.wsBroadcast) {
+      this.wsBroadcast({ type: 'ITEM_PUBLISHED', item, results: publishResults });
+    }
+
+    // Send Telegram Real-Time Live Report
+    if (allSuccess) {
+      telegramNotifier.notifyItemPublished(destination, item, publishResults);
+    } else {
+      telegramNotifier.notifyError(destination, item, lastError || 'One or more channels failed.');
+    }
+
+    return updated || item;
+  }
+
   async publishItemNow(queueId) {
     const item = db.getQueue().find(q => q.id === queueId);
     if (!item) throw new Error('Queue item not found: ' + queueId);
-    db.updateQueueItem(item.id, { scheduledTime: new Date(Date.now() - 5000).toISOString() });
-    await this.processQueue();
-    const updated = db.getQueue().find(q => q.id === queueId) || item;
-    return updated;
+    return await this.dispatchSingleQueueItem(item);
   }
 
   async publishAllQueueNow(destinationId) {

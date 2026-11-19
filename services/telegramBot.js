@@ -703,7 +703,12 @@ class TelegramBotService {
         });
 
         const rawCaption = msg.caption || '';
-        const parsedSeo = this.parseCaptionToSeo(rawCaption, `${dest.name} - Post ${session.photos.length + 1}`);
+        const parsedSeo = this.parseCaptionToSeo(rawCaption, `${dest.name} - Live Travel Post`);
+
+        // Enforce the 3 Master Links policy
+        if (!parsedSeo.caption.includes('bookings.lexatrip.com')) {
+          parsedSeo.caption += `\n\n🌐 बुकिंग पोर्टल: https://bookings.lexatrip.com/\n🌐 आधिकारिक वेबसाइट: https://www.lexatrip.com/\n📞 व्हाट्सएप / कॉल: +91 90798 54982`;
+        }
 
         session.photos.push({
           localPath,
@@ -712,21 +717,63 @@ class TelegramBotService {
           timestamp: new Date().toISOString()
         });
 
-        const currentCount = session.photos.length;
-        let responseMsg = `📸 *[फोटो ${currentCount}/5 प्राप्त]* ${dest.name}\n` +
+        // 1. Process to HD 4:5 vertical portrait
+        const processedDir = path.join(__dirname, '..', 'generated', 'live_dispatches');
+        fs.mkdirSync(processedDir, { recursive: true });
+        const processedFilename = `live_${Date.now()}_4x5.jpg`;
+        const processedPath = path.join(processedDir, processedFilename);
+        await imageProcessor.processTo4x5(localPath, processedPath);
+
+        // 2. Acknowledge receipt and announce instant dispatch
+        await this.sendDualMessage(
+          chatId,
+          `📸 *[लाइव फ़ोटो व SEO प्राप्त]* 🐪\n\n` +
           `📌 *टाइटल:* ${parsedSeo.title}\n` +
-          (parsedSeo.hashtags.length ? `🏷️ *हैशटैग्स:* ${parsedSeo.hashtags.slice(0, 5).join(' ')}\n\n` : '\n');
+          `📍 *डेस्टिनेशन:* ${dest.name}\n\n` +
+          `🚀 *लाइव पब्लिशिंग इंजन सक्रिय...* सभी कनेक्टेड सोशल मीडिया पेजेस (Facebook, Instagram, LinkedIn, Pinterest, Blogger, Telegram) पर अभी लाइव पब्लिश किया जा रहा है!`,
+          { parse_mode: 'Markdown' }
+        );
 
-        if (currentCount < 5) {
-          responseMsg += `अगली फ़ोटो (${currentCount + 1}/5) भेजें।`;
-        } else {
-          responseMsg += `🎉 *पाँचों (5/5) फोटोज़ प्राप्त हो गईं!*\n\n` +
-            `अब कृपया अंतिम टेक्स्ट मैसेज भेजें जिसकी शुरुआत में *कंबाइंड SEO* लिखा हो (जैसे: \`कंबाइंड SEO: लेक्सा ट्रिप जैसलमेर...\`)।\n` +
-            `इसके बाद ऑटोमैटिक शेड्यूलिंग शुरू हो जाएगी!`;
-        }
+        // 3. Immediately queue and dispatch across all platforms
+        const queueRecord = {
+          id: `q_instant_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
+          batchId: `batch_live_${Date.now()}`,
+          destinationId: dest.id,
+          destinationName: dest.name,
+          itemType: 'post',
+          index: session.photos.length,
+          title: parsedSeo.title,
+          caption: parsedSeo.caption,
+          mediaPath: processedPath,
+          scheduledTime: new Date(Date.now() - 5000).toISOString(),
+          status: 'queued',
+          targets: ['instagram', 'facebook', 'linkedin', 'pinterest', 'blogger'],
+          createdAt: new Date().toISOString()
+        };
 
-        await this.sendDualMessage(chatId, responseMsg, { parse_mode: 'Markdown' });
+        db.addToQueue(queueRecord);
+        await scheduler.publishItemNow(queueRecord.id);
 
+        // 4. Send Confirmation with Direct Live Verification Links
+        const doneMsg = `✅ *[लाइव पब्लिशिंग संपन्न]* 🐪\n\n` +
+          `📝 *पोस्ट:* ${parsedSeo.title}\n` +
+          `🕒 *समय:* ${new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}\n\n` +
+          `🔗 *लाइव वेरिफिकेशन लिंक्स (सीधे क्लिक करें):*\n` +
+          `• [📘 Facebook Page](https://www.facebook.com/1385624654624388)\n` +
+          `• [📸 Instagram Profile](https://www.instagram.com/lexatripjaisalmer/)\n` +
+          `• [📢 Telegram Channel](https://t.me/lexatripjaisalmer)\n` +
+          `• [📌 Pinterest Board](https://www.pinterest.com/lexatripjaisalmer/)\n` +
+          `• [💼 LinkedIn Company](https://www.linkedin.com/company/lexatripjaisalmer)\n` +
+          `• [🌐 Bookings Portal](https://bookings.lexatrip.com/)\n` +
+          `• [💬 WhatsApp Support](https://wa.me/919079854982)\n\n` +
+          `🌐 *लाइव डैशबोर्ड पर स्थिति देखें:* https://lexa-trip-automation.onrender.com`;
+
+        await this.sendDualMessage(chatId, doneMsg, {
+          parse_mode: 'Markdown',
+          reply_markup: this.buildDashboardKeyboard(dest.id)
+        });
+
+        // 5. If this is part of a 5-photo batch with combined SEO, trigger full pipeline
         if (session.photos.length >= 5 && session.combinedSeo) {
           await this.triggerFullPipeline(chatId, session, dest);
         }
