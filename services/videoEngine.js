@@ -63,17 +63,12 @@ class VideoEngine {
           filterStr +=
             `[${i}:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=25:5,eq=brightness=-0.12[bg${i}];` +
             `[${i}:v]scale=1080:1350:force_original_aspect_ratio=decrease[fg${i}];` +
-            `[bg${i}][fg${i}]overlay=(W-w)/2:(H-h)/2[centered${i}];` +
-            `[centered${i}]drawtext=text='${brandText}':fontcolor=0xD4AF37:fontsize=36:x=(w-text_w)/2:y=120:shadowcolor=black@0.6:shadowx=2:shadowy=2[branded${i}];` +
-            `[branded${i}]drawtext=text='${tagline}':fontcolor=white@0.9:fontsize=28:x=(w-text_w)/2:y=1740:shadowcolor=black@0.6:shadowx=2:shadowy=2[v${i}];`;
+            `[bg${i}][fg${i}]overlay=(W-w)/2:(H-h)/2[v${i}];`;
         } else {
-          // Clean obsidian dark background
           filterStr +=
             `color=c=0x0A0B10:s=1080x1920:d=${durations[i]}[bg${i}];` +
             `[${i}:v]scale=1080:1350:force_original_aspect_ratio=decrease[fg${i}];` +
-            `[bg${i}][fg${i}]overlay=(W-w)/2:(H-h)/2[centered${i}];` +
-            `[centered${i}]drawtext=text='${brandText}':fontcolor=0xD4AF37:fontsize=36:x=(w-text_w)/2:y=120:shadowcolor=black@0.6:shadowx=2:shadowy=2[branded${i}];` +
-            `[branded${i}]drawtext=text='${tagline}':fontcolor=white@0.9:fontsize=28:x=(w-text_w)/2:y=1740:shadowcolor=black@0.6:shadowx=2:shadowy=2[v${i}];`;
+            `[bg${i}][fg${i}]overlay=(W-w)/2:(H-h)/2[v${i}];`;
         }
       }
 
@@ -175,17 +170,13 @@ class VideoEngine {
         filterComplex = [
           `[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=25:5,eq=brightness=-0.12[bg]`,
           `[0:v]scale=1080:1350:force_original_aspect_ratio=decrease[fg]`,
-          `[bg][fg]overlay=(W-w)/2:(H-h)/2[centered]`,
-          `[centered]drawtext=text='${brandText}':fontcolor=0xD4AF37:fontsize=36:x=(w-text_w)/2:y=120:shadowcolor=black@0.6:shadowx=2:shadowy=2[branded]`,
-          `[branded]drawtext=text='${tagline}':fontcolor=white@0.9:fontsize=28:x=(w-text_w)/2:y=1740:shadowcolor=black@0.6:shadowx=2:shadowy=2[v]`
+          `[bg][fg]overlay=(W-w)/2:(H-h)/2[v]`
         ].join(';');
       } else {
         filterComplex = [
           `color=c=0x0A0B10:s=1080x1920:d=${duration}[bg]`,
           `[0:v]scale=1080:1350:force_original_aspect_ratio=decrease[fg]`,
-          `[bg][fg]overlay=(W-w)/2:(H-h)/2[centered]`,
-          `[centered]drawtext=text='${brandText}':fontcolor=0xD4AF37:fontsize=36:x=(w-text_w)/2:y=120:shadowcolor=black@0.6:shadowx=2:shadowy=2[branded]`,
-          `[branded]drawtext=text='${tagline}':fontcolor=white@0.9:fontsize=28:x=(w-text_w)/2:y=1740:shadowcolor=black@0.6:shadowx=2:shadowy=2[v]`
+          `[bg][fg]overlay=(W-w)/2:(H-h)/2[v]`
         ].join(';');
       }
 
