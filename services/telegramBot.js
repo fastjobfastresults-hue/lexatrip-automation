@@ -724,17 +724,35 @@ class TelegramBotService {
         const processedPath = path.join(processedDir, processedFilename);
         await imageProcessor.processTo4x5(localPath, processedPath);
 
-        // 2. Acknowledge receipt and announce instant dispatch
+        // 2. Also generate an Ultra HD 9:16 Vertical Reel (10-12s)
+        const reelFilename = `live_${Date.now()}_reel.mp4`;
+        const reelPath = path.join(processedDir, reelFilename);
+        let reelGenerated = false;
+        try {
+          await videoEngine.generateSingleReel({
+            imagePath: processedPath,
+            outputPath: reelPath,
+            duration: 10.0,
+            brandText: (dest.name.split('(')[0] || 'LEXA TRIP').trim().toUpperCase(),
+            tagline: '✦ Luxury Desert Camping & Experiential Travel ✦'
+          });
+          reelGenerated = true;
+        } catch (rErr) {
+          console.warn('[TelegramBot] Single Reel render notice:', rErr.message);
+        }
+
+        // 3. Acknowledge receipt and announce instant dispatch
         await this.sendDualMessage(
           chatId,
           `📸 *[लाइव फ़ोटो व SEO प्राप्त]* 🐪\n\n` +
           `📌 *टाइटल:* ${parsedSeo.title}\n` +
-          `📍 *डेस्टिनेशन:* ${dest.name}\n\n` +
+          `📍 *डेस्टिनेशन:* ${dest.name}\n` +
+          (reelGenerated ? `🎬 *9:16 अल्ट्रा HD रील:* स्वतः तैयार (10 सेकंड)\n\n` : `\n`) +
           `🚀 *लाइव पब्लिशिंग इंजन सक्रिय...* सभी कनेक्टेड सोशल मीडिया पेजेस (Facebook, Instagram, LinkedIn, Pinterest, Blogger, Telegram) पर अभी लाइव पब्लिश किया जा रहा है!`,
           { parse_mode: 'Markdown' }
         );
 
-        // 3. Immediately queue and dispatch across all platforms
+        // 4. Immediately queue and dispatch Post (4:5)
         const queueRecord = {
           id: `q_instant_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
           batchId: `batch_live_${Date.now()}`,
@@ -754,9 +772,31 @@ class TelegramBotService {
         db.addToQueue(queueRecord);
         await scheduler.publishItemNow(queueRecord.id);
 
-        // 4. Send Confirmation with Direct Live Verification Links
+        // 5. Also queue and dispatch Reel (9:16) if generated
+        if (reelGenerated) {
+          const reelRecord = {
+            id: `q_reel_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
+            batchId: `batch_live_${Date.now()}`,
+            destinationId: dest.id,
+            destinationName: dest.name,
+            itemType: 'reel',
+            index: session.photos.length,
+            title: `Reel: ${parsedSeo.title}`,
+            caption: parsedSeo.caption,
+            mediaPath: reelPath,
+            scheduledTime: new Date(Date.now() - 2000).toISOString(),
+            status: 'queued',
+            targets: ['instagram', 'facebook', 'youtube', 'pinterest'],
+            createdAt: new Date().toISOString()
+          };
+          db.addToQueue(reelRecord);
+          await scheduler.publishItemNow(reelRecord.id);
+        }
+
+        // 6. Send Confirmation with Direct Live Verification Links
         const doneMsg = `✅ *[लाइव पब्लिशिंग संपन्न]* 🐪\n\n` +
-          `📝 *पोस्ट:* ${parsedSeo.title}\n` +
+          `📝 *पोस्ट:* ${parsedSeo.title} (4:5 HD)\n` +
+          (reelGenerated ? `🎬 *रील:* 9:16 अल्ट्रा HD मोशन रील पब्लिश्ड\n` : '') +
           `🕒 *समय:* ${new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}\n\n` +
           `🔗 *लाइव वेरिफिकेशन लिंक्स (सीधे क्लिक करें):*\n` +
           `• [📘 Facebook Page](https://www.facebook.com/1385624654624388)\n` +
@@ -939,6 +979,7 @@ class TelegramBotService {
           targetChannels: dest.defaultChannels?.carousel || ['instagram', 'facebook', 'linkedin']
         },
         reels: generatedSingleReels,
+        singleReels: generatedSingleReels,
         combined12sReel: hasCombinedReel ? {
           title: `12s Cinematic Highlight: ${dest.name}`,
           duration: 12.0,

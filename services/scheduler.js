@@ -122,14 +122,15 @@ class Scheduler {
     }
 
     // 3. Schedule 5 Individual Ultra HD Reels (if generated)
-    if (batch.singleReels && Array.isArray(batch.singleReels)) {
-      batch.singleReels.forEach((r, idx) => {
+    const singleReelsList = batch.singleReels || batch.reels;
+    if (singleReelsList && Array.isArray(singleReelsList)) {
+      singleReelsList.forEach((r, idx) => {
         queueItem(
           'reel',
           idx + 1,
-          `Reel #${idx + 1}: ${r.seo?.title || 'Desert Adventure'}`,
-          r.seo?.caption || '',
-          r.reelDiskPath || r.reelPath,
+          `Reel #${idx + 1}: ${r.seo?.title || r.title || 'Desert Adventure'}`,
+          r.seo?.caption || r.caption || '',
+          r.reelDiskPath || r.reelPath || r.diskPath,
           r.targetChannels || destination.defaultChannels?.reel || ['instagram', 'facebook', 'youtube', 'pinterest']
         );
       });

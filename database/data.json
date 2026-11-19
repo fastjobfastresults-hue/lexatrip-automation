@@ -8380,6 +8380,1846 @@
         "botToken": "",
         "chatId": ""
       }
+    },
+    {
+      "id": "dest_udaipur",
+      "name": "लेक्सा ट्रिप उदयपुर (Lexa Trip Udaipur)",
+      "slug": "udaipur",
+      "state": "Rajasthan",
+      "tagline": "City of Lakes, Royal Palaces & Romantic Sunset Boat Rides",
+      "heroImage": "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=800&q=80",
+      "website": "https://lexatrip.com/udaipur",
+      "phone": "+91 90798 54982",
+      "proxy": "",
+      "channels": {
+        "facebook": {
+          "enabled": true,
+          "name": "Facebook Page (Lexa Trip)",
+          "handle": "facebook.com/1385624654624388",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "pageId": "1385624654624388",
+            "pageAccessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "instagram": {
+          "enabled": true,
+          "name": "Instagram Business (@lexatripjaisalmer)",
+          "handle": "@lexatripjaisalmer",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "accessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "linkedin": {
+          "enabled": true,
+          "name": "LinkedIn - LexaTrip Jaisalmer",
+          "handle": "linkedin.com/company/lexatrip-jaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "accessToken": "AQVEUNZLO91zZlJbtdlyj3W5JBu4Ms4M7vi9BRnkplrAvMEpX0NzbwFAVm-Z9Zw6CZi7Nns1jUkdGnsBJqqEPazGnf4UBPc4FKk4b212KJ6hCbRG4BbC8pa1TkZPrWutwNtQd9EF4iCQM3LHnoS96I-N0j1Pg0CwINgi005ffIkrNPK3ucH_cOOKWVEgdxLeOrXKsd7XZNKqjFcEGjVtb7fO6nbtjlbNCl-FcDeoA2u2GTwb46A2QUpiPOpq0pCiX0yMFhinE3V-q3xg9M1Xik7bp2nDeOaLhAbTbLtfkXVO0njwu2_JegcZpaGqI-e0_8ZErjShJLE--IaCaAuqrFA2f17ZnQ",
+            "organizationUrn": "urn:li:organization:144145872"
+          },
+          "supports": [
+            "post",
+            "carousel"
+          ]
+        },
+        "pinterest": {
+          "enabled": true,
+          "name": "Pinterest - LexaTrip Jaisalmer",
+          "handle": "pinterest.com/Lexatripofficial/lexatrip-jaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "accessToken": "live_pinterest_master_token_active",
+            "boardId": "1131740650051300286",
+            "boardName": "LexaTrip Jaisalmer",
+            "appId": "1641166"
+          },
+          "supports": [
+            "post",
+            "reel"
+          ]
+        },
+        "youtube": {
+          "enabled": true,
+          "name": "Lexa Trip Jaisalmer ",
+          "handle": "@lexatripjaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "channelId": "UCGoH0bF9aH2MVV0RupzsGqQ"
+          },
+          "supports": [
+            "reel"
+          ]
+        },
+        "blogger": {
+          "enabled": true,
+          "name": "Blogger - LexaTrip Jaisalmer",
+          "handle": "lexatripjaisalmer.blogspot.com",
+          "authType": "api_token",
+          "credentials": {
+            "blogId": "4024327205805487932",
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "blogUrl": "https://lexatripjaisalmer.blogspot.com/"
+          },
+          "supports": [
+            "post"
+          ]
+        },
+        "twitter": {
+          "enabled": false,
+          "isComingSoon": true,
+          "name": "X / Twitter (Future Ready)",
+          "handle": "@lexatripjaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "apiKey": "",
+            "apiSecret": "",
+            "bearerToken": ""
+          },
+          "supports": [
+            "post",
+            "reel"
+          ]
+        },
+        "telegram": {
+          "enabled": true,
+          "name": "Lexa Trip Automation Bot",
+          "handle": "@lexatrip_auto_bot",
+          "credentials": {
+            "botToken": "9283650493:AAEbHNXPtWnej_39TBrCQ3y8yXZUESR2D7E"
+          },
+          "supports": [
+            "post",
+            "reel",
+            "carousel"
+          ]
+        },
+        "threads": {
+          "enabled": true,
+          "name": "Threads (@lexatripjaisalmer)",
+          "handle": "threads.net/@lexatripjaisalmer",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "threadsHandle": "@lexatripjaisalmer",
+            "accessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "website": {
+          "enabled": true,
+          "name": "Official Travel Portal (lexatrip.com)",
+          "handle": "lexatrip.com/jaisalmer",
+          "authType": "rest_api",
+          "credentials": {
+            "siteUrl": "https://lexatrip.com/jaisalmer",
+            "apiUrl": "https://lexatrip.com/wp-json/wp/v2",
+            "username": "lexatrip_admin",
+            "applicationPassword": "official_live_token"
+          },
+          "supports": [
+            "post",
+            "article"
+          ]
+        },
+        "google_business": {
+          "enabled": true,
+          "name": "Google Business Profile (Lexa Trip)",
+          "handle": "Profile ID: 9317053919539372537",
+          "authType": "google_cloud_api",
+          "credentials": {
+            "businessProfileId": "9317053919539372537",
+            "storeCode": "17697760526920010612",
+            "locationId": "locations/9317053919539372537",
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "businessName": "Lexa Trip",
+            "websiteUrl": "https://bookings.lexatrip.com/",
+            "ctaType": "BOOK",
+            "verifiedRating": "5.0 Stars (27 Reviews)",
+            "bookingUrl": "https://bookings.lexatrip.com/",
+            "officialSiteUrl": "https://www.lexatrip.com/",
+            "phone": "+91 90798 54982"
+          },
+          "supports": [
+            "post",
+            "carousel_offer"
+          ]
+        },
+        "reddit": {
+          "connected": true,
+          "status": "🟢 Live Official",
+          "name": "Reddit Official",
+          "handle": "u/Logical_Forever_4242",
+          "url": "https://www.reddit.com/user/Logical_Forever_4242/",
+          "credentials": {
+            "username": "Logical_Forever_4242",
+            "displayName": "Lexa Trip - Luxury Desert and Travel Experiences"
+          }
+        },
+        "quora": {
+          "connected": true,
+          "status": "🟢 Live Official",
+          "name": "Quora Official & Space",
+          "handle": "lexatrip.quora.com",
+          "url": "https://lexatrip.quora.com/",
+          "profileUrl": "https://www.quora.com/profile/IMRAN-KHAN-42350",
+          "credentials": {
+            "spaceUrl": "https://lexatrip.quora.com/"
+          }
+        }
+      },
+      "defaultChannels": {
+        "post": [
+          "instagram",
+          "facebook",
+          "linkedin",
+          "pinterest"
+        ],
+        "carousel": [
+          "instagram",
+          "facebook",
+          "linkedin"
+        ],
+        "reel": [
+          "instagram",
+          "facebook",
+          "youtube",
+          "pinterest"
+        ]
+      },
+      "telegram": {
+        "channelId": "-1003697503605",
+        "channelUsername": "@lexatripjaisalmer"
+      }
+    },
+    {
+      "id": "dest_jaipur",
+      "name": "लेक्सा ट्रिप जयपुर (Lexa Trip Jaipur)",
+      "slug": "jaipur",
+      "state": "Rajasthan",
+      "tagline": "The Pink City, Hawa Mahal & Regal Amber Heritage",
+      "heroImage": "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=800&q=80",
+      "website": "https://lexatrip.com/jaipur",
+      "phone": "+91 90798 54982",
+      "proxy": "",
+      "channels": {
+        "facebook": {
+          "enabled": true,
+          "name": "Facebook Page (Lexa Trip)",
+          "handle": "facebook.com/1385624654624388",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "pageId": "1385624654624388",
+            "pageAccessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "instagram": {
+          "enabled": true,
+          "name": "Instagram Business (@lexatripjaisalmer)",
+          "handle": "@lexatripjaisalmer",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "accessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "linkedin": {
+          "enabled": true,
+          "name": "LinkedIn - LexaTrip Jaisalmer",
+          "handle": "linkedin.com/company/lexatrip-jaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "accessToken": "AQVEUNZLO91zZlJbtdlyj3W5JBu4Ms4M7vi9BRnkplrAvMEpX0NzbwFAVm-Z9Zw6CZi7Nns1jUkdGnsBJqqEPazGnf4UBPc4FKk4b212KJ6hCbRG4BbC8pa1TkZPrWutwNtQd9EF4iCQM3LHnoS96I-N0j1Pg0CwINgi005ffIkrNPK3ucH_cOOKWVEgdxLeOrXKsd7XZNKqjFcEGjVtb7fO6nbtjlbNCl-FcDeoA2u2GTwb46A2QUpiPOpq0pCiX0yMFhinE3V-q3xg9M1Xik7bp2nDeOaLhAbTbLtfkXVO0njwu2_JegcZpaGqI-e0_8ZErjShJLE--IaCaAuqrFA2f17ZnQ",
+            "organizationUrn": "urn:li:organization:144145872"
+          },
+          "supports": [
+            "post",
+            "carousel"
+          ]
+        },
+        "pinterest": {
+          "enabled": true,
+          "name": "Pinterest - LexaTrip Jaisalmer",
+          "handle": "pinterest.com/Lexatripofficial/lexatrip-jaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "accessToken": "live_pinterest_master_token_active",
+            "boardId": "1131740650051300286",
+            "boardName": "LexaTrip Jaisalmer",
+            "appId": "1641166"
+          },
+          "supports": [
+            "post",
+            "reel"
+          ]
+        },
+        "youtube": {
+          "enabled": true,
+          "name": "Lexa Trip Jaisalmer ",
+          "handle": "@lexatripjaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "channelId": "UCGoH0bF9aH2MVV0RupzsGqQ"
+          },
+          "supports": [
+            "reel"
+          ]
+        },
+        "blogger": {
+          "enabled": true,
+          "name": "Blogger - LexaTrip Jaisalmer",
+          "handle": "lexatripjaisalmer.blogspot.com",
+          "authType": "api_token",
+          "credentials": {
+            "blogId": "4024327205805487932",
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "blogUrl": "https://lexatripjaisalmer.blogspot.com/"
+          },
+          "supports": [
+            "post"
+          ]
+        },
+        "twitter": {
+          "enabled": false,
+          "isComingSoon": true,
+          "name": "X / Twitter (Future Ready)",
+          "handle": "@lexatripjaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "apiKey": "",
+            "apiSecret": "",
+            "bearerToken": ""
+          },
+          "supports": [
+            "post",
+            "reel"
+          ]
+        },
+        "telegram": {
+          "enabled": true,
+          "name": "Lexa Trip Automation Bot",
+          "handle": "@lexatrip_auto_bot",
+          "credentials": {
+            "botToken": "9283650493:AAEbHNXPtWnej_39TBrCQ3y8yXZUESR2D7E"
+          },
+          "supports": [
+            "post",
+            "reel",
+            "carousel"
+          ]
+        },
+        "threads": {
+          "enabled": true,
+          "name": "Threads (@lexatripjaisalmer)",
+          "handle": "threads.net/@lexatripjaisalmer",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "threadsHandle": "@lexatripjaisalmer",
+            "accessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "website": {
+          "enabled": true,
+          "name": "Official Travel Portal (lexatrip.com)",
+          "handle": "lexatrip.com/jaisalmer",
+          "authType": "rest_api",
+          "credentials": {
+            "siteUrl": "https://lexatrip.com/jaisalmer",
+            "apiUrl": "https://lexatrip.com/wp-json/wp/v2",
+            "username": "lexatrip_admin",
+            "applicationPassword": "official_live_token"
+          },
+          "supports": [
+            "post",
+            "article"
+          ]
+        },
+        "google_business": {
+          "enabled": true,
+          "name": "Google Business Profile (Lexa Trip)",
+          "handle": "Profile ID: 9317053919539372537",
+          "authType": "google_cloud_api",
+          "credentials": {
+            "businessProfileId": "9317053919539372537",
+            "storeCode": "17697760526920010612",
+            "locationId": "locations/9317053919539372537",
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "businessName": "Lexa Trip",
+            "websiteUrl": "https://bookings.lexatrip.com/",
+            "ctaType": "BOOK",
+            "verifiedRating": "5.0 Stars (27 Reviews)",
+            "bookingUrl": "https://bookings.lexatrip.com/",
+            "officialSiteUrl": "https://www.lexatrip.com/",
+            "phone": "+91 90798 54982"
+          },
+          "supports": [
+            "post",
+            "carousel_offer"
+          ]
+        },
+        "reddit": {
+          "connected": true,
+          "status": "🟢 Live Official",
+          "name": "Reddit Official",
+          "handle": "u/Logical_Forever_4242",
+          "url": "https://www.reddit.com/user/Logical_Forever_4242/",
+          "credentials": {
+            "username": "Logical_Forever_4242",
+            "displayName": "Lexa Trip - Luxury Desert and Travel Experiences"
+          }
+        },
+        "quora": {
+          "connected": true,
+          "status": "🟢 Live Official",
+          "name": "Quora Official & Space",
+          "handle": "lexatrip.quora.com",
+          "url": "https://lexatrip.quora.com/",
+          "profileUrl": "https://www.quora.com/profile/IMRAN-KHAN-42350",
+          "credentials": {
+            "spaceUrl": "https://lexatrip.quora.com/"
+          }
+        }
+      },
+      "defaultChannels": {
+        "post": [
+          "instagram",
+          "facebook",
+          "linkedin",
+          "pinterest"
+        ],
+        "carousel": [
+          "instagram",
+          "facebook",
+          "linkedin"
+        ],
+        "reel": [
+          "instagram",
+          "facebook",
+          "youtube",
+          "pinterest"
+        ]
+      },
+      "telegram": {
+        "channelId": "-1003697503605",
+        "channelUsername": "@lexatripjaisalmer"
+      }
+    },
+    {
+      "id": "dest_manali",
+      "name": "लेक्सा ट्रिप मनाली (Lexa Trip Manali)",
+      "slug": "manali",
+      "state": "Himachal Pradesh",
+      "tagline": "Snowy Himalayan Peaks, Solang Adventure & Pine Valleys",
+      "heroImage": "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=800&q=80",
+      "website": "https://lexatrip.com/manali",
+      "phone": "+91 90798 54982",
+      "proxy": "",
+      "channels": {
+        "facebook": {
+          "enabled": true,
+          "name": "Facebook Page (Lexa Trip)",
+          "handle": "facebook.com/1385624654624388",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "pageId": "1385624654624388",
+            "pageAccessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "instagram": {
+          "enabled": true,
+          "name": "Instagram Business (@lexatripjaisalmer)",
+          "handle": "@lexatripjaisalmer",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "accessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "linkedin": {
+          "enabled": true,
+          "name": "LinkedIn - LexaTrip Jaisalmer",
+          "handle": "linkedin.com/company/lexatrip-jaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "accessToken": "AQVEUNZLO91zZlJbtdlyj3W5JBu4Ms4M7vi9BRnkplrAvMEpX0NzbwFAVm-Z9Zw6CZi7Nns1jUkdGnsBJqqEPazGnf4UBPc4FKk4b212KJ6hCbRG4BbC8pa1TkZPrWutwNtQd9EF4iCQM3LHnoS96I-N0j1Pg0CwINgi005ffIkrNPK3ucH_cOOKWVEgdxLeOrXKsd7XZNKqjFcEGjVtb7fO6nbtjlbNCl-FcDeoA2u2GTwb46A2QUpiPOpq0pCiX0yMFhinE3V-q3xg9M1Xik7bp2nDeOaLhAbTbLtfkXVO0njwu2_JegcZpaGqI-e0_8ZErjShJLE--IaCaAuqrFA2f17ZnQ",
+            "organizationUrn": "urn:li:organization:144145872"
+          },
+          "supports": [
+            "post",
+            "carousel"
+          ]
+        },
+        "pinterest": {
+          "enabled": true,
+          "name": "Pinterest - LexaTrip Jaisalmer",
+          "handle": "pinterest.com/Lexatripofficial/lexatrip-jaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "accessToken": "live_pinterest_master_token_active",
+            "boardId": "1131740650051300286",
+            "boardName": "LexaTrip Jaisalmer",
+            "appId": "1641166"
+          },
+          "supports": [
+            "post",
+            "reel"
+          ]
+        },
+        "youtube": {
+          "enabled": true,
+          "name": "Lexa Trip Jaisalmer ",
+          "handle": "@lexatripjaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "channelId": "UCGoH0bF9aH2MVV0RupzsGqQ"
+          },
+          "supports": [
+            "reel"
+          ]
+        },
+        "blogger": {
+          "enabled": true,
+          "name": "Blogger - LexaTrip Jaisalmer",
+          "handle": "lexatripjaisalmer.blogspot.com",
+          "authType": "api_token",
+          "credentials": {
+            "blogId": "4024327205805487932",
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "blogUrl": "https://lexatripjaisalmer.blogspot.com/"
+          },
+          "supports": [
+            "post"
+          ]
+        },
+        "twitter": {
+          "enabled": false,
+          "isComingSoon": true,
+          "name": "X / Twitter (Future Ready)",
+          "handle": "@lexatripjaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "apiKey": "",
+            "apiSecret": "",
+            "bearerToken": ""
+          },
+          "supports": [
+            "post",
+            "reel"
+          ]
+        },
+        "telegram": {
+          "enabled": true,
+          "name": "Lexa Trip Automation Bot",
+          "handle": "@lexatrip_auto_bot",
+          "credentials": {
+            "botToken": "9283650493:AAEbHNXPtWnej_39TBrCQ3y8yXZUESR2D7E"
+          },
+          "supports": [
+            "post",
+            "reel",
+            "carousel"
+          ]
+        },
+        "threads": {
+          "enabled": true,
+          "name": "Threads (@lexatripjaisalmer)",
+          "handle": "threads.net/@lexatripjaisalmer",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "threadsHandle": "@lexatripjaisalmer",
+            "accessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "website": {
+          "enabled": true,
+          "name": "Official Travel Portal (lexatrip.com)",
+          "handle": "lexatrip.com/jaisalmer",
+          "authType": "rest_api",
+          "credentials": {
+            "siteUrl": "https://lexatrip.com/jaisalmer",
+            "apiUrl": "https://lexatrip.com/wp-json/wp/v2",
+            "username": "lexatrip_admin",
+            "applicationPassword": "official_live_token"
+          },
+          "supports": [
+            "post",
+            "article"
+          ]
+        },
+        "google_business": {
+          "enabled": true,
+          "name": "Google Business Profile (Lexa Trip)",
+          "handle": "Profile ID: 9317053919539372537",
+          "authType": "google_cloud_api",
+          "credentials": {
+            "businessProfileId": "9317053919539372537",
+            "storeCode": "17697760526920010612",
+            "locationId": "locations/9317053919539372537",
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "businessName": "Lexa Trip",
+            "websiteUrl": "https://bookings.lexatrip.com/",
+            "ctaType": "BOOK",
+            "verifiedRating": "5.0 Stars (27 Reviews)",
+            "bookingUrl": "https://bookings.lexatrip.com/",
+            "officialSiteUrl": "https://www.lexatrip.com/",
+            "phone": "+91 90798 54982"
+          },
+          "supports": [
+            "post",
+            "carousel_offer"
+          ]
+        },
+        "reddit": {
+          "connected": true,
+          "status": "🟢 Live Official",
+          "name": "Reddit Official",
+          "handle": "u/Logical_Forever_4242",
+          "url": "https://www.reddit.com/user/Logical_Forever_4242/",
+          "credentials": {
+            "username": "Logical_Forever_4242",
+            "displayName": "Lexa Trip - Luxury Desert and Travel Experiences"
+          }
+        },
+        "quora": {
+          "connected": true,
+          "status": "🟢 Live Official",
+          "name": "Quora Official & Space",
+          "handle": "lexatrip.quora.com",
+          "url": "https://lexatrip.quora.com/",
+          "profileUrl": "https://www.quora.com/profile/IMRAN-KHAN-42350",
+          "credentials": {
+            "spaceUrl": "https://lexatrip.quora.com/"
+          }
+        }
+      },
+      "defaultChannels": {
+        "post": [
+          "instagram",
+          "facebook",
+          "linkedin",
+          "pinterest"
+        ],
+        "carousel": [
+          "instagram",
+          "facebook",
+          "linkedin"
+        ],
+        "reel": [
+          "instagram",
+          "facebook",
+          "youtube",
+          "pinterest"
+        ]
+      },
+      "telegram": {
+        "channelId": "-1003697503605",
+        "channelUsername": "@lexatripjaisalmer"
+      }
+    },
+    {
+      "id": "dest_rishikesh",
+      "name": "लेक्सा ट्रिप ऋषिकेश (Lexa Trip Rishikesh)",
+      "slug": "rishikesh",
+      "state": "Uttarakhand",
+      "tagline": "Ganga Aarti, White Water Rafting & Soulful Yoga Retreats",
+      "heroImage": "https://images.unsplash.com/photo-1603816245457-fe9c80b740e5?auto=format&fit=crop&w=800&q=80",
+      "website": "https://lexatrip.com/rishikesh",
+      "phone": "+91 90798 54982",
+      "proxy": "",
+      "channels": {
+        "facebook": {
+          "enabled": true,
+          "name": "Facebook Page (Lexa Trip)",
+          "handle": "facebook.com/1385624654624388",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "pageId": "1385624654624388",
+            "pageAccessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "instagram": {
+          "enabled": true,
+          "name": "Instagram Business (@lexatripjaisalmer)",
+          "handle": "@lexatripjaisalmer",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "accessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "linkedin": {
+          "enabled": true,
+          "name": "LinkedIn - LexaTrip Jaisalmer",
+          "handle": "linkedin.com/company/lexatrip-jaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "accessToken": "AQVEUNZLO91zZlJbtdlyj3W5JBu4Ms4M7vi9BRnkplrAvMEpX0NzbwFAVm-Z9Zw6CZi7Nns1jUkdGnsBJqqEPazGnf4UBPc4FKk4b212KJ6hCbRG4BbC8pa1TkZPrWutwNtQd9EF4iCQM3LHnoS96I-N0j1Pg0CwINgi005ffIkrNPK3ucH_cOOKWVEgdxLeOrXKsd7XZNKqjFcEGjVtb7fO6nbtjlbNCl-FcDeoA2u2GTwb46A2QUpiPOpq0pCiX0yMFhinE3V-q3xg9M1Xik7bp2nDeOaLhAbTbLtfkXVO0njwu2_JegcZpaGqI-e0_8ZErjShJLE--IaCaAuqrFA2f17ZnQ",
+            "organizationUrn": "urn:li:organization:144145872"
+          },
+          "supports": [
+            "post",
+            "carousel"
+          ]
+        },
+        "pinterest": {
+          "enabled": true,
+          "name": "Pinterest - LexaTrip Jaisalmer",
+          "handle": "pinterest.com/Lexatripofficial/lexatrip-jaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "accessToken": "live_pinterest_master_token_active",
+            "boardId": "1131740650051300286",
+            "boardName": "LexaTrip Jaisalmer",
+            "appId": "1641166"
+          },
+          "supports": [
+            "post",
+            "reel"
+          ]
+        },
+        "youtube": {
+          "enabled": true,
+          "name": "Lexa Trip Jaisalmer ",
+          "handle": "@lexatripjaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "channelId": "UCGoH0bF9aH2MVV0RupzsGqQ"
+          },
+          "supports": [
+            "reel"
+          ]
+        },
+        "blogger": {
+          "enabled": true,
+          "name": "Blogger - LexaTrip Jaisalmer",
+          "handle": "lexatripjaisalmer.blogspot.com",
+          "authType": "api_token",
+          "credentials": {
+            "blogId": "4024327205805487932",
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "blogUrl": "https://lexatripjaisalmer.blogspot.com/"
+          },
+          "supports": [
+            "post"
+          ]
+        },
+        "twitter": {
+          "enabled": false,
+          "isComingSoon": true,
+          "name": "X / Twitter (Future Ready)",
+          "handle": "@lexatripjaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "apiKey": "",
+            "apiSecret": "",
+            "bearerToken": ""
+          },
+          "supports": [
+            "post",
+            "reel"
+          ]
+        },
+        "telegram": {
+          "enabled": true,
+          "name": "Lexa Trip Automation Bot",
+          "handle": "@lexatrip_auto_bot",
+          "credentials": {
+            "botToken": "9283650493:AAEbHNXPtWnej_39TBrCQ3y8yXZUESR2D7E"
+          },
+          "supports": [
+            "post",
+            "reel",
+            "carousel"
+          ]
+        },
+        "threads": {
+          "enabled": true,
+          "name": "Threads (@lexatripjaisalmer)",
+          "handle": "threads.net/@lexatripjaisalmer",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "threadsHandle": "@lexatripjaisalmer",
+            "accessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "website": {
+          "enabled": true,
+          "name": "Official Travel Portal (lexatrip.com)",
+          "handle": "lexatrip.com/jaisalmer",
+          "authType": "rest_api",
+          "credentials": {
+            "siteUrl": "https://lexatrip.com/jaisalmer",
+            "apiUrl": "https://lexatrip.com/wp-json/wp/v2",
+            "username": "lexatrip_admin",
+            "applicationPassword": "official_live_token"
+          },
+          "supports": [
+            "post",
+            "article"
+          ]
+        },
+        "google_business": {
+          "enabled": true,
+          "name": "Google Business Profile (Lexa Trip)",
+          "handle": "Profile ID: 9317053919539372537",
+          "authType": "google_cloud_api",
+          "credentials": {
+            "businessProfileId": "9317053919539372537",
+            "storeCode": "17697760526920010612",
+            "locationId": "locations/9317053919539372537",
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "businessName": "Lexa Trip",
+            "websiteUrl": "https://bookings.lexatrip.com/",
+            "ctaType": "BOOK",
+            "verifiedRating": "5.0 Stars (27 Reviews)",
+            "bookingUrl": "https://bookings.lexatrip.com/",
+            "officialSiteUrl": "https://www.lexatrip.com/",
+            "phone": "+91 90798 54982"
+          },
+          "supports": [
+            "post",
+            "carousel_offer"
+          ]
+        },
+        "reddit": {
+          "connected": true,
+          "status": "🟢 Live Official",
+          "name": "Reddit Official",
+          "handle": "u/Logical_Forever_4242",
+          "url": "https://www.reddit.com/user/Logical_Forever_4242/",
+          "credentials": {
+            "username": "Logical_Forever_4242",
+            "displayName": "Lexa Trip - Luxury Desert and Travel Experiences"
+          }
+        },
+        "quora": {
+          "connected": true,
+          "status": "🟢 Live Official",
+          "name": "Quora Official & Space",
+          "handle": "lexatrip.quora.com",
+          "url": "https://lexatrip.quora.com/",
+          "profileUrl": "https://www.quora.com/profile/IMRAN-KHAN-42350",
+          "credentials": {
+            "spaceUrl": "https://lexatrip.quora.com/"
+          }
+        }
+      },
+      "defaultChannels": {
+        "post": [
+          "instagram",
+          "facebook",
+          "linkedin",
+          "pinterest"
+        ],
+        "carousel": [
+          "instagram",
+          "facebook",
+          "linkedin"
+        ],
+        "reel": [
+          "instagram",
+          "facebook",
+          "youtube",
+          "pinterest"
+        ]
+      },
+      "telegram": {
+        "channelId": "-1003697503605",
+        "channelUsername": "@lexatripjaisalmer"
+      }
+    },
+    {
+      "id": "dest_goa",
+      "name": "लेक्सा ट्रिप गोवा (Lexa Trip Goa)",
+      "slug": "goa",
+      "state": "Goa",
+      "tagline": "Golden Sands, Azure Ocean Sunsets & Luxury Beach Villas",
+      "heroImage": "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=800&q=80",
+      "website": "https://lexatrip.com/goa",
+      "phone": "+91 90798 54982",
+      "proxy": "",
+      "channels": {
+        "facebook": {
+          "enabled": true,
+          "name": "Facebook Page (Lexa Trip)",
+          "handle": "facebook.com/1385624654624388",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "pageId": "1385624654624388",
+            "pageAccessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "instagram": {
+          "enabled": true,
+          "name": "Instagram Business (@lexatripjaisalmer)",
+          "handle": "@lexatripjaisalmer",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "accessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "linkedin": {
+          "enabled": true,
+          "name": "LinkedIn - LexaTrip Jaisalmer",
+          "handle": "linkedin.com/company/lexatrip-jaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "accessToken": "AQVEUNZLO91zZlJbtdlyj3W5JBu4Ms4M7vi9BRnkplrAvMEpX0NzbwFAVm-Z9Zw6CZi7Nns1jUkdGnsBJqqEPazGnf4UBPc4FKk4b212KJ6hCbRG4BbC8pa1TkZPrWutwNtQd9EF4iCQM3LHnoS96I-N0j1Pg0CwINgi005ffIkrNPK3ucH_cOOKWVEgdxLeOrXKsd7XZNKqjFcEGjVtb7fO6nbtjlbNCl-FcDeoA2u2GTwb46A2QUpiPOpq0pCiX0yMFhinE3V-q3xg9M1Xik7bp2nDeOaLhAbTbLtfkXVO0njwu2_JegcZpaGqI-e0_8ZErjShJLE--IaCaAuqrFA2f17ZnQ",
+            "organizationUrn": "urn:li:organization:144145872"
+          },
+          "supports": [
+            "post",
+            "carousel"
+          ]
+        },
+        "pinterest": {
+          "enabled": true,
+          "name": "Pinterest - LexaTrip Jaisalmer",
+          "handle": "pinterest.com/Lexatripofficial/lexatrip-jaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "accessToken": "live_pinterest_master_token_active",
+            "boardId": "1131740650051300286",
+            "boardName": "LexaTrip Jaisalmer",
+            "appId": "1641166"
+          },
+          "supports": [
+            "post",
+            "reel"
+          ]
+        },
+        "youtube": {
+          "enabled": true,
+          "name": "Lexa Trip Jaisalmer ",
+          "handle": "@lexatripjaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "channelId": "UCGoH0bF9aH2MVV0RupzsGqQ"
+          },
+          "supports": [
+            "reel"
+          ]
+        },
+        "blogger": {
+          "enabled": true,
+          "name": "Blogger - LexaTrip Jaisalmer",
+          "handle": "lexatripjaisalmer.blogspot.com",
+          "authType": "api_token",
+          "credentials": {
+            "blogId": "4024327205805487932",
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "blogUrl": "https://lexatripjaisalmer.blogspot.com/"
+          },
+          "supports": [
+            "post"
+          ]
+        },
+        "twitter": {
+          "enabled": false,
+          "isComingSoon": true,
+          "name": "X / Twitter (Future Ready)",
+          "handle": "@lexatripjaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "apiKey": "",
+            "apiSecret": "",
+            "bearerToken": ""
+          },
+          "supports": [
+            "post",
+            "reel"
+          ]
+        },
+        "telegram": {
+          "enabled": true,
+          "name": "Lexa Trip Automation Bot",
+          "handle": "@lexatrip_auto_bot",
+          "credentials": {
+            "botToken": "9283650493:AAEbHNXPtWnej_39TBrCQ3y8yXZUESR2D7E"
+          },
+          "supports": [
+            "post",
+            "reel",
+            "carousel"
+          ]
+        },
+        "threads": {
+          "enabled": true,
+          "name": "Threads (@lexatripjaisalmer)",
+          "handle": "threads.net/@lexatripjaisalmer",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "threadsHandle": "@lexatripjaisalmer",
+            "accessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "website": {
+          "enabled": true,
+          "name": "Official Travel Portal (lexatrip.com)",
+          "handle": "lexatrip.com/jaisalmer",
+          "authType": "rest_api",
+          "credentials": {
+            "siteUrl": "https://lexatrip.com/jaisalmer",
+            "apiUrl": "https://lexatrip.com/wp-json/wp/v2",
+            "username": "lexatrip_admin",
+            "applicationPassword": "official_live_token"
+          },
+          "supports": [
+            "post",
+            "article"
+          ]
+        },
+        "google_business": {
+          "enabled": true,
+          "name": "Google Business Profile (Lexa Trip)",
+          "handle": "Profile ID: 9317053919539372537",
+          "authType": "google_cloud_api",
+          "credentials": {
+            "businessProfileId": "9317053919539372537",
+            "storeCode": "17697760526920010612",
+            "locationId": "locations/9317053919539372537",
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "businessName": "Lexa Trip",
+            "websiteUrl": "https://bookings.lexatrip.com/",
+            "ctaType": "BOOK",
+            "verifiedRating": "5.0 Stars (27 Reviews)",
+            "bookingUrl": "https://bookings.lexatrip.com/",
+            "officialSiteUrl": "https://www.lexatrip.com/",
+            "phone": "+91 90798 54982"
+          },
+          "supports": [
+            "post",
+            "carousel_offer"
+          ]
+        },
+        "reddit": {
+          "connected": true,
+          "status": "🟢 Live Official",
+          "name": "Reddit Official",
+          "handle": "u/Logical_Forever_4242",
+          "url": "https://www.reddit.com/user/Logical_Forever_4242/",
+          "credentials": {
+            "username": "Logical_Forever_4242",
+            "displayName": "Lexa Trip - Luxury Desert and Travel Experiences"
+          }
+        },
+        "quora": {
+          "connected": true,
+          "status": "🟢 Live Official",
+          "name": "Quora Official & Space",
+          "handle": "lexatrip.quora.com",
+          "url": "https://lexatrip.quora.com/",
+          "profileUrl": "https://www.quora.com/profile/IMRAN-KHAN-42350",
+          "credentials": {
+            "spaceUrl": "https://lexatrip.quora.com/"
+          }
+        }
+      },
+      "defaultChannels": {
+        "post": [
+          "instagram",
+          "facebook",
+          "linkedin",
+          "pinterest"
+        ],
+        "carousel": [
+          "instagram",
+          "facebook",
+          "linkedin"
+        ],
+        "reel": [
+          "instagram",
+          "facebook",
+          "youtube",
+          "pinterest"
+        ]
+      },
+      "telegram": {
+        "channelId": "-1003697503605",
+        "channelUsername": "@lexatripjaisalmer"
+      }
+    },
+    {
+      "id": "dest_munnar",
+      "name": "लेक्सा ट्रिप मुन्नार (Lexa Trip Munnar)",
+      "slug": "munnar",
+      "state": "Kerala",
+      "tagline": "Rolling Emerald Tea Gardens & Misty Mountain Retreats",
+      "heroImage": "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=800&q=80",
+      "website": "https://lexatrip.com/munnar",
+      "phone": "+91 90798 54982",
+      "proxy": "",
+      "channels": {
+        "facebook": {
+          "enabled": true,
+          "name": "Facebook Page (Lexa Trip)",
+          "handle": "facebook.com/1385624654624388",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "pageId": "1385624654624388",
+            "pageAccessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "instagram": {
+          "enabled": true,
+          "name": "Instagram Business (@lexatripjaisalmer)",
+          "handle": "@lexatripjaisalmer",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "accessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "linkedin": {
+          "enabled": true,
+          "name": "LinkedIn - LexaTrip Jaisalmer",
+          "handle": "linkedin.com/company/lexatrip-jaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "accessToken": "AQVEUNZLO91zZlJbtdlyj3W5JBu4Ms4M7vi9BRnkplrAvMEpX0NzbwFAVm-Z9Zw6CZi7Nns1jUkdGnsBJqqEPazGnf4UBPc4FKk4b212KJ6hCbRG4BbC8pa1TkZPrWutwNtQd9EF4iCQM3LHnoS96I-N0j1Pg0CwINgi005ffIkrNPK3ucH_cOOKWVEgdxLeOrXKsd7XZNKqjFcEGjVtb7fO6nbtjlbNCl-FcDeoA2u2GTwb46A2QUpiPOpq0pCiX0yMFhinE3V-q3xg9M1Xik7bp2nDeOaLhAbTbLtfkXVO0njwu2_JegcZpaGqI-e0_8ZErjShJLE--IaCaAuqrFA2f17ZnQ",
+            "organizationUrn": "urn:li:organization:144145872"
+          },
+          "supports": [
+            "post",
+            "carousel"
+          ]
+        },
+        "pinterest": {
+          "enabled": true,
+          "name": "Pinterest - LexaTrip Jaisalmer",
+          "handle": "pinterest.com/Lexatripofficial/lexatrip-jaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "accessToken": "live_pinterest_master_token_active",
+            "boardId": "1131740650051300286",
+            "boardName": "LexaTrip Jaisalmer",
+            "appId": "1641166"
+          },
+          "supports": [
+            "post",
+            "reel"
+          ]
+        },
+        "youtube": {
+          "enabled": true,
+          "name": "Lexa Trip Jaisalmer ",
+          "handle": "@lexatripjaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "channelId": "UCGoH0bF9aH2MVV0RupzsGqQ"
+          },
+          "supports": [
+            "reel"
+          ]
+        },
+        "blogger": {
+          "enabled": true,
+          "name": "Blogger - LexaTrip Jaisalmer",
+          "handle": "lexatripjaisalmer.blogspot.com",
+          "authType": "api_token",
+          "credentials": {
+            "blogId": "4024327205805487932",
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "blogUrl": "https://lexatripjaisalmer.blogspot.com/"
+          },
+          "supports": [
+            "post"
+          ]
+        },
+        "twitter": {
+          "enabled": false,
+          "isComingSoon": true,
+          "name": "X / Twitter (Future Ready)",
+          "handle": "@lexatripjaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "apiKey": "",
+            "apiSecret": "",
+            "bearerToken": ""
+          },
+          "supports": [
+            "post",
+            "reel"
+          ]
+        },
+        "telegram": {
+          "enabled": true,
+          "name": "Lexa Trip Automation Bot",
+          "handle": "@lexatrip_auto_bot",
+          "credentials": {
+            "botToken": "9283650493:AAEbHNXPtWnej_39TBrCQ3y8yXZUESR2D7E"
+          },
+          "supports": [
+            "post",
+            "reel",
+            "carousel"
+          ]
+        },
+        "threads": {
+          "enabled": true,
+          "name": "Threads (@lexatripjaisalmer)",
+          "handle": "threads.net/@lexatripjaisalmer",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "threadsHandle": "@lexatripjaisalmer",
+            "accessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "website": {
+          "enabled": true,
+          "name": "Official Travel Portal (lexatrip.com)",
+          "handle": "lexatrip.com/jaisalmer",
+          "authType": "rest_api",
+          "credentials": {
+            "siteUrl": "https://lexatrip.com/jaisalmer",
+            "apiUrl": "https://lexatrip.com/wp-json/wp/v2",
+            "username": "lexatrip_admin",
+            "applicationPassword": "official_live_token"
+          },
+          "supports": [
+            "post",
+            "article"
+          ]
+        },
+        "google_business": {
+          "enabled": true,
+          "name": "Google Business Profile (Lexa Trip)",
+          "handle": "Profile ID: 9317053919539372537",
+          "authType": "google_cloud_api",
+          "credentials": {
+            "businessProfileId": "9317053919539372537",
+            "storeCode": "17697760526920010612",
+            "locationId": "locations/9317053919539372537",
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "businessName": "Lexa Trip",
+            "websiteUrl": "https://bookings.lexatrip.com/",
+            "ctaType": "BOOK",
+            "verifiedRating": "5.0 Stars (27 Reviews)",
+            "bookingUrl": "https://bookings.lexatrip.com/",
+            "officialSiteUrl": "https://www.lexatrip.com/",
+            "phone": "+91 90798 54982"
+          },
+          "supports": [
+            "post",
+            "carousel_offer"
+          ]
+        },
+        "reddit": {
+          "connected": true,
+          "status": "🟢 Live Official",
+          "name": "Reddit Official",
+          "handle": "u/Logical_Forever_4242",
+          "url": "https://www.reddit.com/user/Logical_Forever_4242/",
+          "credentials": {
+            "username": "Logical_Forever_4242",
+            "displayName": "Lexa Trip - Luxury Desert and Travel Experiences"
+          }
+        },
+        "quora": {
+          "connected": true,
+          "status": "🟢 Live Official",
+          "name": "Quora Official & Space",
+          "handle": "lexatrip.quora.com",
+          "url": "https://lexatrip.quora.com/",
+          "profileUrl": "https://www.quora.com/profile/IMRAN-KHAN-42350",
+          "credentials": {
+            "spaceUrl": "https://lexatrip.quora.com/"
+          }
+        }
+      },
+      "defaultChannels": {
+        "post": [
+          "instagram",
+          "facebook",
+          "linkedin",
+          "pinterest"
+        ],
+        "carousel": [
+          "instagram",
+          "facebook",
+          "linkedin"
+        ],
+        "reel": [
+          "instagram",
+          "facebook",
+          "youtube",
+          "pinterest"
+        ]
+      },
+      "telegram": {
+        "channelId": "-1003697503605",
+        "channelUsername": "@lexatripjaisalmer"
+      }
+    },
+    {
+      "id": "dest_varanasi",
+      "name": "लेक्सा ट्रिप वाराणसी (Lexa Trip Varanasi)",
+      "slug": "varanasi",
+      "state": "Uttar Pradesh",
+      "tagline": "Ancient Ghats, Divine Ganga Aarti & Spiritual Legacy",
+      "heroImage": "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=800&q=80",
+      "website": "https://lexatrip.com/varanasi",
+      "phone": "+91 90798 54982",
+      "proxy": "",
+      "channels": {
+        "facebook": {
+          "enabled": true,
+          "name": "Facebook Page (Lexa Trip)",
+          "handle": "facebook.com/1385624654624388",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "pageId": "1385624654624388",
+            "pageAccessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "instagram": {
+          "enabled": true,
+          "name": "Instagram Business (@lexatripjaisalmer)",
+          "handle": "@lexatripjaisalmer",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "accessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "linkedin": {
+          "enabled": true,
+          "name": "LinkedIn - LexaTrip Jaisalmer",
+          "handle": "linkedin.com/company/lexatrip-jaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "accessToken": "AQVEUNZLO91zZlJbtdlyj3W5JBu4Ms4M7vi9BRnkplrAvMEpX0NzbwFAVm-Z9Zw6CZi7Nns1jUkdGnsBJqqEPazGnf4UBPc4FKk4b212KJ6hCbRG4BbC8pa1TkZPrWutwNtQd9EF4iCQM3LHnoS96I-N0j1Pg0CwINgi005ffIkrNPK3ucH_cOOKWVEgdxLeOrXKsd7XZNKqjFcEGjVtb7fO6nbtjlbNCl-FcDeoA2u2GTwb46A2QUpiPOpq0pCiX0yMFhinE3V-q3xg9M1Xik7bp2nDeOaLhAbTbLtfkXVO0njwu2_JegcZpaGqI-e0_8ZErjShJLE--IaCaAuqrFA2f17ZnQ",
+            "organizationUrn": "urn:li:organization:144145872"
+          },
+          "supports": [
+            "post",
+            "carousel"
+          ]
+        },
+        "pinterest": {
+          "enabled": true,
+          "name": "Pinterest - LexaTrip Jaisalmer",
+          "handle": "pinterest.com/Lexatripofficial/lexatrip-jaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "accessToken": "live_pinterest_master_token_active",
+            "boardId": "1131740650051300286",
+            "boardName": "LexaTrip Jaisalmer",
+            "appId": "1641166"
+          },
+          "supports": [
+            "post",
+            "reel"
+          ]
+        },
+        "youtube": {
+          "enabled": true,
+          "name": "Lexa Trip Jaisalmer ",
+          "handle": "@lexatripjaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "channelId": "UCGoH0bF9aH2MVV0RupzsGqQ"
+          },
+          "supports": [
+            "reel"
+          ]
+        },
+        "blogger": {
+          "enabled": true,
+          "name": "Blogger - LexaTrip Jaisalmer",
+          "handle": "lexatripjaisalmer.blogspot.com",
+          "authType": "api_token",
+          "credentials": {
+            "blogId": "4024327205805487932",
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "blogUrl": "https://lexatripjaisalmer.blogspot.com/"
+          },
+          "supports": [
+            "post"
+          ]
+        },
+        "twitter": {
+          "enabled": false,
+          "isComingSoon": true,
+          "name": "X / Twitter (Future Ready)",
+          "handle": "@lexatripjaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "apiKey": "",
+            "apiSecret": "",
+            "bearerToken": ""
+          },
+          "supports": [
+            "post",
+            "reel"
+          ]
+        },
+        "telegram": {
+          "enabled": true,
+          "name": "Lexa Trip Automation Bot",
+          "handle": "@lexatrip_auto_bot",
+          "credentials": {
+            "botToken": "9283650493:AAEbHNXPtWnej_39TBrCQ3y8yXZUESR2D7E"
+          },
+          "supports": [
+            "post",
+            "reel",
+            "carousel"
+          ]
+        },
+        "threads": {
+          "enabled": true,
+          "name": "Threads (@lexatripjaisalmer)",
+          "handle": "threads.net/@lexatripjaisalmer",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "threadsHandle": "@lexatripjaisalmer",
+            "accessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "website": {
+          "enabled": true,
+          "name": "Official Travel Portal (lexatrip.com)",
+          "handle": "lexatrip.com/jaisalmer",
+          "authType": "rest_api",
+          "credentials": {
+            "siteUrl": "https://lexatrip.com/jaisalmer",
+            "apiUrl": "https://lexatrip.com/wp-json/wp/v2",
+            "username": "lexatrip_admin",
+            "applicationPassword": "official_live_token"
+          },
+          "supports": [
+            "post",
+            "article"
+          ]
+        },
+        "google_business": {
+          "enabled": true,
+          "name": "Google Business Profile (Lexa Trip)",
+          "handle": "Profile ID: 9317053919539372537",
+          "authType": "google_cloud_api",
+          "credentials": {
+            "businessProfileId": "9317053919539372537",
+            "storeCode": "17697760526920010612",
+            "locationId": "locations/9317053919539372537",
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "businessName": "Lexa Trip",
+            "websiteUrl": "https://bookings.lexatrip.com/",
+            "ctaType": "BOOK",
+            "verifiedRating": "5.0 Stars (27 Reviews)",
+            "bookingUrl": "https://bookings.lexatrip.com/",
+            "officialSiteUrl": "https://www.lexatrip.com/",
+            "phone": "+91 90798 54982"
+          },
+          "supports": [
+            "post",
+            "carousel_offer"
+          ]
+        },
+        "reddit": {
+          "connected": true,
+          "status": "🟢 Live Official",
+          "name": "Reddit Official",
+          "handle": "u/Logical_Forever_4242",
+          "url": "https://www.reddit.com/user/Logical_Forever_4242/",
+          "credentials": {
+            "username": "Logical_Forever_4242",
+            "displayName": "Lexa Trip - Luxury Desert and Travel Experiences"
+          }
+        },
+        "quora": {
+          "connected": true,
+          "status": "🟢 Live Official",
+          "name": "Quora Official & Space",
+          "handle": "lexatrip.quora.com",
+          "url": "https://lexatrip.quora.com/",
+          "profileUrl": "https://www.quora.com/profile/IMRAN-KHAN-42350",
+          "credentials": {
+            "spaceUrl": "https://lexatrip.quora.com/"
+          }
+        }
+      },
+      "defaultChannels": {
+        "post": [
+          "instagram",
+          "facebook",
+          "linkedin",
+          "pinterest"
+        ],
+        "carousel": [
+          "instagram",
+          "facebook",
+          "linkedin"
+        ],
+        "reel": [
+          "instagram",
+          "facebook",
+          "youtube",
+          "pinterest"
+        ]
+      },
+      "telegram": {
+        "channelId": "-1003697503605",
+        "channelUsername": "@lexatripjaisalmer"
+      }
+    },
+    {
+      "id": "dest_tirupati",
+      "name": "लेक्सा ट्रिप तिरुपति (Lexa Trip Tirupati)",
+      "slug": "tirupati",
+      "state": "Andhra Pradesh",
+      "tagline": "Sacred Tirumala Hills, Divine Blessings & Royal Pilgrimage",
+      "heroImage": "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=800&q=80",
+      "website": "https://lexatrip.com/tirupati",
+      "phone": "+91 90798 54982",
+      "proxy": "",
+      "channels": {
+        "facebook": {
+          "enabled": true,
+          "name": "Facebook Page (Lexa Trip)",
+          "handle": "facebook.com/1385624654624388",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "pageId": "1385624654624388",
+            "pageAccessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "instagram": {
+          "enabled": true,
+          "name": "Instagram Business (@lexatripjaisalmer)",
+          "handle": "@lexatripjaisalmer",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "accessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "linkedin": {
+          "enabled": true,
+          "name": "LinkedIn - LexaTrip Jaisalmer",
+          "handle": "linkedin.com/company/lexatrip-jaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "accessToken": "AQVEUNZLO91zZlJbtdlyj3W5JBu4Ms4M7vi9BRnkplrAvMEpX0NzbwFAVm-Z9Zw6CZi7Nns1jUkdGnsBJqqEPazGnf4UBPc4FKk4b212KJ6hCbRG4BbC8pa1TkZPrWutwNtQd9EF4iCQM3LHnoS96I-N0j1Pg0CwINgi005ffIkrNPK3ucH_cOOKWVEgdxLeOrXKsd7XZNKqjFcEGjVtb7fO6nbtjlbNCl-FcDeoA2u2GTwb46A2QUpiPOpq0pCiX0yMFhinE3V-q3xg9M1Xik7bp2nDeOaLhAbTbLtfkXVO0njwu2_JegcZpaGqI-e0_8ZErjShJLE--IaCaAuqrFA2f17ZnQ",
+            "organizationUrn": "urn:li:organization:144145872"
+          },
+          "supports": [
+            "post",
+            "carousel"
+          ]
+        },
+        "pinterest": {
+          "enabled": true,
+          "name": "Pinterest - LexaTrip Jaisalmer",
+          "handle": "pinterest.com/Lexatripofficial/lexatrip-jaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "accessToken": "live_pinterest_master_token_active",
+            "boardId": "1131740650051300286",
+            "boardName": "LexaTrip Jaisalmer",
+            "appId": "1641166"
+          },
+          "supports": [
+            "post",
+            "reel"
+          ]
+        },
+        "youtube": {
+          "enabled": true,
+          "name": "Lexa Trip Jaisalmer ",
+          "handle": "@lexatripjaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "channelId": "UCGoH0bF9aH2MVV0RupzsGqQ"
+          },
+          "supports": [
+            "reel"
+          ]
+        },
+        "blogger": {
+          "enabled": true,
+          "name": "Blogger - LexaTrip Jaisalmer",
+          "handle": "lexatripjaisalmer.blogspot.com",
+          "authType": "api_token",
+          "credentials": {
+            "blogId": "4024327205805487932",
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "blogUrl": "https://lexatripjaisalmer.blogspot.com/"
+          },
+          "supports": [
+            "post"
+          ]
+        },
+        "twitter": {
+          "enabled": false,
+          "isComingSoon": true,
+          "name": "X / Twitter (Future Ready)",
+          "handle": "@lexatripjaisalmer",
+          "authType": "api_token",
+          "credentials": {
+            "apiKey": "",
+            "apiSecret": "",
+            "bearerToken": ""
+          },
+          "supports": [
+            "post",
+            "reel"
+          ]
+        },
+        "telegram": {
+          "enabled": true,
+          "name": "Lexa Trip Automation Bot",
+          "handle": "@lexatrip_auto_bot",
+          "credentials": {
+            "botToken": "9283650493:AAEbHNXPtWnej_39TBrCQ3y8yXZUESR2D7E"
+          },
+          "supports": [
+            "post",
+            "reel",
+            "carousel"
+          ]
+        },
+        "threads": {
+          "enabled": true,
+          "name": "Threads (@lexatripjaisalmer)",
+          "handle": "threads.net/@lexatripjaisalmer",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "threadsHandle": "@lexatripjaisalmer",
+            "accessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "website": {
+          "enabled": true,
+          "name": "Official Travel Portal (lexatrip.com)",
+          "handle": "lexatrip.com/jaisalmer",
+          "authType": "rest_api",
+          "credentials": {
+            "siteUrl": "https://lexatrip.com/jaisalmer",
+            "apiUrl": "https://lexatrip.com/wp-json/wp/v2",
+            "username": "lexatrip_admin",
+            "applicationPassword": "official_live_token"
+          },
+          "supports": [
+            "post",
+            "article"
+          ]
+        },
+        "google_business": {
+          "enabled": true,
+          "name": "Google Business Profile (Lexa Trip)",
+          "handle": "Profile ID: 9317053919539372537",
+          "authType": "google_cloud_api",
+          "credentials": {
+            "businessProfileId": "9317053919539372537",
+            "storeCode": "17697760526920010612",
+            "locationId": "locations/9317053919539372537",
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
+            "businessName": "Lexa Trip",
+            "websiteUrl": "https://bookings.lexatrip.com/",
+            "ctaType": "BOOK",
+            "verifiedRating": "5.0 Stars (27 Reviews)",
+            "bookingUrl": "https://bookings.lexatrip.com/",
+            "officialSiteUrl": "https://www.lexatrip.com/",
+            "phone": "+91 90798 54982"
+          },
+          "supports": [
+            "post",
+            "carousel_offer"
+          ]
+        },
+        "reddit": {
+          "connected": true,
+          "status": "🟢 Live Official",
+          "name": "Reddit Official",
+          "handle": "u/Logical_Forever_4242",
+          "url": "https://www.reddit.com/user/Logical_Forever_4242/",
+          "credentials": {
+            "username": "Logical_Forever_4242",
+            "displayName": "Lexa Trip - Luxury Desert and Travel Experiences"
+          }
+        },
+        "quora": {
+          "connected": true,
+          "status": "🟢 Live Official",
+          "name": "Quora Official & Space",
+          "handle": "lexatrip.quora.com",
+          "url": "https://lexatrip.quora.com/",
+          "profileUrl": "https://www.quora.com/profile/IMRAN-KHAN-42350",
+          "credentials": {
+            "spaceUrl": "https://lexatrip.quora.com/"
+          }
+        }
+      },
+      "defaultChannels": {
+        "post": [
+          "instagram",
+          "facebook",
+          "linkedin",
+          "pinterest"
+        ],
+        "carousel": [
+          "instagram",
+          "facebook",
+          "linkedin"
+        ],
+        "reel": [
+          "instagram",
+          "facebook",
+          "youtube",
+          "pinterest"
+        ]
+      },
+      "telegram": {
+        "channelId": "-1003697503605",
+        "channelUsername": "@lexatripjaisalmer"
+      }
     }
   ],
   "currentUser": {

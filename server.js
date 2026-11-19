@@ -828,6 +828,74 @@ app.put('/api/settings', (req, res) => {
   res.json(updated);
 });
 
+// --- SECRET API VAULT CREDENTIALS ---
+app.get('/api/credentials', (req, res) => {
+  const settings = db.getSettings();
+  const dest = db.getDestination ? db.getDestination('dest_jaisalmer') : null;
+  res.json({
+    metaToken: settings.meta?.masterUserToken || settings.meta?.lifetimePageToken || '',
+    telegramToken: settings.telegram?.botToken || '',
+    pinterestToken: settings.pinterest?.masterAccessToken || '',
+    linkedinToken: settings.linkedin?.accessToken || '',
+    bloggerToken: dest?.channels?.blogger?.credentials?.apiKey || settings.blogger?.apiKey || '',
+    geminiKey: settings.aiConfig?.apiKey || ''
+  });
+});
+
+app.put('/api/credentials', (req, res) => {
+  const { metaToken, telegramToken, pinterestToken, linkedinToken, bloggerToken, geminiKey } = req.body;
+  const settings = db.getSettings();
+  if (metaToken) {
+    if (!settings.meta) settings.meta = {};
+    settings.meta.masterUserToken = metaToken;
+    settings.meta.lifetimePageToken = metaToken;
+  }
+  if (telegramToken) {
+    if (!settings.telegram) settings.telegram = {};
+    settings.telegram.botToken = telegramToken;
+  }
+  if (pinterestToken) {
+    if (!settings.pinterest) settings.pinterest = {};
+    settings.pinterest.masterAccessToken = pinterestToken;
+  }
+  if (linkedinToken) {
+    if (!settings.linkedin) settings.linkedin = {};
+    settings.linkedin.accessToken = linkedinToken;
+  }
+  if (geminiKey) {
+    if (!settings.aiConfig) settings.aiConfig = {};
+    settings.aiConfig.apiKey = geminiKey;
+  }
+  db.updateSettings(settings);
+
+  try {
+    const rawData = JSON.parse(fs.readFileSync(path.join(__dirname, 'database', 'data.json'), 'utf8'));
+    const jaisalmer = rawData.destinations?.find(d => d.id === 'dest_jaisalmer');
+    if (jaisalmer) {
+      if (metaToken && jaisalmer.channels?.facebook?.credentials) {
+        jaisalmer.channels.facebook.credentials.pageAccessToken = metaToken;
+      }
+      if (metaToken && jaisalmer.channels?.instagram?.credentials) {
+        jaisalmer.channels.instagram.credentials.accessToken = metaToken;
+      }
+      if (pinterestToken && jaisalmer.channels?.pinterest?.credentials) {
+        jaisalmer.channels.pinterest.credentials.accessToken = pinterestToken;
+      }
+      if (linkedinToken && jaisalmer.channels?.linkedin?.credentials) {
+        jaisalmer.channels.linkedin.credentials.accessToken = linkedinToken;
+      }
+      if (bloggerToken && jaisalmer.channels?.blogger?.credentials) {
+        jaisalmer.channels.blogger.credentials.apiKey = bloggerToken;
+      }
+      fs.writeFileSync(path.join(__dirname, 'database', 'data.json'), JSON.stringify(rawData, null, 2), 'utf8');
+    }
+  } catch (err) {
+    console.error('Error syncing credentials to destinations:', err.message);
+  }
+
+  res.json({ success: true, message: 'Credentials updated successfully' });
+});
+
 // --- LOGS ---
 app.get('/api/logs', (req, res) => {
   res.json(db.getLogs(parseInt(req.query.limit, 10) || 100));
