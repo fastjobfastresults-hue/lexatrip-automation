@@ -69,13 +69,14 @@ class TelegramNotifier {
   }
 
   /**
-   * 1. Send Batch Creation Alert
+   * 1. Send Batch Creation Alert (To Admin Chat and Channel)
    */
   async notifyBatchCreated(destination, batch) {
     try {
       const token = this.getTokenForDestination(destination);
-      const chatId = this.getChatIdForDestination(destination);
-      if (!token || !chatId) return;
+      const adminChatId = this.getChatIdForDestination(destination);
+      const channelId = destination?.telegram?.channelId;
+      if (!token) return;
 
       const message = `✨ *[नया बैच तैयार]* ${destination.name}\n\n` +
         `📁 *कैम्पेन:* ${batch.title}\n` +
@@ -84,10 +85,15 @@ class TelegramNotifier {
         `🎬 *1 कम्बाइंड 12s रील (Ultra HD):* तैयार है\n\n` +
         `🚀 *अगला कदम:* डैशबोर्ड से 1-क्लिक में शेड्यूल करें (1-1.5 घंटे का एंटी-स्पैम गैप)।`;
 
-      if (batch.carousel?.previewPath && fs.existsSync(batch.carousel.previewPath)) {
-        await this.sendPhoto(token, chatId, batch.carousel.previewPath, { caption: message, parse_mode: 'Markdown' });
-      } else {
-        await this.sendMessage(token, chatId, message, { parse_mode: 'Markdown' });
+      const targets = [adminChatId, channelId].filter(Boolean);
+      const uniqueTargets = [...new Set(targets)];
+
+      for (const tId of uniqueTargets) {
+        if (batch.carousel?.previewPath && fs.existsSync(batch.carousel.previewPath)) {
+          await this.sendPhoto(token, tId, batch.carousel.previewPath, { caption: message, parse_mode: 'Markdown' });
+        } else {
+          await this.sendMessage(token, tId, message, { parse_mode: 'Markdown' });
+        }
       }
     } catch (err) {
       console.error('[TelegramNotifier notifyBatchCreated]:', err.message);
@@ -95,18 +101,19 @@ class TelegramNotifier {
   }
 
   /**
-   * 2. Send Schedule Timetable Alert
+   * 2. Send Schedule Timetable Alert (To Admin Chat and Channel)
    */
   async notifyBatchScheduled(destination, batch, scheduledItems) {
     try {
       const token = this.getTokenForDestination(destination);
-      const chatId = this.getChatIdForDestination(destination);
-      if (!token || !chatId) return;
+      const adminChatId = this.getChatIdForDestination(destination);
+      const channelId = destination?.telegram?.channelId;
+      if (!token) return;
 
-      let msg = `📅 *[शेड्यूलिंग टाइमटेबल]* ${destination.name}\n\n` +
+      let msg = `📅 *[शेड्यूलिंग टाइमटेबल कन्फर्मेशन]* ${destination.name}\n\n` +
         `बैच: *${batch.title}*\n` +
         `कुल आइटम्स: *${scheduledItems.length}*\n` +
-        `एंटी-स्पैम डिले: *1 से 1.5 घंटे रैंडम अंतराल*\n\n` +
+        `एंटी-स्पैम डिले: *60 से 90 मिनट रैंडम मानवीय अंतराल*\n\n` +
         `*आगामी पोस्ट्स की टाइमिंग:*\n`;
 
       scheduledItems.forEach((item, i) => {
@@ -117,22 +124,29 @@ class TelegramNotifier {
         msg += `${i + 1}. ${typeName} ➔ *${time}* (${date})\n   🎯 चैनल्स: ${channels}\n`;
       });
 
-      msg += `\n🛡️ *हर पोस्ट पब्लिश होते ही आपको यहाँ लाइव रिपोर्ट मिलेगी।*`;
+      msg += `\n🛡️ *हर पोस्ट पब्लिश होते ही आपको यहाँ लाइव रिपोर्ट मिलेगी।*\n` +
+        `🌐 *लाइव डैशबोर्ड:* https://lexa-trip-automation.onrender.com`;
 
-      await this.sendMessage(token, chatId, msg, { parse_mode: 'Markdown' });
+      const targets = [adminChatId, channelId].filter(Boolean);
+      const uniqueTargets = [...new Set(targets)];
+
+      for (const tId of uniqueTargets) {
+        await this.sendMessage(token, tId, msg, { parse_mode: 'Markdown' });
+      }
     } catch (err) {
       console.error('[TelegramNotifier notifyBatchScheduled]:', err.message);
     }
   }
 
   /**
-   * 3. Send Post / Reel Published Alert
+   * 3. Send Post / Reel Published Alert (To Admin Chat and Channel)
    */
   async notifyItemPublished(destination, item, results) {
     try {
       const token = this.getTokenForDestination(destination);
-      const chatId = this.getChatIdForDestination(destination);
-      if (!token || !chatId) return;
+      const adminChatId = this.getChatIdForDestination(destination);
+      const channelId = destination?.telegram?.channelId;
+      if (!token) return;
 
       const typeLabel = item.itemType === 'reel' ? '🎬 12-सेकंड अल्ट्रा HD रील' : item.itemType === 'carousel' ? '📑 5-स्लाइड कर्सल' : `📸 पोस्ट #${item.index} (4:5)`;
 
@@ -142,22 +156,27 @@ class TelegramNotifier {
         platformList += `  ${icon} *${r.platform.toUpperCase()}:* ${r.status.toUpperCase()} ${r.details?.simulated ? '(Simulation Ready)' : ''}\n`;
       });
 
-      const msg = `🎉 *[पब्लिशिंग रिपोर्ट]* ${destination?.name || 'Lexa Trip'}\n\n` +
+      const msg = `🎉 *[सफल पब्लिश रिपोर्ट]* ${destination?.name || 'Lexa Trip'}\n\n` +
         `📌 *कंटेंट:* ${typeLabel}\n` +
         `📝 *टाइटल:* ${item.title}\n` +
         `🕒 *समय:* ${new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}\n\n` +
         `*सोशल मीडिया स्टेटस:*\n${platformList}\n` +
-        `💬 *कैप्शन:* ${item.caption.slice(0, 140)}...`;
+        `💬 *कैप्शन:* ${item.caption.slice(0, 140)}...\n\n` +
+        `🌐 *लाइव डैशबोर्ड:* https://lexa-trip-automation.onrender.com`;
 
-      // If item has image/video file, send preview with caption
-      if (item.mediaPath && fs.existsSync(item.mediaPath)) {
-        if (item.itemType === 'reel') {
-          await this.sendVideo(token, chatId, item.mediaPath, { caption: msg.slice(0, 1024), parse_mode: 'Markdown' });
+      const targets = [adminChatId, channelId].filter(Boolean);
+      const uniqueTargets = [...new Set(targets)];
+
+      for (const tId of uniqueTargets) {
+        if (item.mediaPath && fs.existsSync(item.mediaPath)) {
+          if (item.itemType === 'reel') {
+            await this.sendVideo(token, tId, item.mediaPath, { caption: msg.slice(0, 1024), parse_mode: 'Markdown' });
+          } else {
+            await this.sendPhoto(token, tId, item.mediaPath, { caption: msg.slice(0, 1024), parse_mode: 'Markdown' });
+          }
         } else {
-          await this.sendPhoto(token, chatId, item.mediaPath, { caption: msg.slice(0, 1024), parse_mode: 'Markdown' });
+          await this.sendMessage(token, tId, msg, { parse_mode: 'Markdown' });
         }
-      } else {
-        await this.sendMessage(token, chatId, msg, { parse_mode: 'Markdown' });
       }
     } catch (err) {
       console.error('[TelegramNotifier notifyItemPublished]:', err.message);
@@ -165,20 +184,56 @@ class TelegramNotifier {
   }
 
   /**
-   * 4. Send Error Alert
+   * 4. 🚨 CRITICAL POLICY & SECURITY ALERT (Community Guidelines / Policy / Permissions)
+   */
+  async notifyPolicyAlert({ destination, platform, error, details }) {
+    try {
+      const token = this.getTokenForDestination(destination);
+      const adminChatId = this.getChatIdForDestination(destination);
+      const channelId = destination?.telegram?.channelId;
+      if (!token) return;
+
+      const alertMsg = `🚨 *[अति-महत्वपूर्ण: सुरक्षा व पॉलिसी अलर्ट / POLICY ALERT]* 🚨\n\n` +
+        `📍 *डेस्टिनेशन:* ${destination?.name || 'Lexa Trip'}\n` +
+        `⚠️ *प्लेटफ़ॉर्म:* *${platform.toUpperCase()}*\n` +
+        `🛑 *समस्या / एरर:* \`${error}\`\n\n` +
+        (details ? `📋 *तकनीकी विवरण:* ${String(details).slice(0, 250)}\n\n` : '') +
+        `⚠️ *संभावित कारण:* App Review आवश्यकता, कम्युनिटी गाइडलाइन्स चेक, टोकन एक्सपायरी, या प्राइवेसी पॉलिसी वेरिफिकेशन।\n\n` +
+        `🛠️ *त्वरित कदम:* कृपया अपने डेवलपर कंसोल या डैशबोर्ड में सेटिंग्स चेक करें।\n` +
+        `🌐 *डैशबोर्ड लिंक:* https://lexa-trip-automation.onrender.com`;
+
+      const targets = [adminChatId, channelId].filter(Boolean);
+      const uniqueTargets = [...new Set(targets)];
+
+      for (const tId of uniqueTargets) {
+        await this.sendMessage(token, tId, alertMsg, { parse_mode: 'Markdown' });
+      }
+    } catch (err) {
+      console.error('[TelegramNotifier notifyPolicyAlert]:', err.message);
+    }
+  }
+
+  /**
+   * 5. General Error Alert
    */
   async notifyError(destination, item, errorText) {
     try {
       const token = this.getTokenForDestination(destination);
-      const chatId = this.getChatIdForDestination(destination);
-      if (!token || !chatId) return;
+      const adminChatId = this.getChatIdForDestination(destination);
+      const channelId = destination?.telegram?.channelId;
+      if (!token) return;
 
       const msg = `⚠️ *[त्रुटि अलर्ट / Publishing Error]* ${destination.name}\n\n` +
         `कंटेंट: *${item.title}*\n` +
         `कारण: \`${errorText}\`\n\n` +
         `कृपया डैशबोर्ड में जाकर टोकन या नेटवर्क चेक करें।`;
 
-      await this.sendMessage(token, chatId, msg, { parse_mode: 'Markdown' });
+      const targets = [adminChatId, channelId].filter(Boolean);
+      const uniqueTargets = [...new Set(targets)];
+
+      for (const tId of uniqueTargets) {
+        await this.sendMessage(token, tId, msg, { parse_mode: 'Markdown' });
+      }
     } catch (err) {
       console.error('[TelegramNotifier notifyError]:', err.message);
     }

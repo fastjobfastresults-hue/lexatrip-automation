@@ -179,6 +179,115 @@
   <main class="flex-1 max-w-7xl w-full mx-auto p-6 space-y-6">
 
     <!-- =================================================================== -->
+    <!-- 🚀 MINI LIVE PUBLISHING RADAR & REAL-TIME TRACKING HUD WIDGET       -->
+    <!-- =================================================================== -->
+    <section id="mini-live-tracker-hud" class="apple-hero-card rounded-[26px] p-5 relative overflow-hidden border border-emerald-500/30 bg-gradient-to-br from-[#0c0d16]/95 via-[#0e111d]/90 to-[#07090f]/95 shadow-2xl">
+      <div class="absolute -top-12 -right-12 w-56 h-56 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      
+      <!-- Top Header & Destination Indicator -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-white/10 relative z-10">
+        <div class="flex items-center space-x-3">
+          <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-black text-xl shadow-lg shadow-emerald-500/20">
+            <i class="fa-solid fa-satellite-dish animate-pulse"></i>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <h2 class="text-base font-extrabold text-white tracking-tight flex items-center space-x-2">
+                <span>🚀 लाइव पब्लिशिंग रडार & ट्रैकर</span>
+                <span class="text-gray-400 font-normal text-xs hidden sm:inline">| Real-Time Publishing HUD</span>
+              </h2>
+              <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold uppercase tracking-wider flex items-center space-x-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                <span>24/7 ऑटो-पायलट सक्रिय</span>
+              </span>
+            </div>
+            <p class="text-xs text-gray-400 mt-0.5">
+              सक्रिय डेस्टिनेशन: <span id="hud-dest-name" class="font-bold text-amber-300">लेक्सा ट्रिप जैसलमेर</span> · एंटी-स्पैम मानवीय अंतराल (60–90 मिनट)
+            </p>
+          </div>
+        </div>
+
+        <!-- 1-Click Quick Action Buttons -->
+        <div class="flex items-center space-x-2">
+          <button onclick="refreshLiveTrackerHUD()" class="px-3 py-1.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-white font-bold text-xs transition flex items-center space-x-1.5" title="तुरंत लाइव डेटा सिंक करें">
+            <i class="fa-solid fa-arrows-rotate text-emerald-400"></i>
+            <span>रीफ्रेश</span>
+          </button>
+          <button onclick="publishAllQueueNow()" class="px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 font-bold text-xs transition flex items-center space-x-1.5" title="अभी 1-क्लिक में पब्लिश करें">
+            <i class="fa-solid fa-bolt text-apple-gold"></i>
+            <span>1-Click पब्लिश</span>
+          </button>
+          <a href="https://t.me/lexatrip_auto_bot" target="_blank" class="px-3 py-1.5 rounded-xl bg-[#229ED9]/20 hover:bg-[#229ED9]/30 border border-[#229ED9]/40 text-[#229ED9] font-bold text-xs transition flex items-center space-x-1.5" title="टेलीग्राम बॉट खोलें">
+            <i class="fa-brands fa-telegram"></i>
+            <span>टेलीग्राम बॉट</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 4 Key Metric Counters -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4 relative z-10">
+        <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/5 flex flex-col items-center text-center">
+          <span class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider">आज का कुल बैच</span>
+          <span id="hud-total-today" class="text-xl font-extrabold text-white mt-0.5">6</span>
+          <span class="text-[9px] text-gray-400 mt-0.5">5 पोस्ट्स + 1 कर्सल</span>
+        </div>
+        <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/5 flex flex-col items-center text-center">
+          <span class="text-[10px] text-amber-400/90 font-semibold uppercase tracking-wider">कतार में शेड्यूल्ड</span>
+          <span id="hud-queued-count" class="text-xl font-extrabold text-amber-300 mt-0.5">5</span>
+          <span class="text-[9px] text-amber-400/70 mt-0.5">⏳ टाइमटेबल के अनुसार</span>
+        </div>
+        <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/5 flex flex-col items-center text-center">
+          <span class="text-[10px] text-emerald-400/90 font-semibold uppercase tracking-wider">सफलतापूर्वक पब्लिश्ड</span>
+          <span id="hud-published-count" class="text-xl font-extrabold text-emerald-300 mt-0.5">1</span>
+          <span class="text-[9px] text-emerald-400/70 mt-0.5">✅ लाइव डिस्पैच पूर्ण</span>
+        </div>
+        <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/5 flex flex-col items-center text-center">
+          <span class="text-[10px] text-blue-400/90 font-semibold uppercase tracking-wider">पॉलिसी व चैनल हेल्थ</span>
+          <span class="text-xl font-extrabold text-blue-300 mt-0.5">100%</span>
+          <span class="text-[9px] text-blue-400/70 mt-0.5">🛡️ 0 कम्युनिटी स्ट्राइक</span>
+        </div>
+      </div>
+
+      <!-- Spotlight: Next Scheduled Post Details -->
+      <div id="hud-next-post-container" class="p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-emerald-500/10 to-transparent border border-amber-500/20 relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center text-sm font-bold">
+            <i class="fa-regular fa-clock"></i>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="text-[11px] font-bold uppercase text-amber-400">⏰ अगली आगामी पोस्ट:</span>
+              <span id="hud-next-post-title" class="text-xs font-bold text-white truncate max-w-xs sm:max-w-md">लोड हो रहा है...</span>
+            </div>
+            <p class="text-[11px] text-gray-300 mt-0.5 flex items-center space-x-2">
+              <span>निर्धारित समय: <b id="hud-next-post-time" class="text-emerald-300">--:--</b></span>
+              <span class="text-gray-500">•</span>
+              <span id="hud-next-post-countdown" class="text-amber-300 font-mono text-[10px]">--</span>
+            </p>
+          </div>
+        </div>
+        <div id="hud-next-post-targets" class="flex items-center space-x-1.5 flex-wrap">
+          <span class="px-2 py-0.5 rounded-full bg-pink-500/20 text-pink-300 text-[10px] font-mono">Instagram</span>
+          <span class="px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 text-[10px] font-mono">Facebook</span>
+          <span class="px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 text-[10px] font-mono">LinkedIn</span>
+          <span class="px-2 py-0.5 rounded-full bg-red-500/20 text-red-300 text-[10px] font-mono">Pinterest</span>
+          <span class="px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-300 text-[10px] font-mono">Blogger</span>
+        </div>
+      </div>
+
+      <!-- Channel-by-Channel Live Status Matrix Grid -->
+      <div class="mt-4 pt-3 border-t border-white/5 relative z-10">
+        <div class="text-[11px] font-bold text-gray-400 mb-2 flex items-center justify-between">
+          <span>🌐 सोशल मीडिया चैनल्स लाइव ट्रैकिंग मैट्रिक्स (6 Core Channels):</span>
+          <span class="text-[10px] text-emerald-400 flex items-center space-x-1"><i class="fa-solid fa-circle text-[6px]"></i><span>रियल-टाइम ऑटो-सिंक सक्रिय</span></span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-xs" id="hud-channels-grid">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
     <!-- 🍎 APPLE iOS 18 HERO CONTROL CENTER (PROMINENT HOME SCREEN WIDGETS) -->
     <!-- =================================================================== -->
     <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1106,32 +1215,67 @@ Title: 800-Year-Old Golden Living Fort (Sonar Qila)
         <button onclick="closeCRMModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <!-- MASTER TOKEN 1-CLICK ALL PAGES DISCOVERY -->
+      <!-- MASTER TOKEN & AUTO-LOADED CONNECTION STATUS -->
       <div class="p-4 rounded-2xl bg-white/[0.03] border border-apple-border space-y-3">
         <div class="flex items-center justify-between">
           <span class="text-xs font-bold text-white flex items-center space-x-1.5">
             <i class="fa-brands fa-meta text-blue-400"></i>
-            <span>Master Meta Token (1 Key for ALL Destination Pages)</span>
+            <span>Master Meta & Social CRM Connection</span>
           </span>
-          <span class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">Lifetime Never-Expiring</span>
+          <span id="crm-active-badge" class="text-[10px] text-emerald-400 font-semibold bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/30 flex items-center space-x-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>🟢 ऑटो-कनेक्टेड (Never-Expiring System Key)</span>
+          </span>
         </div>
-        <p class="text-[11px] text-gray-400">
-          यहाँ अपनी Facebook प्रोफाइल का मास्टर टोकन डालें — सिस्टम आपके सारे पेज (जैसलमेर, माउंट आबू, तिरुपति आदि) खुद-ब-खुद डिटेक्ट कर लेगा!
-        </p>
-        <div class="space-y-2">
-          <input type="password" id="crm-master-token" placeholder="Paste Master User Token (EAAW...)" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-xs text-gray-200 font-mono focus:border-emerald-400 outline-none" />
-          <div class="flex items-center space-x-2">
-            <input type="password" id="crm-app-secret" placeholder="App Secret (Optional - for Lifetime Exchange)" class="flex-1 bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-xs text-gray-200 font-mono outline-none" />
-            <button onclick="syncAllMetaPagesFromMaster()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs flex items-center space-x-1.5 shadow-md">
-              <i class="fa-solid fa-wand-magic-sparkles"></i>
-              <span>⚡ Detect All Pages</span>
-            </button>
+
+        <!-- Auto-Loaded Live Destination Pages Card -->
+        <div class="p-3 rounded-xl bg-black/40 border border-emerald-500/20 space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-white flex items-center space-x-1.5">
+              <i class="fa-solid fa-link text-emerald-400"></i>
+              <span>सक्रिय लिंक पेज (<span id="crm-active-dest-name">लेक्सा ट्रिप जैसलमेर</span>):</span>
+            </span>
+            <span class="text-[10px] text-emerald-400 font-mono font-bold bg-emerald-500/10 px-2 py-0.5 rounded">100% सिंक्ड</span>
+          </div>
+          <div id="crm-active-pages-list" class="space-y-1.5 text-xs text-gray-300">
+            <div class="flex items-center justify-between p-2 rounded-lg bg-white/[0.02]">
+              <span class="flex items-center space-x-2">
+                <i class="fa-brands fa-facebook text-blue-400"></i>
+                <b class="text-white">Facebook:</b> <span>Lexa Trip (ID: 1385624654624388)</span>
+              </span>
+              <span class="text-[10px] text-emerald-400 font-bold">🟢 Live</span>
+            </div>
+            <div class="flex items-center justify-between p-2 rounded-lg bg-white/[0.02]">
+              <span class="flex items-center space-x-2">
+                <i class="fa-brands fa-instagram text-pink-400"></i>
+                <b class="text-white">Instagram:</b> <span>@lexatripjaisalmer</span>
+              </span>
+              <span class="text-[10px] text-emerald-400 font-bold">🟢 Live</span>
+            </div>
           </div>
         </div>
 
+        <!-- Collapsible Advanced Settings (Already Auto-Filled) -->
+        <details class="text-xs text-gray-400 pt-1">
+          <summary class="cursor-pointer text-[11px] text-gray-400 hover:text-white font-semibold flex items-center space-x-1">
+            <i class="fa-solid fa-sliders text-apple-gold text-[10px]"></i>
+            <span>मास्टर टोकन / API क्रेडेंशियल्स देखें या एडिट करें (ऑटोमैटिक लोडेड)</span>
+          </summary>
+          <div class="space-y-2 mt-2 pt-2 border-t border-apple-border/50">
+            <input type="password" id="crm-master-token" placeholder="Master User Token (Auto-Loaded)" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-xs text-gray-200 font-mono focus:border-emerald-400 outline-none" />
+            <div class="flex items-center space-x-2">
+              <input type="password" id="crm-app-secret" placeholder="App Secret (Auto-Loaded)" class="flex-1 bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-xs text-gray-200 font-mono outline-none" />
+              <button onclick="syncAllMetaPagesFromMaster()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs flex items-center space-x-1.5 shadow-md">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span>⚡ Re-Detect All</span>
+              </button>
+            </div>
+          </div>
+        </details>
+
         <!-- Detected Pages Selector -->
         <div id="crm-detected-pages-container" class="hidden pt-2 border-t border-apple-border/50 space-y-2">
-          <label class="block text-[11px] font-semibold text-gray-300">Choose Page to Link with Active Destination (<span id="crm-active-dest-name">Jaisalmer</span>):</label>
+          <label class="block text-[11px] font-semibold text-gray-300">Choose Page to Link with Active Destination (<span id="crm-active-dest-name-sub">Jaisalmer</span>):</label>
           <div class="flex items-center space-x-2">
             <select id="crm-detected-pages-select" class="flex-1 bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-xs text-white">
               <option value="">-- Choose Page --</option>

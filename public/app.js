@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   checkTelegramInbox();
   checkSchedulerStatus();
   loadAIConfig();
+  refreshLiveTrackerHUD();
+  setInterval(refreshLiveTrackerHUD, 15000);
 });
 
 // Real-time WebSocket
@@ -176,6 +178,7 @@ function selectDestination(id) {
   updateWorkspace();
   loadQueue();
   checkTelegramInbox();
+  refreshLiveTrackerHUD();
 }
 
 function updateWorkspace() {
@@ -1831,9 +1834,108 @@ async function publishAllQueuedNow() {
     if (!res.ok) throw new Error(data.error);
 
     await loadQueue();
+    refreshLiveTrackerHUD();
     alert(`Dispatched all ${data.count} items to connected channels! ✅\nCheck the Telegram report on your mobile.`);
   } catch (err) {
     alert(`Bulk Publish Error: ${err.message}`);
+  }
+}
+
+// Alias for HUD button
+function publishAllQueueNow() {
+  publishAllQueuedNow();
+}
+
+// 🚀 LIVE DESTINATION PUBLISHING RADAR & REAL-TIME TRACKING HUD
+async function refreshLiveTrackerHUD() {
+  try {
+    const destId = currentDestination?.id || 'dest_jaisalmer';
+    const res = await fetch(`/api/tracking/live-radar?destinationId=${destId}`);
+    if (!res.ok) return;
+    const data = await res.json();
+
+    const dNameEl = document.getElementById('hud-dest-name');
+    if (dNameEl) dNameEl.textContent = data.destinationName || currentDestination?.name || 'लेक्सा ट्रिप जैसलमेर';
+
+    const totalEl = document.getElementById('hud-total-today');
+    if (totalEl) totalEl.textContent = data.totalToday || 0;
+
+    const queuedEl = document.getElementById('hud-queued-count');
+    if (queuedEl) queuedEl.textContent = data.queuedCount || 0;
+
+    const pubEl = document.getElementById('hud-published-count');
+    if (pubEl) pubEl.textContent = data.publishedCount || 0;
+
+    // Next post spotlight
+    const nextTitle = document.getElementById('hud-next-post-title');
+    const nextTime = document.getElementById('hud-next-post-time');
+    const nextCountdown = document.getElementById('hud-next-post-countdown');
+    const nextTargets = document.getElementById('hud-next-post-targets');
+
+    if (data.nextItem) {
+      if (nextTitle) nextTitle.textContent = `पोस्ट #${data.nextItem.index || 1}: ${data.nextItem.title}`;
+      if (nextTime) {
+        const timeStr = new Date(data.nextItem.scheduledTime).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+        nextTime.textContent = timeStr;
+      }
+      if (nextCountdown) {
+        const mins = data.nextItem.minutesUntilNext;
+        nextCountdown.textContent = mins !== null ? (mins === 0 ? 'अभी पब्लिश हो रही है' : `लगभग ${mins} मिनट में`) : '';
+      }
+      if (nextTargets && data.nextItem.targets) {
+        const colors = {
+          instagram: 'bg-pink-500/20 text-pink-300',
+          facebook: 'bg-blue-500/20 text-blue-300',
+          linkedin: 'bg-sky-500/20 text-sky-300',
+          pinterest: 'bg-red-500/20 text-red-300',
+          blogger: 'bg-orange-500/20 text-orange-300',
+          youtube: 'bg-red-600/20 text-red-300'
+        };
+        nextTargets.innerHTML = data.nextItem.targets.map(t => `
+          <span class="px-2 py-0.5 rounded-full ${colors[t] || 'bg-white/10 text-gray-300'} text-[10px] font-mono">${t}</span>
+        `).join('');
+      }
+    } else {
+      if (nextTitle) nextTitle.textContent = 'आज के सभी पोस्ट्स पब्लिश हो चुके हैं ✅';
+      if (nextTime) nextTime.textContent = 'पूर्ण';
+      if (nextCountdown) nextCountdown.textContent = 'ऑल क्लियर';
+      if (nextTargets) nextTargets.innerHTML = '<span class="text-[10px] text-emerald-400 font-bold">100% पब्लिश्ड</span>';
+    }
+
+    // Channels matrix grid (6 core channels)
+    const grid = document.getElementById('hud-channels-grid');
+    if (grid && data.channelBreakdown) {
+      const icons = {
+        instagram: { icon: 'fa-instagram', color: 'text-pink-400' },
+        facebook: { icon: 'fa-facebook', color: 'text-blue-400' },
+        linkedin: { icon: 'fa-linkedin', color: 'text-sky-400' },
+        pinterest: { icon: 'fa-pinterest', color: 'text-red-400' },
+        blogger: { icon: 'fa-blogger-b', color: 'text-orange-400' },
+        youtube: { icon: 'fa-youtube', color: 'text-red-500' }
+      };
+
+      grid.innerHTML = Object.entries(data.channelBreakdown).map(([key, info]) => {
+        const ic = icons[key] || { icon: 'fa-share-nodes', color: 'text-gray-400' };
+        const statusBadge = info.live > 0 ? `<span class="text-emerald-400 font-bold">${info.live} Live</span>` : `<span class="text-amber-400 font-semibold">${info.queued} Queued</span>`;
+        return `
+          <div class="p-2.5 rounded-xl bg-white/[0.03] border border-white/5 flex flex-col justify-between space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-white flex items-center space-x-1.5">
+                <i class="fa-brands ${ic.icon} ${ic.color} text-xs"></i>
+                <span class="text-[11px] truncate">${info.name}</span>
+              </span>
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            </div>
+            <div class="flex items-center justify-between text-[10px] pt-1 border-t border-white/5">
+              ${statusBadge}
+              <span class="text-gray-400 font-mono">${info.queued} कतार</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  } catch (err) {
+    console.error('refreshLiveTrackerHUD error:', err);
   }
 }
 
@@ -2414,6 +2516,31 @@ async function loadCRMData() {
     const res = await fetch('/api/crm');
     if (!res.ok) return;
     const data = await res.json();
+
+    // Auto-populate Master Token & App Secret fields
+    const mToken = document.getElementById('crm-master-token');
+    const aSecret = document.getElementById('crm-app-secret');
+    if (mToken && data.masterToken) mToken.value = data.masterToken;
+    if (aSecret && data.appSecret) aSecret.value = data.appSecret;
+
+    // Render Auto-Loaded Active Pages
+    const pagesContainer = document.getElementById('crm-active-pages-list');
+    if (pagesContainer && Array.isArray(data.activePages)) {
+      pagesContainer.innerHTML = data.activePages.map(p => `
+        <div class="flex items-center justify-between p-2 rounded-lg bg-white/[0.02] border border-white/5">
+          <div class="flex items-center space-x-2">
+            <i class="fa-brands fa-facebook text-blue-400 text-sm"></i>
+            <div>
+              <span class="text-white font-bold">${p.pageName || 'Facebook Page'}</span>
+              <span class="text-[10px] text-gray-400 font-mono ml-1.5">(ID: ${p.pageId})</span>
+              ${p.instagramHandle ? `<span class="text-pink-400 text-[10px] ml-2">📸 ${p.instagramHandle}</span>` : ''}
+            </div>
+          </div>
+          <span class="text-[10px] text-emerald-400 font-bold bg-emerald-500/15 px-2 py-0.5 rounded-full border border-emerald-500/30">🟢 Active Linked</span>
+        </div>
+      `).join('');
+    }
+
     const tReply = document.getElementById('crm-toggle-autoreply');
     const tDm = document.getElementById('crm-toggle-autodm');
     if (tReply) tReply.checked = !!data.autoReplyEnabled;

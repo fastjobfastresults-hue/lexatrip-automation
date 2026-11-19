@@ -273,6 +273,17 @@ class Scheduler {
             publishResults.push({ platform: targetPlatform, status: 'failed', error: err.message });
             allSuccess = false;
             lastError = err.message;
+
+            // Trigger instant security & policy alert if error involves permissions, review or community guidelines
+            const isPolicyIssue = /permission|OAuthException|policy|review|deprecated|restricted|community|guideline|checkpoint|strike|blocked|auth.*fail/i.test(err.message);
+            if (isPolicyIssue) {
+              telegramNotifier.notifyPolicyAlert({
+                destination,
+                platform: targetPlatform,
+                error: err.message,
+                details: `Task: ${item.title} (Type: ${item.itemType})`
+              }).catch(e => console.error('notifyPolicyAlert error:', e));
+            }
           }
         }
 
