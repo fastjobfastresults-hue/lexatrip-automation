@@ -205,29 +205,32 @@ function renderMasterChannelMatrix() {
   };
 
   const allChannels = [
-    { key: 'instagram', label: 'Instagram', icon: 'fa-instagram', color: 'border-pink-500/40 text-pink-400' },
-    { key: 'facebook', label: 'Facebook', icon: 'fa-facebook', color: 'border-blue-500/40 text-blue-400' },
-    { key: 'youtube', label: 'YouTube Shorts', icon: 'fa-youtube', color: 'border-red-500/40 text-red-400' },
-    { key: 'linkedin', label: 'LinkedIn', icon: 'fa-linkedin', color: 'border-sky-500/40 text-sky-400' },
-    { key: 'pinterest', label: 'Pinterest', icon: 'fa-pinterest', color: 'border-rose-500/40 text-rose-400' },
-    { key: 'blogger', label: 'Blogger (.blogspot)', icon: 'fa-blogger-b', color: 'border-amber-500/40 text-amber-400' },
-    { key: 'twitter', label: 'X (Future)', icon: 'fa-x-twitter', color: 'border-gray-500/40 text-gray-400' }
+    { key: 'instagram', label: 'Instagram', icon: 'fa-instagram', iconPrefix: 'fa-brands', color: 'border-pink-500/40 text-pink-400' },
+    { key: 'facebook', label: 'Facebook', icon: 'fa-facebook', iconPrefix: 'fa-brands', color: 'border-blue-500/40 text-blue-400' },
+    { key: 'threads', label: 'Threads', icon: 'fa-threads', iconPrefix: 'fa-brands', color: 'border-zinc-500/40 text-zinc-300' },
+    { key: 'youtube', label: 'YouTube Shorts', icon: 'fa-youtube', iconPrefix: 'fa-brands', color: 'border-red-500/40 text-red-400' },
+    { key: 'linkedin', label: 'LinkedIn', icon: 'fa-linkedin', iconPrefix: 'fa-brands', color: 'border-sky-500/40 text-sky-400' },
+    { key: 'pinterest', label: 'Pinterest', icon: 'fa-pinterest', iconPrefix: 'fa-brands', color: 'border-rose-500/40 text-rose-400' },
+    { key: 'blogger', label: 'Blogger (.blogspot)', icon: 'fa-blogger-b', iconPrefix: 'fa-brands', color: 'border-amber-500/40 text-amber-400' },
+    { key: 'website', label: 'Official Website', icon: 'fa-globe', iconPrefix: 'fa-solid', color: 'border-teal-500/40 text-teal-300' },
+    { key: 'twitter', label: 'X (Future)', icon: 'fa-x-twitter', iconPrefix: 'fa-brands', color: 'border-gray-500/40 text-gray-400' }
   ];
 
   // 1. Post Matrix
   const postsBox = document.getElementById('matrix-posts-container');
   if (postsBox) {
     postsBox.innerHTML = '';
-    const postOptions = ['instagram', 'facebook', 'linkedin', 'pinterest', 'blogger'];
+    const postOptions = ['instagram', 'facebook', 'threads', 'linkedin', 'pinterest', 'blogger', 'website'];
     postOptions.forEach(chKey => {
       const ch = allChannels.find(c => c.key === chKey);
+      if (!ch) return;
       const isSelected = (defaults.post || []).includes(chKey);
       const chip = document.createElement('button');
       chip.className = `matrix-chip px-2.5 py-1 rounded-lg text-[11px] font-bold border transition flex items-center space-x-1.5 ${
         isSelected ? 'active bg-white/[0.08] text-white border-apple-gold' : 'bg-transparent text-gray-400 border-apple-border/50 hover:bg-white/[0.04]'
       }`;
       chip.innerHTML = `
-        <i class="fa-brands ${ch.icon} ${isSelected ? 'text-apple-gold' : 'text-gray-500'}"></i>
+        <i class="${ch.iconPrefix || 'fa-brands'} ${ch.icon} ${isSelected ? 'text-apple-gold' : 'text-gray-500'}"></i>
         <span>${ch.label}</span>
         ${isSelected ? '<i class="fa-solid fa-check text-[9px] text-emerald-400"></i>' : ''}
       `;
@@ -240,16 +243,17 @@ function renderMasterChannelMatrix() {
   const reelsBox = document.getElementById('matrix-reels-container');
   if (reelsBox) {
     reelsBox.innerHTML = '';
-    const reelOptions = ['instagram', 'facebook', 'youtube', 'pinterest'];
+    const reelOptions = ['instagram', 'facebook', 'threads', 'youtube', 'pinterest'];
     reelOptions.forEach(chKey => {
       const ch = allChannels.find(c => c.key === chKey);
+      if (!ch) return;
       const isSelected = (defaults.reel || []).includes(chKey);
       const chip = document.createElement('button');
       chip.className = `matrix-chip px-2.5 py-1 rounded-lg text-[11px] font-bold border transition flex items-center space-x-1.5 ${
         isSelected ? 'active bg-white/[0.08] text-white border-apple-gold' : 'bg-transparent text-gray-400 border-apple-border/50 hover:bg-white/[0.04]'
       }`;
       chip.innerHTML = `
-        <i class="fa-brands ${ch.icon} ${isSelected ? 'text-apple-gold' : 'text-gray-500'}"></i>
+        <i class="${ch.iconPrefix || 'fa-brands'} ${ch.icon} ${isSelected ? 'text-apple-gold' : 'text-gray-500'}"></i>
         <span>${ch.label}</span>
         ${isSelected ? '<i class="fa-solid fa-check text-[9px] text-emerald-400"></i>' : ''}
       `;
@@ -262,16 +266,17 @@ function renderMasterChannelMatrix() {
   const carouselsBox = document.getElementById('matrix-carousels-container');
   if (carouselsBox) {
     carouselsBox.innerHTML = '';
-    const carOptions = ['instagram', 'facebook', 'linkedin'];
+    const carOptions = ['instagram', 'facebook', 'threads', 'linkedin'];
     carOptions.forEach(chKey => {
       const ch = allChannels.find(c => c.key === chKey);
+      if (!ch) return;
       const isSelected = (defaults.carousel || []).includes(chKey);
       const chip = document.createElement('button');
       chip.className = `matrix-chip px-2.5 py-1 rounded-lg text-[11px] font-bold border transition flex items-center space-x-1.5 ${
         isSelected ? 'active bg-white/[0.08] text-white border-apple-gold' : 'bg-transparent text-gray-400 border-apple-border/50 hover:bg-white/[0.04]'
       }`;
       chip.innerHTML = `
-        <i class="fa-brands ${ch.icon} ${isSelected ? 'text-apple-gold' : 'text-gray-500'}"></i>
+        <i class="${ch.iconPrefix || 'fa-brands'} ${ch.icon} ${isSelected ? 'text-apple-gold' : 'text-gray-500'}"></i>
         <span>${ch.label}</span>
         ${isSelected ? '<i class="fa-solid fa-check text-[9px] text-emerald-400"></i>' : ''}
       `;
@@ -321,14 +326,16 @@ function renderInteractiveChannels() {
   container.innerHTML = '';
 
   const platforms = [
-    { key: 'instagram', name: 'Instagram', icon: 'fa-instagram', bg: 'bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600', shadow: 'shadow-pink-500/25' },
-    { key: 'facebook', name: 'Facebook', icon: 'fa-facebook-f', bg: 'bg-gradient-to-tr from-blue-700 via-blue-600 to-sky-500', shadow: 'shadow-blue-500/25' },
-    { key: 'youtube', name: 'YouTube Shorts', icon: 'fa-youtube', bg: 'bg-gradient-to-tr from-red-700 via-red-600 to-rose-500', shadow: 'shadow-red-500/25' },
-    { key: 'linkedin', name: 'LinkedIn', icon: 'fa-linkedin-in', bg: 'bg-gradient-to-tr from-blue-800 via-blue-700 to-sky-600', shadow: 'shadow-sky-500/25' },
-    { key: 'pinterest', name: 'Pinterest', icon: 'fa-pinterest-p', bg: 'bg-gradient-to-tr from-rose-800 via-red-600 to-rose-500', shadow: 'shadow-red-500/25' },
-    { key: 'blogger', name: 'Blogger', icon: 'fa-blogger-b', bg: 'bg-gradient-to-tr from-amber-600 via-orange-500 to-amber-400', shadow: 'shadow-orange-500/25' },
-    { key: 'telegram', name: 'Telegram Bot', icon: 'fa-telegram', bg: 'bg-gradient-to-tr from-sky-600 via-sky-500 to-cyan-400', shadow: 'shadow-sky-500/25' },
-    { key: 'twitter', name: 'X / Twitter', icon: 'fa-x-twitter', bg: 'bg-gradient-to-tr from-gray-950 via-gray-900 to-neutral-900 border border-white/10', shadow: 'shadow-black/40' }
+    { key: 'instagram', name: 'Instagram', icon: 'fa-instagram', iconPrefix: 'fa-brands', bg: 'bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600', shadow: 'shadow-pink-500/25' },
+    { key: 'facebook', name: 'Facebook', icon: 'fa-facebook-f', iconPrefix: 'fa-brands', bg: 'bg-gradient-to-tr from-blue-700 via-blue-600 to-sky-500', shadow: 'shadow-blue-500/25' },
+    { key: 'threads', name: 'Threads', icon: 'fa-threads', iconPrefix: 'fa-brands', bg: 'bg-gradient-to-tr from-black via-zinc-900 to-neutral-900 border border-white/20', shadow: 'shadow-neutral-500/25' },
+    { key: 'youtube', name: 'YouTube Shorts', icon: 'fa-youtube', iconPrefix: 'fa-brands', bg: 'bg-gradient-to-tr from-red-700 via-red-600 to-rose-500', shadow: 'shadow-red-500/25' },
+    { key: 'linkedin', name: 'LinkedIn', icon: 'fa-linkedin-in', iconPrefix: 'fa-brands', bg: 'bg-gradient-to-tr from-blue-800 via-blue-700 to-sky-600', shadow: 'shadow-sky-500/25' },
+    { key: 'pinterest', name: 'Pinterest', icon: 'fa-pinterest-p', iconPrefix: 'fa-brands', bg: 'bg-gradient-to-tr from-rose-800 via-red-600 to-rose-500', shadow: 'shadow-red-500/25' },
+    { key: 'blogger', name: 'Blogger', icon: 'fa-blogger-b', iconPrefix: 'fa-brands', bg: 'bg-gradient-to-tr from-amber-600 via-orange-500 to-amber-400', shadow: 'shadow-orange-500/25' },
+    { key: 'website', name: 'Official Website', icon: 'fa-globe', iconPrefix: 'fa-solid', bg: 'bg-gradient-to-tr from-emerald-700 via-teal-600 to-cyan-500', shadow: 'shadow-teal-500/25' },
+    { key: 'telegram', name: 'Telegram Bot', icon: 'fa-telegram', iconPrefix: 'fa-brands', bg: 'bg-gradient-to-tr from-sky-600 via-sky-500 to-cyan-400', shadow: 'shadow-sky-500/25' },
+    { key: 'twitter', name: 'X / Twitter', icon: 'fa-x-twitter', iconPrefix: 'fa-brands', bg: 'bg-gradient-to-tr from-gray-950 via-gray-900 to-neutral-900 border border-white/10', shadow: 'shadow-black/40' }
   ];
 
   platforms.forEach(p => {
@@ -348,6 +355,22 @@ function renderInteractiveChannels() {
       isConnected = !!ch?.enabled;
       isLiveOfficial = false;
       handle = ch?.handle || '@lexatrip';
+    } else if (p.key === 'website') {
+      const ch = currentDestination.channels?.website || currentDestination.channels?.blog;
+      const creds = ch?.credentials || {};
+      const hasSite = !!(ch?.handle || creds.siteUrl || creds.apiUrl);
+      isConnected = !!ch?.enabled || hasSite;
+      isLiveOfficial = isConnected;
+      handle = ch?.handle || creds.siteUrl?.replace(/^https?:\/\//, '') || 'lexatrip.com';
+    } else if (p.key === 'threads') {
+      const ch = currentDestination.channels?.threads;
+      const metaCh = currentDestination.channels?.instagram || currentDestination.channels?.facebook;
+      const creds = ch?.credentials || metaCh?.credentials || {};
+      const hasToken = !!(creds.accessToken || creds.pageAccessToken);
+      const isSmart = creds.isSmartConnect || ch?.authType === 'smart_oauth' || String(creds.accessToken || creds.pageAccessToken).startsWith('smart_');
+      isConnected = !!ch?.enabled || hasToken;
+      isLiveOfficial = hasToken && !isSmart;
+      handle = ch?.handle || (metaCh?.handle ? `threads.net/${metaCh.handle}` : 'threads.net/@lexatrip');
     } else {
       const ch = currentDestination.channels?.[p.key];
       const creds = ch?.credentials || {};
@@ -379,7 +402,7 @@ function renderInteractiveChannels() {
     card.innerHTML = `
       <div class="flex items-start justify-between">
         <div class="w-10 h-10 rounded-2xl ${p.bg} ${p.shadow} flex items-center justify-center text-white text-lg shadow-md group-hover:scale-105 transition-transform duration-200">
-          <i class="fa-brands ${p.icon}"></i>
+          <i class="${p.iconPrefix || 'fa-brands'} ${p.icon}"></i>
         </div>
         <span class="w-2.5 h-2.5 rounded-full ${dotClass} mt-1"></span>
       </div>
@@ -399,7 +422,7 @@ function renderInteractiveChannels() {
 // 🧪 1-Click Sandbox Test Setup
 async function quickConnectAllChannels() {
   if (!currentDestination) return;
-  const platforms = ['instagram', 'facebook', 'youtube', 'linkedin', 'pinterest', 'telegram'];
+  const platforms = ['instagram', 'facebook', 'threads', 'youtube', 'linkedin', 'pinterest', 'blogger', 'website', 'telegram'];
   const btn = window.event ? window.event.target?.closest('button') : null;
   if (btn) {
     btn.disabled = true;
@@ -701,6 +724,73 @@ function openChannelModal(platform) {
         </div>
       </div>
     `;
+  } else if (platform === 'threads') {
+    title.textContent = 'Connect Official Threads (by Meta)';
+    icon.innerHTML = '<i class="fa-brands fa-threads text-white"></i>';
+    const metaCreds = currentDestination.channels?.instagram?.credentials || currentDestination.channels?.facebook?.credentials || {};
+    const defaultMetaToken = creds.accessToken || metaCreds.accessToken || metaCreds.pageAccessToken || '';
+    const igHandle = currentDestination.channels?.instagram?.handle || `@lexatrip${destSlug}`;
+    const defaultHandle = ch.handle || (igHandle.startsWith('@') ? `threads.net/${igHandle}` : `threads.net/@${igHandle}`);
+
+    fieldsBox.innerHTML = `
+      <div class="space-y-3">
+        <div class="p-3 bg-zinc-800/60 border border-white/20 rounded-xl space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-white flex items-center space-x-1.5">
+              <i class="fa-brands fa-threads"></i>
+              <span>Threads API (Meta Graph Setup)</span>
+            </span>
+            <a href="https://developers.facebook.com/docs/threads" target="_blank" class="px-2.5 py-1 bg-white/10 hover:bg-white/20 text-white text-[10px] rounded-lg font-bold border border-white/20 flex items-center space-x-1 transition">
+              <span>Threads Docs</span>
+              <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+            </a>
+          </div>
+          <p class="text-[11px] text-gray-300 leading-relaxed">
+            Threads Meta ecosystem ka official hissa hai aur aapke Instagram Business handle se natively linked hai.<br>
+            Aapka <b>Meta Lifetime Token</b> Threads par travel updates, micro-blogs aur reels auto-publish karne ke liye tayyar hai.
+          </p>
+        </div>
+        <div>
+          <label class="block font-semibold text-gray-300 mb-1">Threads Profile Handle / URL</label>
+          <input type="text" id="channel-field-1" value="${defaultHandle}" placeholder="threads.net/@lexatripjaisalmer" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono text-xs" />
+        </div>
+        <div>
+          <label class="block font-semibold text-gray-300 mb-1">Meta Master Access Token</label>
+          <input type="password" id="channel-field-2" value="${defaultMetaToken}" placeholder="EAAW..." class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono text-xs" />
+        </div>
+      </div>
+    `;
+  } else if (platform === 'website') {
+    title.textContent = 'Connect Official Travel Portal (lexatrip.com)';
+    icon.innerHTML = '<i class="fa-solid fa-globe text-teal-400"></i>';
+    const siteUrl = creds.siteUrl || `https://lexatrip.com/${destSlug}`;
+    fieldsBox.innerHTML = `
+      <div class="space-y-3">
+        <div class="p-3 bg-teal-500/10 border border-teal-500/20 rounded-xl space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-teal-300 flex items-center space-x-1.5">
+              <i class="fa-solid fa-globe"></i>
+              <span>WordPress REST API / Travel Portal Syndication</span>
+            </span>
+            <a href="https://lexatrip.com" target="_blank" class="px-2.5 py-1 bg-teal-500/20 hover:bg-teal-500/30 text-teal-200 text-[10px] rounded-lg font-bold border border-teal-500/30 flex items-center space-x-1 transition">
+              <span>lexatrip.com</span>
+              <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+            </a>
+          </div>
+          <p class="text-[11px] text-gray-300 leading-relaxed">
+            Lexa Trip Official Website par har destination ke travel packages, SEO articles aur daily guide posts automatic syndicate hote hain.
+          </p>
+        </div>
+        <div>
+          <label class="block font-semibold text-gray-300 mb-1">Official Website Destination URL</label>
+          <input type="text" id="channel-field-1" value="${siteUrl}" placeholder="https://lexatrip.com/jaisalmer" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono text-xs" />
+        </div>
+        <div>
+          <label class="block font-semibold text-gray-300 mb-1">WordPress Application Password / API Secret (Optional)</label>
+          <input type="password" id="channel-field-2" value="${creds.applicationPassword || 'official_live_token'}" placeholder="e.g. xxxx xxxx xxxx xxxx" class="w-full bg-[#0c0d14] border border-apple-border rounded-xl px-3 py-2 text-gray-200 font-mono text-xs" />
+        </div>
+      </div>
+    `;
   } else if (platform === 'twitter') {
     title.textContent = 'X / Twitter (Future Ready Module)';
     icon.innerHTML = '<i class="fa-brands fa-x-twitter text-gray-200"></i>';
@@ -955,6 +1045,10 @@ async function testCurrentChannelConnection() {
     credentials = { botToken: val1, chatId: val2 };
   } else if (platform === 'blogger') {
     credentials = { blogId: val1, apiKey: val2 };
+  } else if (platform === 'threads') {
+    credentials = { threadsHandle: val1, accessToken: val2 };
+  } else if (platform === 'website') {
+    credentials = { siteUrl: val1, applicationPassword: val2, apiUrl: `${val1.replace(/\/$/, '')}/wp-json/wp/v2` };
   } else if (platform === 'twitter') {
     credentials = { handle: val1, apiKey: val2 };
   }
@@ -1038,6 +1132,24 @@ async function saveCurrentChannelCredentials() {
       currentDestination.channels[platform].credentials = { blogId: val1, apiKey: val2 };
       currentDestination.channels[platform].handle = verified?.handle || val1 || 'blogspot.com';
       if (verified?.accountName) currentDestination.channels[platform].name = verified.accountName;
+    } else if (platform === 'threads') {
+      currentDestination.channels[platform].credentials = { 
+        threadsHandle: val1, 
+        accessToken: val2 || currentDestination.channels?.instagram?.credentials?.accessToken,
+        isLifetime: true
+      };
+      currentDestination.channels[platform].handle = verified?.handle || val1 || 'threads.net/@lexatrip';
+      if (verified?.accountName) currentDestination.channels[platform].name = verified.accountName;
+      currentDestination.channels[platform].supports = ['post', 'carousel', 'reel'];
+    } else if (platform === 'website') {
+      currentDestination.channels[platform].credentials = { 
+        siteUrl: val1, 
+        apiUrl: `${val1.replace(/\/$/, '')}/wp-json/wp/v2`,
+        applicationPassword: val2 || 'official_live_token'
+      };
+      currentDestination.channels[platform].handle = verified?.handle || val1.replace(/^https?:\/\//, '') || 'lexatrip.com';
+      if (verified?.accountName) currentDestination.channels[platform].name = verified.accountName;
+      currentDestination.channels[platform].supports = ['post', 'article'];
     } else if (platform === 'twitter') {
       currentDestination.channels[platform].credentials = { handle: val1, apiKey: val2 };
       currentDestination.channels[platform].handle = val1 || '@lexatrip';

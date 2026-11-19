@@ -7936,6 +7936,38 @@
             "reel",
             "carousel"
           ]
+        },
+        "threads": {
+          "enabled": true,
+          "name": "Threads (@lexatripjaisalmer)",
+          "handle": "threads.net/@lexatripjaisalmer",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "threadsHandle": "@lexatripjaisalmer",
+            "accessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "website": {
+          "enabled": true,
+          "name": "Official Travel Portal (lexatrip.com)",
+          "handle": "lexatrip.com/jaisalmer",
+          "authType": "rest_api",
+          "credentials": {
+            "siteUrl": "https://lexatrip.com/jaisalmer",
+            "apiUrl": "https://lexatrip.com/wp-json/wp/v2",
+            "username": "lexatrip_admin",
+            "applicationPassword": "official_live_token"
+          },
+          "supports": [
+            "post",
+            "article"
+          ]
         }
       },
       "customChannels": [],
@@ -8059,6 +8091,38 @@
           "supports": [
             "post",
             "reel"
+          ]
+        },
+        "threads": {
+          "enabled": true,
+          "name": "Threads (@lexatripmountabu)",
+          "handle": "threads.net/@lexatripmountabu",
+          "authType": "lifetime_page_token",
+          "credentials": {
+            "threadsHandle": "@lexatripmountabu",
+            "accessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "isLifetime": true
+          },
+          "supports": [
+            "post",
+            "carousel",
+            "reel"
+          ]
+        },
+        "website": {
+          "enabled": true,
+          "name": "Official Travel Portal (lexatrip.com)",
+          "handle": "lexatrip.com/mountabu",
+          "authType": "rest_api",
+          "credentials": {
+            "siteUrl": "https://lexatrip.com/mountabu",
+            "apiUrl": "https://lexatrip.com/wp-json/wp/v2",
+            "username": "lexatrip_admin",
+            "applicationPassword": "official_live_token"
+          },
+          "supports": [
+            "post",
+            "article"
           ]
         }
       },

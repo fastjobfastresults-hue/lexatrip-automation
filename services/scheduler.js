@@ -5,6 +5,7 @@ const pinterestPublisher = require('./publishers/pinterest');
 const linkedinPublisher = require('./publishers/linkedin');
 const youtubePublisher = require('./publishers/youtube');
 const bloggerPublisher = require('./publishers/blogger');
+const threadsPublisher = require('./publishers/threads');
 const blogPublisher = require('./publishers/blog');
 const customPublisher = require('./publishers/custom');
 const telegramNotifier = require('./telegramNotifier');
@@ -215,6 +216,10 @@ class Scheduler {
                 res = await instagramPublisher.publishImage({ account: accountAdapter, mediaPath: item.mediaPath, caption: item.caption });
               } else if (targetPlatform === 'facebook') {
                 res = await facebookPublisher.publishPhoto({ account: accountAdapter, filePath: item.mediaPath, caption: `${item.title}\n\n${item.caption}` });
+              } else if (targetPlatform === 'threads') {
+                res = await threadsPublisher.publishPost({ account: accountAdapter, text: `${item.title}\n\n${item.caption}`, imageUrl: item.mediaPath });
+              } else if (targetPlatform === 'website' || targetPlatform === 'blog') {
+                res = await blogPublisher.publishArticle({ account: accountAdapter, title: item.title, content: item.caption, excerpt: item.title });
               } else if (targetPlatform === 'pinterest') {
                 res = await pinterestPublisher.publishPin({ account: accountAdapter, imageUrl: item.mediaPath, title: item.title, description: item.caption });
               } else if (targetPlatform === 'linkedin') {
@@ -231,6 +236,10 @@ class Scheduler {
                 res = await instagramPublisher.publishCarousel({ account: accountAdapter, mediaPaths: allImages, caption: item.caption });
               } else if (targetPlatform === 'facebook') {
                 res = await facebookPublisher.publishPhoto({ account: accountAdapter, filePath: item.mediaPath, caption: item.caption });
+              } else if (targetPlatform === 'threads') {
+                res = await threadsPublisher.publishPost({ account: accountAdapter, text: item.caption, imageUrl: item.mediaPath });
+              } else if (targetPlatform === 'website' || targetPlatform === 'blog') {
+                res = await blogPublisher.publishArticle({ account: accountAdapter, title: item.title || 'Travel Photo Story', content: item.caption, excerpt: item.title });
               } else if (targetPlatform === 'linkedin') {
                 res = await linkedinPublisher.publishPost({ account: accountAdapter, text: item.caption, imageUrl: item.mediaPath });
               }
@@ -239,6 +248,8 @@ class Scheduler {
                 res = await instagramPublisher.publishReel({ account: accountAdapter, videoPath: item.mediaPath, caption: item.caption });
               } else if (targetPlatform === 'facebook') {
                 res = await facebookPublisher.publishReel({ account: accountAdapter, videoPath: item.mediaPath, caption: item.caption });
+              } else if (targetPlatform === 'threads') {
+                res = await threadsPublisher.publishPost({ account: accountAdapter, text: `${item.title}\n\n${item.caption}`, videoUrl: item.mediaPath });
               } else if (targetPlatform === 'youtube') {
                 res = await youtubePublisher.uploadShort({ account: accountAdapter, videoPath: item.mediaPath, title: item.title, description: item.caption });
               } else if (targetPlatform === 'pinterest') {
