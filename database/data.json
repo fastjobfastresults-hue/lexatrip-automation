@@ -7986,9 +7986,12 @@
             "locationId": "locations/9317053919539372537",
             "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
             "businessName": "Lexa Trip",
-            "websiteUrl": "https://www.lexatrip.com/jaisalmer",
-            "ctaType": "LEARN_MORE",
-            "verifiedRating": "5.0 Stars (27 Reviews)"
+            "websiteUrl": "https://bookings.lexatrip.com/",
+            "ctaType": "BOOK",
+            "verifiedRating": "5.0 Stars (27 Reviews)",
+            "bookingUrl": "https://bookings.lexatrip.com/",
+            "officialSiteUrl": "https://www.lexatrip.com/",
+            "phone": "+91 90798 54982"
           },
           "supports": [
             "post",

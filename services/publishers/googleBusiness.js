@@ -9,7 +9,8 @@ class GoogleBusinessPublisher {
   async publishPost({ account, title, caption, mediaPath, destinationName, websiteUrl }) {
     const creds = account.credentials || {};
     const { accessToken, locationId, accountId } = creds;
-    const destUrl = websiteUrl || creds.websiteUrl || `https://lexatrip.com/${(destinationName || 'jaisalmer').toLowerCase().replace(/\s+/g, '')}`;
+    const destUrl = websiteUrl || creds.bookingUrl || creds.websiteUrl || 'https://bookings.lexatrip.com/';
+    const phone = creds.phone || '+91 90798 54982';
 
     if (!accessToken || !locationId || String(accessToken).startsWith('smart_')) {
       console.log(`[Google Business Profile] Operating in SMART / SIMULATION mode for ${account.name || destinationName}.`);
@@ -21,7 +22,7 @@ class GoogleBusinessPublisher {
         locationId: locationId || 'locations/lexatrip_jaisalmer',
         publishedAt: new Date().toISOString(),
         callToAction: {
-          actionType: 'LEARN_MORE',
+          actionType: creds.ctaType || 'BOOK',
           url: destUrl
         },
         message: `Local Post simulated for Google Business Profile: ${account.name || destinationName}`
@@ -29,26 +30,40 @@ class GoogleBusinessPublisher {
     }
 
     try {
-      const publicImageUrl = mediaPath ? tunnelService.resolvePublicMediaUrl(mediaPath) : null;
-      const cleanSummary = `${title ? title + '\n\n' : ''}${caption || ''}`.trim().slice(0, 1500);
+      let mediaItems = [];
+      if (Array.isArray(mediaPath) && mediaPath.length > 0) {
+        mediaItems = mediaPath.map(p => ({
+          mediaFormat: 'PHOTO',
+          sourceUrl: tunnelService.resolvePublicMediaUrl(p)
+        }));
+      } else if (mediaPath) {
+        mediaItems = [
+          {
+            mediaFormat: 'PHOTO',
+            sourceUrl: tunnelService.resolvePublicMediaUrl(mediaPath)
+          }
+        ];
+      }
+
+      let cleanSummary = `${title ? title + '\n\n' : ''}${caption || ''}`.trim();
+      // Append booking info and WhatsApp contact if not already present
+      if (!cleanSummary.includes('bookings.lexatrip.com') && !cleanSummary.includes('WhatsApp')) {
+        cleanSummary += `\n\n🏨 Book Instant Deals: ${destUrl}\n💬 WhatsApp Inquiry: ${phone}`;
+      }
+      cleanSummary = cleanSummary.slice(0, 1500);
 
       const localPostPayload = {
         languageCode: 'en-US',
         summary: cleanSummary,
         callToAction: {
-          actionType: creds.ctaType || 'LEARN_MORE',
+          actionType: creds.ctaType || 'BOOK',
           url: destUrl
         },
-        topicType: 'STANDARD' // What's New post
+        topicType: 'STANDARD' // What's New / Hotel Offer post
       };
 
-      if (publicImageUrl) {
-        localPostPayload.media = [
-          {
-            mediaFormat: 'PHOTO',
-            sourceUrl: publicImageUrl
-          }
-        ];
+      if (mediaItems.length > 0) {
+        localPostPayload.media = mediaItems;
       }
 
       const parentPath = locationId.startsWith('accounts/') 
