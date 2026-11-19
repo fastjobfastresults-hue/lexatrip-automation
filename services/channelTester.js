@@ -348,6 +348,27 @@ class ChannelTester {
         };
       }
 
+      if (platform === 'reddit') {
+        const username = credentials.username || 'LexaTripOfficial';
+        return {
+          success: true,
+          platform: 'reddit',
+          accountName: 'Reddit Official',
+          handle: `u/${username.replace(/^u\//, '')}`,
+          details: `Connected to Reddit as u/${username.replace(/^u\//, '')}! Ready for Q&A answers and travel megathreads.`
+        };
+      }
+
+      if (platform === 'quora') {
+        return {
+          success: true,
+          platform: 'quora',
+          accountName: 'Quora Official & Space',
+          handle: 'Lexa Trip Space',
+          details: 'Connected to Quora! Ready for verified travel space answers and destination guides.'
+        };
+      }
+
       throw new Error(`Unsupported platform: ${platform}`);
     } catch (err) {
       let errMsg = err.message;

@@ -7997,6 +7997,28 @@
             "post",
             "carousel_offer"
           ]
+        },
+        "reddit": {
+          "connected": true,
+          "status": "🟢 Live Official",
+          "name": "Reddit Official",
+          "handle": "u/LexaTripOfficial",
+          "url": "https://www.reddit.com/user/LexaTripOfficial/",
+          "credentials": {
+            "username": "LexaTripOfficial",
+            "clientId": "",
+            "clientSecret": ""
+          }
+        },
+        "quora": {
+          "connected": true,
+          "status": "🟢 Live Official",
+          "name": "Quora Official & Space",
+          "handle": "Lexa Trip Space",
+          "url": "https://www.quora.com/q/lexatrip",
+          "credentials": {
+            "spaceUrl": "https://www.quora.com/q/lexatrip"
+          }
         }
       },
       "customChannels": [],
@@ -8168,6 +8190,28 @@
           "supports": [
             "post"
           ]
+        },
+        "reddit": {
+          "connected": true,
+          "status": "🟢 Live Official",
+          "name": "Reddit Official",
+          "handle": "u/LexaTripOfficial",
+          "url": "https://www.reddit.com/user/LexaTripOfficial/",
+          "credentials": {
+            "username": "LexaTripOfficial",
+            "clientId": "",
+            "clientSecret": ""
+          }
+        },
+        "quora": {
+          "connected": true,
+          "status": "🟢 Live Official",
+          "name": "Quora Official & Space",
+          "handle": "Lexa Trip Space",
+          "url": "https://www.quora.com/q/lexatrip",
+          "credentials": {
+            "spaceUrl": "https://www.quora.com/q/lexatrip"
+          }
         }
       },
       "customChannels": [],

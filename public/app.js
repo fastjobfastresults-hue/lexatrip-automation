@@ -337,7 +337,9 @@ function renderInteractiveChannels() {
     { key: 'website', name: 'Official Website', icon: 'fa-globe', iconPrefix: 'fa-solid', bg: 'bg-gradient-to-tr from-emerald-700 via-teal-600 to-cyan-500', shadow: 'shadow-teal-500/25' },
     { key: 'google_business', name: 'Google Business', icon: 'fa-google', iconPrefix: 'fa-brands', bg: 'bg-gradient-to-tr from-blue-700 via-sky-600 to-emerald-500', shadow: 'shadow-blue-500/25' },
     { key: 'telegram', name: 'Telegram Bot', icon: 'fa-telegram', iconPrefix: 'fa-brands', bg: 'bg-gradient-to-tr from-sky-600 via-sky-500 to-cyan-400', shadow: 'shadow-sky-500/25' },
-    { key: 'twitter', name: 'X / Twitter', icon: 'fa-x-twitter', iconPrefix: 'fa-brands', bg: 'bg-gradient-to-tr from-gray-950 via-gray-900 to-neutral-900 border border-white/10', shadow: 'shadow-black/40' }
+    { key: 'twitter', name: 'X / Twitter', icon: 'fa-x-twitter', iconPrefix: 'fa-brands', bg: 'bg-gradient-to-tr from-gray-950 via-gray-900 to-neutral-900 border border-white/10', shadow: 'shadow-black/40' },
+    { key: 'reddit', name: 'Reddit', icon: 'fa-reddit-alien', iconPrefix: 'fa-brands', bg: 'bg-gradient-to-tr from-orange-600 via-rose-600 to-red-600', shadow: 'shadow-orange-500/25' },
+    { key: 'quora', name: 'Quora', icon: 'fa-quora', iconPrefix: 'fa-brands', bg: 'bg-gradient-to-tr from-red-700 via-red-600 to-rose-700', shadow: 'shadow-red-500/25' }
   ];
 
   platforms.forEach(p => {
