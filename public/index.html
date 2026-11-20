@@ -288,8 +288,8 @@
         </div>
         <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/5 flex flex-col items-center text-center">
           <span class="text-[10px] text-blue-400/90 font-semibold uppercase tracking-wider">पॉलिसी व चैनल हेल्थ</span>
-          <span class="text-xl font-extrabold text-blue-300 mt-0.5">100%</span>
-          <span class="text-[9px] text-blue-400/70 mt-0.5">🛡️ 0 कम्युनिटी स्ट्राइक</span>
+          <span id="hud-health-score" class="text-xl font-extrabold text-blue-300 mt-0.5">100%</span>
+          <span id="hud-health-sub" class="text-[9px] text-blue-400/70 mt-0.5">🛡️ 0 कम्युनिटी स्ट्राइक</span>
         </div>
       </div>
 
@@ -465,15 +465,20 @@
         </div>
       </div>
 
-      <!-- Task Tabs: Scheduled Queue vs Published Archive -->
+      <!-- Task Tabs: Scheduled Queue vs Published Archive vs Failed / Partial -->
       <div class="flex items-center space-x-3 border-b border-apple-border/30 pb-2 text-xs">
-        <button onclick="switchTaskTab('queued')" id="tab-btn-queued" class="font-bold text-apple-gold border-b-2 border-apple-gold pb-1 px-1 flex items-center space-x-1.5">
+        <button onclick="switchTaskTab('queued')" id="tab-btn-queued" class="font-bold text-apple-gold border-b-2 border-apple-gold pb-1 px-1 flex items-center space-x-1.5 transition">
           <span>Upcoming Scheduled Tasks</span>
           <span id="badge-queued-count" class="px-2 py-0.2 rounded-full bg-apple-gold/10 text-apple-gold text-[10px]">0</span>
         </button>
-        <button onclick="switchTaskTab('published')" id="tab-btn-published" class="font-semibold text-gray-400 hover:text-white pb-1 px-1 flex items-center space-x-1.5">
+        <button onclick="switchTaskTab('published')" id="tab-btn-published" class="font-semibold text-gray-400 hover:text-white pb-1 px-1 flex items-center space-x-1.5 transition">
           <span>Published Archive (Live Posts)</span>
           <span id="badge-published-count" class="px-2 py-0.2 rounded-full bg-white/[0.06] text-gray-400 text-[10px]">0</span>
+        </button>
+        <button onclick="switchTaskTab('failed')" id="tab-btn-failed" class="font-semibold text-gray-400 hover:text-rose-400 pb-1 px-1 flex items-center space-x-1.5 transition">
+          <i class="fa-solid fa-triangle-exclamation text-[10px] text-rose-400"></i>
+          <span>Failed / Partial Tasks</span>
+          <span id="badge-failed-count" class="px-2 py-0.2 rounded-full bg-rose-500/15 text-rose-400 text-[10px] font-bold">0</span>
         </button>
       </div>
 

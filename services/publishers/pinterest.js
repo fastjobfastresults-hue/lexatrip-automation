@@ -1,36 +1,38 @@
 const axios = require('axios');
+const tunnelService = require('../tunnelService');
 
 class PinterestPublisher {
   /**
    * Publish Pin (Image or Video) to Pinterest Board
    */
   async publishPin({ account, imageUrl, videoUrl = null, title, description, link }) {
-    if (!account.credentials || !account.credentials.accessToken || !account.credentials.boardId || String(account.credentials.accessToken).startsWith('smart_')) {
-      console.log('[Pinterest] Operating in SMART / SIMULATION mode.');
-      return {
-        success: true,
-        simulated: true,
-        platform: 'pinterest',
-        type: videoUrl ? 'video_pin' : 'standard_pin',
-        pinId: 'pin_' + Date.now(),
-        boardId: account.credentials?.boardId || 'board_jaisalmer',
-        publishedAt: new Date().toISOString(),
-        message: 'Pin dispatched successfully via Smart Bridge.'
-      };
+    const creds = account?.credentials || {};
+    const { accessToken, boardId } = creds;
+
+    if (!accessToken || !boardId) {
+      throw new Error('Pinterest credentials missing: accessToken and boardId are required.');
     }
 
-    const { accessToken, boardId } = account.credentials;
+    if (String(accessToken).startsWith('smart_')) {
+      throw new Error('Invalid Pinterest credentials: smart_ placeholder tokens cannot be used for live publishing.');
+    }
+
+    const publicImageUrl = tunnelService.resolvePublicMediaUrl(imageUrl);
+    if (!publicImageUrl || (!publicImageUrl.startsWith('http://') && !publicImageUrl.startsWith('https://'))) {
+      throw new Error(`Pinterest requires a publicly accessible HTTP/HTTPS image URL. Resolved: "${publicImageUrl}"`);
+    }
+
     const url = 'https://api.pinterest.com/v5/pins';
 
     try {
       const payload = {
         board_id: boardId,
-        title: title || 'Lexa Trip Jaisalmer Desert Experience',
-        description: description || 'Experience the golden desert dunes of Jaisalmer with Lexa Trip.',
-        link: link || 'https://lexatrip.com/jaisalmer',
+        title: title || 'Lexa Trip Travel Experience',
+        description: description || 'Experience the wonders of luxury travel with Lexa Trip.',
+        link: link || 'https://lexatrip.com',
         media_source: {
           source_type: 'image_url',
-          url: imageUrl
+          url: publicImageUrl
         }
       };
 
@@ -38,7 +40,8 @@ class PinterestPublisher {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json'
-        }
+        },
+        timeout: 30000
       });
 
       return {
@@ -50,18 +53,9 @@ class PinterestPublisher {
         publishedAt: new Date().toISOString()
       };
     } catch (err) {
-      const errMsg = err.response ? JSON.stringify(err.response.data) : err.message;
-      console.warn('[Pinterest Notice - Graceful Fallback]:', errMsg);
-      return {
-        success: true,
-        simulated: true,
-        platform: 'pinterest',
-        type: videoUrl ? 'video_pin' : 'standard_pin',
-        pinId: 'pin_fallback_' + Date.now(),
-        boardId: boardId,
-        publishedAt: new Date().toISOString(),
-        message: 'Pin processed via Smart Bridge (Pinterest access token refresh recommended).'
-      };
+      const errMsg = err.response?.data?.message || (err.response ? JSON.stringify(err.response.data) : err.message);
+      console.error('[Pinterest Error]:', errMsg);
+      throw new Error(`Pinterest pin publish failed: ${errMsg}`);
     }
   }
 }

@@ -106,7 +106,13 @@ Generate the complete, ready-to-post, highly engaging answer adhering strictly t
 
       // Safety check: Guarantee that the 3 master links are present
       if (!generatedAnswer.includes('bookings.lexatrip.com')) {
-        generatedAnswer += `\n\n📌 **Verified Stay & Experience Bookings**: You can check available luxury Swiss camps and safari packages directly on [bookings.lexatrip.com](${this.masterLinks.bookingPortal}).`;
+        const profile = this.detectDestinationProfile(destination);
+        const stayDesc = profile === 'desert' ? 'luxury Swiss camps and safari packages' :
+          profile === 'hill_station' ? 'scenic mountain resorts and holiday packages' :
+          profile === 'beach_coastal' ? 'beachfront resort stays and vacation packages' :
+          profile === 'heritage_spiritual' ? 'verified heritage stays and cultural tours' :
+          'verified luxury stays and customized holiday packages';
+        generatedAnswer += `\n\n📌 **Verified Stay & Experience Bookings**: You can check available ${stayDesc} directly on [bookings.lexatrip.com](${this.masterLinks.bookingPortal}).`;
       }
       if (!generatedAnswer.includes('lexatrip.com')) {
         generatedAnswer += `\n🌐 **Official Portal**: Explore all tours at [lexatrip.com](${this.masterLinks.mainWebsite}).`;
@@ -142,15 +148,54 @@ Generate the complete, ready-to-post, highly engaging answer adhering strictly t
   }
 
   /**
-   * Robust fallback answer template
+   * Helper: Detect destination profile to serve tailored, authentic advice
+   */
+  detectDestinationProfile(destination = '') {
+    const d = (destination || '').toLowerCase();
+    if (d.includes('jaisalmer') || d.includes('thar') || d.includes('desert') || d.includes('bikaner') || d.includes('sam dunes')) {
+      return 'desert';
+    }
+    if (d.includes('abu') || d.includes('manali') || d.includes('munnar') || d.includes('himachal') || d.includes('shimla') || d.includes('ooty') || d.includes('hill')) {
+      return 'hill_station';
+    }
+    if (d.includes('goa') || d.includes('beach') || d.includes('coastal') || d.includes('andaman') || d.includes('gokarna')) {
+      return 'beach_coastal';
+    }
+    if (d.includes('varanasi') || d.includes('rishikesh') || d.includes('tirupati') || d.includes('jaipur') || d.includes('udaipur') || d.includes('temple') || d.includes('heritage')) {
+      return 'heritage_spiritual';
+    }
+    return 'general';
+  }
+
+  /**
+   * Robust dynamic fallback answer template aligned with destination context
    */
   generateFallbackAnswer({ question, destination, category, waLink }) {
+    const profile = this.detectDestinationProfile(destination);
+
     if (category === 'corporate') {
+      let infra = 'Ensure your venue/resort has dedicated high-speed Wi-Fi backups, audio-visual conference equipment, and power redundancy for seamless meetings.';
+      let teamExp = 'Opt for curated outdoor team challenges, private local sightseeing, and gala networking dinners with live cultural entertainment.';
+
+      if (profile === 'desert') {
+        infra = 'Ensure your luxury desert camp has dedicated 4G/Wi-Fi dongle backups and silent DG genset power for uninterrupted townhalls.';
+        teamExp = 'Opt for curated activities like private dune quad-biking, team desert rallies, and gala dinners under starlit dunes with authentic folk performances.';
+      } else if (profile === 'hill_station') {
+        infra = 'Ensure your mountain resort provides heated conference halls, stable fiber Wi-Fi, and panoramic break-out lawn areas for productive strategy sessions.';
+        teamExp = 'Organize guided pine forest nature trails, valley team-building exercises, and evening bonfire networking sessions.';
+      } else if (profile === 'beach_coastal') {
+        infra = 'Select beachfront convention resorts featuring indoor AV conference setups alongside private outdoor lawns for executive gatherings.';
+        teamExp = 'Host private catamaran sunset cruises, beach volleyball tournaments, watersport challenges, and seaside gala dinners.';
+      } else if (profile === 'heritage_spiritual') {
+        infra = 'Select heritage palace hotels or premium conference facilities offering modern executive boardrooms amidst historic ambiance.';
+        teamExp = 'Arrange private guided heritage walks, exclusive evening cultural ceremonies, and networking dinners with royal regional dining.';
+      }
+
       return `When planning a corporate offsite or group retreat in ${destination}, getting the logistics right is the difference between a chaotic trip and a high-impact team retreat.
 
 Here are 3 critical recommendations from our local destination team:
-1. **Infrastructure & Connectivity**: Ensure your luxury desert camp has dedicated 4G/Wi-Fi dongle backups and silent DG genset power for uninterrupted townhalls.
-2. **Team Experiences**: Opt for curated activities like private dune quad-biking, team treasure hunts, and gala dinners under the desert stars with authentic folk performances.
+1. **Infrastructure & Connectivity**: ${infra}
+2. **Team Experiences**: ${teamExp}
 3. **Seamless Transport & Invoicing**: Book with an operator that provides complete GST-compliant corporate invoices, airport pickups, and dedicated group coaches.
 
 🏢 **Corporate Assistance**: For custom corporate offsite itineraries, delegate packages, and luxury setups in ${destination}:
@@ -159,14 +204,37 @@ Here are 3 critical recommendations from our local destination team:
 - **Corporate Concierge (WhatsApp)**: Connect directly with our team at **${this.masterLinks.phone}** or [click here to chat on WhatsApp](${waLink}).`;
     }
 
+    // Leisure / Family / Luxury / General Advice
+    let stayTip = 'Always choose verified boutique hotels or luxury resorts with certified hygiene standards and 24/7 on-ground assistance.';
+    let timingTip = 'Plan major outdoor sightseeing during early morning or golden sunset hours to avoid peak crowds and capture the best lighting.';
+    let hospitalityTip = 'Engage verified local guides and experience authentic regional culinary delicacies at reputable local establishments.';
+
+    if (profile === 'desert') {
+      stayTip = 'Avoid roadside commercial camps where loud noise spoils the evening. Always pick desert glamping situated deep in private dunes with clean attached western bathrooms and 24/7 running water.';
+      timingTip = 'Skip the afternoon heat! The best safari window is between 5:00 PM and 6:30 PM for breathtaking sunset photography and cooler desert breeze.';
+      hospitalityTip = 'Look for camps that host traditional Manganiyar folk musicians, Kalbelia dances, and freshly prepared Rajasthani cuisine (Dal Baati Churma, Ker Sangri) around an open campfire.';
+    } else if (profile === 'hill_station') {
+      stayTip = 'Pick serene mountain-view resorts or cozy valley cottages situated away from congested town centers for peace, quiet, and pristine views.';
+      timingTip = 'Start your morning tours before 8:30 AM to catch crisp mist-clad views, beat narrow mountain road traffic, and witness clear panoramic mountain vistas.';
+      hospitalityTip = 'Savor fresh local mountain cafes, artisanal teas, and regional pahadi dishes, and take time for guided nature walks through local orchards and pine forests.';
+    } else if (profile === 'beach_coastal') {
+      stayTip = 'Choose verified beachfront properties or private boutique villas with direct coastal access, away from crowded commercial party strips.';
+      timingTip = 'Head out for beach strolls and water activities in the early morning or between 4:00 PM and 6:30 PM for golden sunset views and comfortable temperatures.';
+      hospitalityTip = 'Enjoy fresh coastal catches at authentic seaside shacks, explore historic heritage quarters, and support verified local boatmen and water sports operators.';
+    } else if (profile === 'heritage_spiritual') {
+      stayTip = 'Book verified heritage properties or stays situated within comfortable distance of key cultural landmarks, ensuring quiet courtyards and authentic architecture.';
+      timingTip = 'Experience sacred morning ceremonies, aartis, and monument visits at sunrise (5:30 AM - 7:30 AM) for peaceful contemplation and cooler walking weather.';
+      hospitalityTip = 'Engage certified local heritage guides to understand the rich architectural history, and explore authentic traditional bazaars for handcrafted regional specialties.';
+    }
+
     return `Planning a trip to ${destination}? Here is honest, practical advice to help you get the most memorable and safe experience:
 
-1. **Choosing the Right Camp**: Avoid roadside commercial camps where loud noise spoils the evening. Always pick desert glamping situated deep in private dunes with clean, attached hygienic western bathrooms and 24/7 running water.
-2. **Best Safari Timing**: Skip the afternoon heat! The best safari window is between 5:00 PM and 6:30 PM for breathtaking sunset photography and cooler breeze.
-3. **Authentic Hospitality**: Look for camps that host traditional Manganiyar folk musicians, Kalbelia dances, and freshly prepared Rajasthani cuisine (Dal Baati Churma, Ker Sangri) around an open campfire.
+1. **Choosing the Right Stay**: ${stayTip}
+2. **Best Sightseeing Timing**: ${timingTip}
+3. **Authentic Local Hospitality**: ${hospitalityTip}
 
 💡 **Insider Tip**: To avoid last-minute touts and overpriced roadside brokers:
-- **Verified Stays & Safari**: Check verified camp options and instant confirmation at [bookings.lexatrip.com](${this.masterLinks.bookingPortal}).
+- **Verified Stays & Tours**: Check verified options and instant confirmation at [bookings.lexatrip.com](${this.masterLinks.bookingPortal}).
 - **Explore More**: Learn about all experiences at [lexatrip.com](${this.masterLinks.mainWebsite}).
 - **Direct Local Help**: If you need a customized itinerary for family or couples, reach out to our team anytime at **${this.masterLinks.phone}** or [chat on WhatsApp](${waLink}).`;
   }

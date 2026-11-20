@@ -5,28 +5,29 @@ const FormData = require('form-data');
 class FacebookPublisher {
   /**
    * Direct binary upload of photo to Facebook Page
-   * Works 100% on localhost without any public URL!
    */
   async publishPhoto({ account, filePath, caption }) {
-    const creds = account.credentials || {};
+    const creds = account?.credentials || {};
     const { pageAccessToken, pageId } = creds;
 
-    if (!pageAccessToken || !pageId || String(pageAccessToken).startsWith('smart_')) {
-      console.log('[Facebook Page] Operating in SMART / SIMULATION mode.');
-      return {
-        success: true,
-        simulated: true,
-        platform: 'facebook',
-        postId: 'fb_post_' + Date.now(),
-        publishedAt: new Date().toISOString(),
-        message: 'Facebook photo dispatched successfully via Smart Bridge.'
-      };
+    if (!pageAccessToken || !pageId) {
+      throw new Error('Facebook Page credentials missing: pageAccessToken and pageId are required.');
+    }
+
+    if (String(pageAccessToken).startsWith('smart_')) {
+      throw new Error('Invalid Facebook credentials: smart_ placeholder tokens cannot be used for live publishing.');
+    }
+
+    if (!filePath || !fs.existsSync(filePath)) {
+      throw new Error(`Facebook Photo upload failed: file does not exist at "${filePath}".`);
     }
 
     try {
       const url = `https://graph.facebook.com/v19.0/${pageId}/photos`;
       const form = new FormData();
-      form.append('caption', caption);
+      if (caption) {
+        form.append('caption', caption);
+      }
       form.append('access_token', pageAccessToken);
       form.append('source', fs.createReadStream(filePath));
 
@@ -43,44 +44,37 @@ class FacebookPublisher {
         publishedAt: new Date().toISOString()
       };
     } catch (err) {
-      const errDetail = err.response ? JSON.stringify(err.response.data) : err.message;
-      console.warn('[Facebook Photo Warning]:', errDetail);
-      return {
-        success: true,
-        simulated: true,
-        platform: 'facebook',
-        postId: 'fb_post_' + Date.now(),
-        publishedAt: new Date().toISOString(),
-        message: 'Facebook photo dispatched via Smart Bridge.'
-      };
+      const errDetail = err.response?.data?.error?.message || (err.response ? JSON.stringify(err.response.data) : err.message);
+      console.error('[Facebook Photo Error]:', errDetail);
+      throw new Error(`Facebook Photo publish failed: ${errDetail}`);
     }
   }
 
   /**
    * Direct binary upload of Reel / Video to Facebook Page
-   * Works 100% on localhost!
    */
   async publishReel({ account, videoPath, caption }) {
-    const creds = account.credentials || {};
+    const creds = account?.credentials || {};
     const { pageAccessToken, pageId } = creds;
 
-    if (!pageAccessToken || !pageId || String(pageAccessToken).startsWith('smart_')) {
-      console.log('[Facebook Reel] Operating in SMART / SIMULATION mode.');
-      return {
-        success: true,
-        simulated: true,
-        platform: 'facebook',
-        type: 'reel',
-        videoId: 'fbr_vid_' + Date.now(),
-        publishedAt: new Date().toISOString(),
-        message: 'Facebook Reel dispatched successfully via Smart Bridge.'
-      };
+    if (!pageAccessToken || !pageId) {
+      throw new Error('Facebook Reel credentials missing: pageAccessToken and pageId are required.');
+    }
+
+    if (String(pageAccessToken).startsWith('smart_')) {
+      throw new Error('Invalid Facebook credentials: smart_ placeholder tokens cannot be used for live publishing.');
+    }
+
+    if (!videoPath || !fs.existsSync(videoPath)) {
+      throw new Error(`Facebook Reel upload failed: video file does not exist at "${videoPath}".`);
     }
 
     try {
       const url = `https://graph.facebook.com/v19.0/${pageId}/videos`;
       const form = new FormData();
-      form.append('description', caption);
+      if (caption) {
+        form.append('description', caption);
+      }
       form.append('access_token', pageAccessToken);
       form.append('source', fs.createReadStream(videoPath));
 
@@ -94,21 +88,14 @@ class FacebookPublisher {
         simulated: false,
         platform: 'facebook',
         type: 'reel',
+        postId: res.data.id,
         videoId: res.data.id,
         publishedAt: new Date().toISOString()
       };
     } catch (err) {
-      const errDetail = err.response ? JSON.stringify(err.response.data) : err.message;
-      console.warn('[Facebook Reel Warning]:', errDetail);
-      return {
-        success: true,
-        simulated: true,
-        platform: 'facebook',
-        type: 'reel',
-        videoId: 'fbr_vid_' + Date.now(),
-        publishedAt: new Date().toISOString(),
-        message: 'Facebook Reel dispatched via Smart Bridge.'
-      };
+      const errDetail = err.response?.data?.error?.message || (err.response ? JSON.stringify(err.response.data) : err.message);
+      console.error('[Facebook Reel Error]:', errDetail);
+      throw new Error(`Facebook Reel publish failed: ${errDetail}`);
     }
   }
 }

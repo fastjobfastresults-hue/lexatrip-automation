@@ -4,28 +4,53 @@ const tunnelService = require('../tunnelService');
 
 class InstagramPublisher {
   /**
+   * Helper method to poll Instagram container status until processing completes
+   */
+  async pollContainerStatus(creationId, accessToken, maxAttempts = 20, delayMs = 3000) {
+    let attempts = 0;
+    while (attempts < maxAttempts) {
+      await new Promise(r => setTimeout(r, delayMs));
+      const check = await axios.get(`https://graph.facebook.com/v19.0/${creationId}`, {
+        params: { fields: 'status_code,status', access_token: accessToken },
+        timeout: 15000
+      });
+      const status = check.data?.status_code;
+      if (status === 'FINISHED') {
+        return true;
+      }
+      if (status === 'ERROR') {
+        throw new Error(`Instagram container ${creationId} processing failed: ${check.data?.status || 'ERROR'}`);
+      }
+      if (status === 'EXPIRED') {
+        throw new Error(`Instagram container ${creationId} expired before publishing.`);
+      }
+      attempts++;
+    }
+    throw new Error(`Instagram container ${creationId} processing timed out after ${maxAttempts * (delayMs / 1000)}s.`);
+  }
+
+  /**
    * Publish Single Image Post (4:5) to Instagram
    */
   async publishImage({ account, mediaPath, caption }) {
-    const creds = account.credentials || {};
+    const creds = account?.credentials || {};
     const { accessToken, instagramAccountId } = creds;
 
-    if (!accessToken || !instagramAccountId || String(accessToken).startsWith('smart_')) {
-      console.log('[Instagram] Operating in SMART / SIMULATION mode.');
-      return {
-        success: true,
-        simulated: true,
-        platform: 'instagram',
-        type: 'image',
-        postId: 'ig_post_' + Date.now(),
-        publishedAt: new Date().toISOString(),
-        message: 'Instagram post dispatched successfully via Smart Bridge.'
-      };
+    if (!accessToken || !instagramAccountId) {
+      throw new Error('Instagram credentials missing: accessToken and instagramAccountId are required.');
+    }
+
+    if (String(accessToken).startsWith('smart_')) {
+      throw new Error('Invalid Instagram credentials: smart_ placeholder tokens cannot be used for live publishing.');
     }
 
     try {
       // Meta Graph API requires a publicly resolvable HTTPS URL
       const publicImageUrl = tunnelService.resolvePublicMediaUrl(mediaPath);
+      if (!publicImageUrl || (!publicImageUrl.startsWith('http://') && !publicImageUrl.startsWith('https://'))) {
+        throw new Error(`Instagram requires a public HTTP/HTTPS image URL. Resolved: "${publicImageUrl}"`);
+      }
+
       const url = `https://graph.facebook.com/v19.0/${instagramAccountId}`;
 
       // Step 1: Create Media Container
@@ -37,7 +62,10 @@ class InstagramPublisher {
         },
         timeout: 30000
       });
-      const creationId = containerRes.data.id;
+      const creationId = containerRes.data?.id;
+      if (!creationId) {
+        throw new Error('Instagram failed to create media container: no ID returned.');
+      }
 
       // Step 2: Publish Media Container
       const publishRes = await axios.post(`${url}/media_publish`, null, {
@@ -53,21 +81,13 @@ class InstagramPublisher {
         simulated: false,
         platform: 'instagram',
         type: 'image',
-        postId: publishRes.data.id,
+        postId: publishRes.data?.id || creationId,
         publishedAt: new Date().toISOString()
       };
     } catch (err) {
-      const errData = err.response ? JSON.stringify(err.response.data) : err.message;
-      console.warn('[Instagram Image Warning]:', errData);
-      return {
-        success: true,
-        simulated: true,
-        platform: 'instagram',
-        type: 'image',
-        postId: 'ig_post_' + Date.now(),
-        publishedAt: new Date().toISOString(),
-        message: 'Instagram post dispatched via Smart Bridge.'
-      };
+      const errData = err.response?.data?.error?.message || (err.response ? JSON.stringify(err.response.data) : err.message);
+      console.error('[Instagram Image Error]:', errData);
+      throw new Error(`Instagram image publish failed: ${errData}`);
     }
   }
 
@@ -75,21 +95,19 @@ class InstagramPublisher {
    * Publish Combined 5-Slide Carousel to Instagram
    */
   async publishCarousel({ account, mediaPaths, caption }) {
-    const creds = account.credentials || {};
+    const creds = account?.credentials || {};
     const { accessToken, instagramAccountId } = creds;
 
-    if (!accessToken || !instagramAccountId || String(accessToken).startsWith('smart_')) {
-      console.log('[Instagram Carousel] Operating in SMART / SIMULATION mode.');
-      return {
-        success: true,
-        simulated: true,
-        platform: 'instagram',
-        type: 'carousel',
-        slidesCount: mediaPaths.length,
-        postId: 'ig_carousel_' + Date.now(),
-        publishedAt: new Date().toISOString(),
-        message: `Carousel for ${mediaPaths.length} slides dispatched successfully via Smart Bridge.`
-      };
+    if (!accessToken || !instagramAccountId) {
+      throw new Error('Instagram credentials missing: accessToken and instagramAccountId are required.');
+    }
+
+    if (String(accessToken).startsWith('smart_')) {
+      throw new Error('Invalid Instagram credentials: smart_ placeholder tokens cannot be used for live publishing.');
+    }
+
+    if (!Array.isArray(mediaPaths) || mediaPaths.length < 2) {
+      throw new Error('Instagram carousel requires at least 2 media items.');
     }
 
     try {
@@ -98,6 +116,10 @@ class InstagramPublisher {
 
       for (const p of mediaPaths) {
         const publicUrl = tunnelService.resolvePublicMediaUrl(p);
+        if (!publicUrl || (!publicUrl.startsWith('http://') && !publicUrl.startsWith('https://'))) {
+          throw new Error(`Instagram carousel requires public HTTP/HTTPS URLs. Resolved: "${publicUrl}"`);
+        }
+
         const itemRes = await axios.post(`${url}/media`, null, {
           params: {
             image_url: publicUrl,
@@ -119,9 +141,13 @@ class InstagramPublisher {
         timeout: 30000
       });
 
+      const carouselId = carouselRes.data.id;
+      // Wait for carousel container processing
+      await this.pollContainerStatus(carouselId, accessToken, 15, 2000);
+
       const publishRes = await axios.post(`${url}/media_publish`, null, {
         params: {
-          creation_id: carouselRes.data.id,
+          creation_id: carouselId,
           access_token: accessToken
         },
         timeout: 30000
@@ -132,21 +158,13 @@ class InstagramPublisher {
         simulated: false,
         platform: 'instagram',
         type: 'carousel',
-        postId: publishRes.data.id,
+        postId: publishRes.data?.id || carouselId,
         publishedAt: new Date().toISOString()
       };
     } catch (err) {
-      const errData = err.response ? JSON.stringify(err.response.data) : err.message;
-      console.warn('[Instagram Carousel Warning]:', errData);
-      return {
-        success: true,
-        simulated: true,
-        platform: 'instagram',
-        type: 'carousel',
-        postId: 'ig_carousel_' + Date.now(),
-        publishedAt: new Date().toISOString(),
-        message: 'Instagram carousel dispatched via Smart Bridge.'
-      };
+      const errData = err.response?.data?.error?.message || (err.response ? JSON.stringify(err.response.data) : err.message);
+      console.error('[Instagram Carousel Error]:', errData);
+      throw new Error(`Instagram carousel publish failed: ${errData}`);
     }
   }
 
@@ -155,20 +173,15 @@ class InstagramPublisher {
    * Supports both Direct Resumable Binary Upload & Public Tunnel URL
    */
   async publishReel({ account, videoPath, caption }) {
-    const creds = account.credentials || {};
+    const creds = account?.credentials || {};
     const { accessToken, instagramAccountId } = creds;
 
-    if (!accessToken || !instagramAccountId || String(accessToken).startsWith('smart_')) {
-      console.log('[Instagram Reel] Operating in SMART / SIMULATION mode.');
-      return {
-        success: true,
-        simulated: true,
-        platform: 'instagram',
-        type: 'reel',
-        postId: 'ig_reel_' + Date.now(),
-        publishedAt: new Date().toISOString(),
-        message: 'Ultra HD Reel dispatched successfully via Smart Bridge.'
-      };
+    if (!accessToken || !instagramAccountId) {
+      throw new Error('Instagram credentials missing: accessToken and instagramAccountId are required.');
+    }
+
+    if (String(accessToken).startsWith('smart_')) {
+      throw new Error('Invalid Instagram credentials: smart_ placeholder tokens cannot be used for live publishing.');
     }
 
     try {
@@ -189,10 +202,10 @@ class InstagramPublisher {
           timeout: 30000
         });
 
-        creationId = initRes.data.id;
-        const uploadUrl = initRes.data.uri;
+        creationId = initRes.data?.id;
+        const uploadUrl = initRes.data?.uri;
 
-        if (uploadUrl && fs.existsSync(videoPath)) {
+        if (uploadUrl && videoPath && fs.existsSync(videoPath)) {
           const stats = fs.statSync(videoPath);
           const videoStream = fs.createReadStream(videoPath);
 
@@ -213,6 +226,10 @@ class InstagramPublisher {
         console.log('[Instagram Reel] Direct binary upload fallback to public URL:', binaryErr.message);
         // Fallback to Public URL via Tunnel
         const publicVideoUrl = tunnelService.resolvePublicMediaUrl(videoPath);
+        if (!publicVideoUrl || (!publicVideoUrl.startsWith('http://') && !publicVideoUrl.startsWith('https://'))) {
+          throw new Error(`Instagram Reel requires a public HTTP/HTTPS URL or valid video path. Binary error: ${binaryErr.message}`);
+        }
+
         const containerRes = await axios.post(`${url}/media`, null, {
           params: {
             media_type: 'REELS',
@@ -223,20 +240,15 @@ class InstagramPublisher {
           },
           timeout: 45000
         });
-        creationId = containerRes.data.id;
+        creationId = containerRes.data?.id;
+      }
+
+      if (!creationId) {
+        throw new Error('Instagram failed to initiate Reel container: no ID returned.');
       }
 
       // Step 2: Poll Container Status until ready
-      let status = 'IN_PROGRESS';
-      let attempts = 0;
-      while (status === 'IN_PROGRESS' && attempts < 15) {
-        await new Promise(r => setTimeout(r, 4000));
-        const check = await axios.get(`https://graph.facebook.com/v19.0/${creationId}`, {
-          params: { fields: 'status_code', access_token: accessToken }
-        });
-        status = check.data.status_code;
-        attempts++;
-      }
+      await this.pollContainerStatus(creationId, accessToken, 20, 3000);
 
       // Step 3: Publish Reel
       const publishRes = await axios.post(`${url}/media_publish`, null, {
@@ -252,21 +264,14 @@ class InstagramPublisher {
         simulated: false,
         platform: 'instagram',
         type: 'reel',
-        postId: publishRes.data.id,
+        postId: publishRes.data?.id || creationId,
+        videoId: publishRes.data?.id || creationId,
         publishedAt: new Date().toISOString()
       };
     } catch (err) {
-      const errData = err.response ? JSON.stringify(err.response.data) : err.message;
-      console.warn('[Instagram Reel Warning]:', errData);
-      return {
-        success: true,
-        simulated: true,
-        platform: 'instagram',
-        type: 'reel',
-        videoId: 'ig_reel_' + Date.now(),
-        publishedAt: new Date().toISOString(),
-        message: 'Instagram Reel dispatched via Smart Bridge.'
-      };
+      const errData = err.response?.data?.error?.message || (err.response ? JSON.stringify(err.response.data) : err.message);
+      console.error('[Instagram Reel Error]:', errData);
+      throw new Error(`Instagram Reel publish failed: ${errData}`);
     }
   }
 }

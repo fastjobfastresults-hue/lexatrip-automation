@@ -66,14 +66,36 @@ class TunnelService {
     return settings.publicBaseUrl || this.publicUrl || `http://localhost:${process.env.PORT || 3800}`;
   }
 
-  resolvePublicMediaUrl(relativePath) {
-    if (!relativePath) return '';
-    if (relativePath.startsWith('http://') || relativePath.startsWith('https://')) {
-      return relativePath;
+  resolvePublicMediaUrl(filePath) {
+    if (!filePath) return '';
+    if (typeof filePath !== 'string') return '';
+    if (filePath.startsWith('http://') || filePath.startsWith('https://')) {
+      return filePath;
     }
+
     const base = this.getPublicUrl().replace(/\/$/, '');
-    const cleanPath = relativePath.startsWith('/') ? relativePath : `/${relativePath}`;
-    return `${base}${cleanPath}`;
+    // Normalize backslashes to forward slashes
+    const normalized = filePath.replace(/\\/g, '/');
+
+    // Match known static mounts served by Express in server.js (/generated, /uploads, /public, /audio)
+    const staticMatch = normalized.match(/(?:^|\/)(generated|uploads|public|audio)\/(.+)$/i);
+    let urlPath = '';
+
+    if (staticMatch) {
+      urlPath = '/' + staticMatch[1].toLowerCase() + '/' + staticMatch[2];
+    } else {
+      // Strip Windows drive letter (e.g. D:/ or C:/) if present
+      const stripped = normalized.replace(/^[a-zA-Z]:\/?/, '');
+      urlPath = stripped.startsWith('/') ? stripped : '/' + stripped;
+    }
+
+    // URI-encode path segments while preserving slashes
+    const encodedPath = urlPath
+      .split('/')
+      .map(segment => encodeURIComponent(segment))
+      .join('/');
+
+    return `${base}${encodedPath}`;
   }
 }
 

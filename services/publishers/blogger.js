@@ -7,33 +7,25 @@ class BloggerPublisher {
    * via official Google Blogger API v3
    */
   async publishPost({ account, title, caption, hashtags = '', mediaPath = null, destinationName = 'Lexa Trip' }) {
-    const creds = account.credentials || {};
-    const blogId = creds.blogId || account.handle || '';
-    const apiKey = creds.apiKey || creds.accessToken || '';
+    const creds = account?.credentials || {};
+    const blogId = creds.blogId || account?.handle || '';
+    const apiKey = creds.accessToken || creds.apiKey || '';
 
-    // Smart Simulation mode when no live API key or blog ID is configured, or if raw API key is provided (Google requires OAuth2 Bearer for post creation)
-    if (!blogId || !apiKey || String(apiKey).startsWith('smart_') || apiKey.startsWith('AIzaSy')) {
-      console.log(`[Blogger / Blogspot] Operating in SMART / SIMULATION mode for ${destinationName} (Google Blogger requires OAuth2 Bearer).`);
-      const slug = (destinationName || 'destination').toLowerCase().replace(/\s+/g, '');
-      const postSlug = (title || 'travel-guide').toLowerCase().replace(/[^a-z0-9]+/g, '-');
-      return {
-        success: true,
-        simulated: true,
-        platform: 'blogger',
-        postId: 'blogger_post_' + Date.now(),
-        url: `https://${blogId.includes('.blogspot') ? blogId : `${slug}.blogspot.com`}/${new Date().getFullYear()}/${new Date().getMonth() + 1}/${postSlug}.html`,
-        publishedAt: new Date().toISOString(),
-        message: `Blogspot article published successfully for ${destinationName} (Smart Bridge)!`
-      };
+    if (!blogId || !apiKey) {
+      throw new Error('Blogger credentials missing: blogId and OAuth2 accessToken/apiKey are required.');
+    }
+
+    if (String(apiKey).startsWith('smart_')) {
+      throw new Error('Invalid Blogger credentials: smart_ placeholder tokens cannot be used for live publishing.');
     }
 
     try {
-      // Clean clean blog ID (numbers only or handle)
+      // Clean blog ID (numbers only or handle)
       const cleanBlogId = blogId.replace(/[^0-9]/g, '') || blogId;
       const url = `https://www.googleapis.com/blogger/v3/blogs/${cleanBlogId}/posts/`;
 
       // Extract labels from hashtags
-      const labels = hashtags
+      const labels = (hashtags || '')
         .split(/\s+/)
         .filter(t => t.startsWith('#'))
         .map(t => t.replace('#', ''))
@@ -43,11 +35,13 @@ class BloggerPublisher {
       let imageHtml = '';
       if (mediaPath) {
         const publicMediaUrl = tunnelService.resolvePublicMediaUrl(mediaPath);
-        imageHtml = `
-          <div class="separator" style="clear: both; text-align: center; margin-bottom: 20px;">
-            <img border="0" src="${publicMediaUrl}" alt="${title}" style="max-width: 100%; height: auto; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);" />
-          </div>
-        `;
+        if (publicMediaUrl) {
+          imageHtml = `
+            <div class="separator" style="clear: both; text-align: center; margin-bottom: 20px;">
+              <img border="0" src="${publicMediaUrl}" alt="${title}" style="max-width: 100%; height: auto; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);" />
+            </div>
+          `;
+        }
       }
 
       // Generate engaging, SEO-optimized HTML travel blog post
@@ -60,7 +54,7 @@ class BloggerPublisher {
           </h2>
           
           <p style="font-size: 17px; margin-bottom: 20px; color: #4a5568;">
-            ${caption.replace(/\n/g, '<br/>')}
+            ${(caption || '').replace(/\n/g, '<br/>')}
           </p>
 
           <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 5px solid #d97706; border-radius: 12px; padding: 20px; margin: 25px 0;">
@@ -107,19 +101,9 @@ class BloggerPublisher {
         publishedAt: res.data.published || new Date().toISOString()
       };
     } catch (err) {
-      const errMsg = err.response ? (err.response.data?.error?.message || JSON.stringify(err.response.data)) : err.message;
-      console.warn('[Blogger API Notice - Graceful Fallback]:', errMsg);
-      const slug = (destinationName || 'destination').toLowerCase().replace(/\s+/g, '');
-      const postSlug = (title || 'travel-guide').toLowerCase().replace(/[^a-z0-9]+/g, '-');
-      return {
-        success: true,
-        simulated: true,
-        platform: 'blogger',
-        postId: 'blogger_fallback_' + Date.now(),
-        url: `https://${blogId.includes('.blogspot') ? blogId : `${slug}.blogspot.com`}/${new Date().getFullYear()}/${new Date().getMonth() + 1}/${postSlug}.html`,
-        publishedAt: new Date().toISOString(),
-        message: 'Blogger article processed via Smart Bridge (Google OAuth2 Scope required for direct API).'
-      };
+      const errMsg = err.response?.data?.error?.message || (err.response ? JSON.stringify(err.response.data) : err.message);
+      console.error('[Blogger API Error]:', errMsg);
+      throw new Error(`Blogger post publish failed: ${errMsg}`);
     }
   }
 }

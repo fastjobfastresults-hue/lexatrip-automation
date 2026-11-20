@@ -7,21 +7,21 @@ class CRMEngine {
       {
         id: 'rule_pricing',
         triggerKeywords: ['price', 'rate', 'cost', 'kitna', 'package', 'charges', 'offer'],
-        replyText: '🐪 नमस्ते! लेक्सा ट्रिप के लग्जरी डेजर्ट सफारी व स्विस टेंट पैकेजेस की पूरी जानकारी और बेस्ट डिस्काउंट्स के लिए कृपया हमें +91 90798 54982 पर कॉल/व्हाट्सएप करें या सीधे https://bookings.lexatrip.com/ से बुक करें! ✨',
+        replyText: '✨ नमस्ते! लेक्सा ट्रिप के प्रीमियम हॉलिडे पैकेजेस व लग्जरी स्टे की पूरी जानकारी और बेस्ट डिस्काउंट्स के लिए कृपया हमें +91 90798 54982 पर कॉल/व्हाट्सएप करें या सीधे https://bookings.lexatrip.com/ से बुक करें! ✈️',
         sendDm: true,
-        dmText: 'हेलो! लेक्सा ट्रिप में आपकी रुचि के लिए धन्यवाद। हमारा स्पेशल रॉयल डेजर्ट पैकेज बेस्ट रेट्स पर उपलब्ध है (कैमल सफारी, जीप सफारी, डिनर व सांस्कृतिक लोकनृत्य शामिल)। अधिक जानकारी के लिए सीधे संपर्क करें: WhatsApp +91 90798 54982 | https://bookings.lexatrip.com/'
+        dmText: 'हेलो! लेक्सा ट्रिप में आपकी रुचि के लिए धन्यवाद। हमारे स्पेशल हॉलिडे पैकेजेस बेस्ट रेट्स पर उपलब्ध हैं (वेरिफाइड स्टे, साइटसीइंग व 24/7 ऑन-ग्राउंड सहायता शामिल)। अधिक जानकारी के लिए सीधे संपर्क करें: WhatsApp +91 90798 54982 | https://bookings.lexatrip.com/'
       },
       {
         id: 'rule_booking',
         triggerKeywords: ['book', 'booking', 'reservation', 'available', 'dates', 'karna hai'],
-        replyText: '✨ आपका स्वागत है! अपनी बुकिंग कन्फर्म करने के लिए हमारे आधिकारिक पोर्टल https://bookings.lexatrip.com/ पर जाएं या तुरंत व्हाट्सएप करें: +91 90798 54982 🐪',
+        replyText: '✨ आपका स्वागत है! अपनी बुकिंग कन्फर्म करने के लिए हमारे आधिकारिक पोर्टल https://bookings.lexatrip.com/ पर जाएं या तुरंत व्हाट्सएप करें: +91 90798 54982 🌐',
         sendDm: true,
         dmText: 'नमस्ते! आज ही अपनी लेक्सा ट्रिप बुकिंग पर स्पेशल डिस्काउंट पाएं। तुरंत कन्फर्म करने के लिए विजिट करें: https://bookings.lexatrip.com/ या WhatsApp +91 90798 54982'
       },
       {
         id: 'rule_general',
-        triggerKeywords: ['info', 'details', 'location', 'kahan hai', 'jaisalmer', 'mount abu'],
-        replyText: '🙏 धन्यवाद! लेक्सा ट्रिप आपको शाही राजस्थानी आतिथ्य और अविस्मरणीय अनुभव प्रदान करता है। पूरी जानकारी के लिए https://www.lexatrip.com/ देखें या हमें +91 90798 54982 पर संपर्क करें।',
+        triggerKeywords: ['info', 'details', 'location', 'kahan hai', 'jaisalmer', 'mount abu', 'goa', 'udaipur', 'manali'],
+        replyText: '🙏 धन्यवाद! लेक्सा ट्रिप आपको प्रीमियम हॉलिडे अनुभव और अविस्मरणीय यात्रा प्रदान करता है। पूरी जानकारी के लिए https://www.lexatrip.com/ देखें या हमें +91 90798 54982 पर संपर्क करें।',
         sendDm: true,
         dmText: 'नमस्ते! लेक्सा ट्रिप से जुड़ने के लिए धन्यवाद। हमारी टीम जल्द ही आपसे संपर्क करेगी। आधिकारिक वेबसाइट: https://www.lexatrip.com/'
       }
@@ -34,17 +34,18 @@ class CRMEngine {
     const destinations = db.getDestinations ? db.getDestinations() : [];
     const dest = destinations.find(d => d.id === destinationId) || destinations[0] || { id: 'dest_jaisalmer', name: 'Lexa Trip Jaisalmer' };
 
-    // Master Links Policy for Lexa Trip
+    // Dynamic Master Links derived from destination channels
+    const destChannels = dest.channels || {};
     const masterLinks = {
-      facebook: 'https://www.facebook.com/profile.php?id=61594513580628',
-      instagram: 'https://www.instagram.com/lexatripjaisalmer/',
-      telegram: 'https://t.me/lexatripjaisalmer',
-      pinterest: 'https://www.pinterest.com/lexatripjaisalmer/',
-      linkedin: 'https://www.linkedin.com/company/144145872/',
-      youtube: 'https://www.youtube.com/@lexatripjaisalmer',
-      blogger: 'https://lexatripjaisalmer.blogspot.com/',
+      facebook: destChannels.facebook?.handle || 'https://www.facebook.com/profile.php?id=61594513580628',
+      instagram: destChannels.instagram?.handle ? `https://www.instagram.com/${destChannels.instagram.handle.replace(/^@/, '')}/` : 'https://www.instagram.com/lexatripjaisalmer/',
+      telegram: destChannels.telegram?.channelUsername ? `https://t.me/${destChannels.telegram.channelUsername.replace(/^@/, '')}` : 'https://t.me/lexatripjaisalmer',
+      pinterest: destChannels.pinterest?.handle ? `https://${destChannels.pinterest.handle.replace(/^https?:\/\//, '')}` : 'https://www.pinterest.com/lexatripjaisalmer/',
+      linkedin: destChannels.linkedin?.handle || 'https://www.linkedin.com/company/144145872/',
+      youtube: destChannels.youtube?.handle ? `https://www.youtube.com/${destChannels.youtube.handle}` : 'https://www.youtube.com/@lexatripjaisalmer',
+      blogger: destChannels.blogger?.credentials?.blogUrl || (destChannels.blogger?.handle ? (destChannels.blogger.handle.startsWith('http') ? destChannels.blogger.handle : `https://${destChannels.blogger.handle}`) : 'https://lexatripjaisalmer.blogspot.com/'),
       bookings: 'https://bookings.lexatrip.com/',
-      website: 'https://www.lexatrip.com/',
+      website: dest.website || 'https://www.lexatrip.com/',
       whatsapp: 'https://wa.me/919079854982'
     };
 
@@ -107,8 +108,8 @@ class CRMEngine {
       stats: {
         totalPublished: publishedItems.length,
         totalQueued: queuedItems.length,
-        totalChannels: 6,
-        policyHealth: '100% Policy Safe'
+        totalChannels: dest.channels ? Object.keys(dest.channels).length : 0,
+        policyHealth: (activePages.length > 0 || !!settings.meta?.masterUserToken) ? 'Operational' : 'Unconfigured'
       },
       masterLinks,
       recentDispatches,
@@ -118,42 +119,9 @@ class CRMEngine {
       masterToken: settings.meta?.masterUserToken || '',
       appSecret: settings.meta?.appSecret || '',
       hasMasterToken: !!settings.meta?.masterUserToken,
-      activePages: activePages.length > 0 ? activePages : [
-        {
-          destinationId: 'dest_jaisalmer',
-          destinationName: 'लेक्सा ट्रिप जैसलमेर (Lexa Trip Jaisalmer)',
-          pageId: '1385624654624388',
-          pageName: 'Facebook Page (Lexa Trip)',
-          instagramHandle: '@lexatripjaisalmer',
-          isLifetime: true,
-          status: '🟢 Live Connected'
-        }
-      ],
+      activePages: activePages,
       rules: data.crmSettings?.rules || this.defaultRules,
-      leads: data.crmLeads || [
-        {
-          id: 'lead_1',
-          name: 'Rahul Sharma',
-          platform: 'instagram',
-          handle: '@rahul_travels',
-          destination: 'Lexa Trip Jaisalmer',
-          lastMessage: 'Desert safari ke price kya hai?',
-          status: 'Replied & DM Sent',
-          matchedRule: 'rule_pricing',
-          timestamp: new Date(Date.now() - 3600000 * 2).toISOString()
-        },
-        {
-          id: 'lead_2',
-          name: 'Pooja Verma',
-          platform: 'facebook',
-          handle: 'Pooja Verma',
-          destination: 'Lexa Trip Jaisalmer',
-          lastMessage: 'Do you have family tents available this weekend?',
-          status: 'Replied & DM Sent',
-          matchedRule: 'rule_booking',
-          timestamp: new Date(Date.now() - 3600000 * 5).toISOString()
-        }
-      ]
+      leads: Array.isArray(data.crmLeads) ? data.crmLeads : []
     };
   }
 

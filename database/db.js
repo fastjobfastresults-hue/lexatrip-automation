@@ -242,7 +242,27 @@ class Database {
   save(data) {
     const temp = `${DB_FILE}.tmp`;
     fs.writeFileSync(temp, JSON.stringify(data, null, 2), 'utf-8');
-    fs.renameSync(temp, DB_FILE);
+    let renamed = false;
+    let retries = 5;
+    while (retries > 0) {
+      try {
+        fs.renameSync(temp, DB_FILE);
+        renamed = true;
+        break;
+      } catch (err) {
+        if (err.code === 'EPERM' || err.code === 'EBUSY') {
+          const start = Date.now();
+          while (Date.now() - start < 25) {}
+          retries--;
+        } else {
+          throw err;
+        }
+      }
+    }
+    if (!renamed) {
+      fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf-8');
+      try { fs.unlinkSync(temp); } catch (_) {}
+    }
   }
 
   // --- USER / AUTH ---
@@ -342,12 +362,58 @@ class Database {
   }
 
   // --- QUEUE ---
-  getQueue(destinationId = null) {
+  getQueue(destinationIdOrFilter = null, status = null) {
     const queue = this.read().queue || [];
-    if (destinationId) {
-      return queue.filter(q => q.destinationId === destinationId);
+    let destId = null;
+    let targetStatus = null;
+
+    if (typeof destinationIdOrFilter === 'object' && destinationIdOrFilter !== null) {
+      destId = destinationIdOrFilter.destinationId || null;
+      targetStatus = destinationIdOrFilter.status || null;
+    } else {
+      destId = destinationIdOrFilter;
+      targetStatus = status;
     }
-    return queue;
+
+    return queue.filter(q => {
+      if (destId && q.destinationId !== destId) return false;
+      if (targetStatus) {
+        if (Array.isArray(targetStatus)) {
+          return targetStatus.includes(q.status);
+        }
+        return q.status === targetStatus;
+      }
+      return true;
+    });
+  }
+
+  getQueueItem(id) {
+    if (!id) return null;
+    return (this.read().queue || []).find(q => q.id === id) || null;
+  }
+
+  getQueueStats(destinationId = null) {
+    const queue = this.getQueue(destinationId);
+    const stats = {
+      total: queue.length,
+      queued: 0,
+      publishing: 0,
+      published: 0,
+      partial_or_failed: 0,
+      failed: 0,
+      simulated_historical: 0
+    };
+    for (const item of queue) {
+      if (stats[item.status] !== undefined) {
+        stats[item.status]++;
+      }
+    }
+    return stats;
+  }
+
+  sanitizeQueueRecords() {
+    const { sanitizeQueue } = require('../scripts/sanitizeQueue');
+    return sanitizeQueue(DB_FILE);
   }
 
   addToQueue(item) {

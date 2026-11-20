@@ -5,22 +5,19 @@ class BlogPublisher {
    * Publish article to WordPress Blog via REST API
    */
   async publishArticle({ account, title, content, excerpt, categories = [], tags = [] }) {
-    const creds = account.credentials || {};
+    const creds = account?.credentials || {};
+    const { username, applicationPassword } = creds;
     const siteUrl = creds.siteUrl || creds.apiUrl || 'https://lexatrip.com';
     const apiUrl = creds.apiUrl || `${siteUrl.replace(/\/$/, '')}/wp-json/wp/v2`;
 
-    if (!creds || !creds.username || !creds.applicationPassword || creds.applicationPassword === 'official_live_token' || String(creds.applicationPassword).startsWith('smart_')) {
-      console.log('[Blog / WordPress] Operating in AUTO-SYNDICATION mode for Official Website.');
-      return {
-        success: true,
-        simulated: true,
-        platform: 'website',
-        postId: 'wp_article_' + Date.now(),
-        url: `${siteUrl.replace(/\/$/, '')}/posts/lexatrip-travel-${Date.now()}`,
-        publishedAt: new Date().toISOString(),
-        message: `Article automatically queued and syndicated to Official Portal: ${siteUrl}`
-      };
+    if (!username || !applicationPassword) {
+      throw new Error('WordPress / Blog credentials missing: username and applicationPassword are required.');
     }
+
+    if (applicationPassword === 'official_live_token' || String(applicationPassword).startsWith('smart_')) {
+      throw new Error('Invalid WordPress credentials: placeholder tokens cannot be used for live publishing.');
+    }
+
     const authHeader = 'Basic ' + Buffer.from(`${username}:${applicationPassword}`).toString('base64');
 
     try {
@@ -37,7 +34,8 @@ class BlogPublisher {
           headers: {
             Authorization: authHeader,
             'Content-Type': 'application/json'
-          }
+          },
+          timeout: 25000
         }
       );
 
@@ -50,8 +48,9 @@ class BlogPublisher {
         publishedAt: new Date().toISOString()
       };
     } catch (err) {
-      console.error('[Blog Error]:', err.response ? err.response.data : err.message);
-      throw new Error(err.response ? JSON.stringify(err.response.data) : err.message);
+      const errDetail = err.response?.data?.message || (err.response ? JSON.stringify(err.response.data) : err.message);
+      console.error('[Blog Error]:', errDetail);
+      throw new Error(`WordPress publish failed: ${errDetail}`);
     }
   }
 }

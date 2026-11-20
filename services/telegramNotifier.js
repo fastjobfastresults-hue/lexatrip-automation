@@ -30,18 +30,163 @@ class TelegramNotifier {
     return false;
   }
 
-  getVerifiedLinks(destination) {
-    const fbUrl = 'https://www.facebook.com/profile.php?id=61594513580628';
-    const liUrl = 'https://www.linkedin.com/company/144145872/';
+  getPlatformIcon(platform) {
+    const icons = {
+      facebook: '📘',
+      instagram: '📸',
+      linkedin: '💼',
+      pinterest: '📌',
+      youtube: '🎬',
+      blogger: '✍️',
+      threads: '🧵',
+      twitter: '🐦',
+      reddit: '🤖',
+      quora: '❓',
+      telegram: '📢',
+      website: '🌐',
+      google_business: '📍'
+    };
+    return icons[platform] || '🌐';
+  }
 
-    return `\n🔗 *वेरिफाइड लाइव लिंक्स (क्लिक करके सोशल मीडिया पर देखें):*\n` +
-      `• [📘 Facebook Live](${fbUrl})\n` +
-      `• [📸 Instagram (@lexatripjaisalmer)](https://www.instagram.com/lexatripjaisalmer/)\n` +
-      `• [📢 Telegram Channel](https://t.me/lexatripjaisalmer)\n` +
-      `• [📌 Pinterest Board](https://www.pinterest.com/lexatripjaisalmer/)\n` +
-      `• [💼 LinkedIn Company](${liUrl})\n` +
-      `• [🌐 Bookings Portal](https://bookings.lexatrip.com/)\n` +
-      `• [💬 WhatsApp Chat](https://wa.me/919079854982)`;
+  formatPlatformName(platform) {
+    const names = {
+      facebook: 'Facebook',
+      instagram: 'Instagram',
+      linkedin: 'LinkedIn',
+      pinterest: 'Pinterest',
+      youtube: 'YouTube',
+      blogger: 'Blogger',
+      threads: 'Threads',
+      twitter: 'Twitter / X',
+      reddit: 'Reddit',
+      quora: 'Quora',
+      telegram: 'Telegram',
+      website: 'Website',
+      google_business: 'Google Business'
+    };
+    return names[platform] || platform;
+  }
+
+  getChannelUrl(destination, platform) {
+    const ch = destination?.channels?.[platform];
+    if (!ch) return null;
+
+    const isNonJaisalmer = destination?.id && destination.id !== 'dest_jaisalmer';
+    const hasJaisalmerLeak = (val) => {
+      if (!val || typeof val !== 'string') return false;
+      const lower = val.toLowerCase();
+      return lower.includes('lexatripjaisalmer') || lower.includes('lexatrip-jaisalmer') || lower.includes('1385624654624388');
+    };
+
+    if (isNonJaisalmer && hasJaisalmerLeak(ch.handle)) {
+      return null;
+    }
+
+    let url = null;
+    if (ch.handle && ch.handle !== 'Click to Connect') {
+      if (ch.handle.startsWith('http://') || ch.handle.startsWith('https://')) {
+        url = ch.handle;
+      } else if (platform === 'instagram') {
+        url = `https://instagram.com/${ch.handle.replace('@', '')}`;
+      } else if (platform === 'twitter') {
+        url = `https://x.com/${ch.handle.replace('@', '')}`;
+      } else if (platform === 'youtube') {
+        url = `https://youtube.com/${ch.handle.startsWith('@') ? ch.handle : '@' + ch.handle}`;
+      } else if (platform === 'threads') {
+        url = `https://${ch.handle.replace(/^@/, 'threads.net/@')}`;
+      } else if (platform === 'telegram') {
+        url = `https://t.me/${ch.handle.replace('@', '')}`;
+      } else {
+        url = `https://${ch.handle}`;
+      }
+    } else if (platform === 'blogger' && ch.credentials?.blogUrl) {
+      url = ch.credentials.blogUrl;
+    } else if (platform === 'quora' && (ch.url || ch.credentials?.spaceUrl)) {
+      url = ch.url || ch.credentials.spaceUrl;
+    } else if (platform === 'reddit' && ch.url) {
+      url = ch.url;
+    } else if (platform === 'facebook' && ch.credentials?.pageId) {
+      if (isNonJaisalmer && String(ch.credentials.pageId) === '1385624654624388') {
+        return null;
+      }
+      url = `https://www.facebook.com/${ch.credentials.pageId}`;
+    }
+
+    if (url && isNonJaisalmer && hasJaisalmerLeak(url)) {
+      return null;
+    }
+    return url;
+  }
+
+  getVerifiedLinks(destination, publishResults = null) {
+    const isNonJaisalmer = destination?.id && destination.id !== 'dest_jaisalmer';
+    const hasJaisalmerLeak = (val) => {
+      if (!val || typeof val !== 'string') return false;
+      const lower = val.toLowerCase();
+      return lower.includes('lexatripjaisalmer') || lower.includes('lexatrip-jaisalmer') || lower.includes('1385624654624388');
+    };
+
+    const links = [];
+
+    // 1. If authentic publishResults are available, prioritize live post URLs
+    if (publishResults && Array.isArray(publishResults) && publishResults.length > 0) {
+      for (const r of publishResults) {
+        if (r.status === 'published' || r.status === 'success') {
+          const icon = this.getPlatformIcon(r.platform);
+          const name = this.formatPlatformName(r.platform);
+          const postUrl = r.details?.postUrl || r.postUrl;
+          const label = r.platform === 'facebook' ? 'Facebook Live' : `${name} Live`;
+          if (postUrl) {
+            if (!isNonJaisalmer || !hasJaisalmerLeak(postUrl)) {
+              links.push(`• [${icon} ${label}](${postUrl})`);
+            }
+          } else {
+            const chanUrl = this.getChannelUrl(destination, r.platform);
+            if (chanUrl) {
+              links.push(`• [${icon} ${label}](${chanUrl})`);
+            } else {
+              links.push(`• ${icon} ${label}: लाइव पब्लिश संपन्न`);
+            }
+          }
+        }
+      }
+    }
+
+    // 2. Fallback to destination-specific configured channel profiles
+    if (links.length === 0) {
+      const channelKeys = ['facebook', 'instagram', 'telegram', 'pinterest', 'linkedin', 'youtube', 'blogger'];
+      for (const p of channelKeys) {
+        const url = this.getChannelUrl(destination, p);
+        if (url) {
+          const icon = this.getPlatformIcon(p);
+          const name = this.formatPlatformName(p);
+          const label = p === 'facebook' ? 'Facebook Live' : `${name} Page`;
+          links.push(`• [${icon} ${label}](${url})`);
+        }
+      }
+
+      if (destination?.telegram?.channelUsername) {
+        const tgUser = destination.telegram.channelUsername.replace('@', '');
+        if (!isNonJaisalmer || (!hasJaisalmerLeak(tgUser) && !hasJaisalmerLeak(destination.telegram.channelUsername))) {
+          links.push(`• [📢 Telegram Channel](https://t.me/${tgUser})`);
+        }
+      }
+    }
+
+    // 3. Official Master Links
+    const bookingUrl = destination?.channels?.google_business?.credentials?.bookingUrl || 'https://bookings.lexatrip.com/';
+    links.push(`• [🌐 Bookings Portal](${bookingUrl})`);
+
+    const rawPhone = destination?.phone || destination?.channels?.google_business?.credentials?.phone || '+91 90798 54982';
+    const cleanPhone = rawPhone.replace(/[^0-9]/g, '');
+    links.push(`• [💬 WhatsApp Chat](https://wa.me/${cleanPhone})`);
+
+    const finalLinks = isNonJaisalmer
+      ? links.filter(l => !hasJaisalmerLeak(l))
+      : links;
+
+    return `\n🔗 *वेरिफाइड लाइव लिंक्स (क्लिक करके सोशल मीडिया पर देखें):*\n` + finalLinks.join('\n');
   }
 
   async sendMessage(token, chatId, text, options = {}) {
@@ -181,15 +326,20 @@ class TelegramNotifier {
   }
 
   /**
-   * 3. Send Single Item Published (STRICTLY DE-DUPLICATED)
+   * 3. Send Single Item Published (STRICTLY DE-DUPLICATED & HONEST)
    * Only sent to Admin Chat if not duplicate; never spammed to public channel.
    */
-  async notifyItemPublished(destination, item, results) {
+  async notifyItemPublished(first, second, results) {
     try {
-      const dedupKey = `published_item_${item.id}`;
+      // Support flexible argument order (dest, item) or (item, dest)
+      const destination = (first && (first.channels || first.id?.startsWith('dest_'))) ? first : second;
+      const item = (first && (first.channels || first.id?.startsWith('dest_'))) ? second : first;
+      const publishResults = results || item?.publishResults || [];
+
+      const dedupKey = `published_item_${item?.id}`;
       // Drop duplicate notification if sent within 6 hours
       if (this.isDuplicate(dedupKey, 360)) {
-        console.log(`[TelegramNotifier] Dropping duplicate publish alert for item: ${item.id}`);
+        console.log(`[TelegramNotifier] Dropping duplicate publish alert for item: ${item?.id}`);
         return;
       }
 
@@ -197,14 +347,42 @@ class TelegramNotifier {
       const adminChatId = this.getChatIdForDestination(destination);
       if (!token || !adminChatId) return;
 
-      const typeLabel = item.itemType === 'reel' ? '🎬 9:16 अल्ट्रा HD रील' : item.itemType === 'carousel' ? '📑 5-स्लाइड कर्सल' : `📸 पोस्ट #${item.index} (4:5)`;
-      const directLinks = this.getVerifiedLinks(destination);
+      const typeLabel = item?.itemType === 'reel' ? '🎬 9:16 अल्ट्रा HD रील' : item?.itemType === 'carousel' ? '📑 5-स्लाइड कर्सल' : `📸 पोस्ट #${item?.index || 1} (4:5)`;
 
-      const msg = `🎉 *[सफल पब्लिश रिपोर्ट]* ${destination?.name || 'Lexa Trip'}\n\n` +
+      const publishedList = publishResults.filter(r => r.status === 'published' || r.status === 'success');
+      const failedList = publishResults.filter(r => r.status === 'failed');
+      const isPartial = publishedList.length > 0 && failedList.length > 0;
+      const isAllFailed = publishedList.length === 0 && failedList.length > 0;
+
+      let header = `🎉 *[सफल पब्लिश रिपोर्ट]* ${destination?.name || 'Lexa Trip'}`;
+      if (isPartial) {
+        header = `⚠️ *[आंशिक पब्लिश रिपोर्ट]* ${destination?.name || 'Lexa Trip'}`;
+      } else if (isAllFailed) {
+        header = `🚨 *[पब्लिशिंग विफलता रिपोर्ट]* ${destination?.name || 'Lexa Trip'}`;
+      }
+
+      let msg = `${header}\n\n` +
         `📌 *कंटेंट:* ${typeLabel}\n` +
-        `📝 *टाइटल:* ${item.title}\n` +
-        `🕒 *समय:* ${new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}\n` +
-        `${directLinks}\n\n` +
+        `📝 *टाइटल:* ${item?.title || 'लाइव पोस्ट'}\n` +
+        `🕒 *समय:* ${new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}\n`;
+
+      if (publishResults.length > 0) {
+        msg += `\n*चैनल स्टेटस:*\n`;
+        for (const r of publishResults) {
+          const icon = this.getPlatformIcon(r.platform);
+          const name = this.formatPlatformName(r.platform);
+          if (r.status === 'published' || r.status === 'success') {
+            const postUrl = r.details?.postUrl || r.postUrl;
+            msg += postUrl ? `• ✅ [${icon} ${name} Live Post](${postUrl})\n` : `• ✅ ${icon} ${name}: लाइव पब्लिश संपन्न\n`;
+          } else if (r.status === 'failed') {
+            msg += `• ❌ ${icon} ${name}: \`${r.error || 'त्रुटि'}\`\n`;
+          } else if (r.status === 'skipped') {
+            msg += `• ⏸️ ${icon} ${name}: ${r.reason || 'Skipped'}\n`;
+          }
+        }
+      }
+
+      msg += `${this.getVerifiedLinks(destination, publishResults)}\n\n` +
         `🌐 *लाइव डैशबोर्ड:* https://lexa-trip-automation.onrender.com`;
 
       // Send to Admin Chat ONLY (do NOT spam the public destination channel)
@@ -330,6 +508,35 @@ class TelegramNotifier {
     } catch (err) {
       console.error('[TelegramNotifier notifyError]:', err.message);
     }
+  }
+
+  /**
+   * notifyItemFailed: Explicit failure notification matching Scheduler Queue Contract
+   */
+  async notifyItemFailed(first, second, error) {
+    const destination = (first && (first.channels || first.id?.startsWith('dest_'))) ? first : second;
+    const item = (first && (first.channels || first.id?.startsWith('dest_'))) ? second : first;
+    const errorMsg = typeof error === 'string' ? error : (error?.message || 'अज्ञात विफलता');
+
+    return await this.notifyError(destination, item, errorMsg);
+  }
+
+  /**
+   * sendDailySummary: Alias to notifyDailyDigest for contract consistency
+   */
+  async sendDailySummary(destination, slotName = 'दैनिक सारांश') {
+    return await this.notifyDailyDigest(destination, slotName);
+  }
+
+  /**
+   * getBotForDestination: Server.js compatibility helper
+   */
+  getBotForDestination(destination) {
+    const token = this.getTokenForDestination(destination);
+    if (!token) return null;
+    return {
+      sendMessage: (chatId, text, options) => this.sendMessage(token, chatId, text, options)
+    };
   }
 }
 

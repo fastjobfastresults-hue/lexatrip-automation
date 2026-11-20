@@ -1,57 +1,42 @@
 const axios = require('axios');
+const redditPublisher = require('./publishers/reddit');
+const twitterPublisher = require('./publishers/twitter');
 
 class ChannelTester {
   /**
    * Test and verify connection credentials for any social media platform
+   * MUST execute genuine external API calls. Never returns simulated success.
    */
   async testChannel(platform, credentials) {
     if (!credentials) {
       throw new Error('No credentials provided.');
     }
 
-    // ⚡ 1-Click Smart OAuth Connect Bridge
-    if (
+    // Explicit rejection of mock / synthetic tokens
+    const isSynthetic = 
       credentials.isSmartConnect ||
       credentials.mode === 'smart_connect' ||
       (credentials.accessToken && String(credentials.accessToken).startsWith('smart_')) ||
       (credentials.pageAccessToken && String(credentials.pageAccessToken).startsWith('smart_')) ||
-      (credentials.apiKey && String(credentials.apiKey).startsWith('smart_'))
-    ) {
-      const slug = credentials.destinationSlug || 'official';
-      const map = {
-        facebook: { name: 'Lexa Trip Facebook Page', handle: `facebook.com/lexatrip${slug}`, details: '⚡ 1-Click Meta Bridge Active. Auto-dispatch verified.' },
-        instagram: { name: 'Lexa Trip Instagram Business', handle: `@lexatrip${slug}`, details: '⚡ 1-Click Instagram Graph Bridge Active. Reels & Posts ready.' },
-        threads: { name: 'Lexa Trip Threads', handle: `threads.net/@lexatrip${slug}`, details: '⚡ 1-Click Threads Bridge Active. Travel threads ready.' },
-        website: { name: 'Lexa Trip Travel Portal', handle: `lexatrip.com/${slug}`, details: '⚡ 1-Click Website API Bridge Active. Blog publishing verified.' },
-        youtube: { name: 'Lexa Trip YouTube Official', handle: `youtube.com/@lexatrip${slug}`, details: '⚡ 1-Click YouTube Shorts Bridge Active. 1080x1920 verified.' },
-        linkedin: { name: 'Lexa Trip Company Page', handle: `linkedin.com/company/lexatrip${slug}`, details: '⚡ 1-Click LinkedIn API Bridge Active. Verified.' },
-        pinterest: { name: 'Lexa Trip Pinterest Boards', handle: `pinterest.com/lexatrip${slug}`, details: '⚡ 1-Click Pinterest Pin Bridge Active. Verified.' },
-        blogger: { name: 'Lexa Trip Blogger', handle: `lexatrip${slug}.blogspot.com`, details: '⚡ 1-Click Blogger Bridge Active. Article publishing ready.' },
-        google_business: { name: 'Google Business Profile', handle: `maps.google.com/lexatrip${slug}`, details: '⚡ 1-Click Google Business Profile Active. Local posts & CTA verified.' },
-        telegram: { name: 'Lexa Trip Dispatch Bot', handle: `@lexatrip_${slug}_bot`, details: '⚡ Telegram Dispatch Bot Active. Mobile alerts ready.' }
-      };
+      (credentials.apiKey && String(credentials.apiKey).startsWith('smart_')) ||
+      (credentials.applicationPassword && String(credentials.applicationPassword).startsWith('smart_')) ||
+      credentials.applicationPassword === 'official_live_token';
 
-      const c = map[platform] || { name: `Lexa Trip ${platform}`, handle: `@lexatrip_${platform}`, details: 'Smart bridge active.' };
-      return {
-        success: true,
-        platform,
-        smartConnected: true,
-        accountName: c.name,
-        handle: c.handle,
-        details: c.details
-      };
+    if (isSynthetic) {
+      throw new Error(`Synthetic/smart credentials are not permitted for platform "${platform}". Please provide genuine API credentials.`);
     }
 
     try {
       if (platform === 'instagram') {
-        const { accessToken, instagramAccountId } = credentials;
-        if (!accessToken || !instagramAccountId) {
-          throw new Error('Instagram requires both Access Token and Instagram Business Account ID.');
+        const token = credentials.accessToken || credentials.pageAccessToken;
+        const accountId = credentials.instagramAccountId;
+        if (!token || !accountId) {
+          throw new Error('Instagram requires an Access Token and Instagram Business Account ID.');
         }
-        const res = await axios.get(`https://graph.facebook.com/v19.0/${instagramAccountId}`, {
+        const res = await axios.get(`https://graph.facebook.com/v19.0/${accountId}`, {
           params: {
-            fields: 'name,username,profile_picture_url,followers_count',
-            access_token: accessToken
+            fields: 'id,name,username,profile_picture_url,followers_count',
+            access_token: token
           },
           timeout: 10000
         });
@@ -59,21 +44,22 @@ class ChannelTester {
           success: true,
           platform: 'instagram',
           accountName: res.data.name || res.data.username || 'Instagram Business Account',
-          handle: res.data.username ? `@${res.data.username}` : `@${instagramAccountId}`,
+          handle: res.data.username ? `@${res.data.username}` : `@${accountId}`,
           profilePicture: res.data.profile_picture_url || null,
-          details: `Connected successfully! Followers: ${res.data.followers_count || 'N/A'}`
+          details: `Connected successfully! Followers: ${res.data.followers_count ?? 'N/A'}`
         };
       }
 
       if (platform === 'facebook') {
-        const { pageAccessToken, pageId } = credentials;
-        if (!pageAccessToken || !pageId) {
-          throw new Error('Facebook requires both Page Access Token and Page ID.');
+        const token = credentials.pageAccessToken || credentials.accessToken;
+        const pageId = credentials.pageId;
+        if (!token || !pageId) {
+          throw new Error('Facebook requires Page Access Token and Page ID.');
         }
         const res = await axios.get(`https://graph.facebook.com/v19.0/${pageId}`, {
           params: {
-            fields: 'name,link,fan_count',
-            access_token: pageAccessToken
+            fields: 'id,name,link,fan_count',
+            access_token: token
           },
           timeout: 10000
         });
@@ -81,43 +67,48 @@ class ChannelTester {
           success: true,
           platform: 'facebook',
           accountName: res.data.name || 'Facebook Page',
-          handle: res.data.name,
-          details: `Connected to Facebook Page! Likes/Fans: ${res.data.fan_count || 'N/A'}`
+          handle: res.data.link || res.data.name,
+          details: `Connected to Facebook Page! Likes/Fans: ${res.data.fan_count ?? 'N/A'}`
         };
       }
 
       if (platform === 'youtube') {
-        const { apiKey, channelId } = credentials;
-        if (!apiKey) {
-          throw new Error('YouTube requires an API Key (or OAuth access token).');
-        }
-        if (channelId) {
+        const { apiKey, accessToken, channelId } = credentials;
+        const token = accessToken || (apiKey && String(apiKey).startsWith('ya29.') ? apiKey : null);
+
+        if (token) {
+          // OAuth2 verification: queries authenticated channel
           const res = await axios.get('https://www.googleapis.com/youtube/v3/channels', {
-            params: {
-              part: 'snippet,statistics',
-              id: channelId,
-              key: apiKey
-            },
+            params: { part: 'snippet,statistics', mine: true },
+            headers: { Authorization: `Bearer ${token}` },
             timeout: 10000
           });
           const item = res.data.items?.[0];
-          if (!item) throw new Error('Channel ID not found with this API key.');
+          if (!item) throw new Error('No YouTube channel found associated with this OAuth token.');
           return {
             success: true,
             platform: 'youtube',
             accountName: item.snippet.title,
             handle: item.snippet.customUrl || item.snippet.title,
-            details: `Subscribers: ${item.statistics?.subscriberCount || 'N/A'}`
+            details: `Subscribers: ${item.statistics?.subscriberCount ?? 'N/A'}`
           };
-        } else {
-          // Ping simple API key check
+        } else if (apiKey && channelId) {
+          // API Key verification: requires explicit channelId
+          const res = await axios.get('https://www.googleapis.com/youtube/v3/channels', {
+            params: { part: 'snippet,statistics', id: channelId, key: apiKey },
+            timeout: 10000
+          });
+          const item = res.data.items?.[0];
+          if (!item) throw new Error(`YouTube channel ID "${channelId}" not found with provided API key.`);
           return {
             success: true,
             platform: 'youtube',
-            accountName: 'YouTube API Key Verified',
-            handle: 'API Key Active',
-            details: 'API Key is valid and ready for video/Shorts upload.'
+            accountName: item.snippet.title,
+            handle: item.snippet.customUrl || item.snippet.title,
+            details: `Public channel verified (${item.snippet.title}). Note: Video uploads require OAuth 2.0 access token.`
           };
+        } else {
+          throw new Error('YouTube verification requires an OAuth2 Access Token, or both an API Key and Channel ID.');
         }
       }
 
@@ -125,45 +116,27 @@ class ChannelTester {
         const { accessToken, boardId } = credentials;
         if (!accessToken) throw new Error('Pinterest requires an API Access Token.');
 
-        let username = 'Lexatripofficial';
-        let pinCount = 0;
-        let verifiedBoardName = 'LexaTrip Jaisalmer';
-        let statusNote = '';
+        const userRes = await axios.get('https://api.pinterest.com/v5/user_account', {
+          headers: { Authorization: `Bearer ${accessToken}` },
+          timeout: 10000
+        });
+        const username = userRes.data.username;
 
-        try {
-          const res = await axios.get('https://api.pinterest.com/v5/user_account', {
+        let verifiedBoardName = null;
+        if (boardId) {
+          const bRes = await axios.get(`https://api.pinterest.com/v5/boards/${boardId}`, {
             headers: { Authorization: `Bearer ${accessToken}` },
             timeout: 10000
           });
-          username = res.data.username || username;
-          pinCount = res.data.pin_count ?? 0;
-
-          if (boardId) {
-            try {
-              const bRes = await axios.get(`https://api.pinterest.com/v5/boards/${boardId}`, {
-                headers: { Authorization: `Bearer ${accessToken}` },
-                timeout: 10000
-              });
-              verifiedBoardName = bRes.data?.name || verifiedBoardName;
-            } catch (e) {
-              // fallback to known board
-            }
-          }
-        } catch (apiErr) {
-          const msg = apiErr.response?.data?.message || apiErr.message;
-          if (msg.includes('consumer type is not supported') || apiErr.response?.status === 401 || apiErr.response?.status === 403) {
-            statusNote = ' · Live Developer App Registered (Trial Access Active)';
-          } else {
-            throw apiErr;
-          }
+          verifiedBoardName = bRes.data?.name;
         }
 
         return {
           success: true,
           platform: 'pinterest',
           accountName: `@${username}`,
-          handle: `pinterest.com/${username}/${verifiedBoardName ? verifiedBoardName.toLowerCase().replace(/\s+/g, '-') : 'lexatrip-jaisalmer'}`,
-          details: `Connected successfully! Destination Board: "${verifiedBoardName}" (Board ID: ${boardId || '1131740650051300286'})${statusNote}`
+          handle: `pinterest.com/${username}${verifiedBoardName ? '/' + verifiedBoardName.toLowerCase().replace(/\s+/g, '-') : ''}`,
+          details: `Connected to Pinterest (@${username})!${verifiedBoardName ? ` Destination Board: "${verifiedBoardName}"` : ''}`
         };
       }
 
@@ -178,8 +151,8 @@ class ChannelTester {
           success: true,
           platform: 'linkedin',
           accountName: res.data.name || 'LinkedIn Member',
-          handle: res.data.email || 'LinkedIn Page',
-          details: `Connected! Target Org: ${organizationUrn || 'Self'}`
+          handle: res.data.email || res.data.sub || 'LinkedIn Profile',
+          details: `Connected to LinkedIn! User: ${res.data.name || 'Verified'}${organizationUrn ? ` (Target Org: ${organizationUrn})` : ''}`
         };
       }
 
@@ -188,12 +161,11 @@ class ChannelTester {
         if (!botToken) throw new Error('Telegram requires a Bot Token from @BotFather.');
         const res = await axios.get(`https://api.telegram.org/bot${botToken}/getMe`, { timeout: 10000 });
         if (!res.data.ok) throw new Error('Invalid Telegram Bot Token.');
-        
-        // If chatId provided, send quick greeting
+
         if (chatId) {
           await axios.post(`https://api.telegram.org/bot${botToken}/sendMessage`, {
             chat_id: chatId,
-            text: `🐪 *[Lexa Trip OS]*\n\nTelegram Reporter Connected Successfully! ✅\nAll reports for this destination will be delivered here.`,
+            text: `🐪 *[Lexa Trip OS]*\n\nTelegram Reporter Connected Successfully! ✅\nLive alerts will be delivered here.`,
             parse_mode: 'Markdown'
           });
         }
@@ -203,56 +175,41 @@ class ChannelTester {
           platform: 'telegram',
           accountName: res.data.result.first_name,
           handle: `@${res.data.result.username}`,
-          details: `Bot Verified: @${res.data.result.username} (Alert sent to Chat ID ${chatId || 'N/A'})`
+          details: `Bot Verified: @${res.data.result.username}${chatId ? ` (Test alert sent to Chat ID ${chatId})` : ''}`
         };
       }
 
       if (platform === 'blogger') {
-        const { blogId, apiKey } = credentials;
-        if (!blogId) throw new Error('Blogger requires a Blog ID (found in your Blogger dashboard URL).');
-        if (apiKey) {
-          try {
-            const res = await axios.get(`https://www.googleapis.com/blogger/v3/blogs/${blogId}`, {
-              params: { key: apiKey },
-              timeout: 10000
-            });
-            return {
-              success: true,
-              platform: 'blogger',
-              accountName: res.data.name || 'Google Blogger',
-              handle: res.data.url ? res.data.url.replace(/^https?:\/\//, '') : `${blogId}.blogspot.com`,
-              details: `Connected to Blogger! Posts: ${res.data.posts?.totalItems || 0}`
-            };
-          } catch (e) {
-            // Still allow if format valid
-            return {
-              success: true,
-              platform: 'blogger',
-              accountName: 'Blogger (.blogspot.com)',
-              handle: `${blogId}.blogspot.com`,
-              details: `Configured Blog ID: ${blogId}`
-            };
-          }
-        } else {
-          return {
-            success: true,
-            platform: 'blogger',
-            accountName: 'Blogger (.blogspot.com)',
-            handle: `${blogId}.blogspot.com`,
-            details: `Configured Blog ID: ${blogId}. Ready for automatic blog posts.`
-          };
+        const { blogId, apiKey, accessToken } = credentials;
+        if (!blogId) throw new Error('Blogger requires a Blog ID.');
+        if (!apiKey && !accessToken) {
+          throw new Error('Blogger requires either an API Key or OAuth Access Token.');
         }
+
+        const headers = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
+        const params = apiKey ? { key: apiKey } : {};
+
+        const res = await axios.get(`https://www.googleapis.com/blogger/v3/blogs/${blogId}`, {
+          headers,
+          params,
+          timeout: 10000
+        });
+
+        return {
+          success: true,
+          platform: 'blogger',
+          accountName: res.data.name || 'Google Blogger',
+          handle: res.data.url ? res.data.url.replace(/^https?:\/\//, '') : `${blogId}.blogspot.com`,
+          details: `Connected to Blogger! Blog: "${res.data.name}" (Posts: ${res.data.posts?.totalItems ?? 0})`
+        };
       }
 
       if (platform === 'threads') {
-        const { accessToken, threadsHandle } = credentials;
-        const token = accessToken || credentials.pageAccessToken;
-        if (!token) {
-          throw new Error('Threads requires a Meta Access Token.');
-        }
+        const token = credentials.accessToken || credentials.pageAccessToken;
+        if (!token) throw new Error('Threads requires a Meta Access Token.');
 
-        let verifiedHandle = threadsHandle || '@lexatripjaisalmer';
-        let accountName = 'Threads Official (by Meta)';
+        let accountName = 'Threads Official';
+        let handle = credentials.threadsHandle || '';
 
         try {
           const res = await axios.get('https://graph.threads.net/v1.0/me', {
@@ -263,109 +220,158 @@ class ChannelTester {
             timeout: 8000
           });
           if (res.data) {
-            verifiedHandle = `@${res.data.username || verifiedHandle.replace(/^@/, '')}`;
-            accountName = res.data.name || accountName;
+            handle = `@${res.data.username}`;
+            accountName = res.data.name || res.data.username;
           }
         } catch (tErr) {
-          try {
-            const fbRes = await axios.get('https://graph.facebook.com/v19.0/me', {
-              params: {
-                fields: 'id,name',
-                access_token: token
-              },
-              timeout: 8000
-            });
-            if (fbRes.data?.name) {
-              accountName = `Threads (${fbRes.data.name})`;
-            }
-          } catch (fbErr) {}
+          const fbRes = await axios.get('https://graph.facebook.com/v19.0/me', {
+            params: { fields: 'id,name', access_token: token },
+            timeout: 8000
+          });
+          if (!fbRes.data?.id) throw tErr;
+          accountName = `Threads (${fbRes.data.name})`;
+          handle = `@${fbRes.data.name.toLowerCase().replace(/\s+/g, '_')}`;
         }
-
-        const cleanHandle = verifiedHandle.startsWith('threads.net/') 
-          ? verifiedHandle 
-          : `threads.net/${verifiedHandle.startsWith('@') ? verifiedHandle : '@' + verifiedHandle}`;
 
         return {
           success: true,
           platform: 'threads',
-          accountName: accountName,
-          handle: cleanHandle,
-          details: 'Connected to Threads via Meta Master API! Ready for travel micro-threads and updates.'
+          accountName,
+          handle: handle.startsWith('@') ? `threads.net/${handle}` : handle,
+          details: 'Connected to Threads API successfully.'
         };
       }
 
       if (platform === 'website' || platform === 'blog') {
-        const { siteUrl, apiUrl } = credentials;
-        const targetUrl = siteUrl || apiUrl || 'https://lexatrip.com';
-        const cleanHandle = targetUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
+        const { siteUrl, apiUrl, username, applicationPassword } = credentials;
+        const targetSite = (siteUrl || apiUrl || '').replace(/\/$/, '');
+        if (!targetSite) throw new Error('Website requires siteUrl (e.g. https://lexatrip.com).');
+        if (!username || !applicationPassword) {
+          throw new Error('Website (WordPress) requires username and applicationPassword for REST API authentication.');
+        }
+
+        const authHeader = 'Basic ' + Buffer.from(`${username.trim()}:${applicationPassword.trim()}`).toString('base64');
+        const res = await axios.get(`${targetSite}/wp-json/wp/v2/users/me`, {
+          headers: { Authorization: authHeader },
+          timeout: 10000
+        });
 
         return {
           success: true,
           platform: 'website',
-          accountName: 'Official Travel Portal & Blog',
-          handle: cleanHandle,
-          details: `Official Travel Portal Connected (${targetUrl}). WordPress REST API active for automatic article syndication.`
+          accountName: res.data.name || 'WordPress Admin',
+          handle: targetSite.replace(/^https?:\/\//, ''),
+          details: `Connected to WordPress REST API! Authenticated user: ${res.data.name} (Role: ${res.data.roles?.[0] || 'Author'})`
         };
       }
 
       if (platform === 'google_business' || platform === 'gmb') {
-        const { locationId, accessToken, businessName } = credentials;
-        const targetId = locationId || 'locations/lexatrip_jaisalmer';
-        const cleanHandle = targetId.startsWith('locations/') ? targetId : `locations/${targetId}`;
+        const { accessToken, locationId, businessName } = credentials;
+        if (!accessToken) throw new Error('Google Business Profile requires an OAuth2 Access Token.');
 
-        if (accessToken && !String(accessToken).startsWith('smart_')) {
-          try {
-            const res = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
-              headers: { Authorization: `Bearer ${accessToken}` },
-              timeout: 8000
-            });
-            return {
-              success: true,
-              platform: 'google_business',
-              accountName: businessName || res.data?.name || 'Google Business Profile',
-              handle: cleanHandle,
-              details: `Connected to Google Business Profile via Google Cloud! Location: ${cleanHandle}`
-            };
-          } catch (e) {}
+        let fetchedName = businessName;
+        try {
+          const res = await axios.get('https://mybusinessaccountmanagement.googleapis.com/v1/accounts', {
+            headers: { Authorization: `Bearer ${accessToken}` },
+            timeout: 8000
+          });
+          if (res.data?.accounts?.[0]?.accountName) {
+            fetchedName = res.data.accounts[0].accountName;
+          }
+        } catch (accErr) {
+          // Fallback to oauth2 userinfo
+          const uRes = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+            headers: { Authorization: `Bearer ${accessToken}` },
+            timeout: 8000
+          });
+          fetchedName = uRes.data.name || fetchedName;
         }
 
         return {
           success: true,
           platform: 'google_business',
-          accountName: businessName || 'Google Business Profile',
-          handle: cleanHandle,
-          details: `Connected to Google Business Profile! Verified location: ${cleanHandle}. Ready for 1 daily highlight post with CTA.`
+          accountName: fetchedName || 'Google Business Profile',
+          handle: locationId || 'Verified Location',
+          details: `Connected to Google Business Profile via Google Cloud! Verified account: ${fetchedName}`
         };
       }
 
       if (platform === 'twitter') {
+        const authHeaders = twitterPublisher.getAuthHeaders({
+          method: 'GET',
+          url: 'https://api.twitter.com/2/users/me',
+          credentials
+        });
+
+        const res = await axios.get('https://api.twitter.com/2/users/me', {
+          headers: authHeaders,
+          params: { 'user.fields': 'profile_image_url,description,public_metrics' },
+          timeout: 10000
+        });
+
+        const user = res.data.data;
+        if (!user) throw new Error('Failed to fetch Twitter / X user profile.');
+
         return {
           success: true,
           platform: 'twitter',
-          accountName: 'X / Twitter (Future Ready)',
-          handle: credentials.handle || '@lexatrip',
-          details: 'X / Twitter credentials saved. Ready for future activation.'
+          accountName: user.name,
+          handle: `@${user.username}`,
+          details: `Connected to Twitter / X! User: @${user.username} (Followers: ${user.public_metrics?.followers_count ?? 'N/A'})`
         };
       }
 
       if (platform === 'reddit') {
-        const username = credentials.username || 'LexaTripOfficial';
+        const { clientId, clientSecret, username, password, accessToken } = credentials;
+        let token = accessToken;
+
+        if (!token) {
+          if (!clientId || !clientSecret || !username || !password) {
+            throw new Error('Reddit requires clientId, clientSecret, username, and password.');
+          }
+          token = await redditPublisher.getAccessToken({ clientId, clientSecret, username, password });
+        }
+
+        const userAgent = `web:LexaTripAutomation:v1.0 (by /u/${username || 'LexaTrip'})`;
+        const res = await axios.get('https://oauth.reddit.com/api/v1/me', {
+          headers: {
+            Authorization: `bearer ${token}`,
+            'User-Agent': userAgent
+          },
+          timeout: 10000
+        });
+
+        const userData = res.data;
+        if (!userData || !userData.name) {
+          throw new Error('Invalid Reddit user info received.');
+        }
+
         return {
           success: true,
           platform: 'reddit',
-          accountName: 'Reddit Official',
-          handle: `u/${username.replace(/^u\//, '')}`,
-          details: `Connected to Reddit as u/${username.replace(/^u\//, '')}! Ready for Q&A answers and travel megathreads.`
+          accountName: userData.name,
+          handle: `u/${userData.name}`,
+          details: `Connected to Reddit! User: u/${userData.name} (Total Karma: ${userData.total_karma ?? 0})`
         };
       }
 
       if (platform === 'quora') {
+        // Quora operates strictly in Assisted Copy/Paste mode
+        const spaceUrl = credentials.spaceUrl || credentials.profileUrl;
+        if (spaceUrl) {
+          try {
+            new URL(spaceUrl);
+          } catch (e) {
+            throw new Error('Invalid Quora Space or Profile URL provided.');
+          }
+        }
         return {
           success: true,
           platform: 'quora',
-          accountName: 'Quora Official & Space',
-          handle: 'Lexa Trip Space',
-          details: 'Connected to Quora! Ready for verified travel space answers and destination guides.'
+          isAssisted: true,
+          accountName: credentials.name || 'Quora Space / Profile',
+          handle: spaceUrl ? spaceUrl.replace(/^https?:\/\//, '') : 'quora.com',
+          details: 'Quora operates in Assisted Copy/Paste mode. AI answers are generated for manual pasting into your Quora Space or target questions.'
         };
       }
 
@@ -376,15 +382,12 @@ class ChannelTester {
         errMsg = err.response.data.error.message;
       } else if (err.response?.data?.message) {
         errMsg = err.response.data.message;
-      }
-      
-      // Friendly translations for common API hurdles
-      if (errMsg.includes('Invalid OAuth access token') || errMsg.includes('Session has expired')) {
-        errMsg = 'Invalid or expired Access Token. Please generate a fresh token with required permissions.';
-      } else if (errMsg.includes('Cannot parse access token')) {
-        errMsg = 'Access Token format is invalid. Ensure you copied the full token without spaces.';
-      } else if (errMsg.includes('Unsupported get request')) {
-        errMsg = 'Invalid Page ID or Instagram Account ID. Ensure the ID matches the selected page.';
+      } else if (err.response?.data?.errors?.[0]?.message) {
+        errMsg = err.response.data.errors[0].message;
+      } else if (err.response?.data?.detail) {
+        errMsg = err.response.data.detail;
+      } else if (err.response?.data && typeof err.response.data === 'string') {
+        errMsg = err.response.data;
       }
 
       console.error(`[ChannelTester] ${platform} error:`, errMsg);
@@ -461,61 +464,36 @@ class ChannelTester {
     if (!accessToken) {
       throw new Error('Access Token is required to detect Pinterest boards.');
     }
-    try {
-      // 1. Fetch user profile
-      const userRes = await axios.get('https://api.pinterest.com/v5/user_account', {
-        headers: { Authorization: `Bearer ${accessToken}` },
-        timeout: 10000
-      });
 
-      // 2. Fetch all user boards
-      const boardsRes = await axios.get('https://api.pinterest.com/v5/boards', {
-        headers: { Authorization: `Bearer ${accessToken}` },
-        params: { page_size: 100 },
-        timeout: 10000
-      });
+    // Genuine API calls with no fallback mocks
+    const userRes = await axios.get('https://api.pinterest.com/v5/user_account', {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      timeout: 10000
+    });
 
-      const boards = (boardsRes.data?.items || []).map(b => ({
-        id: b.id,
-        name: b.name,
-        description: b.description || '',
-        privacy: b.privacy || 'PUBLIC',
-        pinCount: b.pin_count || 0
-      }));
+    const boardsRes = await axios.get('https://api.pinterest.com/v5/boards', {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      params: { page_size: 100 },
+      timeout: 10000
+    });
 
-      return {
-        success: true,
-        user: {
-          username: userRes.data?.username,
-          accountType: userRes.data?.account_type,
-          profileImage: userRes.data?.profile_image
-        },
-        boards
-      };
-    } catch (err) {
-      const errMsg = err.response?.data?.message || err.message;
-      if (errMsg.includes('consumer type is not supported') || err.response?.status === 401 || err.response?.status === 403) {
-        // Return confirmed destination boards created on Pinterest
-        return {
-          success: true,
-          user: {
-            username: 'Lexatripofficial',
-            accountType: 'BUSINESS',
-            profileImage: ''
-          },
-          boards: [
-            {
-              id: '1131740650051300286',
-              name: 'LexaTrip Jaisalmer',
-              description: 'Official luxury desert camps and golden dunes board for Lexa Trip Jaisalmer',
-              privacy: 'PUBLIC',
-              pinCount: 0
-            }
-          ]
-        };
-      }
-      throw new Error(`Pinterest Auto-Detect Error: ${errMsg}`);
-    }
+    const boards = (boardsRes.data?.items || []).map(b => ({
+      id: b.id,
+      name: b.name,
+      description: b.description || '',
+      privacy: b.privacy || 'PUBLIC',
+      pinCount: b.pin_count || 0
+    }));
+
+    return {
+      success: true,
+      user: {
+        username: userRes.data?.username,
+        accountType: userRes.data?.account_type,
+        profileImage: userRes.data?.profile_image
+      },
+      boards
+    };
   }
 }
 

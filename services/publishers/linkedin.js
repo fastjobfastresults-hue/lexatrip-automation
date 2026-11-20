@@ -5,18 +5,12 @@ class LinkedInPublisher {
    * Publish Post to LinkedIn Company Page / Profile
    */
   async publishPost({ account, text, imageUrl = null, videoUrl = null, title = '' }) {
-    if (!account.credentials || !account.credentials.accessToken || String(account.credentials.accessToken).startsWith('smart_')) {
-      console.log('[LinkedIn] Operating in SMART / SIMULATION mode.');
-      return {
-        success: true,
-        simulated: true,
-        platform: 'linkedin',
-        type: videoUrl ? 'video_post' : imageUrl ? 'image_post' : 'text_post',
-        postId: 'li_post_' + Date.now(),
-        organizationUrn: account.credentials?.organizationUrn || 'urn:li:organization:12345678',
-        publishedAt: new Date().toISOString(),
-        message: 'LinkedIn post dispatched successfully via Smart Bridge.'
-      };
+    if (!account?.credentials || !account.credentials.accessToken) {
+      throw new Error('LinkedIn credentials missing: accessToken is required.');
+    }
+
+    if (String(account.credentials.accessToken).startsWith('smart_')) {
+      throw new Error('Invalid LinkedIn credentials: smart_ placeholder tokens cannot be used for live publishing.');
     }
 
     const { accessToken, organizationUrn } = account.credentials;
@@ -35,13 +29,17 @@ class LinkedInPublisher {
         authorUrn = `urn:li:person:${memberSub}`;
       }
     } catch (e) {
-      console.warn('[LinkedIn] Could not fetch userinfo, falling back to configured author:', authorUrn);
+      console.warn('[LinkedIn] Could not fetch userinfo, checking configured author:', authorUrn);
+    }
+
+    if (!authorUrn) {
+      throw new Error('LinkedIn publish failed: unable to determine author URN. Please configure organizationUrn or ensure token has w_member_social/openid permissions.');
     }
 
     try {
       const payload = {
         author: authorUrn,
-        commentary: text,
+        commentary: text || title || '',
         visibility: 'PUBLIC',
         distribution: {
           feedDistribution: 'MAIN_FEED',
@@ -74,15 +72,9 @@ class LinkedInPublisher {
         publishedAt: new Date().toISOString()
       };
     } catch (err) {
-      const errMsg = err.response ? JSON.stringify(err.response.data) : err.message;
-      console.warn('[LinkedIn Notice - Graceful Fallback]:', errMsg);
-      return {
-        success: true,
-        simulated: true,
-        platform: 'linkedin',
-        postId: 'li_fallback_' + Date.now(),
-        message: 'LinkedIn post processed via Smart Bridge (Member Profile synced).'
-      };
+      const errMsg = err.response?.data?.message || (err.response ? JSON.stringify(err.response.data) : err.message);
+      console.error('[LinkedIn Error]:', errMsg);
+      throw new Error(`LinkedIn post failed: ${errMsg}`);
     }
   }
 }

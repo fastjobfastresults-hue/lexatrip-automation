@@ -333,7 +333,7 @@ app.get('/api/tracking/live-radar', (req, res) => {
     const batches = db.getBatches();
 
     const destQueue = queue.filter(q => q.destinationId === dest.id);
-    const queuedItems = destQueue.filter(q => q.status === 'queued');
+    const queuedItems = destQueue.filter(q => q.status === 'queued' || q.status === 'publishing');
     const publishedItems = destQueue.filter(q => q.status === 'published' || q.status === 'completed' || q.status === 'success');
     const failedItems = destQueue.filter(q => q.status === 'failed' || q.status === 'partial_or_failed');
 
@@ -347,27 +347,80 @@ app.get('/api/tracking/live-radar', (req, res) => {
       minutesUntilNext = Math.max(0, Math.round(diffMs / 60000));
     }
 
-    // Platform Breakdown
-    const channelBreakdown = {
-      instagram: { name: 'Instagram', handle: '@lexatripjaisalmer', live: 0, queued: 0 },
-      facebook: { name: 'Facebook', handle: '1385624654624388', live: 0, queued: 0 },
-      linkedin: { name: 'LinkedIn', handle: 'LexaTrip Jaisalmer', live: 0, queued: 0 },
-      pinterest: { name: 'Pinterest', handle: 'LexaTrip Jaisalmer', live: 0, queued: 0 },
-      blogger: { name: 'Blogger', handle: 'lexatripjaisalmer', live: 0, queued: 0 },
-      youtube: { name: 'YouTube Shorts', handle: '@lexatripjaisalmer', live: 0, queued: 0 }
-    };
+    // Dynamic Platform Breakdown reflecting destination channels
+    const channelsConfig = dest.channels || {};
+    const defaultChannels = ['instagram', 'facebook', 'linkedin', 'pinterest', 'blogger', 'youtube'];
+    const channelBreakdown = {};
+
+    defaultChannels.forEach(ch => {
+      const conf = channelsConfig[ch] || {};
+      const creds = conf.credentials || {};
+      const isConfigured = !!(creds.accessToken || creds.pageAccessToken || creds.apiKey || creds.botToken) &&
+        !String(creds.accessToken || creds.pageAccessToken || creds.apiKey || '').startsWith('smart_');
+
+      let name = ch.charAt(0).toUpperCase() + ch.slice(1);
+      if (ch === 'youtube') name = 'YouTube Shorts';
+
+      let handle = conf.handle || (conf.name ? conf.name : `@${dest.slug || 'lexatrip'}`);
+      if (ch === 'facebook' && creds.pageId) handle = `Page ${creds.pageId}`;
+      if (ch === 'instagram' && creds.instagramAccountId) handle = `@${creds.instagramAccountId}`;
+
+      channelBreakdown[ch] = {
+        name,
+        handle,
+        configured: isConfigured,
+        live: 0,
+        queued: 0,
+        failed: 0
+      };
+    });
 
     destQueue.forEach(item => {
+      const results = item.publishResults || [];
       (item.targets || []).forEach(ch => {
         if (channelBreakdown[ch]) {
-          if (item.status === 'published' || item.status === 'completed' || item.status === 'success') {
-            channelBreakdown[ch].live++;
-          } else if (item.status === 'queued') {
-            channelBreakdown[ch].queued++;
+          const match = results.find(r => r.platform === ch);
+          if (match) {
+            if (match.status === 'published' || match.status === 'success') {
+              channelBreakdown[ch].live++;
+            } else if (match.status === 'failed') {
+              channelBreakdown[ch].failed++;
+            }
+          } else {
+            if (item.status === 'published' || item.status === 'completed' || item.status === 'success') {
+              channelBreakdown[ch].live++;
+            } else if (item.status === 'failed') {
+              channelBreakdown[ch].failed++;
+            } else if (item.status === 'queued' || item.status === 'publishing') {
+              channelBreakdown[ch].queued++;
+            }
           }
         }
       });
     });
+
+    // Compute authentic Health Score & Metrics
+    const totalAttempted = publishedItems.length + failedItems.length;
+    let healthScore = 100;
+    let healthSubtext = '🛡️ 0 कम्युनिटी स्ट्राइक';
+
+    if (totalAttempted > 0) {
+      healthScore = Math.round((publishedItems.length / totalAttempted) * 100);
+      if (failedItems.length > 0) {
+        healthSubtext = `⚠️ ${failedItems.length} टास्क विफल (${publishedItems.length}/${totalAttempted} सफल)`;
+      } else {
+        healthSubtext = `✅ 100% पब्लिशिंग विश्वसनीयता (${publishedItems.length} टास्क)`;
+      }
+    } else {
+      const configuredCount = Object.values(channelBreakdown).filter(c => c.configured).length;
+      if (configuredCount === 0) {
+        healthScore = 50;
+        healthSubtext = '⚠️ कोई चैनल क्रेडेंशियल कॉन्फ़िगर नहीं';
+      } else {
+        healthScore = 100;
+        healthSubtext = `🟢 ${configuredCount}/6 चैनल्स लाइव रेडी`;
+      }
+    }
 
     res.json({
       success: true,
@@ -377,6 +430,9 @@ app.get('/api/tracking/live-radar', (req, res) => {
       queuedCount: queuedItems.length,
       publishedCount: publishedItems.length,
       failedCount: failedItems.length,
+      healthScore,
+      healthSubtext,
+      systemHealth: `${healthScore}% Reliable (${failedItems.length} Failures)`,
       nextItem: nextItem ? {
         id: nextItem.id,
         itemType: nextItem.itemType,
@@ -388,7 +444,6 @@ app.get('/api/tracking/live-radar', (req, res) => {
       } : null,
       channelBreakdown,
       latestBatch: batches.filter(b => b.destinationId === dest.id).pop() || null,
-      systemHealth: '100% Safe (0 Strikes)',
       recentPublished: publishedItems.slice(-3)
     });
   } catch (err) {

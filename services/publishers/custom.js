@@ -5,40 +5,38 @@ class CustomPublisher {
    * Publish to generic Webhook, Custom API, or Future Platform
    */
   async publish({ account, payload }) {
-    if (!account.credentials || !account.credentials.endpointUrl) {
-      console.log(`[Custom Platform: ${account.name}] Operating in SIMULATION mode.`);
-      return {
-        success: true,
-        simulated: true,
-        platform: account.platform || 'custom',
-        postId: 'sim_custom_' + Date.now(),
-        publishedAt: new Date().toISOString(),
-        message: `Simulation for custom destination: ${account.name}`
-      };
+    const creds = account?.credentials || {};
+    if (!creds.endpointUrl) {
+      throw new Error(`Custom publisher endpointUrl is missing for account: ${account?.name || 'custom'}`);
+    }
+
+    if (String(creds.endpointUrl).startsWith('smart_') || (creds.authToken && String(creds.authToken).startsWith('smart_'))) {
+      throw new Error('Invalid Custom publisher credentials: smart_ placeholder tokens cannot be used for live publishing.');
     }
 
     try {
       const headers = { 'Content-Type': 'application/json' };
-      if (account.credentials.authToken) {
-        headers['Authorization'] = `Bearer ${account.credentials.authToken}`;
+      if (creds.authToken) {
+        headers['Authorization'] = `Bearer ${creds.authToken}`;
       }
-      if (account.credentials.customHeaderKey && account.credentials.customHeaderValue) {
-        headers[account.credentials.customHeaderKey] = account.credentials.customHeaderValue;
+      if (creds.customHeaderKey && creds.customHeaderValue) {
+        headers[creds.customHeaderKey] = creds.customHeaderValue;
       }
 
-      const res = await axios.post(account.credentials.endpointUrl, payload, { headers });
+      const res = await axios.post(creds.endpointUrl, payload, { headers, timeout: 30000 });
 
       return {
         success: true,
         simulated: false,
-        platform: account.platform,
+        platform: account?.platform || 'custom',
         postId: res.data?.id || ('custom_' + Date.now()),
         response: res.data,
         publishedAt: new Date().toISOString()
       };
     } catch (err) {
-      console.error(`[Custom Platform Error ${account.name}]:`, err.message);
-      throw err;
+      const errDetail = err.response?.data?.message || (err.response ? JSON.stringify(err.response.data) : err.message);
+      console.error(`[Custom Platform Error ${account?.name || 'custom'}]:`, errDetail);
+      throw new Error(`Custom platform publish failed: ${errDetail}`);
     }
   }
 }

@@ -20,6 +20,10 @@ class RedditPublisher {
       throw new Error('Missing Reddit credentials (clientId, clientSecret, username, or password).');
     }
 
+    if (String(clientId).startsWith('smart_') || String(password).startsWith('smart_')) {
+      throw new Error('Invalid Reddit credentials: smart_ placeholder tokens cannot be used for live publishing.');
+    }
+
     const authHeader = 'Basic ' + Buffer.from(`${clientId.trim()}:${clientSecret.trim()}`).toString('base64');
     const userAgent = `web:LexaTripAutomation:v1.0 (by /u/${username.trim()})`;
 
@@ -53,7 +57,7 @@ class RedditPublisher {
    * Submit Text or Link Post to Subreddit or User Profile
    */
   async submitPost({ account, subreddit = 'IndiaTravel', title, text, url, kind = 'self' }) {
-    const creds = account.credentials || {};
+    const creds = account?.credentials || {};
     const clientId = creds.clientId;
     const clientSecret = creds.clientSecret;
     const username = creds.username;
@@ -66,7 +70,7 @@ class RedditPublisher {
       api_type: 'json',
       sr: subreddit.replace(/^r\//, '').trim(),
       kind: kind === 'link' ? 'link' : 'self',
-      title: title.trim(),
+      title: (title || '').trim(),
       resubmit: 'true',
       sendreplies: 'true'
     };
@@ -74,7 +78,7 @@ class RedditPublisher {
     if (kind === 'link' && url) {
       postPayload.url = url;
     } else {
-      postPayload.text = text;
+      postPayload.text = text || '';
     }
 
     const res = await axios.post(
@@ -95,15 +99,22 @@ class RedditPublisher {
       throw new Error('Reddit submit error: ' + JSON.stringify(json.errors));
     }
 
-    const postUrl = json?.data?.url || `https://www.reddit.com/r/${subreddit}/`;
     const postId = json?.data?.id || json?.data?.name;
+    if (!postId) {
+      throw new Error('Reddit submit failed: No post ID returned by Reddit API. Response: ' + JSON.stringify(res.data));
+    }
+
+    const cleanSubreddit = subreddit.replace(/^r\//, '').trim();
+    const postUrl = json?.data?.url || `https://www.reddit.com/r/${cleanSubreddit}/comments/${postId.replace(/^t3_/, '')}`;
 
     return {
       success: true,
+      simulated: false,
       platform: 'reddit',
       postId,
       postUrl,
-      subreddit
+      subreddit: cleanSubreddit,
+      publishedAt: new Date().toISOString()
     };
   }
 
@@ -111,7 +122,7 @@ class RedditPublisher {
    * Submit Comment Reply (for Q&A responses)
    */
   async submitComment({ account, parentThingId, text }) {
-    const creds = account.credentials || {};
+    const creds = account?.credentials || {};
     const clientId = creds.clientId;
     const clientSecret = creds.clientSecret;
     const username = creds.username;
@@ -125,7 +136,7 @@ class RedditPublisher {
       querystring.stringify({
         api_type: 'json',
         thing_id: parentThingId,
-        text: text
+        text: text || ''
       }),
       {
         headers: {
@@ -142,10 +153,17 @@ class RedditPublisher {
       throw new Error('Reddit comment error: ' + JSON.stringify(json.errors));
     }
 
+    const commentId = json?.data?.things?.[0]?.data?.id;
+    if (!commentId) {
+      throw new Error('Reddit comment failed: No comment ID returned by Reddit API.');
+    }
+
     return {
       success: true,
+      simulated: false,
       platform: 'reddit',
-      commentId: json?.data?.things?.[0]?.data?.id
+      commentId,
+      publishedAt: new Date().toISOString()
     };
   }
 }

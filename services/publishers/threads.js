@@ -7,21 +7,16 @@ class ThreadsPublisher {
    * Endpoint: https://graph.threads.net/v1.0/
    */
   async publishPost({ account, text, imageUrl, videoUrl }) {
-    const creds = account.credentials || {};
+    const creds = account?.credentials || {};
     const accessToken = creds.accessToken || creds.pageAccessToken;
     const userId = creds.threadsUserId || creds.instagramAccountId || 'me';
 
-    if (!accessToken || String(accessToken).startsWith('smart_')) {
-      console.log('[Threads] Operating in SMART / SIMULATION mode.');
-      return {
-        success: true,
-        simulated: true,
-        platform: 'threads',
-        postId: 'threads_post_' + Date.now(),
-        handle: account.handle || 'threads.net/@lexatripjaisalmer',
-        publishedAt: new Date().toISOString(),
-        message: 'Threads post dispatched successfully via Smart Bridge.'
-      };
+    if (!accessToken) {
+      throw new Error('Threads credentials missing: accessToken is required.');
+    }
+
+    if (String(accessToken).startsWith('smart_')) {
+      throw new Error('Invalid Threads credentials: smart_ placeholder tokens cannot be used for live publishing.');
     }
 
     try {
@@ -34,11 +29,19 @@ class ThreadsPublisher {
       if (videoUrl) {
         mediaType = 'VIDEO';
         containerParams.media_type = 'VIDEO';
-        containerParams.video_url = tunnelService.resolvePublicMediaUrl(videoUrl);
+        const publicVidUrl = tunnelService.resolvePublicMediaUrl(videoUrl);
+        if (!publicVidUrl || (!publicVidUrl.startsWith('http://') && !publicVidUrl.startsWith('https://'))) {
+          throw new Error(`Threads video requires a public HTTP/HTTPS URL. Resolved: "${publicVidUrl}"`);
+        }
+        containerParams.video_url = publicVidUrl;
       } else if (imageUrl) {
         mediaType = 'IMAGE';
         containerParams.media_type = 'IMAGE';
-        containerParams.image_url = tunnelService.resolvePublicMediaUrl(imageUrl);
+        const publicImgUrl = tunnelService.resolvePublicMediaUrl(imageUrl);
+        if (!publicImgUrl || (!publicImgUrl.startsWith('http://') && !publicImgUrl.startsWith('https://'))) {
+          throw new Error(`Threads image requires a public HTTP/HTTPS URL. Resolved: "${publicImgUrl}"`);
+        }
+        containerParams.image_url = publicImgUrl;
       } else {
         containerParams.media_type = 'TEXT';
       }
@@ -56,9 +59,26 @@ class ThreadsPublisher {
         throw new Error('Failed to create Threads container: No container ID returned.');
       }
 
-      // If video, wait 5 seconds for processing
+      // If video, poll status until finished
       if (mediaType === 'VIDEO') {
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        let attempts = 0;
+        let status = 'IN_PROGRESS';
+        while (status === 'IN_PROGRESS' && attempts < 15) {
+          await new Promise(resolve => setTimeout(resolve, 3000));
+          const check = await axios.get(`https://graph.threads.net/v1.0/${creationId}`, {
+            params: { fields: 'status,error_message', access_token: accessToken },
+            timeout: 10000
+          });
+          status = check.data?.status;
+          if (status === 'FINISHED') break;
+          if (status === 'ERROR') {
+            throw new Error(`Threads container processing failed: ${check.data?.error_message || 'ERROR'}`);
+          }
+          attempts++;
+        }
+        if (status !== 'FINISHED' && attempts >= 15) {
+          throw new Error('Threads container processing timed out.');
+        }
       }
 
       // 2. Publish Container
@@ -71,28 +91,21 @@ class ThreadsPublisher {
         timeout: 30000
       });
 
+      const postId = publishRes.data?.id || creationId;
+      const cleanHandle = (account.handle || '').replace(/^threads\.net\/@?/, '').replace(/^@/, '');
+
       return {
         success: true,
         simulated: false,
         platform: 'threads',
-        postId: publishRes.data?.id || creationId,
-        url: `https://www.threads.net/@${(account.handle || '').replace(/^threads\.net\/@?/, '').replace(/^@/, '')}/post/${publishRes.data?.id || creationId}`,
+        postId: postId,
+        url: cleanHandle ? `https://www.threads.net/@${cleanHandle}/post/${postId}` : `https://www.threads.net/post/${postId}`,
         publishedAt: new Date().toISOString()
       };
     } catch (err) {
-      const errData = err.response ? JSON.stringify(err.response.data) : err.message;
-      console.warn('[Threads API Notice]:', errData);
-
-      // Meta permissions notice graceful handling
-      return {
-        success: true,
-        simulated: true,
-        platform: 'threads',
-        postId: 'th_sim_' + Date.now(),
-        handle: account.handle || 'threads.net/@lexatripjaisalmer',
-        publishedAt: new Date().toISOString(),
-        note: 'Queued via Meta Master Bridge. Live token verified.'
-      };
+      const errData = err.response?.data?.error?.message || (err.response ? JSON.stringify(err.response.data) : err.message);
+      console.error('[Threads API Error]:', errData);
+      throw new Error(`Threads publish failed: ${errData}`);
     }
   }
 }

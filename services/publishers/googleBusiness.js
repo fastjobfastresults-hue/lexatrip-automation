@@ -7,26 +7,17 @@ class GoogleBusinessPublisher {
    * Official API: https://mybusiness.googleapis.com/v4/{parent=accounts/*/locations/*}/localPosts
    */
   async publishPost({ account, title, caption, mediaPath, destinationName, websiteUrl }) {
-    const creds = account.credentials || {};
+    const creds = account?.credentials || {};
     const { accessToken, locationId, accountId } = creds;
     const destUrl = websiteUrl || creds.bookingUrl || creds.websiteUrl || 'https://bookings.lexatrip.com/';
     const phone = creds.phone || '+91 90798 54982';
 
-    if (!accessToken || !locationId || String(accessToken).startsWith('smart_')) {
-      console.log(`[Google Business Profile] Operating in SMART / SIMULATION mode for ${account.name || destinationName}.`);
-      return {
-        success: true,
-        simulated: true,
-        platform: 'google_business',
-        postId: 'gmb_post_' + Date.now(),
-        locationId: locationId || 'locations/lexatrip_jaisalmer',
-        publishedAt: new Date().toISOString(),
-        callToAction: {
-          actionType: creds.ctaType || 'BOOK',
-          url: destUrl
-        },
-        message: `Local Post simulated for Google Business Profile: ${account.name || destinationName}`
-      };
+    if (!accessToken || !locationId) {
+      throw new Error('Google Business Profile credentials missing: accessToken and locationId are required.');
+    }
+
+    if (String(accessToken).startsWith('smart_')) {
+      throw new Error('Invalid Google Business Profile credentials: smart_ placeholder tokens cannot be used for live publishing.');
     }
 
     try {
@@ -91,19 +82,9 @@ class GoogleBusinessPublisher {
         publishedAt: new Date().toISOString()
       };
     } catch (err) {
-      const errData = err.response ? JSON.stringify(err.response.data) : err.message;
-      console.warn('[Google Business Profile Notice]:', errData);
-
-      // Return graceful fallback so background queues never crash
-      return {
-        success: true,
-        simulated: true,
-        platform: 'google_business',
-        postId: 'gmb_fallback_' + Date.now(),
-        locationId: locationId || 'locations/lexatrip',
-        publishedAt: new Date().toISOString(),
-        note: `Post processed with Google Business Profile API (${err.message})`
-      };
+      const errData = err.response?.data?.error?.message || (err.response ? JSON.stringify(err.response.data) : err.message);
+      console.error('[Google Business Profile Error]:', errData);
+      throw new Error(`Google Business Profile publish failed: ${errData}`);
     }
   }
 }

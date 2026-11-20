@@ -347,6 +347,12 @@ function renderInteractiveChannels() {
     { key: 'quora', name: 'Quora', icon: 'fa-quora', iconPrefix: 'fa-brands', bg: 'bg-gradient-to-tr from-red-700 via-red-600 to-rose-700', shadow: 'shadow-red-500/25' }
   ];
 
+  const isSynthetic = (val) => {
+    if (!val) return true;
+    const str = String(val).trim();
+    return str.startsWith('smart_') || str === 'official_live_token' || str === 'smart_connect';
+  };
+
   platforms.forEach(p => {
     let isConnected = false;
     let isLiveOfficial = false;
@@ -354,46 +360,99 @@ function renderInteractiveChannels() {
 
     if (p.key === 'telegram') {
       const tg = currentDestination.telegram || {};
-      const hasRealToken = tg.botToken && !tg.botToken.startsWith('smart_') && tg.chatId;
-      const hasSmartToken = tg.botToken && tg.botToken.startsWith('smart_');
+      const hasRealToken = tg.botToken && !isSynthetic(tg.botToken) && tg.chatId;
+      const hasSmartToken = tg.botToken && isSynthetic(tg.botToken);
       isConnected = !!(tg.botToken && tg.chatId);
       isLiveOfficial = !!hasRealToken;
       handle = isLiveOfficial ? 'Live Telegram Connected' : (hasSmartToken ? '🧪 Sandbox Reporter' : 'Click to Configure');
     } else if (p.key === 'twitter') {
       const ch = currentDestination.channels?.twitter;
-      isConnected = !!ch?.enabled;
-      isLiveOfficial = false;
-      handle = ch?.handle || '@lexatrip';
+      const creds = ch?.credentials || {};
+      const hasOAuth1 = (creds.apiKey || creds.consumerKey) && (creds.accessToken || creds.token) && !isSynthetic(creds.apiKey) && !isSynthetic(creds.accessToken);
+      const hasBearer = (creds.bearerToken || creds.accessToken) && !isSynthetic(creds.bearerToken || creds.accessToken);
+      const hasValidToken = hasOAuth1 || hasBearer;
+      isConnected = !!ch?.enabled || hasValidToken;
+      isLiveOfficial = hasValidToken && !creds.isSmartConnect;
+      handle = ch?.handle || (isConnected ? '@lexatrip' : 'Click to Connect');
     } else if (p.key === 'website') {
       const ch = currentDestination.channels?.website || currentDestination.channels?.blog;
       const creds = ch?.credentials || {};
-      const hasSite = !!(ch?.handle || creds.siteUrl || creds.apiUrl);
-      isConnected = !!ch?.enabled || hasSite;
-      isLiveOfficial = isConnected;
-      handle = ch?.handle || creds.siteUrl?.replace(/^https?:\/\//, '') || 'lexatrip.com';
+      const hasSite = !!(creds.siteUrl || creds.apiUrl);
+      const hasAuth = !!(creds.username && (creds.applicationPassword || creds.appPassword) && !isSynthetic(creds.applicationPassword || creds.appPassword));
+      isConnected = hasSite && hasAuth;
+      isLiveOfficial = isConnected && !creds.isSmartConnect;
+      handle = ch?.handle || creds.siteUrl?.replace(/^https?:\/\//, '') || (isConnected ? 'WordPress REST' : 'Click to Configure');
     } else if (p.key === 'google_business') {
       const ch = currentDestination.channels?.google_business || currentDestination.channels?.gmb;
       const creds = ch?.credentials || {};
-      const hasLoc = !!(ch?.handle || creds.locationId);
-      isConnected = !!ch?.enabled || hasLoc;
-      isLiveOfficial = isConnected;
-      handle = ch?.handle || 'maps.google.com';
+      const hasToken = !!(creds.accessToken || creds.refreshToken) && !isSynthetic(creds.accessToken || creds.refreshToken);
+      const hasLoc = !!creds.locationId;
+      isConnected = hasToken && hasLoc;
+      isLiveOfficial = isConnected && !creds.isSmartConnect;
+      handle = ch?.handle || (isConnected ? (creds.locationId || 'Verified Location') : 'Click to Configure');
     } else if (p.key === 'threads') {
       const ch = currentDestination.channels?.threads;
       const metaCh = currentDestination.channels?.instagram || currentDestination.channels?.facebook;
       const creds = ch?.credentials || metaCh?.credentials || {};
-      const hasToken = !!(creds.accessToken || creds.pageAccessToken);
-      const isSmart = creds.isSmartConnect || ch?.authType === 'smart_oauth' || String(creds.accessToken || creds.pageAccessToken).startsWith('smart_');
+      const rawToken = creds.accessToken || creds.pageAccessToken;
+      const hasToken = !!rawToken && !isSynthetic(rawToken);
       isConnected = !!ch?.enabled || hasToken;
-      isLiveOfficial = hasToken && !isSmart;
-      handle = ch?.handle || (metaCh?.handle ? `threads.net/${metaCh.handle}` : 'threads.net/@lexatrip');
+      isLiveOfficial = hasToken && !creds.isSmartConnect;
+      handle = ch?.handle || (metaCh?.handle ? `threads.net/${metaCh.handle}` : (isConnected ? 'threads.net/@lexatrip' : 'Click to Connect'));
+    } else if (p.key === 'blogger') {
+      const ch = currentDestination.channels?.blogger;
+      const creds = ch?.credentials || {};
+      const hasApiKey = !!creds.apiKey && !isSynthetic(creds.apiKey);
+      const hasBlogId = !!creds.blogId;
+      isConnected = hasApiKey && hasBlogId;
+      isLiveOfficial = isConnected && !creds.isSmartConnect;
+      handle = ch?.handle || (hasBlogId ? `Blog ${creds.blogId}` : 'Click to Connect');
+    } else if (p.key === 'facebook') {
+      const ch = currentDestination.channels?.facebook;
+      const creds = ch?.credentials || {};
+      const hasToken = !!(creds.pageAccessToken || creds.accessToken) && !isSynthetic(creds.pageAccessToken || creds.accessToken);
+      const hasPageId = !!creds.pageId;
+      isConnected = hasToken && hasPageId;
+      isLiveOfficial = isConnected && !creds.isSmartConnect;
+      handle = ch?.handle || (hasPageId ? `Page ${creds.pageId}` : 'Click to Connect');
+    } else if (p.key === 'instagram') {
+      const ch = currentDestination.channels?.instagram;
+      const creds = ch?.credentials || {};
+      const hasToken = !!(creds.accessToken || creds.pageAccessToken) && !isSynthetic(creds.accessToken || creds.pageAccessToken);
+      const hasAccountId = !!creds.instagramAccountId;
+      isConnected = hasToken && hasAccountId;
+      isLiveOfficial = isConnected && !creds.isSmartConnect;
+      handle = ch?.handle || (hasAccountId ? `@${creds.instagramAccountId}` : 'Click to Connect');
+    } else if (p.key === 'pinterest') {
+      const ch = currentDestination.channels?.pinterest;
+      const creds = ch?.credentials || {};
+      const hasToken = !!creds.accessToken && !isSynthetic(creds.accessToken);
+      const hasBoardId = !!creds.boardId;
+      isConnected = hasToken && hasBoardId;
+      isLiveOfficial = isConnected && !creds.isSmartConnect;
+      handle = ch?.handle || (hasBoardId ? `Board ${creds.boardId}` : 'Click to Connect');
+    } else if (p.key === 'linkedin') {
+      const ch = currentDestination.channels?.linkedin;
+      const creds = ch?.credentials || {};
+      const hasToken = !!creds.accessToken && !isSynthetic(creds.accessToken);
+      const hasUrn = !!(creds.organizationUrn || creds.personUrn);
+      isConnected = hasToken && hasUrn;
+      isLiveOfficial = isConnected && !creds.isSmartConnect;
+      handle = ch?.handle || (hasUrn ? 'LinkedIn Org' : 'Click to Connect');
+    } else if (p.key === 'youtube') {
+      const ch = currentDestination.channels?.youtube;
+      const creds = ch?.credentials || {};
+      const hasToken = !!(creds.apiKey || creds.accessToken) && !isSynthetic(creds.apiKey || creds.accessToken);
+      const hasChannelId = !!creds.channelId;
+      isConnected = hasToken && hasChannelId;
+      isLiveOfficial = isConnected && !creds.isSmartConnect;
+      handle = ch?.handle || (hasChannelId ? `Channel ${creds.channelId}` : 'Click to Connect');
     } else {
       const ch = currentDestination.channels?.[p.key];
       const creds = ch?.credentials || {};
-      const hasToken = !!(creds.accessToken || creds.pageAccessToken || creds.apiKey || creds.blogId);
-      const isSmart = creds.isSmartConnect || ch?.authType === 'smart_oauth' || String(creds.accessToken || creds.pageAccessToken || creds.apiKey || creds.blogId).startsWith('smart_');
+      const hasToken = !!(creds.accessToken || creds.pageAccessToken || creds.apiKey) && !isSynthetic(creds.accessToken || creds.pageAccessToken || creds.apiKey);
       isConnected = hasToken;
-      isLiveOfficial = hasToken && !isSmart;
+      isLiveOfficial = hasToken && !creds.isSmartConnect;
       handle = ch?.handle || (isConnected ? 'Connected' : 'Click to Connect');
     }
 
@@ -1194,7 +1253,7 @@ async function saveCurrentChannelCredentials() {
       currentDestination.channels[platform].credentials = { 
         siteUrl: val1, 
         apiUrl: `${val1.replace(/\/$/, '')}/wp-json/wp/v2`,
-        applicationPassword: val2 || 'official_live_token'
+        applicationPassword: val2 || ''
       };
       currentDestination.channels[platform].handle = verified?.handle || val1.replace(/^https?:\/\//, '') || 'lexatrip.com';
       if (verified?.accountName) currentDestination.channels[platform].name = verified.accountName;
@@ -1203,7 +1262,7 @@ async function saveCurrentChannelCredentials() {
       currentDestination.channels[platform].credentials = { 
         locationId: val1, 
         accessToken: val2,
-        websiteUrl: currentDestination.channels?.website?.credentials?.siteUrl || `https://lexatrip.com/${destSlug}`,
+        websiteUrl: currentDestination.channels?.website?.credentials?.siteUrl || 'https://www.lexatrip.com/',
         ctaType: 'LEARN_MORE'
       };
       currentDestination.channels[platform].handle = verified?.handle || val1 || 'maps.google.com';
@@ -1682,13 +1741,24 @@ function switchTaskTab(tab) {
   activeTaskTab = tab;
   const queuedBtn = document.getElementById('tab-btn-queued');
   const publishedBtn = document.getElementById('tab-btn-published');
+  const failedBtn = document.getElementById('tab-btn-failed');
+
+  const activeGoldClass = 'font-bold text-apple-gold border-b-2 border-apple-gold pb-1 px-1 flex items-center space-x-1.5 transition';
+  const activeRoseClass = 'font-bold text-rose-400 border-b-2 border-rose-500 pb-1 px-1 flex items-center space-x-1.5 transition';
+  const inactiveClass = 'font-semibold text-gray-400 hover:text-white pb-1 px-1 flex items-center space-x-1.5 border-b-2 border-transparent transition';
 
   if (tab === 'queued') {
-    queuedBtn.className = 'font-bold text-apple-gold border-b-2 border-apple-gold pb-1 px-1 flex items-center space-x-1.5';
-    publishedBtn.className = 'font-semibold text-gray-400 hover:text-white pb-1 px-1 flex items-center space-x-1.5';
-  } else {
-    publishedBtn.className = 'font-bold text-apple-gold border-b-2 border-apple-gold pb-1 px-1 flex items-center space-x-1.5';
-    queuedBtn.className = 'font-semibold text-gray-400 hover:text-white pb-1 px-1 flex items-center space-x-1.5';
+    if (queuedBtn) queuedBtn.className = activeGoldClass;
+    if (publishedBtn) publishedBtn.className = inactiveClass;
+    if (failedBtn) failedBtn.className = inactiveClass;
+  } else if (tab === 'published') {
+    if (publishedBtn) publishedBtn.className = activeGoldClass;
+    if (queuedBtn) queuedBtn.className = inactiveClass;
+    if (failedBtn) failedBtn.className = inactiveClass;
+  } else if (tab === 'failed') {
+    if (failedBtn) failedBtn.className = activeRoseClass;
+    if (queuedBtn) queuedBtn.className = inactiveClass;
+    if (publishedBtn) publishedBtn.className = inactiveClass;
   }
   loadQueue();
 }
@@ -1704,27 +1774,39 @@ async function loadQueue() {
     tbody.innerHTML = '';
 
     const queuedItems = queue.filter(q => q.status === 'queued' || q.status === 'publishing');
-    const publishedItems = queue.filter(q => q.status === 'published' || q.status === 'partial_or_failed');
+    const publishedItems = queue.filter(q => q.status === 'published' || q.status === 'completed' || q.status === 'success');
+    const failedItems = queue.filter(q => q.status === 'failed' || q.status === 'partial_or_failed');
 
     const badgeQ = document.getElementById('badge-queued-count');
     const badgeP = document.getElementById('badge-published-count');
+    const badgeF = document.getElementById('badge-failed-count');
     if (badgeQ) badgeQ.textContent = queuedItems.length;
     if (badgeP) badgeP.textContent = publishedItems.length;
+    if (badgeF) badgeF.textContent = failedItems.length;
 
-    const displayItems = activeTaskTab === 'queued' ? queuedItems : publishedItems;
+    let displayItems = queuedItems;
+    if (activeTaskTab === 'published') {
+      displayItems = publishedItems;
+    } else if (activeTaskTab === 'failed') {
+      displayItems = failedItems;
+    }
 
     if (displayItems.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="7" class="px-4 py-8 text-center text-gray-500">
-        ${activeTaskTab === 'queued' ? `No upcoming queued tasks for ${currentDestination.name}. Use the 1-Click button above to schedule!` : `No published tasks in archive yet.`}
-      </td></tr>`;
+      let emptyMsg = `No upcoming queued tasks for ${currentDestination.name}. Use the 1-Click button above to schedule!`;
+      if (activeTaskTab === 'published') {
+        emptyMsg = `No published tasks in archive yet for ${currentDestination.name}.`;
+      } else if (activeTaskTab === 'failed') {
+        emptyMsg = `No failed or partial tasks. All publishing operations for ${currentDestination.name} are healthy! ✅`;
+      }
+      tbody.innerHTML = `<tr><td colspan="7" class="px-4 py-8 text-center text-gray-500">${emptyMsg}</td></tr>`;
       return;
     }
 
-    displayItems.forEach(item => {
+    displayItems.forEach((item, itemIdx) => {
       const tr = document.createElement('tr');
-      tr.className = 'hover:bg-white/[0.02] transition';
+      tr.className = 'hover:bg-white/[0.02] transition border-b border-apple-border/20';
 
-      const d = new Date(item.scheduledTime);
+      const d = item.scheduledTime ? new Date(item.scheduledTime) : (item.createdAt ? new Date(item.createdAt) : new Date());
       const timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const dateStr = d.toLocaleDateString([], { month: 'short', day: 'numeric' });
 
@@ -1742,13 +1824,34 @@ async function loadQueue() {
         }
       }
 
-      let typeBadge = `<span class="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20 font-bold text-[10px]">Post #${item.index}</span>`;
+      let typeBadge = `<span class="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20 font-bold text-[10px]">Post #${item.index || 1}</span>`;
       if (item.itemType === 'carousel') {
         typeBadge = `<span class="px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20 font-bold text-[10px]">Carousel</span>`;
       } else if (item.itemType === 'reel') {
         typeBadge = `<span class="px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-300 border border-rose-500/20 font-bold text-[10px]">${item.index ? `Reel #${item.index}` : '12s Reel'}</span>`;
       }
 
+      // Real anti-spam spacing calculation (replacing fake random math)
+      let spacingText = 'Scheduled';
+      if (item.status === 'queued') {
+        const prev = itemIdx > 0 ? displayItems[itemIdx - 1] : null;
+        if (prev && prev.scheduledTime && item.scheduledTime) {
+          const gapMins = Math.max(0, Math.round((new Date(item.scheduledTime) - new Date(prev.scheduledTime)) / 60000));
+          const h = Math.floor(gapMins / 60);
+          const m = gapMins % 60;
+          spacingText = h > 0 ? `+${h}h ${m}m gap` : `+${m}m gap`;
+        } else {
+          spacingText = countdown ? `${countdown}` : 'Next in line';
+        }
+      } else if (item.publishedAt) {
+        const pubDate = new Date(item.publishedAt);
+        spacingText = `Live at ${pubDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+      } else if (item.status === 'failed' || item.status === 'partial_or_failed') {
+        spacingText = 'Failed';
+      }
+
+      // Collect target channels with status-specific icons and tooltip error info
+      const results = item.publishResults || [];
       const targets = (item.targets || []).map(t => {
         let icon = 'fa-globe';
         if (t === 'instagram') icon = 'fa-instagram text-pink-400';
@@ -1756,19 +1859,115 @@ async function loadQueue() {
         if (t === 'youtube') icon = 'fa-youtube text-red-400';
         if (t === 'linkedin') icon = 'fa-linkedin text-sky-400';
         if (t === 'pinterest') icon = 'fa-pinterest text-rose-400';
+        if (t === 'blogger') icon = 'fa-blogger text-orange-400';
+        if (t === 'twitter') icon = 'fa-x-twitter text-gray-200';
+        if (t === 'threads') icon = 'fa-threads text-purple-400';
+        if (t === 'telegram') icon = 'fa-telegram text-sky-400';
+
+        const match = results.find(r => r.platform === t);
+        let statusDot = '';
+        let tooltip = t;
+        if (match) {
+          if (match.status === 'published' || match.status === 'success') {
+            statusDot = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>';
+            tooltip = `${t}: Published`;
+          } else if (match.status === 'failed') {
+            statusDot = '<span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>';
+            const errStr = match.error || 'Failed';
+            tooltip = `${t}: ${errStr}`;
+          }
+        }
+
         return `
-          <span class="inline-flex items-center space-x-1 px-1.5 py-0.5 rounded bg-white/[0.04] text-gray-300 text-[10px] border border-apple-border capitalize">
+          <span class="inline-flex items-center space-x-1 px-1.5 py-0.5 rounded bg-white/[0.04] text-gray-300 text-[10px] border border-apple-border capitalize" title="${escapeHtml(tooltip)}">
             <i class="fa-brands ${icon} text-[9px]"></i>
             <span>${t}</span>
+            ${statusDot}
           </span>
         `;
       }).join(' ');
 
-      let statusBadge = `<span class="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20 text-[10px]">Queued</span>`;
+      // Explicit status badges for all statuses
+      let statusBadge = '';
       if (item.status === 'published') {
-        statusBadge = `<span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px]">Published</span>`;
+        statusBadge = `<span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-semibold">Published</span>`;
+      } else if (item.status === 'partial_or_failed') {
+        statusBadge = `<span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-bold">⚠️ Partial</span>`;
+      } else if (item.status === 'failed') {
+        statusBadge = `<span class="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 text-[10px] font-bold">❌ Failed</span>`;
       } else if (item.status === 'publishing') {
         statusBadge = `<span class="px-2 py-0.5 rounded-full bg-sky-500/10 text-sky-300 border border-sky-500/20 text-[10px]"><i class="fa-solid fa-spinner fa-spin"></i> Live</span>`;
+      } else {
+        statusBadge = `<span class="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20 text-[10px]">Queued</span>`;
+      }
+
+      // Expandable inline error preview for partial or failed items
+      const failedResults = results.filter(r => r.status === 'failed');
+      let inlineErrorHtml = '';
+      if (failedResults.length > 0) {
+        inlineErrorHtml = `
+          <details class="mt-1 text-[11px] text-rose-300 group">
+            <summary class="cursor-pointer text-[10px] text-rose-400 hover:text-rose-200 font-semibold flex items-center space-x-1 select-none">
+              <i class="fa-solid fa-circle-exclamation text-[9px]"></i>
+              <span>${failedResults.length} platform failure(s) - click for error details</span>
+            </summary>
+            <div class="mt-1.5 space-y-1 pl-2 border-l-2 border-rose-500/40 font-mono text-[10px] bg-rose-500/[0.04] p-1.5 rounded">
+              ${failedResults.map(f => `<div><b class="capitalize text-rose-300">${escapeHtml(f.platform)}:</b> <span class="text-rose-200/90">${escapeHtml(f.error || 'Platform API Error')}</span></div>`).join('')}
+            </div>
+          </details>
+        `;
+      }
+
+      // Actions Column: Dynamic buttons based on status
+      let actionHtml = '';
+      if (item.status === 'queued') {
+        actionHtml = `
+          <button onclick="publishQueueItemNow('${item.id}')" class="px-3 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-bold inline-flex items-center space-x-1 shadow-sm">
+            <i class="fa-solid fa-bolt text-[9px]"></i>
+            <span>Publish Now</span>
+          </button>
+          <button onclick="rescheduleQueueItem('${item.id}')" class="px-2 py-1 text-gray-400 hover:text-white text-[10px] border border-apple-border rounded-lg" title="Reschedule">
+            <i class="fa-regular fa-clock"></i>
+          </button>
+          <button onclick="deleteQueueItem('${item.id}')" class="px-2 py-1 text-rose-400 hover:text-rose-200 text-[10px]" title="Delete">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        `;
+      } else if (item.status === 'failed' || item.status === 'partial_or_failed') {
+        actionHtml = `
+          <div class="flex items-center space-x-1.5 justify-end">
+            <button onclick="publishQueueItemNow('${item.id}')" class="px-2.5 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 text-[10px] font-bold inline-flex items-center space-x-1" title="Retry publishing">
+              <i class="fa-solid fa-rotate-right text-[9px]"></i>
+              <span>Retry</span>
+            </button>
+            <button onclick="openDispatchModal(window._queueCache?.find(q => q.id === '${item.id}') || { id: '${item.id}', title: '${escapeHtml(item.title)}', targets: ${JSON.stringify(item.targets || [])} }, ${JSON.stringify(results).replace(/"/g, '&quot;')})" class="px-2 py-1 text-gray-300 hover:text-white text-[10px] border border-apple-border rounded-lg" title="Inspect full results & errors">
+              <i class="fa-solid fa-magnifying-glass text-[9px]"></i>
+              <span>Errors</span>
+            </button>
+          </div>
+        `;
+      } else {
+        // Published: Dynamic links for succeeded platforms
+        const liveLinks = results
+          .filter(r => (r.status === 'published' || r.status === 'success') && (r.postUrl || r.details?.postUrl))
+          .map(r => {
+            const url = r.postUrl || r.details?.postUrl;
+            const shortName = r.platform === 'facebook' ? 'FB' : (r.platform === 'instagram' ? 'IG' : (r.platform === 'linkedin' ? 'LI' : (r.platform === 'pinterest' ? 'Pin' : (r.platform === 'youtube' ? 'YT' : r.platform.substring(0, 3).toUpperCase()))));
+            return `
+              <a href="${encodeURI(url)}" target="_blank" class="px-2 py-0.5 rounded bg-white/[0.04] hover:bg-white/[0.1] text-gray-200 border border-apple-border text-[10px] font-bold inline-flex items-center space-x-1 transition" title="Open live ${r.platform} post">
+                <span>${shortName} ↗</span>
+              </a>
+            `;
+          }).join('');
+
+        actionHtml = `
+          <div class="flex items-center space-x-1.5 justify-end">
+            ${liveLinks || `<span class="text-[10px] text-emerald-400/80">✅ Dispatched</span>`}
+            <button onclick="openDispatchModal(window._queueCache?.find(q => q.id === '${item.id}') || { id: '${item.id}', title: '${escapeHtml(item.title)}', targets: ${JSON.stringify(item.targets || [])} }, ${JSON.stringify(results).replace(/"/g, '&quot;')})" class="px-2 py-0.5 rounded bg-white/[0.04] hover:bg-white/[0.1] text-gray-300 border border-apple-border text-[10px]" title="Inspect Dispatch Results">
+              <i class="fa-solid fa-list-check text-[9px]"></i>
+            </button>
+          </div>
+        `;
       }
 
       tr.innerHTML = `
@@ -1777,46 +1976,19 @@ async function loadQueue() {
           <div class="text-[10px] text-gray-500">${dateStr} ${countdown ? `<span class="text-amber-400/80">(${countdown})</span>` : ''}</div>
         </td>
         <td class="px-4 py-3 whitespace-nowrap">${typeBadge}</td>
-        <td class="px-4 py-3 font-medium text-gray-200 max-w-xs truncate">${item.title}</td>
-        <td class="px-4 py-3 whitespace-nowrap">${targets}</td>
-        <td class="px-4 py-3 text-emerald-400 font-mono text-[10px] whitespace-nowrap">+${Math.floor(Math.random() * 25) + 65}m jitter</td>
-        <td class="px-4 py-3 whitespace-nowrap">${statusBadge}</td>
-        <td class="px-4 py-3 text-right whitespace-nowrap space-x-1.5">
-          ${item.status === 'queued' ? `
-            <button onclick="publishQueueItemNow('${item.id}')" class="px-3 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-bold flex-inline items-center space-x-1 shadow-sm">
-              <i class="fa-solid fa-bolt text-[9px]"></i>
-              <span>Publish Now</span>
-            </button>
-            <button onclick="rescheduleQueueItem('${item.id}')" class="px-2 py-1 text-gray-400 hover:text-white text-[10px] border border-apple-border rounded-lg">
-              <i class="fa-regular fa-clock"></i>
-            </button>
-            <button onclick="deleteQueueItem('${item.id}')" class="px-2 py-1 text-rose-400 hover:text-rose-200 text-[10px]">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          ` : `
-            <div class="flex items-center space-x-1.5 justify-end">
-              <a href="https://www.facebook.com/profile.php?id=61594513580628" target="_blank" class="px-2 py-0.5 rounded bg-blue-500/15 hover:bg-blue-500/30 text-blue-300 border border-blue-500/30 text-[10px] font-bold inline-flex items-center space-x-1 transition" title="Open Live Facebook Page">
-                <i class="fa-brands fa-facebook"></i>
-                <span>FB ↗</span>
-              </a>
-              <a href="https://www.instagram.com/lexatripjaisalmer/" target="_blank" class="px-2 py-0.5 rounded bg-pink-500/15 hover:bg-pink-500/30 text-pink-300 border border-pink-500/30 text-[10px] font-bold inline-flex items-center space-x-1 transition" title="Open Live Instagram">
-                <i class="fa-brands fa-instagram"></i>
-                <span>IG ↗</span>
-              </a>
-              <a href="https://t.me/lexatripjaisalmer" target="_blank" class="px-2 py-0.5 rounded bg-sky-500/15 hover:bg-sky-500/30 text-sky-300 border border-sky-500/30 text-[10px] font-bold inline-flex items-center space-x-1 transition" title="Open Telegram Channel">
-                <i class="fa-brands fa-telegram"></i>
-                <span>TG ↗</span>
-              </a>
-              <a href="https://www.pinterest.com/lexatripjaisalmer/" target="_blank" class="px-2 py-0.5 rounded bg-rose-500/15 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 text-[10px] font-bold inline-flex items-center space-x-1 transition" title="Open Pinterest">
-                <i class="fa-brands fa-pinterest"></i>
-                <span>Pin ↗</span>
-              </a>
-            </div>
-          `}
+        <td class="px-4 py-3 font-medium text-gray-200 max-w-xs">
+          <div class="truncate">${escapeHtml(item.title)}</div>
+          ${inlineErrorHtml}
         </td>
+        <td class="px-4 py-3 whitespace-nowrap">${targets}</td>
+        <td class="px-4 py-3 text-emerald-400 font-mono text-[10px] whitespace-nowrap">${spacingText}</td>
+        <td class="px-4 py-3 whitespace-nowrap">${statusBadge}</td>
+        <td class="px-4 py-3 text-right whitespace-nowrap space-x-1.5">${actionHtml}</td>
       `;
       tbody.appendChild(tr);
     });
+
+    window._queueCache = queue;
   } catch (err) {
     console.error('Error loading queue:', err);
   }
@@ -1885,6 +2057,22 @@ async function refreshLiveTrackerHUD() {
     const pubEl = document.getElementById('hud-published-count');
     if (pubEl) pubEl.textContent = data.publishedCount || 0;
 
+    const healthEl = document.getElementById('hud-health-score');
+    const healthSubEl = document.getElementById('hud-health-sub') || document.getElementById('hud-health-subtext');
+    if (healthEl) {
+      healthEl.textContent = `${data.healthScore ?? 100}%`;
+      if (data.healthScore < 75) {
+        healthEl.className = 'text-xl font-extrabold text-rose-400 mt-0.5';
+      } else if (data.healthScore < 95) {
+        healthEl.className = 'text-xl font-extrabold text-amber-400 mt-0.5';
+      } else {
+        healthEl.className = 'text-xl font-extrabold text-emerald-300 mt-0.5';
+      }
+    }
+    if (healthSubEl) {
+      healthSubEl.textContent = data.healthSubtext || (data.failedCount > 0 ? `⚠️ ${data.failedCount} टास्क विफल` : '🛡️ 0 कम्युनिटी स्ट्राइक');
+    }
+
     // Next post spotlight
     const nextTitle = document.getElementById('hud-next-post-title');
     const nextTime = document.getElementById('hud-next-post-time');
@@ -1935,16 +2123,34 @@ async function refreshLiveTrackerHUD() {
 
       grid.innerHTML = Object.entries(data.channelBreakdown).map(([key, info]) => {
         const ic = icons[key] || { icon: 'fa-share-nodes', color: 'text-gray-400' };
-        const statusBadge = info.live > 0 ? `<span class="text-emerald-400 font-bold">${info.live} Live</span>` : `<span class="text-amber-400 font-semibold">${info.queued} Queued</span>`;
+
+        let statusBadge = '';
+        let dotColor = 'bg-gray-600';
+
+        if (info.failed > 0) {
+          dotColor = 'bg-rose-500 shadow-[0_0_8px_#f43f5e]';
+          statusBadge = `<span class="text-rose-400 font-bold">${info.failed} Failed</span>`;
+        } else if (info.live > 0) {
+          dotColor = 'bg-emerald-400 shadow-[0_0_8px_#34d399]';
+          statusBadge = `<span class="text-emerald-400 font-bold">${info.live} Live</span>`;
+        } else if (info.queued > 0) {
+          dotColor = 'bg-amber-400 shadow-[0_0_6px_#f59e0b]';
+          statusBadge = `<span class="text-amber-400 font-semibold">${info.queued} Queued</span>`;
+        } else {
+          dotColor = info.configured ? 'bg-sky-400/50' : 'bg-gray-600';
+          statusBadge = `<span class="text-gray-500 font-medium">${info.configured ? 'Ready' : 'Offline'}</span>`;
+        }
+
         return `
           <div class="p-2.5 rounded-xl bg-white/[0.03] border border-white/5 flex flex-col justify-between space-y-1">
             <div class="flex items-center justify-between">
-              <span class="font-bold text-white flex items-center space-x-1.5">
+              <span class="font-bold text-white flex items-center space-x-1.5 truncate">
                 <i class="fa-brands ${ic.icon} ${ic.color} text-xs"></i>
-                <span class="text-[11px] truncate">${info.name}</span>
+                <span class="text-[11px] truncate">${escapeHtml(info.name)}</span>
               </span>
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+              <span class="w-1.5 h-1.5 rounded-full ${dotColor}"></span>
             </div>
+            <div class="text-[10px] text-gray-400 font-mono truncate">${escapeHtml(info.handle || '')}</div>
             <div class="flex items-center justify-between text-[10px] pt-1 border-t border-white/5">
               ${statusBadge}
               <span class="text-gray-400 font-mono">${info.queued} कतार</span>
@@ -2041,6 +2247,17 @@ async function toggleSchedulerActive() {
   }
 }
 
+// Helper for XSS-safe text rendering
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 // --- LIVE DISPATCH RESULTS MODAL ---
 function openDispatchModal(item, results = []) {
   const modal = document.getElementById('dispatch-modal');
@@ -2050,20 +2267,49 @@ function openDispatchModal(item, results = []) {
   if (titleEl) titleEl.textContent = item?.title || 'Social Post';
   if (listEl) {
     listEl.innerHTML = '';
-    const targets = item?.targets || ['instagram', 'facebook', 'linkedin', 'pinterest'];
-    targets.forEach(t => {
+    const itemTargets = item?.targets && item.targets.length > 0 ? item.targets : ['instagram', 'facebook', 'linkedin', 'pinterest'];
+    const resultPlatforms = results && results.length > 0 ? results.map(r => r.platform) : [];
+    const allPlatforms = Array.from(new Set([...itemTargets, ...resultPlatforms]));
+
+    allPlatforms.forEach(t => {
       const match = results.find(r => r.platform === t);
-      const isSuccess = !match || match.status === 'published' || match.status === 'success';
+      const isSuccess = !!match && (match.status === 'published' || match.status === 'success');
+      const isFailed = !!match && (match.status === 'failed' || match.status === 'error');
+      const isSkipped = !match || match.status === 'skipped' || match.status === 'omitted';
+
+      let dotClass = 'bg-gray-500';
+      let statusHtml = '';
+      let errorHtml = '';
+
+      const postUrl = match?.postUrl || match?.details?.postUrl;
+
+      if (isSuccess) {
+        dotClass = 'bg-emerald-400';
+        const linkHtml = postUrl 
+          ? `<a href="${encodeURI(postUrl)}" target="_blank" class="text-emerald-300 underline ml-1.5 hover:text-emerald-100 font-bold" title="Open live post">View Post ↗</a>` 
+          : '';
+        statusHtml = `<span class="text-emerald-400 font-semibold text-[11px]">✅ Live Dispatched ${linkHtml}</span>`;
+      } else if (isFailed) {
+        dotClass = 'bg-rose-400';
+        const rawErr = match.error || (typeof match.details === 'string' ? match.details : (match.details?.error || match.details?.message || 'Platform API Error'));
+        statusHtml = `<span class="text-rose-400 font-semibold text-[11px]">❌ Failed</span>`;
+        errorHtml = `<div class="mt-1 p-2 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-300 font-mono text-[10px] break-words leading-tight">${escapeHtml(rawErr)}</div>`;
+      } else {
+        dotClass = 'bg-gray-500';
+        statusHtml = `<span class="text-gray-400 font-medium text-[11px]">⏭️ Skipped / Not Dispatched</span>`;
+      }
+
       const row = document.createElement('div');
-      row.className = 'p-2.5 rounded-xl bg-white/[0.03] border border-apple-border flex items-center justify-between text-xs';
+      row.className = 'p-2.5 rounded-xl bg-white/[0.03] border border-apple-border flex flex-col space-y-1 text-xs';
       row.innerHTML = `
-        <div class="flex items-center space-x-2">
-          <span class="w-2 h-2 rounded-full ${isSuccess ? 'bg-emerald-400' : 'bg-rose-400'}"></span>
-          <span class="font-bold text-white capitalize">${t}</span>
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-2">
+            <span class="w-2 h-2 rounded-full ${dotClass}"></span>
+            <span class="font-bold text-white capitalize">${escapeHtml(t)}</span>
+          </div>
+          <div>${statusHtml}</div>
         </div>
-        <span class="${isSuccess ? 'text-emerald-400 font-semibold' : 'text-rose-400'} text-[11px]">
-          ${isSuccess ? '✅ Live Dispatched' : 'Failed'}
-        </span>
+        ${errorHtml}
       `;
       listEl.appendChild(row);
     });
@@ -2602,23 +2848,23 @@ async function loadCRMData() {
 
               <!-- Clickable Direct Links for this post -->
               <div class="flex items-center space-x-1.5 flex-wrap gap-1">
-                <a href="${item.liveLinks?.facebook || 'https://www.facebook.com/profile.php?id=61594513580628'}" target="_blank" class="px-2.5 py-1 rounded-lg bg-blue-500/15 hover:bg-blue-500/30 text-blue-300 border border-blue-500/30 text-[11px] font-semibold inline-flex items-center space-x-1 transition" title="Open Live Facebook Page">
+                <a href="${item.liveLinks?.facebook || currentDestination?.channels?.facebook?.handle || 'https://www.facebook.com/profile.php?id=61594513580628'}" target="_blank" class="px-2.5 py-1 rounded-lg bg-blue-500/15 hover:bg-blue-500/30 text-blue-300 border border-blue-500/30 text-[11px] font-semibold inline-flex items-center space-x-1 transition" title="Open Live Facebook Page">
                   <i class="fa-brands fa-facebook"></i>
                   <span>FB ↗</span>
                 </a>
-                <a href="${item.liveLinks?.instagram || 'https://www.instagram.com/lexatripjaisalmer/'}" target="_blank" class="px-2.5 py-1 rounded-lg bg-pink-500/15 hover:bg-pink-500/30 text-pink-300 border border-pink-500/30 text-[11px] font-semibold inline-flex items-center space-x-1 transition" title="Open Live Instagram Profile">
+                <a href="${item.liveLinks?.instagram || (currentDestination?.channels?.instagram?.handle ? 'https://www.instagram.com/' + currentDestination.channels.instagram.handle.replace(/^@/, '') + '/' : 'https://www.instagram.com/lexatripjaisalmer/')}" target="_blank" class="px-2.5 py-1 rounded-lg bg-pink-500/15 hover:bg-pink-500/30 text-pink-300 border border-pink-500/30 text-[11px] font-semibold inline-flex items-center space-x-1 transition" title="Open Live Instagram Profile">
                   <i class="fa-brands fa-instagram"></i>
                   <span>IG ↗</span>
                 </a>
-                <a href="${item.liveLinks?.telegram || 'https://t.me/lexatripjaisalmer'}" target="_blank" class="px-2.5 py-1 rounded-lg bg-sky-500/15 hover:bg-sky-500/30 text-sky-300 border border-sky-500/30 text-[11px] font-semibold inline-flex items-center space-x-1 transition" title="Open Telegram Channel">
+                <a href="${item.liveLinks?.telegram || (currentDestination?.telegram?.channelUsername ? 'https://t.me/' + currentDestination.telegram.channelUsername.replace(/^@/, '') : 'https://t.me/lexatripjaisalmer')}" target="_blank" class="px-2.5 py-1 rounded-lg bg-sky-500/15 hover:bg-sky-500/30 text-sky-300 border border-sky-500/30 text-[11px] font-semibold inline-flex items-center space-x-1 transition" title="Open Telegram Channel">
                   <i class="fa-brands fa-telegram"></i>
                   <span>TG ↗</span>
                 </a>
-                <a href="${item.liveLinks?.pinterest || 'https://www.pinterest.com/lexatripjaisalmer/'}" target="_blank" class="px-2.5 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 text-[11px] font-semibold inline-flex items-center space-x-1 transition" title="Open Pinterest Board">
+                <a href="${item.liveLinks?.pinterest || (currentDestination?.channels?.pinterest?.handle ? 'https://' + currentDestination.channels.pinterest.handle.replace(/^https?:\/\//, '') : 'https://www.pinterest.com/lexatripjaisalmer/')}" target="_blank" class="px-2.5 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 text-[11px] font-semibold inline-flex items-center space-x-1 transition" title="Open Pinterest Board">
                   <i class="fa-brands fa-pinterest"></i>
                   <span>Pin ↗</span>
                 </a>
-                <a href="${item.liveLinks?.linkedin || 'https://www.linkedin.com/company/144145872/'}" target="_blank" class="px-2.5 py-1 rounded-lg bg-indigo-500/15 hover:bg-indigo-500/30 text-indigo-300 border border-indigo-500/30 text-[11px] font-semibold inline-flex items-center space-x-1 transition" title="Open LinkedIn Page">
+                <a href="${item.liveLinks?.linkedin || currentDestination?.channels?.linkedin?.handle || 'https://www.linkedin.com/company/144145872/'}" target="_blank" class="px-2.5 py-1 rounded-lg bg-indigo-500/15 hover:bg-indigo-500/30 text-indigo-300 border border-indigo-500/30 text-[11px] font-semibold inline-flex items-center space-x-1 transition" title="Open LinkedIn Page">
                   <i class="fa-brands fa-linkedin"></i>
                   <span>IN ↗</span>
                 </a>
@@ -3441,23 +3687,30 @@ async function loadCRMData() {
 
     if (dispatchesContainer) {
       if (published.length === 0) {
+        const chs = currentDestination?.channels || {};
+        const fbUrl = chs.facebook?.handle || 'https://www.facebook.com/profile.php?id=61594513580628';
+        const igHandle = chs.instagram?.handle ? chs.instagram.handle.replace(/^@/, '') : 'lexatripjaisalmer';
+        const tgHandle = currentDestination?.telegram?.channelUsername ? currentDestination.telegram.channelUsername.replace(/^@/, '') : 'lexatripjaisalmer';
+        const pinUrl = chs.pinterest?.handle ? `https://${chs.pinterest.handle.replace(/^https?:\/\//, '')}` : 'https://www.pinterest.com/lexatripjaisalmer/';
+        const liUrl = chs.linkedin?.handle || 'https://www.linkedin.com/company/144145872/';
+
         dispatchesContainer.innerHTML = `
           <div class="p-4 rounded-xl bg-white/[0.02] border border-white/5 space-y-2">
-            <p class="text-gray-300 font-bold">✅ हालिया पब्लिश की गई 6 पोस्ट्स व 6 रील्स के लाइव वेरिफिकेशन लिंक्स:</p>
+            <p class="text-gray-300 font-bold">✅ हालिया पब्लिश की गई पोस्ट्स व रील्स के लाइव वेरिफिकेशन लिंक्स:</p>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
-              <a href="https://www.facebook.com/profile.php?id=61594513580628" target="_blank" class="p-2 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 flex items-center space-x-1.5 transition">
+              <a href="${fbUrl}" target="_blank" class="p-2 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 flex items-center space-x-1.5 transition">
                 <i class="fa-brands fa-facebook"></i> <span>Facebook ↗</span>
               </a>
-              <a href="https://www.instagram.com/lexatripjaisalmer/" target="_blank" class="p-2 rounded-lg bg-pink-500/10 hover:bg-pink-500/20 text-pink-300 flex items-center space-x-1.5 transition">
+              <a href="https://www.instagram.com/${igHandle}/" target="_blank" class="p-2 rounded-lg bg-pink-500/10 hover:bg-pink-500/20 text-pink-300 flex items-center space-x-1.5 transition">
                 <i class="fa-brands fa-instagram"></i> <span>Instagram ↗</span>
               </a>
-              <a href="https://t.me/lexatripjaisalmer" target="_blank" class="p-2 rounded-lg bg-[#229ED9]/10 hover:bg-[#229ED9]/20 text-[#229ED9] flex items-center space-x-1.5 transition">
+              <a href="https://t.me/${tgHandle}" target="_blank" class="p-2 rounded-lg bg-[#229ED9]/10 hover:bg-[#229ED9]/20 text-[#229ED9] flex items-center space-x-1.5 transition">
                 <i class="fa-brands fa-telegram"></i> <span>Telegram Channel ↗</span>
               </a>
-              <a href="https://www.pinterest.com/lexatripjaisalmer/" target="_blank" class="p-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-300 flex items-center space-x-1.5 transition">
+              <a href="${pinUrl}" target="_blank" class="p-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-300 flex items-center space-x-1.5 transition">
                 <i class="fa-brands fa-pinterest"></i> <span>Pinterest ↗</span>
               </a>
-              <a href="https://www.linkedin.com/company/144145872/" target="_blank" class="p-2 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 flex items-center space-x-1.5 transition">
+              <a href="${liUrl}" target="_blank" class="p-2 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 flex items-center space-x-1.5 transition">
                 <i class="fa-brands fa-linkedin"></i> <span>LinkedIn ↗</span>
               </a>
               <a href="https://bookings.lexatrip.com/" target="_blank" class="p-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 flex items-center space-x-1.5 transition">

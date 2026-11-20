@@ -7,6 +7,7 @@ const videoEngine = require('./videoEngine');
 const seoGenerator = require('./seoGenerator');
 const scheduler = require('./scheduler');
 const telegramNotifier = require('./telegramNotifier');
+const channelTester = require('./channelTester');
 
 class NativeTelegramBot {
   constructor(token) {
@@ -392,6 +393,69 @@ class TelegramBotService {
     };
   }
 
+  /**
+   * 🛡️ Genuine Channel Health Audit via external API verification
+   */
+  async generateHealthReport(dest) {
+    if (!dest) return '❌ डेस्टिनेशन उपलब्ध नहीं है।';
+
+    const channelsToCheck = [
+      'facebook', 'instagram', 'linkedin', 'pinterest',
+      'youtube', 'blogger', 'threads', 'reddit', 'quora'
+    ];
+
+    const results = await Promise.allSettled(channelsToCheck.map(async (platform) => {
+      const ch = dest.channels?.[platform];
+      if (!ch || ch.enabled === false) {
+        return { platform, status: 'disabled' };
+      }
+      if (!ch.credentials || Object.keys(ch.credentials).length === 0) {
+        return { platform, status: 'unconfigured' };
+      }
+      try {
+        const testRes = await channelTester.testChannel(platform, ch.credentials);
+        return { platform, status: 'ok', info: testRes.accountName || testRes.handle || 'Verified' };
+      } catch (err) {
+        return { platform, status: 'error', error: err.message };
+      }
+    }));
+
+    let connectedCount = 0;
+    let failedCount = 0;
+    let report = `🛡️ *[चैनल हेल्थ व API ऑडिट रिपोर्ट]*\n\n` +
+      `📍 *डेस्टिनेशन:* ${dest.name}\n` +
+      `🕒 *ऑडिट समय:* ${new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}\n\n`;
+
+    results.forEach((r, idx) => {
+      const p = channelsToCheck[idx];
+      const icon = telegramNotifier.getPlatformIcon(p);
+      const name = telegramNotifier.formatPlatformName(p);
+      const data = r.value;
+
+      if (!data || data.status === 'disabled') {
+        report += `• ${icon} *${name}:* ⚪ निष्क्रिय (Disabled)\n`;
+      } else if (data.status === 'unconfigured') {
+        report += `• ${icon} *${name}:* 🟡 अनकॉन्फ़िगर्ड (No credentials)\n`;
+      } else if (data.status === 'ok') {
+        connectedCount++;
+        report += `• ${icon} *${name}:* 🟢 सक्रिय (${data.info})\n`;
+      } else {
+        failedCount++;
+        const shortErr = (data.error || 'Connection Failed').slice(0, 55);
+        report += `• ${icon} *${name}:* 🔴 विफल (\`${shortErr}\`)\n`;
+      }
+    });
+
+    report += `\n📊 *समरी:* ${connectedCount} सक्रिय | ${failedCount} विफल\n`;
+    if (failedCount > 0) {
+      report += `⚠️ कुछ चैनल्स के टोकन एक्सपायर या गलत हैं। डैशबोर्ड के 🔐 API वॉल्ट से अपडेट करें।\n`;
+    } else {
+      report += `✅ सभी कॉन्फ़िगर्ड चैनल्स का लाइव API टेस्ट सफल रहा।\n`;
+    }
+    report += `\n🌐 *लाइव डैशबोर्ड:* https://lexa-trip-automation.onrender.com`;
+    return report;
+  }
+
   // --- 📋 DAILY EXECUTIVE REPORT GENERATOR ---
   async sendDailyExecutiveReport(targetChatId = null) {
     const destinations = db.getDestinations();
@@ -418,7 +482,7 @@ class TelegramBotService {
       reportMsg += `${i + 1}. *${d.name.split('(')[0].trim()}:* ${dPub.length}/${dQueue.length} पोस्ट्स पब्लिश्ड\n`;
     });
 
-    reportMsg += `\n🛡️ *सिक्योरिटी व चैनल हेल्थ:* 100% सुरक्षित (0 कम्युनिटी स्ट्राइक)\n` +
+    reportMsg += `\n🛡️ *चैनल स्टेटस:* लाइव API टोकन ऑडिट हेतु /health भेजें\n` +
       `🌐 *लाइव वेब डैशबोर्ड:* https://lexa-trip-automation.onrender.com`;
 
     const adminChatId = targetChatId || settings.telegram?.allowedChatId;
@@ -492,12 +556,14 @@ class TelegramBotService {
       const destQueue = queue.filter(q => q.destinationId === (targetDest?.id || 'dest_jaisalmer'));
       const pending = destQueue.filter(q => q.status === 'queued');
       const completed = destQueue.filter(q => q.status === 'published' || q.status === 'completed');
+      const failed = destQueue.filter(q => q.status === 'failed' || q.status === 'partial_or_failed');
 
       let reply = `📊 *[लाइव स्टेटस & ट्रैकिंग]* 🐪\n\n` +
         `📍 *सक्रिय डेस्टिनेशन:* *${targetDest?.name || 'Lexa Trip'}*\n` +
         `✅ *पब्लिश्ड आज:* ${completed.length} पोस्ट्स\n` +
         `⏳ *कतार में शेड्यूल्ड:* ${pending.length} पोस्ट्स\n` +
-        `🛡️ *चैनल सेफ्टी हेल्थ:* 100% सुरक्षित (0 स्ट्राइक)\n`;
+        (failed.length > 0 ? `⚠️ *विफल / आंशिक:* ${failed.length} पोस्ट्स (डैशबोर्ड देखें)\n` : '') +
+        `🛡️ *चैनल हेल्थ:* लाइव ऑडिट के लिए /health भेजें\n`;
 
       if (pending.length > 0) {
         reply += `\n*⏰ आगामी शेड्यूल्ड पोस्ट्स:*\n`;
@@ -509,14 +575,7 @@ class TelegramBotService {
         reply += `\n✨ *अभी कोई पेंडिंग पोस्ट नहीं है। नया बैच भेजने के लिए 5 फ़ोटोज़ + कंबाइंड SEO भेजें।*`;
       }
 
-      reply += `\n\n🔗 *वेरिफाइड लाइव चैनल्स (क्लिक करके देखें):*\n` +
-        `• [📘 Facebook Page](https://www.facebook.com/profile.php?id=61594513580628)\n` +
-        `• [📸 Instagram (@lexatripjaisalmer)](https://www.instagram.com/lexatripjaisalmer/)\n` +
-        `• [💼 LinkedIn Company](https://www.linkedin.com/company/144145872/)\n` +
-        `• [📢 Telegram Channel](https://t.me/lexatripjaisalmer)\n` +
-        `• [📌 Pinterest Board](https://www.pinterest.com/lexatripjaisalmer/)\n` +
-        `• [🌐 Bookings Portal](https://bookings.lexatrip.com/)\n` +
-        `• [💬 WhatsApp Support](https://wa.me/919079854982)\n\n` +
+      reply += `${telegramNotifier.getVerifiedLinks(targetDest)}\n\n` +
         `🌐 *लाइव वेब डैशबोर्ड:* https://lexa-trip-automation.onrender.com`;
 
       await this.bot.sendMessage(chatId, reply, {
@@ -526,6 +585,13 @@ class TelegramBotService {
     };
 
     this.bot.onText(/\/status|\/report|\/live/, (msg) => renderStatus(msg.chat.id));
+
+    this.bot.onText(/\/health/, async (msg) => {
+      const dest = this.resolveDestination(msg);
+      await this.bot.sendMessage(msg.chat.id, `⏳ *[चैनल हेल्थ ऑडिट]* लाइव API टोकन्स की जांच हो रही है...`, { parse_mode: 'Markdown' });
+      const healthMsg = await this.generateHealthReport(dest);
+      await this.bot.sendMessage(msg.chat.id, healthMsg, { parse_mode: 'Markdown', reply_markup: this.buildDashboardKeyboard(dest.id) });
+    });
 
     // 3. Reset command
     this.bot.onText(/\/reset/, (msg) => {
@@ -587,17 +653,9 @@ class TelegramBotService {
         await this.sendDailyExecutiveReport(chatId);
       } else if (text === '🛡️ चैनल हेल्थ') {
         const dest = this.resolveDestination(msg);
-        let healthMsg = `🛡️ *[चैनल हेल्थ व पॉलिसी सेफ्टी रिपोर्ट]*\n\n` +
-          `📍 *डेस्टिनेशन:* ${dest.name}\n` +
-          `📸 *Instagram (@lexatripjaisalmer):* 🟢 Live Official\n` +
-          `📘 *Facebook Page:* 🟢 Lifetime Token Linked\n` +
-          `💼 *LinkedIn:* 🟢 Organization Urn Active\n` +
-          `📌 *Pinterest:* 🟢 Board Connected\n` +
-          `✍️ *Blogger:* 🟢 Live Connected\n` +
-          `🎬 *YouTube Shorts:* 🟢 API Active\n` +
-          `🤖 *Reddit & Quora Hub:* 🟢 AI Q&A Engine 100% Safe\n\n` +
-          `✅ *स्टेटस: 0 कम्युनिटी स्ट्राइक · 100% पॉलिसी सुरक्षित*`;
-        await this.bot.sendMessage(chatId, healthMsg, { parse_mode: 'Markdown', reply_markup: this.buildDashboardKeyboard() });
+        await this.bot.sendMessage(chatId, `⏳ *[चैनल हेल्थ ऑडिट]* लाइव API टोकन्स की जांच हो रही है...`, { parse_mode: 'Markdown' });
+        const healthMsg = await this.generateHealthReport(dest);
+        await this.bot.sendMessage(chatId, healthMsg, { parse_mode: 'Markdown', reply_markup: this.buildDashboardKeyboard(dest.id) });
       } else if (text === '🐪 डेस्टिनेशन बदलें') {
         await this.bot.sendMessage(chatId, `📍 *कृपया डेस्टिनेशन चुनें:*`, {
           parse_mode: 'Markdown',
@@ -628,59 +686,50 @@ class TelegramBotService {
         await renderStatus(chatId);
       } else if (data === 'action_schedule') {
         await this.bot.answerCallbackQuery(cbQuery.id, '📅 शेड्यूल लोड हो रहा है...');
+        const session = this.getSession(chatId);
+        const sessionDest = db.getDestination(session.destinationId) || db.getDestinations()[0];
         const queue = db.getQueue();
-        const pending = queue.filter(q => q.status === 'queued');
-        let scheduleMsg = `📅 *[आज का लाइव शेड्यूल & कतार]* 🐪\n\n`;
+        const pending = queue.filter(q => q.destinationId === sessionDest.id && q.status === 'queued');
+        let scheduleMsg = `📅 *[आज का लाइव शेड्यूल & कतार]* 🐪\n\n` +
+          `📍 *डेस्टिनेशन:* ${sessionDest.name}\n\n`;
         if (pending.length === 0) {
-          scheduleMsg += `आज की सभी पोस्ट्स पब्लिश हो चुकी हैं।`;
+          scheduleMsg += `आज की सभी पोस्ट्स पब्लिश हो चुकी हैं या कतार में कोई पोस्ट नहीं है।\n`;
         } else {
           pending.forEach((item, i) => {
             const time = new Date(item.scheduledTime).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
             scheduleMsg += `${i + 1}. *${item.title.slice(0, 35)}...*\n   ⏰ समय: *${time}* | चैनल्स: ${(item.targets || []).join(', ')}\n\n`;
           });
-          scheduleMsg += `🔗 *लाइव वेरिफिकेशन लिंक्स:*\n` +
-            `• [📘 Facebook](https://www.facebook.com/profile.php?id=61594513580628) | [📸 Instagram](https://www.instagram.com/lexatripjaisalmer/)\n` +
-            `• [📢 Telegram Channel](https://t.me/lexatripjaisalmer) | [🌐 Bookings](https://bookings.lexatrip.com/)\n\n` +
-            `🌐 *लाइव डैशबोर्ड:* https://lexa-trip-automation.onrender.com`;
         }
-        await this.bot.sendMessage(chatId, scheduleMsg, { parse_mode: 'Markdown', reply_markup: this.buildDashboardKeyboard() });
+        scheduleMsg += `${telegramNotifier.getVerifiedLinks(sessionDest)}\n\n` +
+          `🌐 *लाइव डैशबोर्ड:* https://lexa-trip-automation.onrender.com`;
+        await this.bot.sendMessage(chatId, scheduleMsg, { parse_mode: 'Markdown', reply_markup: this.buildDashboardKeyboard(sessionDest.id) });
       } else if (data === 'action_archive') {
         await this.bot.answerCallbackQuery(cbQuery.id, '✅ पब्लिश्ड आर्काइव...');
+        const session = this.getSession(chatId);
+        const sessionDest = db.getDestination(session.destinationId) || db.getDestinations()[0];
         const queue = db.getQueue();
-        const published = queue.filter(q => q.status === 'published' || q.status === 'completed').slice(-6);
-        let archiveMsg = `✅ *[हाल ही में पब्लिश की गई पोस्ट्स व लाइव लिंक्स]*\n\n`;
+        const published = queue.filter(q => q.destinationId === sessionDest.id && (q.status === 'published' || q.status === 'completed')).slice(-6);
+        let archiveMsg = `✅ *[हाल ही में पब्लिश की गई पोस्ट्स व लाइव लिंक्स]*\n\n` +
+          `📍 *डेस्टिनेशन:* ${sessionDest.name}\n\n`;
         if (published.length === 0) {
-          archiveMsg += `आज अभी तक कोई पोस्ट पब्लिश नहीं हुई है।`;
+          archiveMsg += `आज अभी तक कोई पोस्ट पब्लिश नहीं हुई है।\n`;
         } else {
           published.forEach((item, i) => {
             archiveMsg += `${i + 1}. *${item.title.slice(0, 35)}...*\n   ✅ स्टेटस: पब्लिश्ड | प्रकार: ${item.itemType.toUpperCase()}\n`;
           });
-          archiveMsg += `\n🔗 *वेरिफिकेशन लिंक्स (सीधे क्लिक करें):*\n` +
-            `• [📘 Facebook Page](https://www.facebook.com/profile.php?id=61594513580628)\n` +
-            `• [📸 Instagram Profile](https://www.instagram.com/lexatripjaisalmer/)\n` +
-            `• [📢 Telegram Channel](https://t.me/lexatripjaisalmer)\n` +
-            `• [📌 Pinterest Board](https://www.pinterest.com/lexatripjaisalmer/)\n` +
-            `• [💼 LinkedIn Company](https://www.linkedin.com/company/144145872/)\n` +
-            `• [🌐 Bookings Portal](https://bookings.lexatrip.com/)\n` +
-            `• [💬 WhatsApp Chat](https://wa.me/919079854982)\n\n` +
-            `🌐 *लाइव डैशबोर्ड:* https://lexa-trip-automation.onrender.com`;
         }
-        await this.bot.sendMessage(chatId, archiveMsg, { parse_mode: 'Markdown', reply_markup: this.buildDashboardKeyboard() });
+        archiveMsg += `${telegramNotifier.getVerifiedLinks(sessionDest)}\n\n` +
+          `🌐 *लाइव डैशबोर्ड:* https://lexa-trip-automation.onrender.com`;
+        await this.bot.sendMessage(chatId, archiveMsg, { parse_mode: 'Markdown', reply_markup: this.buildDashboardKeyboard(sessionDest.id) });
       } else if (data === 'action_daily_report') {
         await this.bot.answerCallbackQuery(cbQuery.id, '📋 डेली रिपोर्ट तैयार की जा रही है...');
         await this.sendDailyExecutiveReport(chatId);
       } else if (data === 'action_health') {
-        await this.bot.answerCallbackQuery(cbQuery.id, '🛡️ हेल्थ चेक...');
-        const healthMsg = `🛡️ *[चैनल हेल्थ व पॉलिसी सेफ्टी ऑडिट]*\n\n` +
-          `• *Facebook / Meta:* 🟢 Lifetime Token Active\n` +
-          `• *Instagram (@lexatripjaisalmer):* 🟢 Active\n` +
-          `• *LinkedIn:* 🟢 Valid\n` +
-          `• *Pinterest:* 🟢 Valid\n` +
-          `• *YouTube:* 🟢 Valid\n` +
-          `• *Blogger:* 🟢 Valid\n` +
-          `• *Reddit & Quora Hub:* 🟢 AI Drip Safe\n\n` +
-          `✅ *स्टेटस: 0 कम्युनिटी स्ट्राइक · 100% पॉलिसी सुरक्षित*`;
-        await this.bot.sendMessage(chatId, healthMsg, { parse_mode: 'Markdown', reply_markup: this.buildDashboardKeyboard() });
+        await this.bot.answerCallbackQuery(cbQuery.id, '🛡️ लाइव हेल्थ चेक शुरू...');
+        const session = this.getSession(chatId);
+        const dest = db.getDestination(session.destinationId) || this.resolveDestination({ chat: { id: chatId } });
+        const healthMsg = await this.generateHealthReport(dest);
+        await this.bot.sendMessage(chatId, healthMsg, { parse_mode: 'Markdown', reply_markup: this.buildDashboardKeyboard(dest.id) });
       } else if (data === 'action_refresh') {
         await this.bot.answerCallbackQuery(cbQuery.id, '🔄 रीफ्रेश पूर्ण!');
         await renderStatus(chatId);
@@ -787,9 +836,18 @@ class TelegramBotService {
         };
 
         db.addToQueue(queueRecord);
-        await scheduler.publishItemNow(queueRecord.id);
+        let postResult = null;
+        try {
+          postResult = await scheduler.publishItemNow(queueRecord.id);
+        } catch (pErr) {
+          postResult = {
+            status: 'failed',
+            publishResults: [{ platform: 'system', status: 'failed', error: pErr.message }]
+          };
+        }
 
         // 5. Also queue and dispatch Reel (9:16) if generated
+        let reelResult = null;
         if (reelGenerated) {
           const reelRecord = {
             id: `q_reel_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
@@ -807,25 +865,96 @@ class TelegramBotService {
             createdAt: new Date().toISOString()
           };
           db.addToQueue(reelRecord);
-          await scheduler.publishItemNow(reelRecord.id);
+          try {
+            reelResult = await scheduler.publishItemNow(reelRecord.id);
+          } catch (rErr) {
+            reelResult = {
+              status: 'failed',
+              publishResults: [{ platform: 'system', status: 'failed', error: rErr.message }]
+            };
+          }
         }
 
-        // 6. Send Confirmation with Direct Live Verification Links
-        const doneMsg = `✅ *[लाइव पब्लिशिंग संपन्न]* 🐪\n\n` +
-          `📝 *पोस्ट:* ${parsedSeo.title} (4:5 HD)\n` +
-          (reelGenerated ? `🎬 *रील:* 9:16 अल्ट्रा HD मोशन रील पब्लिश्ड\n` : '') +
-          `🕒 *समय:* ${new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}\n\n` +
-          `🔗 *लाइव वेरिफिकेशन लिंक्स (सीधे क्लिक करें):*\n` +
-          `• [📘 Facebook Page](https://www.facebook.com/profile.php?id=61594513580628)\n` +
-          `• [📸 Instagram Profile](https://www.instagram.com/lexatripjaisalmer/)\n` +
-          `• [📢 Telegram Channel](https://t.me/lexatripjaisalmer)\n` +
-          `• [📌 Pinterest Board](https://www.pinterest.com/lexatripjaisalmer/)\n` +
-          `• [💼 LinkedIn Company](https://www.linkedin.com/company/144145872/)\n` +
-          `• [🌐 Bookings Portal](https://bookings.lexatrip.com/)\n` +
-          `• [💬 WhatsApp Support](https://wa.me/919079854982)\n\n` +
-          `🌐 *लाइव डैशबोर्ड पर स्थिति देखें:* https://lexa-trip-automation.onrender.com`;
+        // 6. Inspect publish results & deliver truthful report
+        const allTargetResults = [
+          ...(postResult?.publishResults || []),
+          ...(reelResult?.publishResults || [])
+        ];
+        const publishedTargets = allTargetResults.filter(r => r.status === 'published' || r.status === 'success');
+        const failedTargets = allTargetResults.filter(r => r.status === 'failed');
+        const skippedTargets = allTargetResults.filter(r => r.status === 'skipped');
 
-        await this.sendDualMessage(chatId, doneMsg, {
+        let reportMsg = '';
+        if (publishedTargets.length > 0 && failedTargets.length === 0) {
+          // 100% Genuine Success
+          reportMsg = `✅ *[लाइव पब्लिशिंग संपन्न]* 🐪\n\n` +
+            `📍 *डेस्टिनेशन:* ${dest.name}\n` +
+            `📝 *पोस्ट:* ${parsedSeo.title} (4:5 HD)\n` +
+            (reelGenerated ? `🎬 *रील:* 9:16 अल्ट्रा HD मोशन रील पब्लिश्ड\n` : '') +
+            `🕒 *समय:* ${new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}\n\n` +
+            `🔗 *वेरिफाइड लाइव पोस्ट लिंक्स (सीधे क्लिक करें):*\n`;
+
+          for (const r of publishedTargets) {
+            const icon = telegramNotifier.getPlatformIcon(r.platform);
+            const name = telegramNotifier.formatPlatformName(r.platform);
+            const postUrl = r.details?.postUrl || r.postUrl;
+            if (postUrl) {
+              reportMsg += `• [${icon} ${name} Live Post](${postUrl})\n`;
+            } else {
+              const chanUrl = telegramNotifier.getChannelUrl(dest, r.platform);
+              reportMsg += chanUrl ? `• [${icon} ${name} Profile](${chanUrl})\n` : `• ${icon} ${name}: लाइव पब्लिश संपन्न ✅\n`;
+            }
+          }
+        } else if (publishedTargets.length > 0 && failedTargets.length > 0) {
+          // Partial Success
+          reportMsg = `⚠️ *[आंशिक पब्लिशिंग चेतावनी — कुछ चैनल्स में विफलता]* 🐪\n\n` +
+            `📍 *डेस्टिनेशन:* ${dest.name}\n` +
+            `📝 *कंटेंट:* ${parsedSeo.title}\n` +
+            `🕒 *समय:* ${new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}\n\n` +
+            `*सफल चैनल्स:*\n`;
+
+          for (const r of publishedTargets) {
+            const icon = telegramNotifier.getPlatformIcon(r.platform);
+            const name = telegramNotifier.formatPlatformName(r.platform);
+            const postUrl = r.details?.postUrl || r.postUrl;
+            reportMsg += postUrl ? `• ✅ [${icon} ${name} Live Post](${postUrl})\n` : `• ✅ ${icon} ${name}: लाइव पब्लिश संपन्न\n`;
+          }
+
+          reportMsg += `\n*विफल चैनल्स (एरर विवरणी):*\n`;
+          for (const r of failedTargets) {
+            const icon = telegramNotifier.getPlatformIcon(r.platform);
+            const name = telegramNotifier.formatPlatformName(r.platform);
+            reportMsg += `• ❌ ${icon} ${name}: \`${r.error || 'अज्ञात त्रुटि'}\`\n`;
+          }
+
+          if (skippedTargets.length > 0) {
+            reportMsg += `\n*स्किप किए गए चैनल्स:*\n`;
+            for (const r of skippedTargets) {
+              const icon = telegramNotifier.getPlatformIcon(r.platform);
+              const name = telegramNotifier.formatPlatformName(r.platform);
+              reportMsg += `• ⏸️ ${icon} ${name}: ${r.reason || 'Skipped'}\n`;
+            }
+          }
+          reportMsg += `\n🛠️ *समाधान:* विफल चैनल्स के क्रेडेंशियल्स डैशबोर्ड से जांचें।\n`;
+        } else {
+          // Complete Failure
+          reportMsg = `🚨 *[पब्लिशिंग विफलता अलर्ट]* 🐪\n\n` +
+            `📍 *डेस्टिनेशन:* ${dest.name}\n` +
+            `📝 *कंटेंट:* ${parsedSeo.title}\n` +
+            `🕒 *समय:* ${new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}\n\n` +
+            `🛑 *सभी चैनल्स पर पब्लिशिंग विफल रही:*\n`;
+
+          for (const r of failedTargets) {
+            const icon = telegramNotifier.getPlatformIcon(r.platform);
+            const name = telegramNotifier.formatPlatformName(r.platform);
+            reportMsg += `• ❌ ${icon} ${name}: \`${r.error || 'अज्ञात विफलता'}\`\n`;
+          }
+          reportMsg += `\n⚠️ *कोई भी पोस्ट लाइव नहीं हुई।* कृपया डैशबोर्ड के 🔐 सीक्रेट API वॉल्ट से टोकन रीफ्रेश करें।\n`;
+        }
+
+        reportMsg += `\n🌐 *लाइव डैशबोर्ड:* https://lexa-trip-automation.onrender.com`;
+
+        await this.sendDualMessage(chatId, reportMsg, {
           parse_mode: 'Markdown',
           reply_markup: this.buildDashboardKeyboard(dest.id)
         });

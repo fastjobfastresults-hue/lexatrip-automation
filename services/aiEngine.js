@@ -56,6 +56,75 @@ class AIEngine {
   }
 
   /**
+   * Resilient JSON parser: strips markdown codeblocks, preambles/postambles,
+   * trailing commas, and handles malformed LLM responses safely.
+   */
+  safeParseAIJson(rawStr) {
+    if (!rawStr || typeof rawStr !== 'string') {
+      throw new Error('Empty AI response.');
+    }
+
+    let text = rawStr.trim();
+
+    // 1. Unwrap markdown code blocks (```json ... ``` or ``` ... ```)
+    const fenceMatch = text.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+    if (fenceMatch && fenceMatch[1]) {
+      text = fenceMatch[1].trim();
+    }
+
+    // 2. Extract substring enclosed by first { and last } or first [ and last ]
+    const firstBrace = text.indexOf('{');
+    const lastBrace = text.lastIndexOf('}');
+    const firstBracket = text.indexOf('[');
+    const lastBracket = text.lastIndexOf(']');
+
+    let candidate = text;
+    if (firstBrace !== -1 && lastBrace !== -1 && (firstBracket === -1 || firstBrace < firstBracket)) {
+      candidate = text.substring(firstBrace, lastBrace + 1);
+    } else if (firstBracket !== -1 && lastBracket !== -1) {
+      candidate = text.substring(firstBracket, lastBracket + 1);
+    }
+
+    // 3. Trailing comma & comment cleanup helpers
+    const stripComments = (str) => str.replace(/\/\*[\s\S]*?\*\/|\/\/[^\n\r]*/g, '');
+    const stripTrailingCommas = (str) => str.replace(/,\s*([\]}])/g, '$1');
+
+    try {
+      return JSON.parse(candidate);
+    } catch (err1) {
+      try {
+        return JSON.parse(stripTrailingCommas(candidate));
+      } catch (err2) {
+        try {
+          // Strip multiline and single-line comments, then trailing commas, and re-attempt
+          const sanitized = stripTrailingCommas(stripComments(candidate));
+          return JSON.parse(sanitized);
+        } catch (err3) {
+          // If candidate extraction was affected by comments outside JSON, strip comments on full text
+          const textWithoutComments = stripComments(text);
+          const firstBraceClean = textWithoutComments.indexOf('{');
+          const lastBraceClean = textWithoutComments.lastIndexOf('}');
+          if (firstBraceClean !== -1 && lastBraceClean !== -1) {
+            const cleanCandidate = stripTrailingCommas(textWithoutComments.substring(firstBraceClean, lastBraceClean + 1));
+            return JSON.parse(cleanCandidate);
+          }
+          throw err3;
+        }
+      }
+    }
+  }
+
+  /**
+   * Generates clean social hashtag from destination string
+   */
+  formatHashtagTag(name = '') {
+    // If name contains English in parentheses e.g. "लेक्सा ट्रिप जैसलमेर (Lexa Trip Jaisalmer)"
+    const match = name.match(/\(([^)]+)\)/);
+    const target = match ? match[1] : name;
+    return target.replace(/[^\p{L}\p{M}\p{N}]/gu, '');
+  }
+
+  /**
    * AI-powered parsing with structured JSON output
    */
   async parseWithAI({ rawText, destinationName, config }) {
@@ -65,7 +134,7 @@ Analyze the following raw content and extract/organize exactly 5 distinct social
 For EACH of the 5 posts, separate:
 1. "title": A catchy, viral headline (max 70 characters, suitable for YouTube Shorts, Reels, Blog).
 2. "caption": Engaging, high-converting travel storytelling description (2-4 lines).
-3. "hashtags": High-volume SEO travel hashtags (starting with #${destinationName.replace(/\\s+/g, '')} and destination tags).
+3. "hashtags": High-volume SEO travel hashtags (starting with #${this.formatHashtagTag(destinationName)} and destination tags).
 
 If the raw input contains fewer than 5 posts, creatively expand and generate the remaining posts based on the themes in the input for "${destinationName}".
 
@@ -146,14 +215,30 @@ ${rawText}
       responseText = res.data.choices?.[0]?.message?.content || '';
     }
 
-    // Clean JSON string if wrapped in codeblocks
-    const cleanJson = responseText.replace(/```json/gi, '').replace(/```/g, '').trim();
-    const parsed = JSON.parse(cleanJson);
-    if (!parsed.posts || !Array.isArray(parsed.posts)) {
-      throw new Error('AI returned invalid format.');
+    // Resilient JSON extraction and sanitization
+    const parsed = this.safeParseAIJson(responseText);
+
+    // Normalize output: support { posts: [...] }, direct array [...], or nested object
+    let posts = [];
+    if (parsed && Array.isArray(parsed.posts)) {
+      posts = parsed.posts;
+    } else if (Array.isArray(parsed)) {
+      posts = parsed;
+    } else if (parsed && typeof parsed === 'object') {
+      const arrKey = Object.keys(parsed).find(k => Array.isArray(parsed[k]));
+      if (arrKey) posts = parsed[arrKey];
     }
 
-    return parsed.posts.slice(0, 5);
+    if (!posts || !Array.isArray(posts) || posts.length === 0) {
+      throw new Error('AI returned invalid format: no posts array found.');
+    }
+
+    return posts.slice(0, 5).map((p, idx) => ({
+      index: p.index || (idx + 1),
+      title: (p.title || `${destinationName} Highlight #${idx + 1}`).trim(),
+      caption: (p.caption || '').trim(),
+      hashtags: (p.hashtags || `#${this.formatHashtagTag(destinationName)} #TravelIndia #Explore`).trim()
+    }));
   }
 
   /**
@@ -175,17 +260,26 @@ ${rawText}
       chunksToProcess = text.split(/\n\s*---\s*\n|\n\s*===\s*\n|\n\s*\n\s*\n/).filter(c => c && c.trim().length > 10);
     }
 
+    const cleanTag = this.formatHashtagTag(destinationName);
+    const fallbackThemes = [
+      { title: `Iconic Highlights & Scenic Wonders of ${destinationName}`, caption: `Discover breathtaking sights, hidden gems, and unforgettable experiences in ${destinationName}. Handcrafted holiday journeys tailored just for you!` },
+      { title: `Luxury Stays & Premium Hospitality in ${destinationName}`, caption: `Relax in comfort with verified boutique stays, scenic vistas, and warm on-ground hospitality in ${destinationName}. Reserve your dream getaway today.` },
+      { title: `Authentic Culture, Cuisine & Heritage in ${destinationName}`, caption: `Immerse yourself in rich local flavors, vibrant traditions, and timeless stories of ${destinationName}. Travel like an insider with Lexa Trip.` },
+      { title: `Thrilling Adventures & Nature Trails in ${destinationName}`, caption: `Feel the rush with curated outdoor excursions, breathtaking viewpoints, and unforgettable adventures across ${destinationName}.` },
+      { title: `Golden Sunset Moments & Memories in ${destinationName}`, caption: `Catch magical twilight hues and create memories that last a lifetime in ${destinationName}. Book your bespoke itinerary with our local destination team!` }
+    ];
+
     for (let i = 0; i < 5; i++) {
       const chunk = chunksToProcess[i] || '';
       if (chunk) {
         posts.push(this.extractSinglePostSEO(chunk, i + 1, destinationName));
       } else {
-        // Fallback default for remaining posts up to 5
+        const theme = fallbackThemes[i] || fallbackThemes[0];
         posts.push({
           index: i + 1,
-          title: `${destinationName} Experience #${i + 1}`,
-          caption: `Discover the breathtaking sights and royal hospitality of ${destinationName}. Book your memorable journey with us!`,
-          hashtags: `#${destinationName.replace(/\\s+/g, '')} #TravelIndia #Wanderlust #Explore`
+          title: theme.title,
+          caption: theme.caption,
+          hashtags: `#${cleanTag} #TravelIndia #Wanderlust #Explore`
         });
       }
     }
@@ -246,7 +340,8 @@ ${rawText}
 
     // Default hashtags if still empty
     if (!hashtags) {
-      hashtags = `#${destinationName.replace(/\\s+/g, '')} #TravelGoals #IncredibleIndia #ExploreWithUs`;
+      const cleanTag = this.formatHashtagTag(destinationName);
+      hashtags = `#${cleanTag} #TravelGoals #IncredibleIndia #ExploreWithUs`;
     }
 
     // Truncate title if overly long
