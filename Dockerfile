@@ -16,10 +16,10 @@ COPY . .
 # Environment settings
 ENV NODE_ENV=production
 ENV PORT=10000
-ENV NODE_OPTIONS="--max-old-space-size=256 --optimize-for-size"
+ENV NODE_OPTIONS="--max-old-space-size=256"
 
 # Expose port for Render
 EXPOSE 10000
 
-# Start Automation Server with strict memory limit to prevent 512MB OOM
+# Start Automation Server with strict memory limit
 CMD ["node", "--max-old-space-size=256", "server.js"]
