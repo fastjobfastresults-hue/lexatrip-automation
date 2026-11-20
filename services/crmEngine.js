@@ -36,11 +36,11 @@ class CRMEngine {
 
     // Master Links Policy for Lexa Trip
     const masterLinks = {
-      facebook: 'https://www.facebook.com/1385624654624388',
+      facebook: 'https://www.facebook.com/profile.php?id=61594513580628',
       instagram: 'https://www.instagram.com/lexatripjaisalmer/',
       telegram: 'https://t.me/lexatripjaisalmer',
       pinterest: 'https://www.pinterest.com/lexatripjaisalmer/',
-      linkedin: 'https://www.linkedin.com/company/lexatripjaisalmer',
+      linkedin: 'https://www.linkedin.com/company/144145872/',
       youtube: 'https://www.youtube.com/@lexatripjaisalmer',
       blogger: 'https://lexatripjaisalmer.blogspot.com/',
       bookings: 'https://bookings.lexatrip.com/',

@@ -499,8 +499,9 @@ class TelegramBotService {
       }
 
       reply += `\n\n🔗 *वेरिफाइड लाइव चैनल्स (क्लिक करके देखें):*\n` +
-        `• [📘 Facebook Page](https://www.facebook.com/1385624654624388)\n` +
+        `• [📘 Facebook Page](https://www.facebook.com/profile.php?id=61594513580628)\n` +
         `• [📸 Instagram (@lexatripjaisalmer)](https://www.instagram.com/lexatripjaisalmer/)\n` +
+        `• [💼 LinkedIn Company](https://www.linkedin.com/company/144145872/)\n` +
         `• [📢 Telegram Channel](https://t.me/lexatripjaisalmer)\n` +
         `• [📌 Pinterest Board](https://www.pinterest.com/lexatripjaisalmer/)\n` +
         `• [🌐 Bookings Portal](https://bookings.lexatrip.com/)\n` +
@@ -513,7 +514,7 @@ class TelegramBotService {
       });
     };
 
-    this.bot.onText(/\/status/, (msg) => renderStatus(msg.chat.id));
+    this.bot.onText(/\/status|\/report|\/live/, (msg) => renderStatus(msg.chat.id));
 
     // 3. Reset command
     this.bot.onText(/\/reset/, (msg) => {
@@ -627,7 +628,7 @@ class TelegramBotService {
             scheduleMsg += `${i + 1}. *${item.title.slice(0, 35)}...*\n   ⏰ समय: *${time}* | चैनल्स: ${(item.targets || []).join(', ')}\n\n`;
           });
           scheduleMsg += `🔗 *लाइव वेरिफिकेशन लिंक्स:*\n` +
-            `• [📘 Facebook](https://www.facebook.com/1385624654624388) | [📸 Instagram](https://www.instagram.com/lexatripjaisalmer/)\n` +
+            `• [📘 Facebook](https://www.facebook.com/profile.php?id=61594513580628) | [📸 Instagram](https://www.instagram.com/lexatripjaisalmer/)\n` +
             `• [📢 Telegram Channel](https://t.me/lexatripjaisalmer) | [🌐 Bookings](https://bookings.lexatrip.com/)\n\n` +
             `🌐 *लाइव डैशबोर्ड:* https://lexa-trip-automation.onrender.com`;
         }
@@ -644,11 +645,11 @@ class TelegramBotService {
             archiveMsg += `${i + 1}. *${item.title.slice(0, 35)}...*\n   ✅ स्टेटस: पब्लिश्ड | प्रकार: ${item.itemType.toUpperCase()}\n`;
           });
           archiveMsg += `\n🔗 *वेरिफिकेशन लिंक्स (सीधे क्लिक करें):*\n` +
-            `• [📘 Facebook Page](https://www.facebook.com/1385624654624388)\n` +
+            `• [📘 Facebook Page](https://www.facebook.com/profile.php?id=61594513580628)\n` +
             `• [📸 Instagram Profile](https://www.instagram.com/lexatripjaisalmer/)\n` +
             `• [📢 Telegram Channel](https://t.me/lexatripjaisalmer)\n` +
             `• [📌 Pinterest Board](https://www.pinterest.com/lexatripjaisalmer/)\n` +
-            `• [💼 LinkedIn Company](https://www.linkedin.com/company/lexatripjaisalmer)\n` +
+            `• [💼 LinkedIn Company](https://www.linkedin.com/company/144145872/)\n` +
             `• [🌐 Bookings Portal](https://bookings.lexatrip.com/)\n` +
             `• [💬 WhatsApp Chat](https://wa.me/919079854982)\n\n` +
             `🌐 *लाइव डैशबोर्ड:* https://lexa-trip-automation.onrender.com`;
@@ -799,11 +800,11 @@ class TelegramBotService {
           (reelGenerated ? `🎬 *रील:* 9:16 अल्ट्रा HD मोशन रील पब्लिश्ड\n` : '') +
           `🕒 *समय:* ${new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}\n\n` +
           `🔗 *लाइव वेरिफिकेशन लिंक्स (सीधे क्लिक करें):*\n` +
-          `• [📘 Facebook Page](https://www.facebook.com/1385624654624388)\n` +
+          `• [📘 Facebook Page](https://www.facebook.com/profile.php?id=61594513580628)\n` +
           `• [📸 Instagram Profile](https://www.instagram.com/lexatripjaisalmer/)\n` +
           `• [📢 Telegram Channel](https://t.me/lexatripjaisalmer)\n` +
           `• [📌 Pinterest Board](https://www.pinterest.com/lexatripjaisalmer/)\n` +
-          `• [💼 LinkedIn Company](https://www.linkedin.com/company/lexatripjaisalmer)\n` +
+          `• [💼 LinkedIn Company](https://www.linkedin.com/company/144145872/)\n` +
           `• [🌐 Bookings Portal](https://bookings.lexatrip.com/)\n` +
           `• [💬 WhatsApp Support](https://wa.me/919079854982)\n\n` +
           `🌐 *लाइव डैशबोर्ड पर स्थिति देखें:* https://lexa-trip-automation.onrender.com`;

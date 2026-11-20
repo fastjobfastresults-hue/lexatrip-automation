@@ -842,6 +842,18 @@ app.get('/api/credentials', (req, res) => {
   });
 });
 
+// --- STORAGE MANAGER & GARBAGE COLLECTION ---
+const storageManager = require('./services/storageManager');
+
+app.get('/api/storage', (req, res) => {
+  res.json(storageManager.getStorageReport());
+});
+
+app.post('/api/storage/cleanup', (req, res) => {
+  const result = storageManager.cleanupPublishedMedia();
+  res.json({ success: true, ...result });
+});
+
 app.put('/api/credentials', (req, res) => {
   const { metaToken, telegramToken, pinterestToken, linkedinToken, bloggerToken, geminiKey } = req.body;
   const settings = db.getSettings();

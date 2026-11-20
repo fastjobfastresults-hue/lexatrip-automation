@@ -7968,11 +7968,11 @@
       "channels": {
         "facebook": {
           "enabled": true,
-          "name": "Facebook Page (Lexa Trip)",
-          "handle": "facebook.com/1385624654624388",
+          "name": "Facebook Page (Lexatripjaisalmer)",
+          "handle": "https://www.facebook.com/profile.php?id=61594513580628",
           "authType": "lifetime_page_token",
           "credentials": {
-            "pageId": "1385624654624388",
+            "pageId": "1190728550800516",
             "pageAccessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
             "isLifetime": true
           },
@@ -8000,7 +8000,7 @@
         "linkedin": {
           "enabled": true,
           "name": "LinkedIn - LexaTrip Jaisalmer",
-          "handle": "linkedin.com/company/lexatrip-jaisalmer",
+          "handle": "https://www.linkedin.com/company/144145872/",
           "authType": "api_token",
           "credentials": {
             "accessToken": "AQVEUNZLO91zZlJbtdlyj3W5JBu4Ms4M7vi9BRnkplrAvMEpX0NzbwFAVm-Z9Zw6CZi7Nns1jUkdGnsBJqqEPazGnf4UBPc4FKk4b212KJ6hCbRG4BbC8pa1TkZPrWutwNtQd9EF4iCQM3LHnoS96I-N0j1Pg0CwINgi005ffIkrNPK3ucH_cOOKWVEgdxLeOrXKsd7XZNKqjFcEGjVtb7fO6nbtjlbNCl-FcDeoA2u2GTwb46A2QUpiPOpq0pCiX0yMFhinE3V-q3xg9M1Xik7bp2nDeOaLhAbTbLtfkXVO0njwu2_JegcZpaGqI-e0_8ZErjShJLE--IaCaAuqrFA2f17ZnQ",
@@ -8201,10 +8201,12 @@
       "channels": {
         "facebook": {
           "enabled": true,
-          "name": "Facebook Page - Lexa Trip Mount Abu",
-          "handle": "Click to Connect",
+          "name": "Facebook Page (Lexatripmountabu)",
+          "handle": "https://www.facebook.com/profile.php?id=61594050853686",
           "authType": "api_token",
-          "credentials": {},
+          "credentials": {
+            "pageId": "1387953687723780"
+          },
           "supports": [
             "post",
             "carousel",
@@ -9544,11 +9546,11 @@
       "channels": {
         "facebook": {
           "enabled": true,
-          "name": "Facebook Page (Lexa Trip)",
-          "handle": "facebook.com/1385624654624388",
+          "name": "Facebook Page (Lexatripmunnar)",
+          "handle": "https://www.facebook.com/profile.php?id=61594170400993",
           "authType": "lifetime_page_token",
           "credentials": {
-            "pageId": "1385624654624388",
+            "pageId": "1361009330428038",
             "pageAccessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
             "isLifetime": true
           },
@@ -9774,11 +9776,11 @@
       "channels": {
         "facebook": {
           "enabled": true,
-          "name": "Facebook Page (Lexa Trip)",
-          "handle": "facebook.com/1385624654624388",
+          "name": "Facebook Page (Lexatripvaranasi)",
+          "handle": "https://www.facebook.com/profile.php?id=61594116223402",
           "authType": "lifetime_page_token",
           "credentials": {
-            "pageId": "1385624654624388",
+            "pageId": "1387213014467886",
             "pageAccessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
             "isLifetime": true
           },
@@ -10004,8 +10006,8 @@
       "channels": {
         "facebook": {
           "enabled": true,
-          "name": "Facebook Page (Lexa Trip)",
-          "handle": "facebook.com/1385624654624388",
+          "name": "Facebook Page (Lexatriptirupati)",
+          "handle": "https://www.facebook.com/1385624654624388",
           "authType": "lifetime_page_token",
           "credentials": {
             "pageId": "1385624654624388",

@@ -10,10 +10,12 @@ const googleBusinessPublisher = require('./publishers/googleBusiness');
 const blogPublisher = require('./publishers/blog');
 const customPublisher = require('./publishers/custom');
 const telegramNotifier = require('./telegramNotifier');
+const storageManager = require('./storageManager');
 
 class Scheduler {
   constructor() {
     this.timer = null;
+    this.digestTimer = null;
     this.isProcessing = false;
     this.wsBroadcast = null;
   }
@@ -26,12 +28,45 @@ class Scheduler {
     if (this.timer) clearInterval(this.timer);
     this.timer = setInterval(() => this.processQueue(), 20000);
     console.log('⚡ Multi-Destination Anti-Spam Scheduler active. Checking queue every 20s.');
+
+    // Daily Tri-Digest Reporter (Morning 09:00 AM, Afternoon 02:00 PM, Evening 08:00 PM IST)
+    if (this.digestTimer) clearInterval(this.digestTimer);
+    this.digestTimer = setInterval(() => this.checkDailyDigestSchedule(), 60000);
+
+    // Auto-clean storage of published media
+    storageManager.startAutoCleanup();
   }
 
   stop() {
     if (this.timer) {
       clearInterval(this.timer);
       this.timer = null;
+    }
+    if (this.digestTimer) {
+      clearInterval(this.digestTimer);
+      this.digestTimer = null;
+    }
+  }
+
+  checkDailyDigestSchedule() {
+    const now = new Date();
+    // Indian Standard Time (UTC + 5:30)
+    const istOffset = 5.5 * 60 * 60 * 1000;
+    const istTime = new Date(now.getTime() + istOffset);
+    const hour = istTime.getUTCHours();
+    const minute = istTime.getUTCMinutes();
+
+    let slot = null;
+    if (hour === 9 && minute === 0) slot = '🌅 प्रातःकालीन सारांश (Morning Digest)';
+    else if (hour === 14 && minute === 0) slot = '☀️ दोपहर सारांश (Afternoon Digest)';
+    else if (hour === 20 && minute === 0) slot = '🌙 सांध्यकालीन सारांश (Evening Digest)';
+
+    if (slot) {
+      console.log(`📢 [Scheduler] Dispatching ${slot} to Telegram...`);
+      const destinations = db.getDestinations();
+      for (const dest of destinations) {
+        telegramNotifier.notifyDailyDigest(dest, slot);
+      }
     }
   }
 

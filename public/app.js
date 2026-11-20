@@ -1795,7 +1795,7 @@ async function loadQueue() {
             </button>
           ` : `
             <div class="flex items-center space-x-1.5 justify-end">
-              <a href="https://www.facebook.com/1385624654624388" target="_blank" class="px-2 py-0.5 rounded bg-blue-500/15 hover:bg-blue-500/30 text-blue-300 border border-blue-500/30 text-[10px] font-bold inline-flex items-center space-x-1 transition" title="Open Live Facebook Page">
+              <a href="https://www.facebook.com/profile.php?id=61594513580628" target="_blank" class="px-2 py-0.5 rounded bg-blue-500/15 hover:bg-blue-500/30 text-blue-300 border border-blue-500/30 text-[10px] font-bold inline-flex items-center space-x-1 transition" title="Open Live Facebook Page">
                 <i class="fa-brands fa-facebook"></i>
                 <span>FB ↗</span>
               </a>
@@ -2602,7 +2602,7 @@ async function loadCRMData() {
 
               <!-- Clickable Direct Links for this post -->
               <div class="flex items-center space-x-1.5 flex-wrap gap-1">
-                <a href="${item.liveLinks?.facebook || 'https://www.facebook.com/1385624654624388'}" target="_blank" class="px-2.5 py-1 rounded-lg bg-blue-500/15 hover:bg-blue-500/30 text-blue-300 border border-blue-500/30 text-[11px] font-semibold inline-flex items-center space-x-1 transition" title="Open Live Facebook Page">
+                <a href="${item.liveLinks?.facebook || 'https://www.facebook.com/profile.php?id=61594513580628'}" target="_blank" class="px-2.5 py-1 rounded-lg bg-blue-500/15 hover:bg-blue-500/30 text-blue-300 border border-blue-500/30 text-[11px] font-semibold inline-flex items-center space-x-1 transition" title="Open Live Facebook Page">
                   <i class="fa-brands fa-facebook"></i>
                   <span>FB ↗</span>
                 </a>
@@ -2618,7 +2618,7 @@ async function loadCRMData() {
                   <i class="fa-brands fa-pinterest"></i>
                   <span>Pin ↗</span>
                 </a>
-                <a href="${item.liveLinks?.linkedin || 'https://www.linkedin.com/company/lexatripjaisalmer'}" target="_blank" class="px-2.5 py-1 rounded-lg bg-indigo-500/15 hover:bg-indigo-500/30 text-indigo-300 border border-indigo-500/30 text-[11px] font-semibold inline-flex items-center space-x-1 transition" title="Open LinkedIn Page">
+                <a href="${item.liveLinks?.linkedin || 'https://www.linkedin.com/company/144145872/'}" target="_blank" class="px-2.5 py-1 rounded-lg bg-indigo-500/15 hover:bg-indigo-500/30 text-indigo-300 border border-indigo-500/30 text-[11px] font-semibold inline-flex items-center space-x-1 transition" title="Open LinkedIn Page">
                   <i class="fa-brands fa-linkedin"></i>
                   <span>IN ↗</span>
                 </a>
@@ -3445,7 +3445,7 @@ async function loadCRMData() {
           <div class="p-4 rounded-xl bg-white/[0.02] border border-white/5 space-y-2">
             <p class="text-gray-300 font-bold">✅ हालिया पब्लिश की गई 6 पोस्ट्स व 6 रील्स के लाइव वेरिफिकेशन लिंक्स:</p>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
-              <a href="https://www.facebook.com/1385624654624388" target="_blank" class="p-2 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 flex items-center space-x-1.5 transition">
+              <a href="https://www.facebook.com/profile.php?id=61594513580628" target="_blank" class="p-2 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 flex items-center space-x-1.5 transition">
                 <i class="fa-brands fa-facebook"></i> <span>Facebook ↗</span>
               </a>
               <a href="https://www.instagram.com/lexatripjaisalmer/" target="_blank" class="p-2 rounded-lg bg-pink-500/10 hover:bg-pink-500/20 text-pink-300 flex items-center space-x-1.5 transition">
@@ -3457,7 +3457,7 @@ async function loadCRMData() {
               <a href="https://www.pinterest.com/lexatripjaisalmer/" target="_blank" class="p-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-300 flex items-center space-x-1.5 transition">
                 <i class="fa-brands fa-pinterest"></i> <span>Pinterest ↗</span>
               </a>
-              <a href="https://www.linkedin.com/company/lexatripjaisalmer" target="_blank" class="p-2 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 flex items-center space-x-1.5 transition">
+              <a href="https://www.linkedin.com/company/144145872/" target="_blank" class="p-2 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 flex items-center space-x-1.5 transition">
                 <i class="fa-brands fa-linkedin"></i> <span>LinkedIn ↗</span>
               </a>
               <a href="https://bookings.lexatrip.com/" target="_blank" class="p-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 flex items-center space-x-1.5 transition">
@@ -3481,7 +3481,7 @@ async function loadCRMData() {
               <p class="text-[11px] text-gray-400 mt-0.5">${p.caption ? p.caption.substring(0, 80) + '...' : 'Live luxury travel campaign.'}</p>
             </div>
             <div class="flex items-center space-x-2 shrink-0">
-              <a href="${p.liveUrl || 'https://www.facebook.com/1385624654624388'}" target="_blank" class="px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-apple-gold border border-apple-gold/30 text-xs font-bold transition flex items-center space-x-1">
+              <a href="${p.liveUrl || 'https://www.facebook.com/profile.php?id=61594513580628'}" target="_blank" class="px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-apple-gold border border-apple-gold/30 text-xs font-bold transition flex items-center space-x-1">
                 <span>लाइव लिंक ↗</span>
               </a>
             </div>
@@ -3565,5 +3565,62 @@ async function detectAllPagesFromToken() {
     alert('✅ पेजेस डिटेक्ट हो गए: ' + (data.pages ? data.pages.length : 0) + ' पेजेस मिले।');
   } catch (err) {
     alert('डिटेक्शन एरर: ' + err.message);
+  }
+}
+
+
+// ===================================================================
+// ⚡ LIVE WORK DRAWER & STORAGE AUTO-CLEANUP CLIENT LOGIC
+// ===================================================================
+
+function toggleLiveWorkDrawer() {
+  const drawer = document.getElementById('live-work-drawer');
+  if (!drawer) return;
+  if (drawer.classList.contains('hidden')) {
+    drawer.classList.remove('hidden');
+    loadLiveWorkStats();
+  } else {
+    drawer.classList.add('hidden');
+  }
+}
+
+async function loadLiveWorkStats() {
+  try {
+    const res = await fetch('/api/storage');
+    if (res.ok) {
+      const stats = await res.json();
+      const el = document.getElementById('live-work-storage-info');
+      if (el) {
+        el.textContent = `लोकल डिस्क: ${stats.totalMB} MB (${stats.totalFiles} फाइल्स) · ऑटो-क्लीनअप सक्रिय`;
+      }
+    }
+  } catch (e) {}
+
+  try {
+    const res2 = await fetch('/api/queue');
+    if (res2.ok) {
+      const queue = await res2.json();
+      const next = queue.find(q => q.status === 'queued');
+      const el2 = document.getElementById('live-work-next-task');
+      if (el2) {
+        if (next) {
+          const time = new Date(next.scheduledTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          el2.textContent = `आगामी टास्क: ${next.title?.substring(0, 30)}... @ ${time}`;
+        } else {
+          el2.textContent = 'आगामी टास्क: कतार स्टैंडबाय में है।';
+        }
+      }
+    }
+  } catch (e) {}
+}
+
+async function triggerStorageCleanupNow() {
+  try {
+    const res = await fetch('/api/storage/cleanup', { method: 'POST' });
+    const data = await res.json();
+    alert(`🧹 स्टोरेज क्लीनअप सफल!\n\n${data.deletedCount} पब्लिश हो चुकी फाइल्स डिलीट की गईं।\n${data.freedMB} MB डिस्क स्पेस खाली किया गया।\n(सोशल मीडिया पर सभी पोस्ट्स सुरक्षित रहेंगी)`);
+    loadLiveWorkStats();
+  } catch (err) {
+    alert('क्लीनअप त्रुटि: ' + err.message);
   }
 }
