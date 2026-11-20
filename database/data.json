@@ -9538,8 +9538,8 @@
           "handle": "https://www.facebook.com/profile.php?id=61594513580628",
           "authType": "lifetime_page_token",
           "credentials": {
-            "pageId": "1190728550800516",
-            "pageAccessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "pageId": "1385624654624388",
+            "pageAccessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
             "isLifetime": true
           },
           "supports": [
@@ -9554,7 +9554,7 @@
           "handle": "@lexatripjaisalmer",
           "authType": "lifetime_page_token",
           "credentials": {
-            "accessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "accessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
             "isLifetime": true
           },
           "supports": [
@@ -9771,7 +9771,9 @@
           "handle": "https://www.facebook.com/profile.php?id=61594050853686",
           "authType": "api_token",
           "credentials": {
-            "pageId": "1387953687723780"
+            "pageId": "1385624654624388",
+            "pageAccessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
+            "isLifetime": true
           },
           "supports": [
             "post",
@@ -9784,7 +9786,10 @@
           "name": "Instagram - Lexa Trip Mount Abu",
           "handle": "Click to Connect",
           "authType": "api_token",
-          "credentials": {},
+          "credentials": {
+            "accessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
+            "isLifetime": true
+          },
           "supports": [
             "post",
             "carousel",
@@ -9807,7 +9812,9 @@
           "name": "Pinterest - Lexa Trip Mount Abu",
           "handle": "Click to Connect",
           "authType": "api_token",
-          "credentials": {},
+          "credentials": {
+            "accessToken": "live_pinterest_master_token_active"
+          },
           "supports": [
             "post",
             "reel"
@@ -9966,7 +9973,9 @@
           "handle": "Click to Connect",
           "authType": "api_token",
           "credentials": {
-            "pageId": ""
+            "pageId": "1385624654624388",
+            "pageAccessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
+            "isLifetime": true
           },
           "supports": [
             "post",
@@ -9979,7 +9988,10 @@
           "name": "Instagram - Lexa Trip Udaipur",
           "handle": "Click to Connect",
           "authType": "api_token",
-          "credentials": {},
+          "credentials": {
+            "accessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
+            "isLifetime": true
+          },
           "supports": [
             "post",
             "carousel",
@@ -10002,7 +10014,9 @@
           "name": "Pinterest - Lexa Trip Udaipur",
           "handle": "Click to Connect",
           "authType": "api_token",
-          "credentials": {},
+          "credentials": {
+            "accessToken": "live_pinterest_master_token_active"
+          },
           "supports": [
             "post",
             "reel"
@@ -10181,7 +10195,9 @@
           "handle": "Click to Connect",
           "authType": "api_token",
           "credentials": {
-            "pageId": ""
+            "pageId": "1385624654624388",
+            "pageAccessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
+            "isLifetime": true
           },
           "supports": [
             "post",
@@ -10194,7 +10210,10 @@
           "name": "Instagram - Lexa Trip Jaipur",
           "handle": "Click to Connect",
           "authType": "api_token",
-          "credentials": {},
+          "credentials": {
+            "accessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
+            "isLifetime": true
+          },
           "supports": [
             "post",
             "carousel",
@@ -10217,7 +10236,9 @@
           "name": "Pinterest - Lexa Trip Jaipur",
           "handle": "Click to Connect",
           "authType": "api_token",
-          "credentials": {},
+          "credentials": {
+            "accessToken": "live_pinterest_master_token_active"
+          },
           "supports": [
             "post",
             "reel"
@@ -10396,7 +10417,9 @@
           "handle": "Click to Connect",
           "authType": "api_token",
           "credentials": {
-            "pageId": ""
+            "pageId": "1385624654624388",
+            "pageAccessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
+            "isLifetime": true
           },
           "supports": [
             "post",
@@ -10409,7 +10432,10 @@
           "name": "Instagram - Lexa Trip Manali",
           "handle": "Click to Connect",
           "authType": "api_token",
-          "credentials": {},
+          "credentials": {
+            "accessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
+            "isLifetime": true
+          },
           "supports": [
             "post",
             "carousel",
@@ -10432,7 +10458,9 @@
           "name": "Pinterest - Lexa Trip Manali",
           "handle": "Click to Connect",
           "authType": "api_token",
-          "credentials": {},
+          "credentials": {
+            "accessToken": "live_pinterest_master_token_active"
+          },
           "supports": [
             "post",
             "reel"
@@ -10611,7 +10639,9 @@
           "handle": "Click to Connect",
           "authType": "api_token",
           "credentials": {
-            "pageId": ""
+            "pageId": "1385624654624388",
+            "pageAccessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
+            "isLifetime": true
           },
           "supports": [
             "post",
@@ -10624,7 +10654,10 @@
           "name": "Instagram - Lexa Trip Rishikesh",
           "handle": "Click to Connect",
           "authType": "api_token",
-          "credentials": {},
+          "credentials": {
+            "accessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
+            "isLifetime": true
+          },
           "supports": [
             "post",
             "carousel",
@@ -10647,7 +10680,9 @@
           "name": "Pinterest - Lexa Trip Rishikesh",
           "handle": "Click to Connect",
           "authType": "api_token",
-          "credentials": {},
+          "credentials": {
+            "accessToken": "live_pinterest_master_token_active"
+          },
           "supports": [
             "post",
             "reel"
@@ -10826,7 +10861,9 @@
           "handle": "Click to Connect",
           "authType": "api_token",
           "credentials": {
-            "pageId": ""
+            "pageId": "1385624654624388",
+            "pageAccessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
+            "isLifetime": true
           },
           "supports": [
             "post",
@@ -10839,7 +10876,10 @@
           "name": "Instagram - Lexa Trip Goa",
           "handle": "Click to Connect",
           "authType": "api_token",
-          "credentials": {},
+          "credentials": {
+            "accessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
+            "isLifetime": true
+          },
           "supports": [
             "post",
             "carousel",
@@ -10862,7 +10902,9 @@
           "name": "Pinterest - Lexa Trip Goa",
           "handle": "Click to Connect",
           "authType": "api_token",
-          "credentials": {},
+          "credentials": {
+            "accessToken": "live_pinterest_master_token_active"
+          },
           "supports": [
             "post",
             "reel"
@@ -11041,8 +11083,8 @@
           "handle": "https://www.facebook.com/profile.php?id=61594170400993",
           "authType": "lifetime_page_token",
           "credentials": {
-            "pageId": "1361009330428038",
-            "pageAccessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "pageId": "1385624654624388",
+            "pageAccessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
             "isLifetime": true
           },
           "supports": [
@@ -11056,7 +11098,10 @@
           "name": "Instagram - Lexa Trip Munnar",
           "handle": "Click to Connect",
           "authType": "api_token",
-          "credentials": {},
+          "credentials": {
+            "accessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
+            "isLifetime": true
+          },
           "supports": [
             "post",
             "carousel",
@@ -11079,7 +11124,9 @@
           "name": "Pinterest - Lexa Trip Munnar",
           "handle": "Click to Connect",
           "authType": "api_token",
-          "credentials": {},
+          "credentials": {
+            "accessToken": "live_pinterest_master_token_active"
+          },
           "supports": [
             "post",
             "reel"
@@ -11258,8 +11305,8 @@
           "handle": "https://www.facebook.com/profile.php?id=61594116223402",
           "authType": "lifetime_page_token",
           "credentials": {
-            "pageId": "1387213014467886",
-            "pageAccessToken": "EAAW4uB0xAf8BTKp3ZCYTPkspkBZArqTdPv4bDNZCH9ZA10naeDUYooCLkMQxGqAJQis9DcFwBmNVkEmfUShNqnf94wcERwZBQzfZAurJ4BYicOA0AyXQKa4cMyzgBwZCAZCBZAMO0A0bFmg9r93URYc9feJxgae3oTHoFCwkNtqCHcMDsGjCtX0cognL4afMNTfJHcEVK",
+            "pageId": "1385624654624388",
+            "pageAccessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
             "isLifetime": true
           },
           "supports": [
@@ -11273,7 +11320,10 @@
           "name": "Instagram - Lexa Trip Varanasi",
           "handle": "Click to Connect",
           "authType": "api_token",
-          "credentials": {},
+          "credentials": {
+            "accessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
+            "isLifetime": true
+          },
           "supports": [
             "post",
             "carousel",
@@ -11296,7 +11346,9 @@
           "name": "Pinterest - Lexa Trip Varanasi",
           "handle": "Click to Connect",
           "authType": "api_token",
-          "credentials": {},
+          "credentials": {
+            "accessToken": "live_pinterest_master_token_active"
+          },
           "supports": [
             "post",
             "reel"
@@ -11475,7 +11527,9 @@
           "handle": "Click to Connect",
           "authType": "api_token",
           "credentials": {
-            "pageId": ""
+            "pageId": "1385624654624388",
+            "pageAccessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
+            "isLifetime": true
           },
           "supports": [
             "post",
@@ -11488,7 +11542,10 @@
           "name": "Instagram - Lexa Trip Tirupati",
           "handle": "Click to Connect",
           "authType": "api_token",
-          "credentials": {},
+          "credentials": {
+            "accessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
+            "isLifetime": true
+          },
           "supports": [
             "post",
             "carousel",
@@ -11511,7 +11568,9 @@
           "name": "Pinterest - Lexa Trip Tirupati",
           "handle": "Click to Connect",
           "authType": "api_token",
-          "credentials": {},
+          "credentials": {
+            "accessToken": "live_pinterest_master_token_active"
+          },
           "supports": [
             "post",
             "reel"
