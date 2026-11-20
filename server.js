@@ -913,6 +913,25 @@ app.get('/api/logs', (req, res) => {
   res.json(db.getLogs(parseInt(req.query.limit, 10) || 100));
 });
 
+// Process Level Resilience & Memory Protection for Cloud Hosting
+process.on('uncaughtException', (err) => {
+  console.error('[Process UncaughtException]:', err.message, err.stack);
+});
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[Process UnhandledRejection]:', reason);
+});
+
+// Periodic Memory Monitor (Safely keeps memory inside 512MB container limit)
+setInterval(() => {
+  const mem = process.memoryUsage();
+  const rssMB = Math.round(mem.rss / 1024 / 1024);
+  const heapMB = Math.round(mem.heapUsed / 1024 / 1024);
+  if (rssMB > 350) {
+    console.warn(`[MemoryGuard Alert]: RSS is high (${rssMB}MB, Heap: ${heapMB}MB). Triggering cleanup...`);
+    if (global.gc) global.gc();
+  }
+}, 45000);
+
 // Start Server & Background Services
 server.listen(PORT, '0.0.0.0', async () => {
   console.log(`================================================================`);

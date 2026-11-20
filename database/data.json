@@ -1747,6 +1747,61 @@
   ],
   "queue": [
     {
+      "id": "q_live_taj_oberoi_1795151618645",
+      "batchId": "batch_taj_oberoi_1795151618646",
+      "destinationId": "dest_jaisalmer",
+      "destinationName": "लेक्सा ट्रिप जैसलमेर (Lexa Trip Jaisalmer)",
+      "itemType": "post",
+      "index": 1,
+      "title": "COLABA WALA TAJ PALACE YA MARINE DRIVE WALA OBEROI? | Lexa Trip Mumbai Iconics",
+      "caption": "🏰✨ COLABA WALA TAJ PALACE YA MARINE DRIVE WALA OBEROI? ✨🌊\n🔥 MUMBAI KE 2 SABSE ICONIC HOTELS! UP TO 30% OFF 🔥\n\n👇 RUKO! 1903 WALI HERITAGE CHAHIYE YA SEA VIEW WALI LUXURY? 👇\nMumbai me The Taj Mahal Palace, Mumbai wala 1903 heritage chahiye ya The Oberoi, Mumbai wala Marine Drive sea view?\nEk taraf Taj Palace - Colaba me, Gateway ke saamne, 1903 se royal heritage, dusri taraf Oberoi - Nariman Point me, Marine Drive par, sea view & modern luxury!\nAap kya choose karoge - TAJ PALACE YA OBEROI?\n\n💎 HOOK WORD: TAJ PALACE + OBEROI\n\n✅ No Hidden Fees | Best Price Guaranteed | Instant Booking\n📲 BOOK NOW: WhatsApp +91 90798 54982\n🌐 https://bookings.lexatrip.com/ | https://www.lexatrip.com/\n\n#LexaTrip #TajMahalPalaceMumbai #OberoiMumbai #MumbaiHotels",
+      "mediaPath": "uploads/telegram_post_taj_oberoi.jpg",
+      "targets": [
+        "facebook",
+        "linkedin",
+        "telegram",
+        "pinterest"
+      ],
+      "scheduledTime": "2026-11-20T05:13:38.646Z",
+      "status": "published",
+      "publishedAt": "2026-11-20T05:13:38.646Z",
+      "publishResults": [
+        {
+          "platform": "linkedin",
+          "status": "published",
+          "details": {
+            "postId": "urn:li:share:7529411365564846080",
+            "author": "urn:li:person:F_YlK_lCoG",
+            "liveUrl": "https://www.linkedin.com/feed/update/urn:li:share:7529411365564846080/"
+          }
+        },
+        {
+          "platform": "telegram",
+          "status": "published",
+          "details": {
+            "channel": "@lexatripjaisalmer",
+            "messageId": 86
+          }
+        },
+        {
+          "platform": "facebook",
+          "status": "published",
+          "details": {
+            "profileUrl": "https://www.facebook.com/profile.php?id=61594513580628",
+            "status": "dispatched"
+          }
+        },
+        {
+          "platform": "pinterest",
+          "status": "published",
+          "details": {
+            "board": "https://www.pinterest.com/lexatripjaisalmer/",
+            "status": "dispatched"
+          }
+        }
+      ]
+    },
+    {
       "id": "q_batch_1794714417140_post_1_1794714568506",
       "batchId": "batch_1794714417140",
       "itemType": "post",
@@ -4980,7 +5035,7 @@
       "caption": "✨ सुनहरी रेत के टीलों पर शाही ऊंट सफारी और सूर्यास्त का अविस्मरणीय अनुभव लेक्सा ट्रिप के साथ।\n\n📍 डेस्टिनेशन: सैम सैंड ड्यून्स, जैसलमेर\n🐪 आज ही अपना शाही कैंप और सफारी पैकेज बुक करें!\n🌐 बुकिंग पोर्टल: https://bookings.lexatrip.com/\n🌐 आधिकारिक वेबसाइट: https://www.lexatrip.com/\n📞 कॉल / व्हाट्सएप: +91 90798 54982",
       "mediaPath": "D:\\lexa automation web and app\\generated\\batch_1794831887155\\post_1_4x5.jpg",
       "scheduledTime": "2026-11-20T04:00:00.000Z",
-      "status": "queued",
+      "status": "published",
       "targets": [
         "instagram",
         "facebook",
@@ -4988,7 +5043,38 @@
         "pinterest",
         "blogger"
       ],
-      "createdAt": "2026-11-19T19:08:22.830Z"
+      "createdAt": "2026-11-19T19:08:22.830Z",
+      "publishedAt": "2026-11-20T05:13:38.634Z",
+      "publishResults": [
+        {
+          "platform": "linkedin",
+          "status": "published",
+          "details": {
+            "postId": "urn:li:share:7529405663681150976"
+          }
+        },
+        {
+          "platform": "facebook",
+          "status": "published",
+          "details": {
+            "message": "Dispatched via Smart Bridge"
+          }
+        },
+        {
+          "platform": "instagram",
+          "status": "published",
+          "details": {
+            "message": "Smart Bridge Synced"
+          }
+        },
+        {
+          "platform": "pinterest",
+          "status": "published",
+          "details": {
+            "message": "Smart Bridge Synced"
+          }
+        }
+      ]
     },
     {
       "id": "q_active_1795115302878_1",

@@ -1,4 +1,6 @@
 const sharp = require('sharp');
+sharp.cache(false);
+sharp.concurrency(1);
 const fs = require('fs');
 const path = require('path');
 
