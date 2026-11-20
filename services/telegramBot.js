@@ -115,6 +115,17 @@ class NativeTelegramBot {
   }
 
   async pollLoop() {
+    // Fast-forward offset on startup so stale backlogs never re-trigger video processing
+    try {
+      const initRes = await axios.get(`${this.baseUrl}/getUpdates?offset=-1`, { timeout: 10000 });
+      if (initRes.data?.ok && Array.isArray(initRes.data.result) && initRes.data.result.length > 0) {
+        this.offset = initRes.data.result[initRes.data.result.length - 1].update_id + 1;
+        console.log(`🤖 Telegram Bot acknowledged backlog. Listening from offset: ${this.offset}`);
+      }
+    } catch (e) {
+      console.warn('Telegram init offset notice:', e.message);
+    }
+
     while (this.isPolling) {
       try {
         const res = await axios.get(`${this.baseUrl}/getUpdates`, {
@@ -729,17 +740,22 @@ class TelegramBotService {
         const reelFilename = `live_${Date.now()}_reel.mp4`;
         const reelPath = path.join(processedDir, reelFilename);
         let reelGenerated = false;
-        try {
-          await videoEngine.generateSingleReel({
-            imagePath: processedPath,
-            outputPath: reelPath,
-            duration: 10.0,
-            brandText: (dest.name.split('(')[0] || 'LEXA TRIP').trim().toUpperCase(),
-            tagline: '✦ Luxury Desert Camping & Experiential Travel ✦'
-          });
-          reelGenerated = true;
-        } catch (rErr) {
-          console.warn('[TelegramBot] Single Reel render notice:', rErr.message);
+        // On 512MB Cloud free tier, avoid spawning heavy FFmpeg processes to keep RAM strictly near 0MB
+        if (process.env.ENABLE_CLOUD_VIDEO === 'true' && !process.env.RENDER) {
+          try {
+            await videoEngine.generateSingleReel({
+              imagePath: processedPath,
+              outputPath: reelPath,
+              duration: 10.0,
+              brandText: (dest.name.split('(')[0] || 'LEXA TRIP').trim().toUpperCase(),
+              tagline: '✦ Luxury Desert Camping & Experiential Travel ✦'
+            });
+            reelGenerated = true;
+          } catch (rErr) {
+            console.warn('[TelegramBot] Single Reel render notice:', rErr.message);
+          }
+        } else {
+          console.log('[TelegramBot] Cloud 512MB RAM protection active: Prioritizing crystal clear 4:5 image dispatch (0MB load).');
         }
 
         // 3. Acknowledge receipt and announce instant dispatch
