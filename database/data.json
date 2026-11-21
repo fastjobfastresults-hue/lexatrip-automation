@@ -80,9 +80,9 @@
       "connected": false,
       "authType": "api_token",
       "credentials": {
-        "accessToken": "",
-        "instagramAccountId": "",
-        "pageId": ""
+        "accessToken": "EAAW4uB0xAf8BTPN9ty5pNUMpjCZCZAFXXHk992WbyckObzPt50ZBdtBzWNb7RVZBvPANWtu3eCy2f5uZCvfgPrlEs7nyYuL96X6S1GDdn77WAkZCiAsRC0zb6HFuAkLaUnGOb15z0ythYYln66CWgNZA1orTrUxnpvwPYe4jDuwGZAlbgSgO11VncMeodPKBdzRuSbOS",
+        "instagramAccountId": "17841429903443095",
+        "pageId": "1190728550800516"
       },
       "proxy": ""
     },
@@ -153,8 +153,8 @@
       "connected": false,
       "authType": "api_token",
       "credentials": {
-        "pageAccessToken": "",
-        "pageId": ""
+        "pageId": "1190728550800516",
+        "pageAccessToken": "EAAW4uB0xAf8BTPN9ty5pNUMpjCZCZAFXXHk992WbyckObzPt50ZBdtBzWNb7RVZBvPANWtu3eCy2f5uZCvfgPrlEs7nyYuL96X6S1GDdn77WAkZCiAsRC0zb6HFuAkLaUnGOb15z0ythYYln66CWgNZA1orTrUxnpvwPYe4jDuwGZAlbgSgO11VncMeodPKBdzRuSbOS"
       },
       "proxy": ""
     }
@@ -9550,9 +9550,8 @@
           "handle": "https://www.facebook.com/profile.php?id=61594513580628",
           "authType": "lifetime_page_token",
           "credentials": {
-            "pageId": "1385624654624388",
-            "pageAccessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
-            "isLifetime": true
+            "pageId": "1190728550800516",
+            "pageAccessToken": "EAAW4uB0xAf8BTPN9ty5pNUMpjCZCZAFXXHk992WbyckObzPt50ZBdtBzWNb7RVZBvPANWtu3eCy2f5uZCvfgPrlEs7nyYuL96X6S1GDdn77WAkZCiAsRC0zb6HFuAkLaUnGOb15z0ythYYln66CWgNZA1orTrUxnpvwPYe4jDuwGZAlbgSgO11VncMeodPKBdzRuSbOS"
           },
           "supports": [
             "post",
@@ -9566,9 +9565,9 @@
           "handle": "@lexatripjaisalmer",
           "authType": "lifetime_page_token",
           "credentials": {
-            "accessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
-            "isLifetime": true,
-            "instagramAccountId": "17841424678908618"
+            "accessToken": "EAAW4uB0xAf8BTPN9ty5pNUMpjCZCZAFXXHk992WbyckObzPt50ZBdtBzWNb7RVZBvPANWtu3eCy2f5uZCvfgPrlEs7nyYuL96X6S1GDdn77WAkZCiAsRC0zb6HFuAkLaUnGOb15z0ythYYln66CWgNZA1orTrUxnpvwPYe4jDuwGZAlbgSgO11VncMeodPKBdzRuSbOS",
+            "instagramAccountId": "17841429903443095",
+            "pageId": "1190728550800516"
           },
           "supports": [
             "post",
@@ -9784,9 +9783,8 @@
           "handle": "https://www.facebook.com/profile.php?id=61594050853686",
           "authType": "api_token",
           "credentials": {
-            "pageId": "1385624654624388",
-            "pageAccessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
-            "isLifetime": true
+            "pageId": "1387953687723780",
+            "pageAccessToken": "EAAW4uB0xAf8BTL9i3ZAnmcNYHdHlQH08K5x8DFMHiP3aDIOjpV3nTzZB4SBuCd0q93jTDnzCmDd6Au3yOZB8cf5qwBUt7escLlJPuNcaDimhHLfiz7TeirjZB7ue5l482yQ0ZBCAFyw7k2r4f2gDHC5ZCFhzq2jIPnldWVUZAOqDdESepLN9ZBdN7EwqeCsq6AABNPqV"
           },
           "supports": [
             "post",
@@ -9800,9 +9798,9 @@
           "handle": "Click to Connect",
           "authType": "api_token",
           "credentials": {
-            "accessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
-            "isLifetime": true,
-            "instagramAccountId": "17841424678908618"
+            "accessToken": "EAAW4uB0xAf8BTL9i3ZAnmcNYHdHlQH08K5x8DFMHiP3aDIOjpV3nTzZB4SBuCd0q93jTDnzCmDd6Au3yOZB8cf5qwBUt7escLlJPuNcaDimhHLfiz7TeirjZB7ue5l482yQ0ZBCAFyw7k2r4f2gDHC5ZCFhzq2jIPnldWVUZAOqDdESepLN9ZBdN7EwqeCsq6AABNPqV",
+            "instagramAccountId": "17841433524273801",
+            "pageId": "1387953687723780"
           },
           "supports": [
             "post",
@@ -9987,9 +9985,8 @@
           "handle": "Click to Connect",
           "authType": "api_token",
           "credentials": {
-            "pageId": "1385624654624388",
-            "pageAccessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
-            "isLifetime": true
+            "pageId": "1288622184340792",
+            "pageAccessToken": "EAAW4uB0xAf8BTLT2n9WaN4sLxPCiYUjHxUYvYhzw4TZCyK96B0tuCkotWut62nUgBWqPoDBPFtDSNhljNyxYHAZCZCxGCEIkmZCxf2ijMRvGsthq6Bka4dNODFrZAZByHhVAIZB4paq027ZBhAiQHVk7PaY3gAExIMR32vJ5VXB6gljoGVcmtFvR6eUXAD9SkkhUnyxYNplB"
           },
           "supports": [
             "post",
@@ -10003,9 +10000,9 @@
           "handle": "Click to Connect",
           "authType": "api_token",
           "credentials": {
-            "accessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
-            "isLifetime": true,
-            "instagramAccountId": "17841424678908618"
+            "accessToken": "EAAW4uB0xAf8BTLT2n9WaN4sLxPCiYUjHxUYvYhzw4TZCyK96B0tuCkotWut62nUgBWqPoDBPFtDSNhljNyxYHAZCZCxGCEIkmZCxf2ijMRvGsthq6Bka4dNODFrZAZByHhVAIZB4paq027ZBhAiQHVk7PaY3gAExIMR32vJ5VXB6gljoGVcmtFvR6eUXAD9SkkhUnyxYNplB",
+            "instagramAccountId": "17841434226455586",
+            "pageId": "1288622184340792"
           },
           "supports": [
             "post",
@@ -10210,9 +10207,8 @@
           "handle": "Click to Connect",
           "authType": "api_token",
           "credentials": {
-            "pageId": "1385624654624388",
-            "pageAccessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
-            "isLifetime": true
+            "pageId": "1288622184340792",
+            "pageAccessToken": "EAAW4uB0xAf8BTLT2n9WaN4sLxPCiYUjHxUYvYhzw4TZCyK96B0tuCkotWut62nUgBWqPoDBPFtDSNhljNyxYHAZCZCxGCEIkmZCxf2ijMRvGsthq6Bka4dNODFrZAZByHhVAIZB4paq027ZBhAiQHVk7PaY3gAExIMR32vJ5VXB6gljoGVcmtFvR6eUXAD9SkkhUnyxYNplB"
           },
           "supports": [
             "post",
@@ -10226,9 +10222,9 @@
           "handle": "Click to Connect",
           "authType": "api_token",
           "credentials": {
-            "accessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
-            "isLifetime": true,
-            "instagramAccountId": "17841424678908618"
+            "accessToken": "EAAW4uB0xAf8BTLT2n9WaN4sLxPCiYUjHxUYvYhzw4TZCyK96B0tuCkotWut62nUgBWqPoDBPFtDSNhljNyxYHAZCZCxGCEIkmZCxf2ijMRvGsthq6Bka4dNODFrZAZByHhVAIZB4paq027ZBhAiQHVk7PaY3gAExIMR32vJ5VXB6gljoGVcmtFvR6eUXAD9SkkhUnyxYNplB",
+            "instagramAccountId": "17841434226455586",
+            "pageId": "1288622184340792"
           },
           "supports": [
             "post",
@@ -11102,9 +11098,8 @@
           "handle": "https://www.facebook.com/profile.php?id=61594170400993",
           "authType": "lifetime_page_token",
           "credentials": {
-            "pageId": "1385624654624388",
-            "pageAccessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
-            "isLifetime": true
+            "pageId": "1361009330428038",
+            "pageAccessToken": "EAAW4uB0xAf8BTBhQYh7EPcdZCNpJSSpPRK7LZCZAlPvL4mssNzgzS9KQH789Y1hlCV3IZBfBFA8NmY2JAYYcr7RGAXWfM11gwnBgOTBDPR4ADP60vyGZALcE9ysNOFVIPpwAi5m4kABAZBUueVW6hv0P5mmUjCBtVNZCmxfWtFp7nernRMGZBZCs6sF6vbX45DmpXW3Hh"
           },
           "supports": [
             "post",
@@ -11118,9 +11113,9 @@
           "handle": "Click to Connect",
           "authType": "api_token",
           "credentials": {
-            "accessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
-            "isLifetime": true,
-            "instagramAccountId": "17841424678908618"
+            "accessToken": "EAAW4uB0xAf8BTBhQYh7EPcdZCNpJSSpPRK7LZCZAlPvL4mssNzgzS9KQH789Y1hlCV3IZBfBFA8NmY2JAYYcr7RGAXWfM11gwnBgOTBDPR4ADP60vyGZALcE9ysNOFVIPpwAi5m4kABAZBUueVW6hv0P5mmUjCBtVNZCmxfWtFp7nernRMGZBZCs6sF6vbX45DmpXW3Hh",
+            "instagramAccountId": "17841434417677202",
+            "pageId": "1361009330428038"
           },
           "supports": [
             "post",
@@ -11325,9 +11320,8 @@
           "handle": "https://www.facebook.com/profile.php?id=61594116223402",
           "authType": "lifetime_page_token",
           "credentials": {
-            "pageId": "1385624654624388",
-            "pageAccessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
-            "isLifetime": true
+            "pageId": "1387213014467886",
+            "pageAccessToken": "EAAW4uB0xAf8BTMoV7WQzQRkRYTPmi5EM3qFlGIwiBUTVuacZBuFBehINo4L7vGTzvIItIU6HZBPiTUTTsavFWSAyj5ZAznuwZCApVctMYjmReE9l95gOUpo94EWdJZC262P1sAueUHwyfKyD8mVfzHsjoF3ZAREQXmrBCtyRODefpkBt2HnSlp7PzTyLjEVDO3pn8I"
           },
           "supports": [
             "post",
@@ -11341,9 +11335,9 @@
           "handle": "Click to Connect",
           "authType": "api_token",
           "credentials": {
-            "accessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
-            "isLifetime": true,
-            "instagramAccountId": "17841424678908618"
+            "accessToken": "EAAW4uB0xAf8BTMoV7WQzQRkRYTPmi5EM3qFlGIwiBUTVuacZBuFBehINo4L7vGTzvIItIU6HZBPiTUTTsavFWSAyj5ZAznuwZCApVctMYjmReE9l95gOUpo94EWdJZC262P1sAueUHwyfKyD8mVfzHsjoF3ZAREQXmrBCtyRODefpkBt2HnSlp7PzTyLjEVDO3pn8I",
+            "instagramAccountId": "17841434237437029",
+            "pageId": "1387213014467886"
           },
           "supports": [
             "post",
@@ -11549,8 +11543,7 @@
           "authType": "api_token",
           "credentials": {
             "pageId": "1385624654624388",
-            "pageAccessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
-            "isLifetime": true
+            "pageAccessToken": "EAAW4uB0xAf8BTGRAbJy9FrJnLklSLGzyR7JKdY5hwfXnK6GVUvmJ2MUQEp150YmrLkR6cxEtvD63vIuieO7o8i6APnZB8cuiZBLyB73MP05xPswZAMhW0DOv30ZBipXDuiOYcDGwLVS33dZChm10BCFfAAIvj0iFa5psScuqBjnIUQSQbWfSFFcMUG35eV2mPInTB"
           },
           "supports": [
             "post",

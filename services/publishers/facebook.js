@@ -36,11 +36,16 @@ class FacebookPublisher {
         timeout: 60000
       });
 
+      const rawPostId = res.data.id || res.data.post_id;
+      const cleanPostId = rawPostId?.includes('_') ? rawPostId.split('_')[1] : rawPostId;
+      const postUrl = `https://www.facebook.com/${pageId}/posts/${cleanPostId}`;
+
       return {
         success: true,
         simulated: false,
         platform: 'facebook',
-        postId: res.data.id || res.data.post_id,
+        postId: rawPostId,
+        postUrl,
         publishedAt: new Date().toISOString()
       };
     } catch (err) {
@@ -83,13 +88,17 @@ class FacebookPublisher {
         timeout: 120000
       });
 
+      const rawVideoId = res.data.id;
+      const postUrl = `https://www.facebook.com/${pageId}/videos/${rawVideoId}`;
+
       return {
         success: true,
         simulated: false,
         platform: 'facebook',
         type: 'reel',
-        postId: res.data.id,
-        videoId: res.data.id,
+        postId: rawVideoId,
+        videoId: rawVideoId,
+        postUrl,
         publishedAt: new Date().toISOString()
       };
     } catch (err) {
