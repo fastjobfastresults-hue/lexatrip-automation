@@ -30,43 +30,107 @@
     }
   </script>
   <style>
+    :root, [data-theme="dark"] {
+      --bg-primary: #0F172A;
+      --bg-radial: radial-gradient(at 10% 10%, rgba(245, 158, 11, 0.08) 0px, transparent 45%), radial-gradient(at 90% 12%, rgba(59, 130, 246, 0.08) 0px, transparent 45%), radial-gradient(at 50% 80%, rgba(16, 185, 129, 0.06) 0px, transparent 55%);
+      --header-bg: rgba(15, 23, 42, 0.94);
+      --nav-bg: rgba(15, 23, 42, 0.96);
+      --card-bg: rgba(30, 41, 59, 0.72);
+      --card-elevated: rgba(30, 41, 59, 0.92);
+      --card-border: rgba(255, 255, 255, 0.09);
+      --text-primary: #F8FAFC;
+      --text-secondary: #CBD5E1;
+      --text-muted: #94A3B8;
+      --accent-gold: #D4AF37;
+      --accent-glow: rgba(212, 175, 55, 0.22);
+      --shadow-card: 0 15px 35px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #F8FAFC;
+      --bg-radial: radial-gradient(at 10% 10%, rgba(217, 119, 6, 0.04) 0px, transparent 45%), radial-gradient(at 90% 12%, rgba(37, 99, 235, 0.04) 0px, transparent 45%), radial-gradient(at 50% 80%, rgba(16, 185, 129, 0.04) 0px, transparent 55%);
+      --header-bg: rgba(255, 255, 255, 0.96);
+      --nav-bg: rgba(248, 250, 252, 0.96);
+      --card-bg: rgba(255, 255, 255, 0.92);
+      --card-elevated: #FFFFFF;
+      --card-border: #E2E8F0;
+      --text-primary: #0F172A;
+      --text-secondary: #334155;
+      --text-muted: #64748B;
+      --accent-gold: #B45309;
+      --accent-glow: rgba(180, 83, 9, 0.15);
+      --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+    }
+
+    [data-theme="cyber"] {
+      --bg-primary: #060E18;
+      --bg-radial: radial-gradient(at 10% 10%, rgba(0, 240, 255, 0.12) 0px, transparent 45%), radial-gradient(at 90% 12%, rgba(16, 185, 129, 0.1) 0px, transparent 45%), radial-gradient(at 50% 80%, rgba(99, 102, 241, 0.08) 0px, transparent 55%);
+      --header-bg: rgba(6, 14, 24, 0.95);
+      --nav-bg: rgba(8, 18, 30, 0.96);
+      --card-bg: rgba(13, 27, 42, 0.8);
+      --card-elevated: rgba(15, 32, 50, 0.92);
+      --card-border: rgba(0, 240, 255, 0.25);
+      --text-primary: #E2E8F0;
+      --text-secondary: #94A3B8;
+      --text-muted: #64748B;
+      --accent-gold: #00F0FF;
+      --accent-glow: rgba(0, 240, 255, 0.25);
+      --shadow-card: 0 0 25px rgba(0, 240, 255, 0.12);
+    }
+
+    [data-theme="velvet"] {
+      --bg-primary: #0D0B18;
+      --bg-radial: radial-gradient(at 10% 10%, rgba(212, 175, 55, 0.12) 0px, transparent 45%), radial-gradient(at 90% 12%, rgba(168, 85, 247, 0.1) 0px, transparent 45%), radial-gradient(at 50% 80%, rgba(236, 72, 153, 0.06) 0px, transparent 55%);
+      --header-bg: rgba(13, 11, 24, 0.95);
+      --nav-bg: rgba(18, 15, 32, 0.96);
+      --card-bg: rgba(26, 22, 46, 0.8);
+      --card-elevated: rgba(32, 27, 56, 0.92);
+      --card-border: rgba(212, 175, 55, 0.25);
+      --text-primary: #FFF8E7;
+      --text-secondary: #D8B4FE;
+      --text-muted: #A855F7;
+      --accent-gold: #F5D061;
+      --accent-glow: rgba(245, 208, 97, 0.25);
+      --shadow-card: 0 15px 35px rgba(0, 0, 0, 0.5);
+    }
+
     body {
-      background-color: #06070B;
-      background-image: 
-        radial-gradient(at 10% 10%, rgba(212, 175, 55, 0.08) 0px, transparent 45%),
-        radial-gradient(at 90% 12%, rgba(59, 130, 246, 0.07) 0px, transparent 45%),
-        radial-gradient(at 50% 80%, rgba(16, 185, 129, 0.06) 0px, transparent 55%);
+      background-color: var(--bg-primary);
+      background-image: var(--bg-radial);
       background-attachment: fixed;
-      color: #F3F4F6;
+      color: var(--text-primary);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
     .glass-card {
-      background: rgba(18, 20, 30, 0.65);
+      background: var(--card-bg) !important;
       backdrop-filter: blur(36px) saturate(180%);
       -webkit-backdrop-filter: blur(36px) saturate(180%);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--card-border) !important;
+      box-shadow: var(--shadow-card) !important;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .glass-card-elevated {
-      background: rgba(22, 25, 38, 0.82);
+      background: var(--card-elevated) !important;
       backdrop-filter: blur(40px) saturate(190%);
       -webkit-backdrop-filter: blur(40px) saturate(190%);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      border: 1px solid var(--card-border) !important;
+      box-shadow: var(--shadow-card) !important;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .apple-hero-card {
-      background: rgba(16, 18, 28, 0.75);
+      background: var(--card-bg) !important;
       backdrop-filter: blur(40px) saturate(200%);
       -webkit-backdrop-filter: blur(40px) saturate(200%);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      border: 1px solid var(--card-border) !important;
+      box-shadow: var(--shadow-card) !important;
       transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .apple-hero-card:hover {
-      border-color: rgba(255, 255, 255, 0.2);
+      border-color: var(--accent-gold) !important;
       transform: translateY(-2px);
-      box-shadow: 0 28px 55px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      box-shadow: 0 20px 45px var(--accent-glow) !important;
     }
     .gold-btn {
       background: linear-gradient(135deg, #F5E6B3 0%, #D4AF37 50%, #A97C19 100%);
@@ -94,17 +158,17 @@
     .active-nav-tab {
       background: linear-gradient(135deg, rgba(212, 175, 55, 0.25) 0%, rgba(212, 175, 55, 0.1) 100%) !important;
       border: 1px solid rgba(212, 175, 55, 0.7) !important;
-      color: #FFF !important;
+      color: var(--text-primary) !important;
       box-shadow: 0 0 16px rgba(212, 175, 55, 0.25) !important;
     }
     .inactive-nav-tab {
       background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: #9CA3AF;
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
     }
     .inactive-nav-tab:hover {
       background: rgba(255, 255, 255, 0.07);
-      color: #FFF;
+      color: var(--text-primary);
     }
     .role-btn.active {
       background: #D4AF37 !important;
@@ -112,6 +176,77 @@
       font-weight: 800 !important;
     }
 
+    /* Day / Light Mode Overrides for Perfect Readability & Eye Comfort */
+    [data-theme="light"] .text-white {
+      color: #0F172A !important;
+    }
+    [data-theme="light"] .text-gray-200,
+    [data-theme="light"] .text-gray-300 {
+      color: #334155 !important;
+    }
+    [data-theme="light"] .text-gray-400 {
+      color: #64748B !important;
+    }
+    [data-theme="light"] header {
+      background-color: var(--header-bg) !important;
+      border-color: var(--card-border) !important;
+    }
+    [data-theme="light"] nav {
+      background-color: var(--nav-bg) !important;
+      border-color: var(--card-border) !important;
+    }
+    [data-theme="light"] .border-white\/10,
+    [data-theme="light"] .border-white\/5,
+    [data-theme="light"] .border-white\/20 {
+      border-color: #E2E8F0 !important;
+    }
+    [data-theme="light"] .bg-white\/\[0\.02\],
+    [data-theme="light"] .bg-white\/\[0\.03\],
+    [data-theme="light"] .bg-white\/\[0\.04\],
+    [data-theme="light"] .bg-white\/\[0\.06\] {
+      background-color: rgba(0, 0, 0, 0.03) !important;
+    }
+    [data-theme="light"] .inactive-nav-tab {
+      background: rgba(0, 0, 0, 0.03) !important;
+      color: #475569 !important;
+      border-color: #E2E8F0 !important;
+    }
+    [data-theme="light"] .inactive-nav-tab:hover {
+      background: rgba(0, 0, 0, 0.07) !important;
+      color: #0F172A !important;
+    }
+
+    /* Robotic Agent Mesh Styles & Keyframes */
+    .agent-node-card {
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .agent-node-card:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 18px 36px -8px var(--accent-glow, rgba(0, 240, 255, 0.25));
+    }
+    .agent-node-active {
+      transform: translateY(-3px);
+      box-shadow: 0 0 25px var(--accent-glow, rgba(0, 240, 255, 0.35)) !important;
+    }
+    @keyframes packetFlow {
+      0% { left: -10%; opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { left: 110%; opacity: 0; }
+    }
+    .animate-packet-travel {
+      animation: packetFlow 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+
+    .theme-toggle-btn.active-theme-btn {
+      background-color: var(--accent-gold) !important;
+      color: #000000 !important;
+      font-weight: 800 !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-apple-gold selection:text-black">
@@ -153,6 +288,26 @@
         <button onclick="switchRole('guest')" id="role-btn-guest" class="role-btn px-3 py-1 rounded-full text-gray-400 hover:text-white transition flex items-center space-x-1.5">
           <i class="fa-solid fa-globe text-xs"></i>
           <span>🌐 गेस्ट व्यू</span>
+        </button>
+      </div>
+
+      <!-- MODERN PROFESSIONAL THEME SELECTOR (Day / Night / Cyber-Robot / Royal Velvet) -->
+      <div class="theme-switcher-bar flex items-center bg-white/[0.05] border border-white/10 rounded-full p-1 text-xs shadow-inner">
+        <button onclick="setAppTheme('light')" id="theme-btn-light" class="theme-toggle-btn px-2.5 py-1 rounded-full transition flex items-center space-x-1 font-semibold text-gray-400 hover:text-amber-500" title="डे मोड (Day Mode) — सुखद रोशनी व आँखों को सुकून">
+          <i class="fa-solid fa-sun text-amber-500"></i>
+          <span class="hidden sm:inline text-[11px]">दिन</span>
+        </button>
+        <button onclick="setAppTheme('dark')" id="theme-btn-dark" class="theme-toggle-btn px-2.5 py-1 rounded-full transition flex items-center space-x-1 font-semibold text-gray-400 hover:text-indigo-400" title="नाइट मोड (Midnight Slate) — गहरा व आरामदेह स्लेट">
+          <i class="fa-solid fa-moon text-indigo-400"></i>
+          <span class="hidden sm:inline text-[11px]">रात</span>
+        </button>
+        <button onclick="setAppTheme('cyber')" id="theme-btn-cyber" class="theme-toggle-btn px-2.5 py-1 rounded-full transition flex items-center space-x-1 font-semibold text-gray-400 hover:text-emerald-400" title="रोबोटिक एआई OS (Cybernetic Robot Mesh)">
+          <i class="fa-solid fa-robot text-emerald-400"></i>
+          <span class="hidden sm:inline text-[11px]">रोबोट</span>
+        </button>
+        <button onclick="setAppTheme('velvet')" id="theme-btn-velvet" class="theme-toggle-btn px-2.5 py-1 rounded-full transition flex items-center space-x-1 font-semibold text-gray-400 hover:text-amber-400" title="रॉयल वेल्वेट (Royal Velvet Gold)">
+          <i class="fa-solid fa-gem text-amber-400"></i>
+          <span class="hidden sm:inline text-[11px]">रॉयल</span>
         </button>
       </div>
 
@@ -224,6 +379,240 @@
     <!-- 📊 VIEW 1: EXECUTIVE LIVE DASHBOARD (DEFAULT VIEW ON MAIN SCREEN)   -->
     <!-- =================================================================== -->
     <div id="view-dashboard" class="view-panel space-y-6">
+
+      <!-- 🤖 AUTONOMOUS AI AGENT SWARM & ROBOTIC DATA-FLOW MESH -->
+      <section id="ai-agent-swarm-mesh" class="apple-hero-card rounded-[26px] p-5 sm:p-6 relative overflow-hidden border transition-all duration-300">
+        <!-- Background Ambient Robotic Grid Glow -->
+        <div class="agent-mesh-ambient-glow absolute -top-24 -left-24 w-80 h-80 rounded-full blur-3xl pointer-events-none opacity-20 transition-all"></div>
+        <div class="agent-mesh-ambient-glow-2 absolute -bottom-24 -right-24 w-80 h-80 rounded-full blur-3xl pointer-events-none opacity-20 transition-all"></div>
+
+        <!-- Section Header -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-white/10 relative z-10">
+          <div class="flex items-center space-x-3.5">
+            <div class="relative w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 via-emerald-500 to-indigo-600 flex items-center justify-center text-white text-2xl shadow-lg shadow-cyan-500/25">
+              <i class="fa-solid fa-robot animate-bounce" style="animation-duration: 2.5s;"></i>
+              <span class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-black flex items-center justify-center">
+                <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+              </span>
+            </div>
+            <div>
+              <div class="flex items-center space-x-2 flex-wrap gap-y-1">
+                <h2 class="text-base sm:text-lg font-black tracking-tight text-white flex items-center space-x-2">
+                  <span>🤖 स्वायत्त एआई एजेंट मेश</span>
+                  <span class="text-xs font-mono font-normal text-cyan-400 hidden sm:inline">[Autonomous Neural Swarm]</span>
+                </h2>
+                <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold uppercase tracking-wider flex items-center space-x-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                  <span>5 एजेंट्स लाइव सिंक्रनाइज़्ड</span>
+                </span>
+              </div>
+              <p class="text-xs text-gray-400 mt-0.5">
+                रियल-टाइम रोबोटिक पाइपलाइन: Telegram से फ़ोटो व SEO लेकर 8 सोशल नेटवर्क्स पर 100% ऑथेंटिक पब्लिशिंग
+              </p>
+            </div>
+          </div>
+
+          <!-- Controls: Trigger Data Flow Pulse & SFX Sound -->
+          <div class="flex items-center space-x-2">
+            <button onclick="triggerAgentSwarmPulse()" id="btn-pulse-agent-swarm" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-black font-extrabold text-xs shadow-lg shadow-cyan-500/20 transition-all flex items-center space-x-2 active:scale-95 cursor-pointer">
+              <i class="fa-solid fa-bolt animate-pulse"></i>
+              <span>⚡ पल्स डेटा फ्लो (Pulse Data Flow)</span>
+            </button>
+            <button onclick="toggleAgentAudioSFX()" id="btn-agent-sfx" class="px-3 py-2 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-gray-200 font-bold text-xs transition flex items-center space-x-1.5" title="रोबोटिक साउंड इफेक्ट्स टॉगल करें">
+              <i id="agent-sfx-icon" class="fa-solid fa-volume-high text-cyan-400"></i>
+              <span id="agent-sfx-text" class="hidden sm:inline">SFX ऑन</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 5 Interactive Robotic Agent Cards in Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 my-5 relative z-10">
+          
+          <!-- Agent 1: Sentinel (Telegram Ingest) -->
+          <div onclick="inspectAgentNode('sentinel')" id="agent-node-sentinel" class="agent-node-card rounded-2xl p-4 bg-white/[0.03] border border-cyan-500/30 hover:border-cyan-400 flex flex-col justify-between group">
+            <div>
+              <div class="flex items-center justify-between mb-2.5">
+                <div class="w-9 h-9 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-base group-hover:scale-110 transition-transform shadow-inner">
+                  <i class="fa-solid fa-satellite"></i>
+                </div>
+                <span class="px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 text-[10px] font-mono font-bold flex items-center space-x-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
+                  <span>LISTENING</span>
+                </span>
+              </div>
+              <h4 class="text-xs font-black text-white group-hover:text-cyan-300 transition">Agent Sentinel</h4>
+              <p class="text-[11px] text-gray-400 mt-0.5">टेलीग्राम इनजेस्टर रोबोट</p>
+              <div class="mt-2.5 text-[10px] text-gray-300 space-y-1">
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-400">स्रोत:</span>
+                  <span class="font-mono text-cyan-300 truncate max-w-[100px]">@lexatripjaisalmer</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-400">पेलोड:</span>
+                  <span class="font-mono text-white">5 RAW Photos + SEO</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3 pt-2 border-t border-white/5 flex items-center justify-between text-[10px] text-cyan-400 font-bold">
+              <span>नोड 01</span>
+              <span>इनपुट रिसेप्टर ➔</span>
+            </div>
+          </div>
+
+          <!-- Agent 2: Cortex (Vision & SEO Neural Core) -->
+          <div onclick="inspectAgentNode('cortex')" id="agent-node-cortex" class="agent-node-card rounded-2xl p-4 bg-white/[0.03] border border-purple-500/30 hover:border-purple-400 flex flex-col justify-between group">
+            <div>
+              <div class="flex items-center justify-between mb-2.5">
+                <div class="w-9 h-9 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-base group-hover:scale-110 transition-transform shadow-inner">
+                  <i class="fa-solid fa-brain"></i>
+                </div>
+                <span class="px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-300 text-[10px] font-mono font-bold flex items-center space-x-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span>
+                  <span>SYNTHESIZING</span>
+                </span>
+              </div>
+              <h4 class="text-xs font-black text-white group-hover:text-purple-300 transition">Agent Cortex</h4>
+              <p class="text-[11px] text-gray-400 mt-0.5">न्यूरल विज़न & SEO ब्रेन</p>
+              <div class="mt-2.5 text-[10px] text-gray-300 space-y-1">
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-400">एआई मॉडल:</span>
+                  <span class="font-mono text-purple-300">Gemini 1.5 Pro</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-400">आस्पेक्ट रेशियो:</span>
+                  <span class="font-mono text-white">4:5 HD क्रॉपिंग</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3 pt-2 border-t border-white/5 flex items-center justify-between text-[10px] text-purple-400 font-bold">
+              <span>नोड 02</span>
+              <span>कंटेंट ट्रांसफॉर्म ➔</span>
+            </div>
+          </div>
+
+          <!-- Agent 3: Motion (FFmpeg Ultra HD Reels) -->
+          <div onclick="inspectAgentNode('motion')" id="agent-node-motion" class="agent-node-card rounded-2xl p-4 bg-white/[0.03] border border-amber-500/30 hover:border-amber-400 flex flex-col justify-between group">
+            <div>
+              <div class="flex items-center justify-between mb-2.5">
+                <div class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-base group-hover:scale-110 transition-transform shadow-inner">
+                  <i class="fa-solid fa-film"></i>
+                </div>
+                <span class="px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 text-[10px] font-mono font-bold flex items-center space-x-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                  <span>READY</span>
+                </span>
+              </div>
+              <h4 class="text-xs font-black text-white group-hover:text-amber-300 transition">Agent Motion</h4>
+              <p class="text-[11px] text-gray-400 mt-0.5">रील्स & वीडियो इंजन</p>
+              <div class="mt-2.5 text-[10px] text-gray-300 space-y-1">
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-400">पाइपलाइन:</span>
+                  <span class="font-mono text-amber-300">FFmpeg Ultrafast</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-400">आउटपुट:</span>
+                  <span class="font-mono text-white">9:16 Ultra HD (8s)</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3 pt-2 border-t border-white/5 flex items-center justify-between text-[10px] text-amber-400 font-bold">
+              <span>नोड 03</span>
+              <span>मोशन रेंडर ➔</span>
+            </div>
+          </div>
+
+          <!-- Agent 4: Dispatcher (Graph API Broadcaster) -->
+          <div onclick="inspectAgentNode('dispatcher')" id="agent-node-dispatcher" class="agent-node-card rounded-2xl p-4 bg-white/[0.03] border border-emerald-500/30 hover:border-emerald-400 flex flex-col justify-between group">
+            <div>
+              <div class="flex items-center justify-between mb-2.5">
+                <div class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-base group-hover:scale-110 transition-transform shadow-inner">
+                  <i class="fa-solid fa-tower-broadcast"></i>
+                </div>
+                <span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 text-[10px] font-mono font-bold flex items-center space-x-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                  <span>ROUTING</span>
+                </span>
+              </div>
+              <h4 class="text-xs font-black text-white group-hover:text-emerald-300 transition">Agent Dispatcher</h4>
+              <p class="text-[11px] text-gray-400 mt-0.5">मल्टी-चैनल ब्रॉडकास्टर</p>
+              <div class="mt-2.5 text-[10px] text-gray-300 space-y-1">
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-400">टारगेट:</span>
+                  <span class="font-mono text-emerald-300 truncate max-w-[100px]">Page 1190728550800516</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-400">Instagram:</span>
+                  <span class="font-mono text-white">@lexatripjaisalmer</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3 pt-2 border-t border-white/5 flex items-center justify-between text-[10px] text-emerald-400 font-bold">
+              <span>नोड 04</span>
+              <span>लाइव पब्लिश ➔</span>
+            </div>
+          </div>
+
+          <!-- Agent 5: Aegis (Token Health & Anti-Spam Sentry) -->
+          <div onclick="inspectAgentNode('aegis')" id="agent-node-aegis" class="agent-node-card rounded-2xl p-4 bg-white/[0.03] border border-blue-500/30 hover:border-blue-400 flex flex-col justify-between group">
+            <div>
+              <div class="flex items-center justify-between mb-2.5">
+                <div class="w-9 h-9 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-base group-hover:scale-110 transition-transform shadow-inner">
+                  <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <span class="px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-300 text-[10px] font-mono font-bold flex items-center space-x-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
+                  <span>GUARDING</span>
+                </span>
+              </div>
+              <h4 class="text-xs font-black text-white group-hover:text-blue-300 transition">Agent Aegis</h4>
+              <p class="text-[11px] text-gray-400 mt-0.5">एंटी-स्पैम व टोकन सेंट्री</p>
+              <div class="mt-2.5 text-[10px] text-gray-300 space-y-1">
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-400">चेक अंतराल:</span>
+                  <span class="font-mono text-blue-300">20s ऑटो-साइकल</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-400">सुरक्षा:</span>
+                  <span class="font-mono text-emerald-400">Zero Simulation</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3 pt-2 border-t border-white/5 flex items-center justify-between text-[10px] text-blue-400 font-bold">
+              <span>नोड 05</span>
+              <span>सिस्टम शील्ड 🛡️</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Animated Data-Flow Highway (Visual Photon Wire) -->
+        <div class="relative py-2 my-2 z-10 hidden sm:block">
+          <div class="h-1.5 w-full bg-white/[0.04] rounded-full overflow-hidden relative border border-white/5">
+            <div id="data-flow-packet" class="h-full w-24 bg-gradient-to-r from-transparent via-cyan-400 to-transparent rounded-full absolute -left-24 transition-all"></div>
+          </div>
+          <div class="flex justify-between text-[9px] font-mono text-gray-400 mt-1.5 px-1">
+            <span>[Telegram Ingest]</span>
+            <span>➔ [Vision & SEO AI]</span>
+            <span>➔ [FFmpeg Video Reel]</span>
+            <span>➔ [Meta Graph API]</span>
+            <span>➔ [Live Audit & Shield]</span>
+          </div>
+        </div>
+
+        <!-- Live Autonomous Agent Ticker Log -->
+        <div class="p-3 rounded-2xl bg-black/40 border border-white/10 font-mono text-xs relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 shadow-inner">
+          <div class="flex items-center space-x-2.5 overflow-hidden">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            <span class="text-[10px] text-cyan-400 font-bold uppercase tracking-wider">LIVE SWARM TICKER:</span>
+            <span id="agent-live-ticker-text" class="text-gray-300 text-xs truncate max-w-md lg:max-w-xl">
+              [01:42:15] 🤖 Agent Sentinel: Synchronized with Telegram channel @lexatripjaisalmer (-1003697503605)...
+            </span>
+          </div>
+          <span class="text-[10px] text-gray-400 text-right whitespace-nowrap">
+            हार्टबीट: <b class="text-emerald-400 font-bold" id="agent-swarm-heartbeat">Active (20s)</b>
+          </span>
+        </div>
+      </section>
 
       <!-- Real-Time Radar & Metrics HUD -->
       <section id="mini-live-tracker-hud" class="apple-hero-card rounded-[26px] p-5 relative overflow-hidden border border-emerald-500/30 bg-gradient-to-br from-[#0c0d16]/95 via-[#0e111d]/90 to-[#07090f]/95 shadow-2xl">
