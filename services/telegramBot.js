@@ -785,41 +785,17 @@ class TelegramBotService {
         const processedPath = path.join(processedDir, processedFilename);
         await imageProcessor.processTo4x5(localPath, processedPath);
 
-        // 2. Also generate an Ultra HD 9:16 Vertical Reel (10-12s)
-        const reelFilename = `live_${Date.now()}_reel.mp4`;
-        const reelPath = path.join(processedDir, reelFilename);
-        let reelGenerated = false;
-        if (process.env.DISABLE_CLOUD_VIDEO !== 'true') {
-          try {
-            console.log('[TelegramBot] Generating 9:16 Ultra HD motion Reel...');
-            await videoEngine.generateSingleReel({
-              imagePath: processedPath,
-              outputPath: reelPath,
-              duration: 10.0,
-              brandText: (dest.name.split('(')[0] || 'LEXA TRIP').trim().toUpperCase(),
-              tagline: '✦ Luxury Desert Camping & Experiential Travel ✦'
-            });
-            reelGenerated = true;
-            console.log('[TelegramBot] Single Reel successfully generated at:', reelPath);
-          } catch (rErr) {
-            console.warn('[TelegramBot] Single Reel render notice:', rErr.message);
-          }
-        } else {
-          console.log('[TelegramBot] Cloud video disabled via DISABLE_CLOUD_VIDEO.');
-        }
-
-        // 3. Acknowledge receipt and announce instant dispatch
+        // 2. Immediately acknowledge receipt and announce instant dispatch to Telegram
         await this.sendDualMessage(
           chatId,
           `📸 *[लाइव फ़ोटो व SEO प्राप्त]* 🐪\n\n` +
           `📌 *टाइटल:* ${parsedSeo.title}\n` +
-          `📍 *डेस्टिनेशन:* ${dest.name}\n` +
-          (reelGenerated ? `🎬 *9:16 अल्ट्रा HD रील:* स्वतः तैयार (10 सेकंड)\n\n` : `\n`) +
+          `📍 *डेस्टिनेशन:* ${dest.name}\n\n` +
           `🚀 *लाइव पब्लिशिंग इंजन सक्रिय...* सभी कनेक्टेड सोशल मीडिया पेजेस (Facebook, Instagram, LinkedIn, Pinterest, Blogger, Telegram) पर अभी लाइव पब्लिश किया जा रहा है!`,
           { parse_mode: 'Markdown' }
         );
 
-        // 4. Immediately queue and dispatch Post (4:5)
+        // 3. Immediately queue and dispatch Post (4:5) to all connected channels
         const queueRecord = {
           id: `q_instant_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
           batchId: `batch_live_${Date.now()}`,
@@ -847,43 +823,10 @@ class TelegramBotService {
           };
         }
 
-        // 5. Also queue and dispatch Reel (9:16) if generated
-        let reelResult = null;
-        if (reelGenerated) {
-          const reelRecord = {
-            id: `q_reel_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
-            batchId: `batch_live_${Date.now()}`,
-            destinationId: dest.id,
-            destinationName: dest.name,
-            itemType: 'reel',
-            index: session.photos.length,
-            title: `Reel: ${parsedSeo.title}`,
-            caption: parsedSeo.caption,
-            mediaPath: reelPath,
-            scheduledTime: new Date(Date.now() - 2000).toISOString(),
-            status: 'queued',
-            targets: ['instagram', 'facebook', 'youtube', 'pinterest'],
-            createdAt: new Date().toISOString()
-          };
-          db.addToQueue(reelRecord);
-          try {
-            reelResult = await scheduler.publishItemNow(reelRecord.id);
-          } catch (rErr) {
-            reelResult = {
-              status: 'failed',
-              publishResults: [{ platform: 'system', status: 'failed', error: rErr.message }]
-            };
-          }
-        }
-
-        // 6. Inspect publish results & deliver truthful report
-        const allTargetResults = [
-          ...(postResult?.publishResults || []),
-          ...(reelResult?.publishResults || [])
-        ];
-        const publishedTargets = allTargetResults.filter(r => r.status === 'published' || r.status === 'success');
-        const failedTargets = allTargetResults.filter(r => r.status === 'failed');
-        const skippedTargets = allTargetResults.filter(r => r.status === 'skipped');
+        // 4. Deliver truthful report for Post
+        const publishedTargets = (postResult?.publishResults || []).filter(r => r.status === 'published' || r.status === 'success');
+        const failedTargets = (postResult?.publishResults || []).filter(r => r.status === 'failed');
+        const skippedTargets = (postResult?.publishResults || []).filter(r => r.status === 'skipped');
 
         let reportMsg = '';
         if (publishedTargets.length > 0 && failedTargets.length === 0) {
@@ -891,7 +834,6 @@ class TelegramBotService {
           reportMsg = `✅ *[लाइव पब्लिशिंग संपन्न]* 🐪\n\n` +
             `📍 *डेस्टिनेशन:* ${dest.name}\n` +
             `📝 *पोस्ट:* ${parsedSeo.title} (4:5 HD)\n` +
-            (reelGenerated ? `🎬 *रील:* 9:16 अल्ट्रा HD मोशन रील पब्लिश्ड\n` : '') +
             `🕒 *समय:* ${new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}\n\n` +
             `🔗 *वेरिफाइड लाइव पोस्ट लिंक्स (सीधे क्लिक करें):*\n`;
 
@@ -960,6 +902,74 @@ class TelegramBotService {
           reply_markup: this.buildDashboardKeyboard(dest.id)
         });
 
+        // 5. In background: Also generate an Ultra HD 9:16 Vertical Reel (8s) and publish asynchronously
+        setImmediate(async () => {
+          if (process.env.DISABLE_CLOUD_VIDEO === 'true') {
+            console.log('[TelegramBot] Cloud video disabled via DISABLE_CLOUD_VIDEO.');
+            return;
+          }
+
+          const reelFilename = `live_${Date.now()}_reel.mp4`;
+          const reelPath = path.join(processedDir, reelFilename);
+          try {
+            console.log('[TelegramBot] Background generating 9:16 Ultra HD motion Reel...');
+            await videoEngine.generateSingleReel({
+              imagePath: processedPath,
+              outputPath: reelPath,
+              duration: 8.0,
+              brandText: (dest.name.split('(')[0] || 'LEXA TRIP').trim().toUpperCase(),
+              tagline: '✦ Luxury Desert Camping & Experiential Travel ✦'
+            });
+
+            console.log('[TelegramBot] Background Single Reel successfully generated at:', reelPath);
+
+            const reelRecord = {
+              id: `q_reel_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
+              batchId: `batch_live_${Date.now()}`,
+              destinationId: dest.id,
+              destinationName: dest.name,
+              itemType: 'reel',
+              index: session.photos.length,
+              title: `Reel: ${parsedSeo.title}`,
+              caption: parsedSeo.caption,
+              mediaPath: reelPath,
+              scheduledTime: new Date().toISOString(),
+              status: 'queued',
+              targets: ['facebook', 'instagram', 'youtube'],
+              createdAt: new Date().toISOString()
+            };
+            db.addToQueue(reelRecord);
+            const reelResult = await scheduler.publishItemNow(reelRecord.id);
+
+            const rPublished = (reelResult?.publishResults || []).filter(r => r.status === 'published' || r.status === 'success');
+            const rFailed = (reelResult?.publishResults || []).filter(r => r.status === 'failed');
+
+            if (rPublished.length > 0) {
+              let rMsg = `🎬 *[9:16 मोशन रील लाइव पब्लिश संपन्न]* 🐪\n\n` +
+                `📍 *डेस्टिनेशन:* ${dest.name}\n` +
+                `📌 *टाइटल:* Reel: ${parsedSeo.title}\n\n` +
+                `*रील लाइव चैनल्स:*\n`;
+              for (const r of rPublished) {
+                const icon = telegramNotifier.getPlatformIcon(r.platform);
+                const name = telegramNotifier.formatPlatformName(r.platform);
+                const postUrl = r.details?.postUrl || r.postUrl;
+                rMsg += postUrl ? `• [${icon} ${name} Reel](${postUrl})\n` : `• ✅ ${icon} ${name}: रील लाइव\n`;
+              }
+              if (rFailed.length > 0) {
+                rMsg += `\n*विफल रील चैनल्स:*\n`;
+                for (const r of rFailed) {
+                  const icon = telegramNotifier.getPlatformIcon(r.platform);
+                  const name = telegramNotifier.formatPlatformName(r.platform);
+                  rMsg += `• ❌ ${icon} ${name}: \`${r.error || 'त्रुटि'}\`\n`;
+                }
+              }
+              await this.sendDualMessage(chatId, rMsg, { parse_mode: 'Markdown' });
+            }
+          } catch (rErr) {
+            console.warn('[TelegramBot] Background Single Reel render notice:', rErr.message);
+          }
+        });
+
         // 5. If this is part of a 5-photo batch with combined SEO, trigger full pipeline
         if (session.photos.length >= 5 && session.combinedSeo) {
           await this.triggerFullPipeline(chatId, session, dest);
@@ -999,6 +1009,49 @@ class TelegramBotService {
         }
 
         await this.triggerFullPipeline(chatId, session, dest);
+      } else if (session.photos && session.photos.length > 0) {
+        // Fallback: If user sends SEO/Caption text in a separate message after uploading a photo
+        const cleanedText = text.replace(/^(एसईओ|seo|टाइटल|title)\s*[:：\-]?\s*/i, '').trim();
+        const parsedSeo = this.parseCaptionToSeo(cleanedText, `${dest.name} - Live Travel Post`);
+        if (!parsedSeo.caption.includes('bookings.lexatrip.com')) {
+          parsedSeo.caption += `\n\n🌐 बुकिंग पोर्टल: https://bookings.lexatrip.com/\n🌐 आधिकारिक वेबसाइट: https://www.lexatrip.com/\n📞 व्हाट्सएप / कॉल: +91 90798 54982`;
+        }
+
+        const lastPhoto = session.photos[session.photos.length - 1];
+        lastPhoto.rawCaption = text;
+        lastPhoto.seo = parsedSeo;
+
+        await this.sendDualMessage(
+          chatId,
+          `📝 *[SEO टेक्स्ट प्राप्त]* 🐪\n\n` +
+          `📌 *टाइटल:* ${parsedSeo.title}\n` +
+          `📍 *डेस्टिनेशन:* ${dest.name}\n\n` +
+          `🚀 ताज़ा SEO के साथ सोशल मीडिया चैनल्स पर लाइव पब्लिश किया जा रहा है...`,
+          { parse_mode: 'Markdown' }
+        );
+
+        const queueRecord = {
+          id: `q_instant_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
+          batchId: `batch_live_${Date.now()}`,
+          destinationId: dest.id,
+          destinationName: dest.name,
+          itemType: 'post',
+          index: session.photos.length,
+          title: parsedSeo.title,
+          caption: parsedSeo.caption,
+          mediaPath: lastPhoto.localPath,
+          scheduledTime: new Date(Date.now() - 5000).toISOString(),
+          status: 'queued',
+          targets: ['instagram', 'facebook', 'linkedin', 'pinterest', 'blogger'],
+          createdAt: new Date().toISOString()
+        };
+
+        db.addToQueue(queueRecord);
+        try {
+          await scheduler.publishItemNow(queueRecord.id);
+        } catch (pErr) {
+          console.error('[TelegramBot Text Publish Error]:', pErr.message);
+        }
       }
     };
 

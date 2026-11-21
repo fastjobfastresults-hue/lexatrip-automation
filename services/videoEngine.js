@@ -37,7 +37,7 @@ class VideoEngine {
       }
 
       const totalDuration = durations.reduce((a, b) => a + b, 0); // 12s
-      const args = [];
+      const args = ['-threads', '1'];
 
       // 1. Loop each of the 5 images for their respective duration
       for (let i = 0; i < 5; i++) {
@@ -61,7 +61,7 @@ class VideoEngine {
       for (let i = 0; i < 5; i++) {
         if (style === 'contain_blur') {
           filterStr +=
-            `[${i}:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=25:5,eq=brightness=-0.12[bg${i}];` +
+            `[${i}:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=4:1,eq=brightness=-0.12[bg${i}];` +
             `[${i}:v]scale=1080:1350:force_original_aspect_ratio=decrease[fg${i}];` +
             `[bg${i}][fg${i}]overlay=(W-w)/2:(H-h)/2[v${i}];`;
         } else {
@@ -82,15 +82,15 @@ class VideoEngine {
       // 4. Video encoding parameters for Ultra HD clarity
       args.push(
         '-c:v', 'libx264',
-        '-preset', 'fast',
-        '-crf', '18', // visually lossless Ultra HD
-        '-b:v', '8000k',
-        '-maxrate', '12000k',
-        '-bufsize', '16000k',
+        '-preset', 'ultrafast',
+        '-crf', '24',
+        '-b:v', '2500k',
+        '-maxrate', '3500k',
+        '-bufsize', '3500k',
         '-pix_fmt', 'yuv420p',
-        '-r', '30',
+        '-r', '24',
         '-c:a', 'aac',
-        '-b:a', '192k',
+        '-b:a', '128k',
         '-shortest',
         '-t', totalDuration.toString(),
         '-movflags', '+faststart',
@@ -156,7 +156,7 @@ class VideoEngine {
         fs.mkdirSync(outputDir, { recursive: true });
       }
 
-      const args = [];
+      const args = ['-threads', '1'];
       args.push('-loop', '1', '-t', duration.toString(), '-i', imagePath);
 
       if (audioPath && fs.existsSync(audioPath)) {
@@ -168,7 +168,7 @@ class VideoEngine {
       let filterComplex = '';
       if (style === 'contain_blur') {
         filterComplex = [
-          `[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=25:5,eq=brightness=-0.12[bg]`,
+          `[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=4:1,eq=brightness=-0.12[bg]`,
           `[0:v]scale=1080:1350:force_original_aspect_ratio=decrease[fg]`,
           `[bg][fg]overlay=(W-w)/2:(H-h)/2[v]`
         ].join(';');
@@ -186,13 +186,13 @@ class VideoEngine {
 
       args.push(
         '-c:v', 'libx264',
-        '-preset', 'fast',
-        '-crf', '18',
-        '-b:v', '8000k',
+        '-preset', 'ultrafast',
+        '-crf', '24',
+        '-b:v', '2500k',
         '-pix_fmt', 'yuv420p',
-        '-r', '30',
+        '-r', '24',
         '-c:a', 'aac',
-        '-b:a', '192k',
+        '-b:a', '128k',
         '-shortest',
         '-t', duration.toString(),
         '-movflags', '+faststart',
