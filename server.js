@@ -21,6 +21,7 @@ const aiEngine = require('./services/aiEngine');
 const crmEngine = require('./services/crmEngine');
 const QAEngine = require('./services/qaEngine');
 const qaEngine = new QAEngine();
+const { deepHealthHandler } = require('./services/deepHealth');
 
 const app = express();
 const server = http.createServer(app);
@@ -35,6 +36,7 @@ app.use(express.urlencoded({ extended: true }));
 // Health Check for Cloud Load Balancers & Render
 app.get('/health', (req, res) => res.status(200).send('OK'));
 app.get('/healthz', (req, res) => res.status(200).send('OK'));
+app.get('/health/deep', deepHealthHandler);
 
 // Cache-Control headers to prevent browser from caching stale files
 app.use((req, res, next) => {
