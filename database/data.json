@@ -9539,41 +9539,25 @@
       "name": "लेक्सा ट्रिप जैसलमेर (Lexa Trip Jaisalmer)",
       "slug": "jaisalmer",
       "state": "Rajasthan",
-      "tagline": "Unforgettable Golden Dunes & Luxury Desert Experiences",
+      "tagline": "✦ Luxury Desert Camping & Experiential Travel ✦",
       "website": "https://lexatrip.com/jaisalmer",
       "phone": "+91 98765 43210",
       "proxy": "",
       "channels": {
         "facebook": {
           "enabled": true,
-          "name": "Facebook Page (Lexatripjaisalmer)",
-          "handle": "https://www.facebook.com/profile.php?id=61594513580628",
-          "authType": "lifetime_page_token",
           "credentials": {
             "pageId": "1190728550800516",
             "pageAccessToken": "EAAW4uB0xAf8BTPN9ty5pNUMpjCZCZAFXXHk992WbyckObzPt50ZBdtBzWNb7RVZBvPANWtu3eCy2f5uZCvfgPrlEs7nyYuL96X6S1GDdn77WAkZCiAsRC0zb6HFuAkLaUnGOb15z0ythYYln66CWgNZA1orTrUxnpvwPYe4jDuwGZAlbgSgO11VncMeodPKBdzRuSbOS"
-          },
-          "supports": [
-            "post",
-            "carousel",
-            "reel"
-          ]
+          }
         },
         "instagram": {
           "enabled": true,
-          "name": "Instagram Business (@lexatripjaisalmer)",
-          "handle": "@lexatripjaisalmer",
-          "authType": "lifetime_page_token",
           "credentials": {
             "accessToken": "EAAW4uB0xAf8BTPN9ty5pNUMpjCZCZAFXXHk992WbyckObzPt50ZBdtBzWNb7RVZBvPANWtu3eCy2f5uZCvfgPrlEs7nyYuL96X6S1GDdn77WAkZCiAsRC0zb6HFuAkLaUnGOb15z0ythYYln66CWgNZA1orTrUxnpvwPYe4jDuwGZAlbgSgO11VncMeodPKBdzRuSbOS",
             "instagramAccountId": "17841429903443095",
             "pageId": "1190728550800516"
-          },
-          "supports": [
-            "post",
-            "carousel",
-            "reel"
-          ]
+          }
         },
         "linkedin": {
           "enabled": true,
@@ -9772,41 +9756,26 @@
       "name": "लेक्सा ट्रिप माउंट आबू (Lexa Trip Mount Abu)",
       "slug": "mountabu",
       "state": "Rajasthan",
-      "tagline": "The Serene Hill Station Oasis of Rajasthan - Nakki Lake & Dilwara",
+      "tagline": "✦ Scenic Hill Station Retreats & Serenity ✦",
       "website": "https://lexatrip.com/mountabu",
       "phone": "+91 98765 43211",
       "proxy": "",
       "channels": {
         "facebook": {
           "enabled": true,
-          "name": "Facebook Page (Lexatripmountabu)",
-          "handle": "https://www.facebook.com/profile.php?id=61594050853686",
-          "authType": "api_token",
           "credentials": {
             "pageId": "1387953687723780",
             "pageAccessToken": "EAAW4uB0xAf8BTL9i3ZAnmcNYHdHlQH08K5x8DFMHiP3aDIOjpV3nTzZB4SBuCd0q93jTDnzCmDd6Au3yOZB8cf5qwBUt7escLlJPuNcaDimhHLfiz7TeirjZB7ue5l482yQ0ZBCAFyw7k2r4f2gDHC5ZCFhzq2jIPnldWVUZAOqDdESepLN9ZBdN7EwqeCsq6AABNPqV"
           },
-          "supports": [
-            "post",
-            "carousel",
-            "reel"
-          ]
+          "handle": "https://www.facebook.com/61594050853686"
         },
         "instagram": {
           "enabled": true,
-          "name": "Instagram - Lexa Trip Mount Abu",
-          "handle": "Click to Connect",
-          "authType": "api_token",
           "credentials": {
             "accessToken": "EAAW4uB0xAf8BTL9i3ZAnmcNYHdHlQH08K5x8DFMHiP3aDIOjpV3nTzZB4SBuCd0q93jTDnzCmDd6Au3yOZB8cf5qwBUt7escLlJPuNcaDimhHLfiz7TeirjZB7ue5l482yQ0ZBCAFyw7k2r4f2gDHC5ZCFhzq2jIPnldWVUZAOqDdESepLN9ZBdN7EwqeCsq6AABNPqV",
             "instagramAccountId": "17841433524273801",
             "pageId": "1387953687723780"
-          },
-          "supports": [
-            "post",
-            "carousel",
-            "reel"
-          ]
+          }
         },
         "linkedin": {
           "enabled": true,
@@ -9849,7 +9818,8 @@
           "authType": "api_token",
           "credentials": {
             "blogId": "",
-            "apiKey": ""
+            "apiKey": "",
+            "blogUrl": "https://lexatripmountabu.blogspot.com"
           },
           "supports": [
             "post"
@@ -9981,34 +9951,18 @@
       "channels": {
         "facebook": {
           "enabled": true,
-          "name": "Facebook Page (Lexatrip udaipur)",
-          "handle": "Click to Connect",
-          "authType": "api_token",
           "credentials": {
             "pageId": "1288622184340792",
             "pageAccessToken": "EAAW4uB0xAf8BTLT2n9WaN4sLxPCiYUjHxUYvYhzw4TZCyK96B0tuCkotWut62nUgBWqPoDBPFtDSNhljNyxYHAZCZCxGCEIkmZCxf2ijMRvGsthq6Bka4dNODFrZAZByHhVAIZB4paq027ZBhAiQHVk7PaY3gAExIMR32vJ5VXB6gljoGVcmtFvR6eUXAD9SkkhUnyxYNplB"
-          },
-          "supports": [
-            "post",
-            "carousel",
-            "reel"
-          ]
+          }
         },
         "instagram": {
           "enabled": true,
-          "name": "Instagram - Lexa Trip Udaipur",
-          "handle": "Click to Connect",
-          "authType": "api_token",
           "credentials": {
             "accessToken": "EAAW4uB0xAf8BTLT2n9WaN4sLxPCiYUjHxUYvYhzw4TZCyK96B0tuCkotWut62nUgBWqPoDBPFtDSNhljNyxYHAZCZCxGCEIkmZCxf2ijMRvGsthq6Bka4dNODFrZAZByHhVAIZB4paq027ZBhAiQHVk7PaY3gAExIMR32vJ5VXB6gljoGVcmtFvR6eUXAD9SkkhUnyxYNplB",
             "instagramAccountId": "17841434226455586",
             "pageId": "1288622184340792"
-          },
-          "supports": [
-            "post",
-            "carousel",
-            "reel"
-          ]
+          }
         },
         "linkedin": {
           "enabled": true,
@@ -10203,34 +10157,18 @@
       "channels": {
         "facebook": {
           "enabled": true,
-          "name": "Facebook Page (Lexatrip jaipur)",
-          "handle": "Click to Connect",
-          "authType": "api_token",
           "credentials": {
             "pageId": "1288622184340792",
             "pageAccessToken": "EAAW4uB0xAf8BTLT2n9WaN4sLxPCiYUjHxUYvYhzw4TZCyK96B0tuCkotWut62nUgBWqPoDBPFtDSNhljNyxYHAZCZCxGCEIkmZCxf2ijMRvGsthq6Bka4dNODFrZAZByHhVAIZB4paq027ZBhAiQHVk7PaY3gAExIMR32vJ5VXB6gljoGVcmtFvR6eUXAD9SkkhUnyxYNplB"
-          },
-          "supports": [
-            "post",
-            "carousel",
-            "reel"
-          ]
+          }
         },
         "instagram": {
           "enabled": true,
-          "name": "Instagram - Lexa Trip Jaipur",
-          "handle": "Click to Connect",
-          "authType": "api_token",
           "credentials": {
             "accessToken": "EAAW4uB0xAf8BTLT2n9WaN4sLxPCiYUjHxUYvYhzw4TZCyK96B0tuCkotWut62nUgBWqPoDBPFtDSNhljNyxYHAZCZCxGCEIkmZCxf2ijMRvGsthq6Bka4dNODFrZAZByHhVAIZB4paq027ZBhAiQHVk7PaY3gAExIMR32vJ5VXB6gljoGVcmtFvR6eUXAD9SkkhUnyxYNplB",
             "instagramAccountId": "17841434226455586",
             "pageId": "1288622184340792"
-          },
-          "supports": [
-            "post",
-            "carousel",
-            "reel"
-          ]
+          }
         },
         "linkedin": {
           "enabled": true,
@@ -11086,7 +11024,7 @@
       "name": "लेक्सा ट्रिप मुन्नार (Lexa Trip Munnar)",
       "slug": "munnar",
       "state": "Kerala",
-      "tagline": "Rolling Emerald Tea Gardens & Misty Mountain Retreats",
+      "tagline": "✦ Emerald Tea Gardens & Mist-Clad Hills ✦",
       "heroImage": "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=800&q=80",
       "website": "https://lexatrip.com/munnar",
       "phone": "+91 90798 54982",
@@ -11094,34 +11032,18 @@
       "channels": {
         "facebook": {
           "enabled": true,
-          "name": "Facebook Page (Lexatripmunnar)",
-          "handle": "https://www.facebook.com/profile.php?id=61594170400993",
-          "authType": "lifetime_page_token",
           "credentials": {
             "pageId": "1361009330428038",
             "pageAccessToken": "EAAW4uB0xAf8BTBhQYh7EPcdZCNpJSSpPRK7LZCZAlPvL4mssNzgzS9KQH789Y1hlCV3IZBfBFA8NmY2JAYYcr7RGAXWfM11gwnBgOTBDPR4ADP60vyGZALcE9ysNOFVIPpwAi5m4kABAZBUueVW6hv0P5mmUjCBtVNZCmxfWtFp7nernRMGZBZCs6sF6vbX45DmpXW3Hh"
-          },
-          "supports": [
-            "post",
-            "carousel",
-            "reel"
-          ]
+          }
         },
         "instagram": {
           "enabled": true,
-          "name": "Instagram - Lexa Trip Munnar",
-          "handle": "Click to Connect",
-          "authType": "api_token",
           "credentials": {
             "accessToken": "EAAW4uB0xAf8BTBhQYh7EPcdZCNpJSSpPRK7LZCZAlPvL4mssNzgzS9KQH789Y1hlCV3IZBfBFA8NmY2JAYYcr7RGAXWfM11gwnBgOTBDPR4ADP60vyGZALcE9ysNOFVIPpwAi5m4kABAZBUueVW6hv0P5mmUjCBtVNZCmxfWtFp7nernRMGZBZCs6sF6vbX45DmpXW3Hh",
             "instagramAccountId": "17841434417677202",
             "pageId": "1361009330428038"
-          },
-          "supports": [
-            "post",
-            "carousel",
-            "reel"
-          ]
+          }
         },
         "linkedin": {
           "enabled": true,
@@ -11308,7 +11230,7 @@
       "name": "लेक्सा ट्रिप वाराणसी (Lexa Trip Varanasi)",
       "slug": "varanasi",
       "state": "Uttar Pradesh",
-      "tagline": "Ancient Ghats, Divine Ganga Aarti & Spiritual Legacy",
+      "tagline": "✦ Spiritual Ghats & Heritage Experiences ✦",
       "heroImage": "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=800&q=80",
       "website": "https://lexatrip.com/varanasi",
       "phone": "+91 90798 54982",
@@ -11316,34 +11238,18 @@
       "channels": {
         "facebook": {
           "enabled": true,
-          "name": "Facebook Page (Lexatripvaranasi)",
-          "handle": "https://www.facebook.com/profile.php?id=61594116223402",
-          "authType": "lifetime_page_token",
           "credentials": {
             "pageId": "1387213014467886",
             "pageAccessToken": "EAAW4uB0xAf8BTMoV7WQzQRkRYTPmi5EM3qFlGIwiBUTVuacZBuFBehINo4L7vGTzvIItIU6HZBPiTUTTsavFWSAyj5ZAznuwZCApVctMYjmReE9l95gOUpo94EWdJZC262P1sAueUHwyfKyD8mVfzHsjoF3ZAREQXmrBCtyRODefpkBt2HnSlp7PzTyLjEVDO3pn8I"
-          },
-          "supports": [
-            "post",
-            "carousel",
-            "reel"
-          ]
+          }
         },
         "instagram": {
           "enabled": true,
-          "name": "Instagram - Lexa Trip Varanasi",
-          "handle": "Click to Connect",
-          "authType": "api_token",
           "credentials": {
             "accessToken": "EAAW4uB0xAf8BTMoV7WQzQRkRYTPmi5EM3qFlGIwiBUTVuacZBuFBehINo4L7vGTzvIItIU6HZBPiTUTTsavFWSAyj5ZAznuwZCApVctMYjmReE9l95gOUpo94EWdJZC262P1sAueUHwyfKyD8mVfzHsjoF3ZAREQXmrBCtyRODefpkBt2HnSlp7PzTyLjEVDO3pn8I",
             "instagramAccountId": "17841434237437029",
             "pageId": "1387213014467886"
-          },
-          "supports": [
-            "post",
-            "carousel",
-            "reel"
-          ]
+          }
         },
         "linkedin": {
           "enabled": true,
@@ -11530,7 +11436,7 @@
       "name": "लेक्सा ट्रिप तिरुपति (Lexa Trip Tirupati)",
       "slug": "tirupati",
       "state": "Andhra Pradesh",
-      "tagline": "Sacred Tirumala Hills, Divine Blessings & Royal Pilgrimage",
+      "tagline": "✦ Sacred Hill Stays & Divine Hospitality ✦",
       "heroImage": "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=800&q=80",
       "website": "https://lexatrip.com/tirupati",
       "phone": "+91 90798 54982",
@@ -11538,34 +11444,17 @@
       "channels": {
         "facebook": {
           "enabled": true,
-          "name": "Facebook Page (Lexatrip tirupati)",
-          "handle": "Click to Connect",
-          "authType": "api_token",
           "credentials": {
             "pageId": "1385624654624388",
             "pageAccessToken": "EAAW4uB0xAf8BTGRAbJy9FrJnLklSLGzyR7JKdY5hwfXnK6GVUvmJ2MUQEp150YmrLkR6cxEtvD63vIuieO7o8i6APnZB8cuiZBLyB73MP05xPswZAMhW0DOv30ZBipXDuiOYcDGwLVS33dZChm10BCFfAAIvj0iFa5psScuqBjnIUQSQbWfSFFcMUG35eV2mPInTB"
-          },
-          "supports": [
-            "post",
-            "carousel",
-            "reel"
-          ]
+          }
         },
         "instagram": {
-          "enabled": true,
-          "name": "Instagram - Lexa Trip Tirupati",
-          "handle": "Click to Connect",
-          "authType": "api_token",
+          "enabled": false,
           "credentials": {
-            "accessToken": "EAAW4uB0xAf8BTKMcL0WuHnAWnZAvOyQ0ZCh0DHpplZAYHyi5Gp89ERCn9ve7gJd72OZADcM8clqiYTunnIffoTzK4ZBgXaEPjdUEzynbPhAyW0KyLLpZAZCi22K3HJKsHcZCWEZB3xlGZAtu3ByyK6qjaDCPAuLSYrPgNkp3wZBkaHlZB6OVIEIDe5AYGLjYANKLIT722t9Jn3qs",
-            "isLifetime": true,
-            "instagramAccountId": "17841424678908618"
-          },
-          "supports": [
-            "post",
-            "carousel",
-            "reel"
-          ]
+            "pageId": "1385624654624388",
+            "reason": "No Instagram Business account linked to Facebook page yet"
+          }
         },
         "linkedin": {
           "enabled": true,
@@ -11745,6 +11634,434 @@
         "enabled": false,
         "botToken": "",
         "chatId": ""
+      }
+    },
+    {
+      "id": "dest_ranthambore",
+      "name": "लेक्सा ट्रिप रणथंभौर (Lexa Trip Ranthambore)",
+      "slug": "ranthambore",
+      "state": "Rajasthan",
+      "tagline": "✦ Royal Tiger Safari & Wilderness Stays ✦",
+      "website": "https://bookings.lexatrip.com/",
+      "phone": "+91 90798 54982",
+      "proxy": "",
+      "channels": {
+        "facebook": {
+          "enabled": true,
+          "credentials": {
+            "pageId": "1415019615017383",
+            "pageAccessToken": "EAAW4uB0xAf8BTDQNFH7rLfCD6P1p1zyGAg9xR4sDZAqtWUQ0V998qECHr8px2RL3jFJQCrZA3zYw9bzmtrZAjaSjka01ZA01uj8B4RFGD6Mv8ECVWnwQvv4UM2MdtZCsbr0ywZB171S068sZBrb3ARiB27SUfHUPtgCMOLgeqwSWA46l5Vfh88XYiQAecVfxiAFcUaRVeJA"
+          }
+        },
+        "instagram": {
+          "enabled": true,
+          "credentials": {
+            "accessToken": "EAAW4uB0xAf8BTDQNFH7rLfCD6P1p1zyGAg9xR4sDZAqtWUQ0V998qECHr8px2RL3jFJQCrZA3zYw9bzmtrZAjaSjka01ZA01uj8B4RFGD6Mv8ECVWnwQvv4UM2MdtZCsbr0ywZB171S068sZBrb3ARiB27SUfHUPtgCMOLgeqwSWA46l5Vfh88XYiQAecVfxiAFcUaRVeJA",
+            "instagramAccountId": "17841434985697878",
+            "pageId": "1415019615017383"
+          }
+        },
+        "linkedin": {
+          "enabled": true,
+          "credentials": {}
+        },
+        "pinterest": {
+          "enabled": true,
+          "credentials": {}
+        },
+        "youtube": {
+          "enabled": true,
+          "credentials": {
+            "channelId": "UCGoH0bF9aH2MVV0RupzsGqQ"
+          }
+        },
+        "blogger": {
+          "enabled": true,
+          "credentials": {
+            "blogId": "4024327205805487932"
+          }
+        },
+        "twitter": {
+          "enabled": false,
+          "credentials": {}
+        },
+        "telegram": {
+          "enabled": true,
+          "credentials": {
+            "botToken": "9283650493:AAEbHNXPtWnej_39TBrCQ3y8yXZUESR2D7E",
+            "channelId": "-1003697503605"
+          }
+        },
+        "threads": {
+          "enabled": true,
+          "credentials": {
+            "accessToken": "EAAW4uB0xAf8BTDQNFH7rLfCD6P1p1zyGAg9xR4sDZAqtWUQ0V998qECHr8px2RL3jFJQCrZA3zYw9bzmtrZAjaSjka01ZA01uj8B4RFGD6Mv8ECVWnwQvv4UM2MdtZCsbr0ywZB171S068sZBrb3ARiB27SUfHUPtgCMOLgeqwSWA46l5Vfh88XYiQAecVfxiAFcUaRVeJA"
+          }
+        },
+        "website": {
+          "enabled": true,
+          "credentials": {}
+        },
+        "google_business": {
+          "enabled": false,
+          "credentials": {}
+        },
+        "reddit": {
+          "enabled": false,
+          "credentials": {}
+        },
+        "quora": {
+          "enabled": true,
+          "credentials": {}
+        }
+      },
+      "customChannels": [],
+      "defaultChannels": {
+        "post": [
+          "instagram",
+          "facebook",
+          "linkedin",
+          "pinterest",
+          "blogger"
+        ],
+        "reel": [
+          "instagram",
+          "facebook",
+          "youtube",
+          "pinterest"
+        ],
+        "carousel": [
+          "instagram",
+          "facebook",
+          "linkedin"
+        ]
+      },
+      "telegram": {
+        "botToken": "9283650493:AAEbHNXPtWnej_39TBrCQ3y8yXZUESR2D7E",
+        "chatId": "8455865796",
+        "channelId": "-1003697503605",
+        "channelUsername": "@lexatrip_ranthambore"
+      }
+    },
+    {
+      "id": "dest_rajasthan",
+      "name": "लेक्सा ट्रिप राजस्थान (Lexa Trip Rajasthan)",
+      "slug": "rajasthan",
+      "state": "Rajasthan",
+      "tagline": "✦ Royal Palaces, Forts & Desert Expeditions ✦",
+      "website": "https://bookings.lexatrip.com/",
+      "phone": "+91 90798 54982",
+      "proxy": "",
+      "channels": {
+        "facebook": {
+          "enabled": true,
+          "credentials": {
+            "pageId": "1288622184340792",
+            "pageAccessToken": "EAAW4uB0xAf8BTLT2n9WaN4sLxPCiYUjHxUYvYhzw4TZCyK96B0tuCkotWut62nUgBWqPoDBPFtDSNhljNyxYHAZCZCxGCEIkmZCxf2ijMRvGsthq6Bka4dNODFrZAZByHhVAIZB4paq027ZBhAiQHVk7PaY3gAExIMR32vJ5VXB6gljoGVcmtFvR6eUXAD9SkkhUnyxYNplB"
+          }
+        },
+        "instagram": {
+          "enabled": true,
+          "credentials": {
+            "accessToken": "EAAW4uB0xAf8BTLT2n9WaN4sLxPCiYUjHxUYvYhzw4TZCyK96B0tuCkotWut62nUgBWqPoDBPFtDSNhljNyxYHAZCZCxGCEIkmZCxf2ijMRvGsthq6Bka4dNODFrZAZByHhVAIZB4paq027ZBhAiQHVk7PaY3gAExIMR32vJ5VXB6gljoGVcmtFvR6eUXAD9SkkhUnyxYNplB",
+            "instagramAccountId": "17841434226455586",
+            "pageId": "1288622184340792"
+          }
+        },
+        "linkedin": {
+          "enabled": true,
+          "credentials": {}
+        },
+        "pinterest": {
+          "enabled": true,
+          "credentials": {}
+        },
+        "youtube": {
+          "enabled": true,
+          "credentials": {
+            "channelId": "UCGoH0bF9aH2MVV0RupzsGqQ"
+          }
+        },
+        "blogger": {
+          "enabled": true,
+          "credentials": {
+            "blogId": "4024327205805487932"
+          }
+        },
+        "twitter": {
+          "enabled": false,
+          "credentials": {}
+        },
+        "telegram": {
+          "enabled": true,
+          "credentials": {
+            "botToken": "9283650493:AAEbHNXPtWnej_39TBrCQ3y8yXZUESR2D7E",
+            "channelId": "-1003697503605"
+          }
+        },
+        "threads": {
+          "enabled": true,
+          "credentials": {
+            "accessToken": "EAAW4uB0xAf8BTLT2n9WaN4sLxPCiYUjHxUYvYhzw4TZCyK96B0tuCkotWut62nUgBWqPoDBPFtDSNhljNyxYHAZCZCxGCEIkmZCxf2ijMRvGsthq6Bka4dNODFrZAZByHhVAIZB4paq027ZBhAiQHVk7PaY3gAExIMR32vJ5VXB6gljoGVcmtFvR6eUXAD9SkkhUnyxYNplB"
+          }
+        },
+        "website": {
+          "enabled": true,
+          "credentials": {}
+        },
+        "google_business": {
+          "enabled": false,
+          "credentials": {}
+        },
+        "reddit": {
+          "enabled": false,
+          "credentials": {}
+        },
+        "quora": {
+          "enabled": true,
+          "credentials": {}
+        }
+      },
+      "customChannels": [],
+      "defaultChannels": {
+        "post": [
+          "instagram",
+          "facebook",
+          "linkedin",
+          "pinterest",
+          "blogger"
+        ],
+        "reel": [
+          "instagram",
+          "facebook",
+          "youtube",
+          "pinterest"
+        ],
+        "carousel": [
+          "instagram",
+          "facebook",
+          "linkedin"
+        ]
+      },
+      "telegram": {
+        "botToken": "9283650493:AAEbHNXPtWnej_39TBrCQ3y8yXZUESR2D7E",
+        "chatId": "8455865796",
+        "channelId": "-1003697503605",
+        "channelUsername": "@lexatrip_rajasthan"
+      }
+    },
+    {
+      "id": "dest_amritsar",
+      "name": "लेक्सा ट्रिप अमृतसर (Lexa Trip Amritsar)",
+      "slug": "amritsar",
+      "state": "Punjab",
+      "tagline": "✦ Golden Temple & Vibrant Heritage Tourism ✦",
+      "website": "https://bookings.lexatrip.com/",
+      "phone": "+91 90798 54982",
+      "proxy": "",
+      "channels": {
+        "facebook": {
+          "enabled": true,
+          "credentials": {
+            "pageId": "1342898318900703",
+            "pageAccessToken": "EAAW4uB0xAf8BTMBadasjNksZA2jXxZAy9eypj6v3nNrQWqYfT8ttkHbX14qud74ncmb1XEsDp6kccLSpUvq65duXGMJhnbcog5BFUQb32r6ZArfZBdN6O5DIP2GLsbGuO6xmPjdci72Dqw0tXBZATKe5oVje5liudz2yLas7G9kR6vFwLLFdYejHiQgjKqrtKBRW5"
+          }
+        },
+        "instagram": {
+          "enabled": true,
+          "credentials": {
+            "accessToken": "EAAW4uB0xAf8BTMBadasjNksZA2jXxZAy9eypj6v3nNrQWqYfT8ttkHbX14qud74ncmb1XEsDp6kccLSpUvq65duXGMJhnbcog5BFUQb32r6ZArfZBdN6O5DIP2GLsbGuO6xmPjdci72Dqw0tXBZATKe5oVje5liudz2yLas7G9kR6vFwLLFdYejHiQgjKqrtKBRW5",
+            "instagramAccountId": "17841434034846448",
+            "pageId": "1342898318900703"
+          }
+        },
+        "linkedin": {
+          "enabled": true,
+          "credentials": {}
+        },
+        "pinterest": {
+          "enabled": true,
+          "credentials": {}
+        },
+        "youtube": {
+          "enabled": true,
+          "credentials": {
+            "channelId": "UCGoH0bF9aH2MVV0RupzsGqQ"
+          }
+        },
+        "blogger": {
+          "enabled": true,
+          "credentials": {
+            "blogId": "4024327205805487932"
+          }
+        },
+        "twitter": {
+          "enabled": false,
+          "credentials": {}
+        },
+        "telegram": {
+          "enabled": true,
+          "credentials": {
+            "botToken": "9283650493:AAEbHNXPtWnej_39TBrCQ3y8yXZUESR2D7E",
+            "channelId": "-1003697503605"
+          }
+        },
+        "threads": {
+          "enabled": true,
+          "credentials": {
+            "accessToken": "EAAW4uB0xAf8BTMBadasjNksZA2jXxZAy9eypj6v3nNrQWqYfT8ttkHbX14qud74ncmb1XEsDp6kccLSpUvq65duXGMJhnbcog5BFUQb32r6ZArfZBdN6O5DIP2GLsbGuO6xmPjdci72Dqw0tXBZATKe5oVje5liudz2yLas7G9kR6vFwLLFdYejHiQgjKqrtKBRW5"
+          }
+        },
+        "website": {
+          "enabled": true,
+          "credentials": {}
+        },
+        "google_business": {
+          "enabled": false,
+          "credentials": {}
+        },
+        "reddit": {
+          "enabled": false,
+          "credentials": {}
+        },
+        "quora": {
+          "enabled": true,
+          "credentials": {}
+        }
+      },
+      "customChannels": [],
+      "defaultChannels": {
+        "post": [
+          "instagram",
+          "facebook",
+          "linkedin",
+          "pinterest",
+          "blogger"
+        ],
+        "reel": [
+          "instagram",
+          "facebook",
+          "youtube",
+          "pinterest"
+        ],
+        "carousel": [
+          "instagram",
+          "facebook",
+          "linkedin"
+        ]
+      },
+      "telegram": {
+        "botToken": "9283650493:AAEbHNXPtWnej_39TBrCQ3y8yXZUESR2D7E",
+        "chatId": "8455865796",
+        "channelId": "-1003697503605",
+        "channelUsername": "@lexatrip_amritsar"
+      }
+    },
+    {
+      "id": "dest_maysuru",
+      "name": "लेक्सा ट्रिप मैसूर (Lexa Trip Mysuru)",
+      "slug": "mysuru",
+      "state": "Karnataka",
+      "tagline": "✦ Royal Mysore Palaces, Culture & Art ✦",
+      "website": "https://bookings.lexatrip.com/",
+      "phone": "+91 90798 54982",
+      "proxy": "",
+      "channels": {
+        "facebook": {
+          "enabled": true,
+          "credentials": {
+            "pageId": "1293968303804848",
+            "pageAccessToken": "EAAW4uB0xAf8BTJf91DBuQkZABYRUiaCBoh8FpwPzg0XWJCyLFJ6MZBePLLJqs3VaqR7Jd9ppBBdteq37fK5l4yV3ym9nNzviWNZBsIUHILz13TZAfOLsUsavnjan4SgOiWFoOZA35SKVP9pPbjaT52ZBhdPGZCuncflqks78YvGSfygCZABuZAu40jqUgqZB6k8S8DDvnz"
+          }
+        },
+        "instagram": {
+          "enabled": true,
+          "credentials": {
+            "accessToken": "EAAW4uB0xAf8BTJf91DBuQkZABYRUiaCBoh8FpwPzg0XWJCyLFJ6MZBePLLJqs3VaqR7Jd9ppBBdteq37fK5l4yV3ym9nNzviWNZBsIUHILz13TZAfOLsUsavnjan4SgOiWFoOZA35SKVP9pPbjaT52ZBhdPGZCuncflqks78YvGSfygCZABuZAu40jqUgqZB6k8S8DDvnz",
+            "instagramAccountId": "17841434259396990",
+            "pageId": "1293968303804848"
+          }
+        },
+        "linkedin": {
+          "enabled": true,
+          "credentials": {}
+        },
+        "pinterest": {
+          "enabled": true,
+          "credentials": {}
+        },
+        "youtube": {
+          "enabled": true,
+          "credentials": {
+            "channelId": "UCGoH0bF9aH2MVV0RupzsGqQ"
+          }
+        },
+        "blogger": {
+          "enabled": true,
+          "credentials": {
+            "blogId": "4024327205805487932"
+          }
+        },
+        "twitter": {
+          "enabled": false,
+          "credentials": {}
+        },
+        "telegram": {
+          "enabled": true,
+          "credentials": {
+            "botToken": "9283650493:AAEbHNXPtWnej_39TBrCQ3y8yXZUESR2D7E",
+            "channelId": "-1003697503605"
+          }
+        },
+        "threads": {
+          "enabled": true,
+          "credentials": {
+            "accessToken": "EAAW4uB0xAf8BTJf91DBuQkZABYRUiaCBoh8FpwPzg0XWJCyLFJ6MZBePLLJqs3VaqR7Jd9ppBBdteq37fK5l4yV3ym9nNzviWNZBsIUHILz13TZAfOLsUsavnjan4SgOiWFoOZA35SKVP9pPbjaT52ZBhdPGZCuncflqks78YvGSfygCZABuZAu40jqUgqZB6k8S8DDvnz"
+          }
+        },
+        "website": {
+          "enabled": true,
+          "credentials": {}
+        },
+        "google_business": {
+          "enabled": false,
+          "credentials": {}
+        },
+        "reddit": {
+          "enabled": false,
+          "credentials": {}
+        },
+        "quora": {
+          "enabled": true,
+          "credentials": {}
+        }
+      },
+      "customChannels": [],
+      "defaultChannels": {
+        "post": [
+          "instagram",
+          "facebook",
+          "linkedin",
+          "pinterest",
+          "blogger"
+        ],
+        "reel": [
+          "instagram",
+          "facebook",
+          "youtube",
+          "pinterest"
+        ],
+        "carousel": [
+          "instagram",
+          "facebook",
+          "linkedin"
+        ]
+      },
+      "telegram": {
+        "botToken": "9283650493:AAEbHNXPtWnej_39TBrCQ3y8yXZUESR2D7E",
+        "chatId": "8455865796",
+        "channelId": "-1003697503605",
+        "channelUsername": "@lexatrip_mysuru"
       }
     }
   ],
