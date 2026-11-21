@@ -5237,14 +5237,15 @@
       "caption": "⛺ तारों से जगमगाते रेगिस्तान के नीचे लग्जरी स्विस टेंट और शाही राजस्थानी ठाठ-बाट।\n\n📍 डेस्टिनेशन: रॉयल डेजर्ट कैंप, जैसलमेर\n✨ खास सुविधाएं: एसी स्विस टेंट्स, लोकनृत्य व बोनफायर डिनर।\n🌐 तुरंत बुक करें: https://bookings.lexatrip.com/\n🌐 वेबसाइट: https://www.lexatrip.com/\n💬 व्हाट्सएप: +91 90798 54982",
       "mediaPath": "D:\\lexa automation web and app\\generated\\batch_1794831887155\\post_2_4x5.jpg",
       "scheduledTime": "2026-11-20T06:00:00.000Z",
-      "status": "queued",
+      "status": "failed",
       "targets": [
         "instagram",
         "facebook",
         "linkedin",
         "pinterest"
       ],
-      "createdAt": "2026-11-19T19:08:22.878Z"
+      "createdAt": "2026-11-19T19:08:22.878Z",
+      "lastError": "Invalid local Windows path in cloud environment"
     },
     {
       "id": "q_active_1795115302888_2",
@@ -5257,14 +5258,15 @@
       "caption": "🏰 पीले बलुआ पत्थरों से बना दुनिया का एकमात्र जीवित किला — सोनार किला। लेक्सा ट्रिप के साथ हेरिटेज वॉक का आनंद लें।\n\n📍 डेस्टिनेशन: जैसलमेर किला व पटवों की हवेली\n🌐 पूरी जानकारी व गाइडेड टूर बुकिंग: https://bookings.lexatrip.com/\n🌐 वेबसाइट: https://www.lexatrip.com/\n📞 व्हाट्सएप: +91 90798 54982",
       "mediaPath": "D:\\lexa automation web and app\\generated\\batch_1794831887155\\post_3_4x5.jpg",
       "scheduledTime": "2026-11-20T08:30:00.000Z",
-      "status": "queued",
+      "status": "failed",
       "targets": [
         "instagram",
         "facebook",
         "linkedin",
         "pinterest"
       ],
-      "createdAt": "2026-11-19T19:08:22.888Z"
+      "createdAt": "2026-11-19T19:08:22.888Z",
+      "lastError": "Invalid local Windows path in cloud environment"
     },
     {
       "id": "q_active_1795115302900_3",
@@ -5277,14 +5279,15 @@
       "caption": "🛶 ऐतिहासिक गड़ीसर झील के शांत पानी में शाम की बोटिंग और बड़ा बाग की भव्य छतरियां।\n\n📍 डेस्टिनेशन: गड़ीसर झील, जैसलमेर\n🌐 रॉयल टूर पैकेज: https://bookings.lexatrip.com/\n🌐 वेबसाइट: https://www.lexatrip.com/\n📞 संपर्क: +91 90798 54982",
       "mediaPath": "D:\\lexa automation web and app\\generated\\batch_1794831887155\\post_4_4x5.jpg",
       "scheduledTime": "2026-11-20T11:00:00.000Z",
-      "status": "queued",
+      "status": "failed",
       "targets": [
         "instagram",
         "facebook",
         "linkedin",
         "pinterest"
       ],
-      "createdAt": "2026-11-19T19:08:22.900Z"
+      "createdAt": "2026-11-19T19:08:22.900Z",
+      "lastError": "Invalid local Windows path in cloud environment"
     },
     {
       "id": "q_active_1795115302912_4",
@@ -5297,14 +5300,15 @@
       "caption": "🔥 ढोलक की थाप, कालबेलिया लोकनृत्य और रेगिस्तान की ठंडी रात में कैंपफायर का जादू।\n\n📍 डेस्टिनेशन: लेक्सा ट्रिप डेजर्ट एरिना, जैसलमेर\n🌐 अभी सीटें आरक्षित करें: https://bookings.lexatrip.com/\n🌐 वेबसाइट: https://www.lexatrip.com/\n💬 व्हाट्सएप: +91 90798 54982",
       "mediaPath": "D:\\lexa automation web and app\\generated\\batch_1794831887155\\post_5_4x5.jpg",
       "scheduledTime": "2026-11-20T13:30:00.000Z",
-      "status": "queued",
+      "status": "failed",
       "targets": [
         "instagram",
         "facebook",
         "linkedin",
         "pinterest"
       ],
-      "createdAt": "2026-11-19T19:08:22.912Z"
+      "createdAt": "2026-11-19T19:08:22.912Z",
+      "lastError": "Invalid local Windows path in cloud environment"
     },
     {
       "id": "q_active_1795115302919_5",
@@ -5317,13 +5321,14 @@
       "caption": "👉 स्वाइप करें और जानें जैसलमेर के 5 सबसे भव्य व शाही अनुभव! ऊंट सफारी से लेकर सोनार किले तक सब कुछ एक नजर में।\n\n🐪 प्लान करें अपनी ड्रीम वेकेशन: https://bookings.lexatrip.com/\n🌐 वेबसाइट: https://www.lexatrip.com/\n📞 व्हाट्सएप: +91 90798 54982",
       "mediaPath": "/generated/batch_1794831887155/carousel_preview.jpg",
       "scheduledTime": "2026-11-20T15:00:00.000Z",
-      "status": "queued",
+      "status": "failed",
       "targets": [
         "instagram",
         "facebook",
         "linkedin"
       ],
-      "createdAt": "2026-11-19T19:08:22.919Z"
+      "createdAt": "2026-11-19T19:08:22.919Z",
+      "lastError": "Purged pre-migration stale queue item"
     },
     {
       "id": "q_instant_1795189151392_35q8",
@@ -5336,7 +5341,7 @@
       "caption": "Sunset in Desert #LexaTrip\n\n🌐 बुकिंग पोर्टल: https://bookings.lexatrip.com/\n🌐 आधिकारिक वेबसाइट: https://www.lexatrip.com/\n📞 व्हाट्सएप / कॉल: +91 90798 54982",
       "mediaPath": "d:\\lexa automation web and app\\generated\\live_dispatches\\live_1795189151386_4x5.jpg",
       "scheduledTime": "2026-11-20T15:39:06.392Z",
-      "status": "queued",
+      "status": "failed",
       "targets": [
         "instagram",
         "facebook",
@@ -5344,7 +5349,8 @@
         "pinterest",
         "blogger"
       ],
-      "createdAt": "2026-11-20T15:39:11.392Z"
+      "createdAt": "2026-11-20T15:39:11.392Z",
+      "lastError": "Invalid local Windows path in cloud environment"
     },
     {
       "id": "q_instant_1795189151489_pgp4",
@@ -5357,7 +5363,7 @@
       "caption": "Sunset in Desert #LexaTrip\n\n🌐 बुकिंग पोर्टल: https://bookings.lexatrip.com/\n🌐 आधिकारिक वेबसाइट: https://www.lexatrip.com/\n📞 व्हाट्सएप / कॉल: +91 90798 54982",
       "mediaPath": "d:\\lexa automation web and app\\generated\\live_dispatches\\live_1795189151485_4x5.jpg",
       "scheduledTime": "2026-11-20T15:39:06.489Z",
-      "status": "queued",
+      "status": "failed",
       "targets": [
         "instagram",
         "facebook",
@@ -5365,7 +5371,8 @@
         "pinterest",
         "blogger"
       ],
-      "createdAt": "2026-11-20T15:39:11.489Z"
+      "createdAt": "2026-11-20T15:39:11.489Z",
+      "lastError": "Invalid local Windows path in cloud environment"
     },
     {
       "id": "q_instant_1795189190916_89i7",
@@ -5378,7 +5385,7 @@
       "caption": "Sunset in Desert #LexaTrip\n\n🌐 बुकिंग पोर्टल: https://bookings.lexatrip.com/\n🌐 आधिकारिक वेबसाइट: https://www.lexatrip.com/\n📞 व्हाट्सएप / कॉल: +91 90798 54982",
       "mediaPath": "d:\\lexa automation web and app\\generated\\live_dispatches\\live_1795189190912_4x5.jpg",
       "scheduledTime": "2026-11-20T15:39:45.917Z",
-      "status": "queued",
+      "status": "failed",
       "targets": [
         "instagram",
         "facebook",
@@ -5386,7 +5393,8 @@
         "pinterest",
         "blogger"
       ],
-      "createdAt": "2026-11-20T15:39:50.917Z"
+      "createdAt": "2026-11-20T15:39:50.917Z",
+      "lastError": "Invalid local Windows path in cloud environment"
     },
     {
       "id": "q_instant_1795189190952_j08q",
@@ -5399,7 +5407,7 @@
       "caption": "Sunset in Desert #LexaTrip\n\n🌐 बुकिंग पोर्टल: https://bookings.lexatrip.com/\n🌐 आधिकारिक वेबसाइट: https://www.lexatrip.com/\n📞 व्हाट्सएप / कॉल: +91 90798 54982",
       "mediaPath": "d:\\lexa automation web and app\\generated\\live_dispatches\\live_1795189190950_4x5.jpg",
       "scheduledTime": "2026-11-20T15:39:45.953Z",
-      "status": "queued",
+      "status": "failed",
       "targets": [
         "instagram",
         "facebook",
@@ -5407,7 +5415,8 @@
         "pinterest",
         "blogger"
       ],
-      "createdAt": "2026-11-20T15:39:50.953Z"
+      "createdAt": "2026-11-20T15:39:50.953Z",
+      "lastError": "Invalid local Windows path in cloud environment"
     },
     {
       "id": "q_instant_1795189379232_3yh4",
@@ -5420,7 +5429,7 @@
       "caption": "Sunset in Desert #LexaTrip\n\n🌐 बुकिंग पोर्टल: https://bookings.lexatrip.com/\n🌐 आधिकारिक वेबसाइट: https://www.lexatrip.com/\n📞 व्हाट्सएप / कॉल: +91 90798 54982",
       "mediaPath": "d:\\lexa automation web and app\\generated\\live_dispatches\\live_1795189379227_4x5.jpg",
       "scheduledTime": "2026-11-20T15:42:54.232Z",
-      "status": "queued",
+      "status": "failed",
       "targets": [
         "instagram",
         "facebook",
@@ -5428,7 +5437,8 @@
         "pinterest",
         "blogger"
       ],
-      "createdAt": "2026-11-20T15:42:59.232Z"
+      "createdAt": "2026-11-20T15:42:59.232Z",
+      "lastError": "Invalid local Windows path in cloud environment"
     },
     {
       "id": "q_instant_1795189379335_gs55",
@@ -5441,7 +5451,7 @@
       "caption": "Sunset in Desert #LexaTrip\n\n🌐 बुकिंग पोर्टल: https://bookings.lexatrip.com/\n🌐 आधिकारिक वेबसाइट: https://www.lexatrip.com/\n📞 व्हाट्सएप / कॉल: +91 90798 54982",
       "mediaPath": "d:\\lexa automation web and app\\generated\\live_dispatches\\live_1795189379329_4x5.jpg",
       "scheduledTime": "2026-11-20T15:42:54.335Z",
-      "status": "queued",
+      "status": "failed",
       "targets": [
         "instagram",
         "facebook",
@@ -5449,7 +5459,8 @@
         "pinterest",
         "blogger"
       ],
-      "createdAt": "2026-11-20T15:42:59.335Z"
+      "createdAt": "2026-11-20T15:42:59.335Z",
+      "lastError": "Invalid local Windows path in cloud environment"
     },
     {
       "id": "q_active_1795115302930_6",
@@ -5462,14 +5473,15 @@
       "caption": "🎬 12 सेकंड में महसूस करें जैसलमेर के सुनहरे धोरों की उड़ान! #Shorts #Reels #LexaTripJaisalmer\n\n🌐 बुक करें: https://bookings.lexatrip.com/\n🌐 वेबसाइट: https://www.lexatrip.com/\n📞 व्हाट्सएप: +91 90798 54982",
       "mediaPath": "D:\\lexa automation web and app\\generated\\batch_1794831887155\\combined_12s_reel.mp4",
       "scheduledTime": "2026-11-21T04:30:00.000Z",
-      "status": "queued",
+      "status": "failed",
       "targets": [
         "instagram",
         "facebook",
         "youtube",
         "pinterest"
       ],
-      "createdAt": "2026-11-19T19:08:22.930Z"
+      "createdAt": "2026-11-19T19:08:22.930Z",
+      "lastError": "Invalid local Windows path in cloud environment"
     }
   ],
   "logs": [
