@@ -789,9 +789,9 @@ class TelegramBotService {
         const reelFilename = `live_${Date.now()}_reel.mp4`;
         const reelPath = path.join(processedDir, reelFilename);
         let reelGenerated = false;
-        // On 512MB Cloud free tier, avoid spawning heavy FFmpeg processes to keep RAM strictly near 0MB
-        if (process.env.ENABLE_CLOUD_VIDEO === 'true' && !process.env.RENDER) {
+        if (process.env.DISABLE_CLOUD_VIDEO !== 'true') {
           try {
+            console.log('[TelegramBot] Generating 9:16 Ultra HD motion Reel...');
             await videoEngine.generateSingleReel({
               imagePath: processedPath,
               outputPath: reelPath,
@@ -800,11 +800,12 @@ class TelegramBotService {
               tagline: '✦ Luxury Desert Camping & Experiential Travel ✦'
             });
             reelGenerated = true;
+            console.log('[TelegramBot] Single Reel successfully generated at:', reelPath);
           } catch (rErr) {
             console.warn('[TelegramBot] Single Reel render notice:', rErr.message);
           }
         } else {
-          console.log('[TelegramBot] Cloud 512MB RAM protection active: Prioritizing crystal clear 4:5 image dispatch (0MB load).');
+          console.log('[TelegramBot] Cloud video disabled via DISABLE_CLOUD_VIDEO.');
         }
 
         // 3. Acknowledge receipt and announce instant dispatch
