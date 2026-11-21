@@ -37,7 +37,9 @@ class CRMEngine {
     // Dynamic Master Links derived from destination channels
     const destChannels = dest.channels || {};
     const masterLinks = {
-      facebook: destChannels.facebook?.handle || 'https://www.facebook.com/profile.php?id=61594513580628',
+      facebook: destChannels.facebook?.handle 
+        ? (destChannels.facebook.handle.startsWith('http') ? destChannels.facebook.handle : `https://www.facebook.com/${destChannels.facebook.handle.replace(/^@/, '')}`)
+        : (destChannels.facebook?.credentials?.pageId ? `https://www.facebook.com/profile.php?id=${destChannels.facebook.credentials.pageId}` : 'https://www.facebook.com/profile.php?id=1190728550800516'),
       instagram: destChannels.instagram?.handle ? `https://www.instagram.com/${destChannels.instagram.handle.replace(/^@/, '')}/` : 'https://www.instagram.com/lexatripjaisalmer/',
       telegram: destChannels.telegram?.channelUsername ? `https://t.me/${destChannels.telegram.channelUsername.replace(/^@/, '')}` : 'https://t.me/lexatripjaisalmer',
       pinterest: destChannels.pinterest?.handle ? `https://${destChannels.pinterest.handle.replace(/^https?:\/\//, '')}` : 'https://www.pinterest.com/lexatripjaisalmer/',

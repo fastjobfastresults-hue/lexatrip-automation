@@ -21,9 +21,10 @@ class ImageProcessor {
       let pipeline = sharp(inputPath)
         .rotate(); // auto-orient based on EXIF
 
-      // Resize to exact 1080x1350 (4:5)
+      // Resize to exact 1080x1350 (4:5) using contain with black canvas to guarantee 0% cropping of logos/text
       pipeline = pipeline.resize(targetWidth, targetHeight, {
-        fit: 'cover',
+        fit: 'contain',
+        background: { r: 0, g: 0, b: 0, alpha: 1 },
         position: 'center'
       });
 

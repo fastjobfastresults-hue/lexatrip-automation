@@ -110,7 +110,7 @@ class TelegramNotifier {
       if (isNonJaisalmer && String(ch.credentials.pageId) === '1385624654624388') {
         return null;
       }
-      url = `https://www.facebook.com/${ch.credentials.pageId}`;
+      url = `https://www.facebook.com/profile.php?id=${ch.credentials.pageId}`;
     }
 
     if (url && isNonJaisalmer && hasJaisalmerLeak(url)) {

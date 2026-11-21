@@ -92,8 +92,8 @@ class FacebookPublisher {
       });
 
       const rawVideoId = res.data.id;
-      // Universal direct Facebook Reel URL for 9:16 vertical videos
-      const postUrl = `https://www.facebook.com/reel/${rawVideoId}`;
+      // Universal direct Facebook Watch / Reel URL that resolves publicly without requiring user login
+      const postUrl = `https://www.facebook.com/watch/?v=${rawVideoId}`;
 
       return {
         success: true,
@@ -103,6 +103,7 @@ class FacebookPublisher {
         postId: rawVideoId,
         videoId: rawVideoId,
         reelUrl: postUrl,
+        watchUrl: postUrl,
         postUrl,
         publishedAt: new Date().toISOString()
       };
