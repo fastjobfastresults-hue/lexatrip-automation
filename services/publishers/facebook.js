@@ -38,13 +38,16 @@ class FacebookPublisher {
 
       const rawPostId = res.data.id || res.data.post_id;
       const cleanPostId = rawPostId?.includes('_') ? rawPostId.split('_')[1] : rawPostId;
-      const postUrl = `https://www.facebook.com/${pageId}/posts/${cleanPostId}`;
+      const photoId = res.data.id || cleanPostId;
+      // Universal direct Facebook photo URL that resolves publicly on all platforms
+      const postUrl = `https://www.facebook.com/photo.php?fbid=${photoId}`;
 
       return {
         success: true,
         simulated: false,
         platform: 'facebook',
         postId: rawPostId,
+        photoId,
         postUrl,
         publishedAt: new Date().toISOString()
       };
@@ -89,7 +92,8 @@ class FacebookPublisher {
       });
 
       const rawVideoId = res.data.id;
-      const postUrl = `https://www.facebook.com/${pageId}/videos/${rawVideoId}`;
+      // Universal direct Facebook Reel URL for 9:16 vertical videos
+      const postUrl = `https://www.facebook.com/reel/${rawVideoId}`;
 
       return {
         success: true,
@@ -98,6 +102,7 @@ class FacebookPublisher {
         type: 'reel',
         postId: rawVideoId,
         videoId: rawVideoId,
+        reelUrl: postUrl,
         postUrl,
         publishedAt: new Date().toISOString()
       };

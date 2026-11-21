@@ -246,42 +246,56 @@ class TelegramBotService {
     this.inbox.set(destinationId, []);
   }
 
-  resolveDestination(msg) {
+  resolveDestination(msg, textHint = '') {
     const destinations = db.getDestinations();
-    const chatId = msg.chat?.id ? String(msg.chat.id) : '';
-    const chatTitle = (msg.chat?.title || '').toLowerCase();
-    const chatUsername = (msg.chat?.username || '').toLowerCase();
+    const chatId = msg?.chat?.id ? String(msg.chat.id) : '';
+    const chatTitle = (msg?.chat?.title || '').toLowerCase();
+    const chatUsername = (msg?.chat?.username || '').toLowerCase();
+    const messageContent = (textHint || msg?.text || msg?.caption || '').toLowerCase();
 
+    // 1. Direct Explicit Channel ID match (Strict Priority #1)
     for (const d of destinations) {
       if (d.telegram?.channelId && String(d.telegram.channelId) === chatId) return d;
-      if (d.telegram?.chatId && String(d.telegram.chatId) === chatId) return d;
     }
 
+    // 2. Explicit Destination Mention in Text/SEO (e.g. "डेस्टिनेशन: लेक्सा ट्रिप जैसलमेर", "Mount Abu", "Tirupati")
+    if (messageContent) {
+      for (const d of destinations) {
+        const slug = (d.slug || '').toLowerCase();
+        const cityEnglish = (d.name.match(/\((.*?)\)/)?.[1] || '').toLowerCase().replace(/lexa\s*trip/i, '').trim();
+        const cityHindi = d.name.split('(')[0].replace(/लेक्सा\s*ट्रिप/i, '').trim();
+
+        if (
+          (cityEnglish && cityEnglish.length > 2 && messageContent.includes(cityEnglish)) ||
+          (cityHindi && cityHindi.length > 2 && messageContent.includes(cityHindi)) ||
+          (slug && slug.length > 2 && messageContent.includes(slug))
+        ) {
+          return d;
+        }
+      }
+    }
+
+    // 3. Match from Chat Title or Chat Username (for telegram destination groups)
     for (const d of destinations) {
       const slug = (d.slug || '').toLowerCase();
       const name = (d.name || '').toLowerCase();
       const city = name.replace(/lexa\s*trip/i, '').trim();
-      if (city && (chatTitle.includes(city) || chatUsername.includes(city))) {
-        d.telegram = d.telegram || {};
-        d.telegram.channelId = chatId;
-        d.telegram.channelUsername = msg.chat?.username ? `@${msg.chat.username}` : '';
-        db.saveDestination(d);
+      if (city && city.length > 2 && (chatTitle.includes(city) || chatUsername.includes(city))) {
         return d;
       }
-      if (slug && (chatTitle.includes(slug) || chatUsername.includes(slug))) {
-        d.telegram = d.telegram || {};
-        d.telegram.channelId = chatId;
-        db.saveDestination(d);
+      if (slug && slug.length > 2 && (chatTitle.includes(slug) || chatUsername.includes(slug))) {
         return d;
       }
     }
 
+    // 4. Session Active Destination
     const session = this.sessions.get(chatId);
     if (session?.destinationId) {
       const found = db.getDestination(session.destinationId);
       if (found) return found;
     }
 
+    // 5. Fallback to default Jaisalmer
     return destinations[0] || { id: 'dest_jaisalmer', name: 'Lexa Trip Jaisalmer', slug: 'jaisalmer' };
   }
 
@@ -524,7 +538,7 @@ class TelegramBotService {
     // 1. Welcome / Help Command
     this.bot.onText(/\/start|\/help|\/menu/, (msg) => {
       const chatId = msg.chat.id;
-      const dest = this.resolveDestination(msg);
+      const dest = this.resolveDestination(msg, text);
       const session = this.getSession(chatId, dest);
 
       const welcome = `🐪 *Lexa Trip Multi-Destination Command Center* ✨\n\n` +
@@ -743,7 +757,7 @@ class TelegramBotService {
       if (!photoArray || photoArray.length === 0) return;
 
       const bestPhoto = photoArray[photoArray.length - 1];
-      const dest = this.resolveDestination(msg);
+      const dest = this.resolveDestination(msg, msg.caption || '');
       const session = this.getSession(chatId, dest);
 
       const destInboxDir = path.join(__dirname, '..', 'uploads', 'telegram_inbox', dest.id);
@@ -986,7 +1000,7 @@ class TelegramBotService {
       if (!text || text.startsWith('/')) return;
 
       const chatId = msg.chat.id;
-      const dest = this.resolveDestination(msg);
+      const dest = this.resolveDestination(msg, text);
       const session = this.getSession(chatId, dest);
 
       const isCombinedSeo = /^(कंबाइंड\s*SEO|combined\s*seo|combinedseo)/i.test(text);
