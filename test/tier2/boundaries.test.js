@@ -764,7 +764,7 @@ describe('Tier 2: Boundary & Corner Cases Test Suite', () => {
     });
 
     it('2.11 Facebook 429 Request Limit Reached fails explicitly', async () => {
-      mockHttp.onPost(/graph\.facebook\.com\/v\d+\.\d+\/[^/]+\/videos/, {
+      mockHttp.onPost(/graph\.facebook\.com\/v\d+\.\d+\/[^/]+\/(?:videos|video_reels)/, {
         error: { message: 'Application request limit reached.', code: 4 }
       }, 429);
 

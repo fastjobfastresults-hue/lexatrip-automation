@@ -114,8 +114,8 @@ describe('Tier 1: Social Media Publishers Feature Coverage', () => {
       assert.strictEqual(result.type, 'reel');
       assert.strictEqual(result.videoId, 'fb_video_id_102');
 
-      const req = mockHttp.findRequest('/videos', 'post');
-      assert.ok(req, 'Expected POST to /videos endpoint');
+      const req = mockHttp.findRequest('/video_reels', 'post') || mockHttp.findRequest('/videos', 'post');
+      assert.ok(req, 'Expected POST to /video_reels or /videos endpoint');
     });
   });
 

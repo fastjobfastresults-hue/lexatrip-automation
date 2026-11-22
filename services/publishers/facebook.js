@@ -71,7 +71,9 @@ class FacebookPublisher {
   }
 
   /**
-   * Direct binary upload of Reel / Video to Facebook Page
+   * Publish Official Facebook Reel (9:16) to Facebook Page
+   * Uses Meta's Official 3-Phase Reels Publishing API (video_reels)
+   * with automatic fallback to classic video endpoint if needed.
    */
   async publishReel({ account, videoPath, caption }) {
     const creds = account?.credentials || {};
@@ -89,6 +91,78 @@ class FacebookPublisher {
       throw new Error(`Facebook Reel upload failed: video file does not exist at "${videoPath}".`);
     }
 
+    const stats = fs.statSync(videoPath);
+    let videoId = null;
+    let reelUrl = null;
+    let postFeedId = null;
+
+    // --- STRATEGY 1: Meta Official 3-Phase Facebook Reels API (/video_reels) ---
+    try {
+      console.log(`[Facebook Reel] Phase 1: Initializing Reels upload for Page ${pageId}...`);
+      const initRes = await axios.post(`https://graph.facebook.com/v19.0/${pageId}/video_reels`, {
+        upload_phase: 'start',
+        access_token: pageAccessToken
+      }, { timeout: 30000 });
+
+      videoId = initRes.data?.video_id;
+      const uploadUrl = initRes.data?.upload_url;
+
+      if (videoId && uploadUrl) {
+        console.log(`[Facebook Reel] Phase 2: Streaming binary video (${stats.size} bytes)...`);
+        const videoStream = fs.createReadStream(videoPath);
+        await axios.post(uploadUrl, videoStream, {
+          headers: {
+            'Authorization': `OAuth ${pageAccessToken}`,
+            'offset': '0',
+            'file_size': stats.size.toString(),
+            'Content-Length': stats.size.toString(),
+            'X-Entity-Length': stats.size.toString(),
+            'X-Entity-Type': 'video/mp4',
+            'Content-Type': 'application/octet-stream'
+          },
+          maxBodyLength: Infinity,
+          maxContentLength: Infinity,
+          timeout: 120000
+        });
+
+        console.log(`[Facebook Reel] Phase 3: Finishing and publishing Reel ${videoId} to Page feed...`);
+        const finishRes = await axios.post(`https://graph.facebook.com/v19.0/${pageId}/video_reels`, {
+          upload_phase: 'finish',
+          access_token: pageAccessToken,
+          video_id: videoId,
+          video_state: 'PUBLISHED',
+          description: caption || ''
+        }, { timeout: 45000 });
+
+        postFeedId = finishRes.data?.post_id;
+        reelUrl = `https://www.facebook.com/reel/${videoId}/`;
+
+        console.log(`[Facebook Reel] ✅ Live Reel published successfully: ${reelUrl} (Feed Post: ${postFeedId || 'active'})`);
+
+        return {
+          success: true,
+          simulated: false,
+          platform: 'facebook',
+          type: 'reel',
+          postId: videoId,
+          videoId: videoId,
+          postFeedId: postFeedId,
+          reelUrl: reelUrl,
+          watchUrl: reelUrl,
+          postUrl: reelUrl,
+          publishedAt: new Date().toISOString()
+        };
+      }
+    } catch (reelsApiErr) {
+      const status = reelsApiErr.response?.status;
+      const errMsg = reelsApiErr.response?.data?.error?.message || reelsApiErr.message;
+      if (status === 429 || /request limit|rate limit|quota/i.test(errMsg)) {
+        throw new Error(`Facebook Reel publish failed: ${errMsg}`);
+      }
+      console.warn(`[Facebook Reel API Notice]: Official video_reels attempt failed (${errMsg}), falling back to direct video upload...`);
+    }
+
+    // --- STRATEGY 2: Fallback to Direct Form-Data Video Upload (/videos) ---
     try {
       const url = `https://graph.facebook.com/v19.0/${pageId}/videos`;
       const form = new FormData();
@@ -105,7 +179,7 @@ class FacebookPublisher {
 
       const rawVideoId = res.data.id;
       // Direct Facebook Reel permalink from Graph API
-      let reelUrl = `https://www.facebook.com/reel/${rawVideoId}/`;
+      reelUrl = `https://www.facebook.com/reel/${rawVideoId}/`;
       try {
         const vidInfo = await axios.get(`https://graph.facebook.com/v19.0/${rawVideoId}`, {
           params: { fields: 'permalink_url', access_token: pageAccessToken },

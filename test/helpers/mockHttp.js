@@ -256,8 +256,41 @@ class MockHttp {
       id: 'fb_photo_id_101',
       post_id: 'fb_post_id_101'
     });
+    this.onPost(/graph\.facebook\.com\/v\d+\.\d+\/[^/]+\/video_reels/, (config) => {
+      let data = {};
+      try {
+        data = typeof config.data === 'string' ? JSON.parse(config.data || '{}') : (config.data || {});
+      } catch (e) {
+        data = config.data || {};
+      }
+      if (data.upload_phase === 'start') {
+        return {
+          video_id: 'fb_video_id_102',
+          upload_url: 'https://rupload.facebook.com/video-upload/v27.0/fb_video_id_102'
+        };
+      }
+      return {
+        success: true,
+        post_id: 'fb_post_id_102'
+      };
+    });
+    this.onPost(/rupload\.facebook\.com\/video-upload/, {
+      success: true
+    });
     this.onPost(/graph\.facebook\.com\/v\d+\.\d+\/[^/]+\/videos/, {
       id: 'fb_video_id_102'
+    });
+    this.onGet(/graph\.facebook\.com\/v\d+\.\d+\/fb_photo_id_101/, {
+      id: 'fb_photo_id_101',
+      link: 'https://www.facebook.com/photo.php?fbid=fb_photo_id_101'
+    });
+    this.onGet(/graph\.facebook\.com\/v\d+\.\d+\/fb_video_id_102/, {
+      id: 'fb_video_id_102',
+      permalink_url: '/reel/fb_video_id_102/'
+    });
+    this.onGet(/graph\.facebook\.com\/v\d+\.\d+\/ig_published_post_id_202/, {
+      id: 'ig_published_post_id_202',
+      permalink: 'https://www.instagram.com/p/ig_mock_permalink_202/'
     });
     this.onGet(/graph\.facebook\.com\/v\d+\.\d+\/[^/]+\/accounts/, {
       data: [{
