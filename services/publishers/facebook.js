@@ -178,14 +178,14 @@ class FacebookPublisher {
       });
 
       const rawVideoId = res.data.id;
-      // Direct Facebook Reel permalink from Graph API
+      // Direct Facebook Reel canonical permalink
       reelUrl = `https://www.facebook.com/reel/${rawVideoId}/`;
       try {
         const vidInfo = await axios.get(`https://graph.facebook.com/v19.0/${rawVideoId}`, {
           params: { fields: 'permalink_url', access_token: pageAccessToken },
           timeout: 10000
         });
-        if (vidInfo.data?.permalink_url) {
+        if (vidInfo.data?.permalink_url && vidInfo.data.permalink_url.includes('/reel/')) {
           reelUrl = vidInfo.data.permalink_url.startsWith('http')
             ? vidInfo.data.permalink_url
             : `https://www.facebook.com${vidInfo.data.permalink_url}`;

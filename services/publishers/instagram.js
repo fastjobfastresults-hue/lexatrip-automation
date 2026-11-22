@@ -228,6 +228,9 @@ class InstagramPublisher {
               Authorization: `OAuth ${accessToken}`,
               offset: '0',
               file_size: stats.size.toString(),
+              'Content-Length': stats.size.toString(),
+              'X-Entity-Length': stats.size.toString(),
+              'X-Entity-Type': 'video/mp4',
               'Content-Type': 'application/octet-stream'
             },
             maxContentLength: Infinity,
@@ -261,8 +264,8 @@ class InstagramPublisher {
         throw new Error('Instagram failed to initiate Reel container: no ID returned.');
       }
 
-      // Step 2: Poll Container Status until ready
-      await this.pollContainerStatus(creationId, accessToken, 20, 3000);
+      // Step 2: Poll Container Status until ready (45 attempts * 4s = 180s timeout for Meta transcoding)
+      await this.pollContainerStatus(creationId, accessToken, 45, 4000);
 
       // Step 3: Publish Reel
       const publishRes = await axios.post(`${url}/media_publish`, null, {

@@ -1001,9 +1001,23 @@ class TelegramBotService {
                 }
               }
               await this.sendDualMessage(chatId, rMsg, { parse_mode: 'Markdown' });
+            } else if (rFailed.length > 0) {
+              let rMsg = `⚠️ *[9:16 मोशन रील पब्लिश रिपोर्ट]*\n\n` +
+                `📍 *डेस्टिनेशन:* ${dest.name}\n` +
+                `📌 *टाइटल:* Reel: ${parsedSeo.title}\n\n` +
+                `*विफल रील चैनल्स:*\n`;
+              for (const r of rFailed) {
+                const icon = telegramNotifier.getPlatformIcon(r.platform);
+                const name = telegramNotifier.formatPlatformName(r.platform);
+                rMsg += `• ❌ ${icon} ${name}: \`${r.error || 'त्रुटि'}\`\n`;
+              }
+              await this.sendDualMessage(chatId, rMsg, { parse_mode: 'Markdown' });
             }
           } catch (rErr) {
             console.warn('[TelegramBot] Background Single Reel render notice:', rErr.message);
+            try {
+              await this.sendDualMessage(chatId, `⚠️ *[9:16 मोशन रील निर्माण में त्रुटि]*\n\`${rErr.message}\``, { parse_mode: 'Markdown' });
+            } catch (e) {}
           }
         });
 
