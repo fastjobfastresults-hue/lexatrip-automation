@@ -36,6 +36,7 @@ app.use(express.urlencoded({ extended: true }));
 // Health Check for Cloud Load Balancers & Render
 app.get('/health', (req, res) => res.status(200).send('OK'));
 app.get('/healthz', (req, res) => res.status(200).send('OK'));
+app.get('/api/health', (req, res) => res.status(200).json({ status: 'ok', uptime: process.uptime(), timestamp: new Date().toISOString() }));
 app.get('/health/deep', deepHealthHandler);
 
 // Cache-Control headers to prevent browser from caching stale files

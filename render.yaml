@@ -10,6 +10,8 @@ services:
         value: production
       - key: PORT
         value: 10000
+      - key: PUBLIC_URL
+        value: https://lexa-trip-automation.onrender.com
       - key: TELEGRAM_BOT_TOKEN
         value: 9283650493:AAEbHNXPtWnej_39TBrCQ3y8yXZUESR2D7E
       - key: META_APP_ID

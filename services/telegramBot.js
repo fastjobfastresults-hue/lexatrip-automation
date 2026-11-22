@@ -960,6 +960,19 @@ class TelegramBotService {
 
             console.log('[TelegramBot] Background Single Reel successfully generated at:', reelPath);
 
+            // Dynamically determine reel targets based on destination enabled channels and credentials
+            const reelTargets = [];
+            if (dest.channels?.facebook?.enabled !== false && dest.channels?.facebook?.credentials?.pageAccessToken) {
+              reelTargets.push('facebook');
+            }
+            if (dest.channels?.instagram?.enabled !== false && (dest.channels?.instagram?.credentials?.accessToken || dest.channels?.instagram?.credentials?.pageAccessToken)) {
+              reelTargets.push('instagram');
+            }
+            if (dest.channels?.youtube?.enabled === true && (dest.channels?.youtube?.credentials?.accessToken || dest.channels?.youtube?.credentials?.refreshToken)) {
+              reelTargets.push('youtube');
+            }
+            const targets = reelTargets.length > 0 ? reelTargets : ['facebook', 'instagram'];
+
             const reelRecord = {
               id: `q_reel_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
               batchId: `batch_live_${Date.now()}`,
@@ -972,7 +985,7 @@ class TelegramBotService {
               mediaPath: reelPath,
               scheduledTime: new Date().toISOString(),
               status: 'publishing',
-              targets: ['facebook', 'instagram', 'youtube'],
+              targets: targets,
               createdAt: new Date().toISOString()
             };
             db.addToQueue(reelRecord);
@@ -981,7 +994,31 @@ class TelegramBotService {
             const rPublished = (reelResult?.publishResults || []).filter(r => r.status === 'published' || r.status === 'success');
             const rFailed = (reelResult?.publishResults || []).filter(r => r.status === 'failed');
 
-            if (rPublished.length > 0) {
+            if (reelResult?.status === 'queued') {
+              // Transient failure triggered automatic retry
+              let rMsg = `🔄 *[9:16 मोशन रील पुनः प्रयास शेड्यूल्ड]* 🐪\n\n` +
+                `📍 *डेस्टिनेशन:* ${dest.name}\n` +
+                `📌 *टाइटल:* Reel: ${parsedSeo.title}\n` +
+                `⏱ *प्रयास:* ${reelResult.retryCount || 1}/3 (अस्थायी विलंब/ट्रांसकोडिंग के कारण पुनः प्रयास)\n\n`;
+              if (rPublished.length > 0) {
+                rMsg += `*लाइव चैनल्स:*\n`;
+                for (const r of rPublished) {
+                  const icon = telegramNotifier.getPlatformIcon(r.platform);
+                  const name = telegramNotifier.formatPlatformName(r.platform);
+                  const postUrl = r.details?.reelUrl || r.details?.postUrl || r.details?.watchUrl || r.details?.permalink || r.postUrl || r.reelUrl;
+                  rMsg += postUrl ? `• [${icon} ${name} Reel](${postUrl})\n` : `• ✅ ${icon} ${name}: रील लाइव\n`;
+                }
+              }
+              if (rFailed.length > 0) {
+                rMsg += `\n*पुनः प्रयास किए जाने वाले चैनल्स:*\n`;
+                for (const r of rFailed) {
+                  const icon = telegramNotifier.getPlatformIcon(r.platform);
+                  const name = telegramNotifier.formatPlatformName(r.platform);
+                  rMsg += `• ⏳ ${icon} ${name}: \`${r.error || 'अस्थायी त्रुटि'}\`\n`;
+                }
+              }
+              await this.sendDualMessage(chatId, rMsg, { parse_mode: 'Markdown' });
+            } else if (rPublished.length > 0) {
               let rMsg = `🎬 *[9:16 मोशन रील लाइव पब्लिश संपन्न]* 🐪\n\n` +
                 `📍 *डेस्टिनेशन:* ${dest.name}\n` +
                 `📌 *टाइटल:* Reel: ${parsedSeo.title}\n\n` +
@@ -1001,23 +1038,38 @@ class TelegramBotService {
                 }
               }
               await this.sendDualMessage(chatId, rMsg, { parse_mode: 'Markdown' });
-            } else if (rFailed.length > 0) {
-              let rMsg = `⚠️ *[9:16 मोशन रील पब्लिश रिपोर्ट]*\n\n` +
+            } else {
+              // All targets failed (rPublished.length === 0)
+              let failMsg = `🚨 *[9:16 मोशन रील पब्लिश विफलता]*\n\n` +
                 `📍 *डेस्टिनेशन:* ${dest.name}\n` +
                 `📌 *टाइटल:* Reel: ${parsedSeo.title}\n\n` +
                 `*विफल रील चैनल्स:*\n`;
-              for (const r of rFailed) {
-                const icon = telegramNotifier.getPlatformIcon(r.platform);
-                const name = telegramNotifier.formatPlatformName(r.platform);
-                rMsg += `• ❌ ${icon} ${name}: \`${r.error || 'त्रुटि'}\`\n`;
+              if (rFailed.length > 0) {
+                for (const r of rFailed) {
+                  const icon = telegramNotifier.getPlatformIcon(r.platform);
+                  const name = telegramNotifier.formatPlatformName(r.platform);
+                  failMsg += `• ❌ ${icon} ${name}: \`${r.error || 'त्रुटि'}\`\n`;
+                }
+              } else {
+                failMsg += `• ❌ सभी रील चैनल्स पर प्रकाशन विफल रहा।\n`;
               }
-              await this.sendDualMessage(chatId, rMsg, { parse_mode: 'Markdown' });
+              failMsg += `\nकृपया क्रेडेंशियल्स व नेटवर्क कनेक्शन जांचें।`;
+              await this.sendDualMessage(chatId, failMsg, { parse_mode: 'Markdown' });
             }
           } catch (rErr) {
-            console.warn('[TelegramBot] Background Single Reel render notice:', rErr.message);
+            console.error('[TelegramBot] Background Single Reel render error:', rErr);
             try {
-              await this.sendDualMessage(chatId, `⚠️ *[9:16 मोशन रील निर्माण में त्रुटि]*\n\`${rErr.message}\``, { parse_mode: 'Markdown' });
-            } catch (e) {}
+              await this.sendDualMessage(
+                chatId,
+                `🚨 *[9:16 मोशन रील निर्माण विफलता]* 🐪\n\n` +
+                `📍 *डेस्टिनेशन:* ${dest.name}\n` +
+                `🛑 *त्रुटि:* \`${rErr.message}\`\n\n` +
+                `वीडियो रेंडरिंग प्रक्रिया विफल हो गई।`,
+                { parse_mode: 'Markdown' }
+              );
+            } catch (e) {
+              console.error('[TelegramBot] Error sending reel render alert:', e.message);
+            }
           }
         });
 

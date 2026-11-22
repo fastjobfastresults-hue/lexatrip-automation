@@ -62,6 +62,8 @@ class TunnelService {
   }
 
   getPublicUrl() {
+    const cloudUrl = process.env.PUBLIC_URL || process.env.RENDER_EXTERNAL_URL;
+    if (cloudUrl) return cloudUrl.replace(/\/$/, '');
     const settings = db.getSettings();
     return settings.publicBaseUrl || this.publicUrl || `http://localhost:${process.env.PORT || 3800}`;
   }

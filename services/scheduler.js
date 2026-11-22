@@ -318,6 +318,20 @@ class Scheduler {
   }
 
   /**
+   * Determine whether an error is transient (temporary network/timeout/rate-limit/transcoding delay)
+   * vs permanent (auth/permissions/missing credentials/invalid parameters/simulated).
+   */
+  isTransientError(errorMsg) {
+    if (!errorMsg || typeof errorMsg !== 'string') return false;
+    const permanentRegex = /(oauth|permission|invalid.*token|token.*expired|unauthorized|401|403|unsupported\s*platform|simulated|missing.*credential)/i;
+    if (permanentRegex.test(errorMsg)) {
+      return false;
+    }
+    const transientRegex = /(429|rate\s*limit|too\s*many\s*requests|500|502|503|504|timeout|timed\s*out|transcoding|processing\s*timed\s*out|in_progress|transient|temporary|service\s*unavailable|network\s*error|econnreset|econnrefused|etimedout|socket\s*hang\s*up)/i;
+    return transientRegex.test(errorMsg);
+  }
+
+  /**
    * Dispatch a single queue item to all target platforms
    */
   async dispatchSingleQueueItem(item) {
@@ -335,6 +349,16 @@ class Scheduler {
     let lastError = null;
 
     for (const targetPlatform of item.targets) {
+      // If item is being retried, check if targetPlatform already succeeded authentically in previous attempt
+      const existingSuccess = (item.publishResults || []).find(
+        r => r.platform === targetPlatform && (r.status === 'published' || r.status === 'success') && r.details && !r.details.simulated
+      );
+      if (existingSuccess) {
+        console.log(`⏩ [Scheduler] Skipping already published platform "${targetPlatform}" for [${item.id}]`);
+        publishResults.push(existingSuccess);
+        continue;
+      }
+
       const channelConfig = destination?.channels ? destination.channels[targetPlatform] : null;
 
       if (channelConfig && channelConfig.enabled === false) {
@@ -573,10 +597,61 @@ class Scheduler {
 
     allSuccess = (finalStatus === 'published');
 
+    // Transient failure retry engine (Automatic retry for Reels & retryable pipeline items)
+    const MAX_RETRIES = 3;
+    const currentRetries = Number(item.retryCount || 0);
+    const isRetryableItem = item.itemType === 'reel' || item.itemType === 'single_reel' || item.id?.startsWith('q_reel_') || item.retryEnabled === true;
+    const hasTransientFailure = failedResults.some(r => this.isTransientError(r.error)) || this.isTransientError(lastError);
+
+    if (isRetryableItem && !item.disableRetry && !allSuccess && hasTransientFailure && currentRetries < MAX_RETRIES) {
+      const nextRetries = currentRetries + 1;
+      const backoffMs = Math.pow(2, currentRetries) * 15000; // 15s, 30s, 60s
+      const nextScheduledTime = new Date(Date.now() + backoffMs).toISOString();
+      const errorSummary = failedResults.length > 0 
+        ? failedResults.map(r => `[${r.platform}] ${r.error}`).join('; ')
+        : (lastError || 'Transient error during publishing.');
+
+      const retryUpdates = {
+        status: 'queued',
+        retryCount: nextRetries,
+        scheduledTime: nextScheduledTime,
+        lastError: errorSummary,
+        publishResults
+      };
+
+      Object.assign(item, retryUpdates);
+      const updated = db.updateQueueItem(item.id, retryUpdates);
+
+      db.addLog({
+        type: 'retry_scheduled',
+        queueId: item.id,
+        destination: destination.name,
+        itemType: item.itemType,
+        title: item.title,
+        retryCount: nextRetries,
+        scheduledTime: nextScheduledTime,
+        lastError: errorSummary
+      });
+
+      if (this.wsBroadcast) {
+        this.wsBroadcast({ type: 'ITEM_RETRY_SCHEDULED', item, retryCount: nextRetries });
+      }
+
+      console.log(`🔁 [Scheduler] Transient error detected for [${item.id}]. Re-queued with backoff (${backoffMs / 1000}s, attempt ${nextRetries}/${MAX_RETRIES}): ${errorSummary}`);
+
+      return updated || item;
+    }
+
+    const errorSummary = failedResults.length > 0 
+      ? failedResults.map(r => `[${r.platform}] ${r.error}`).join('; ')
+      : (lastError || 'One or more channels failed.');
+
     const updates = {
       status: finalStatus,
       publishedAt: new Date().toISOString(),
-      publishResults
+      publishResults,
+      retryCount: currentRetries,
+      lastError: allSuccess ? null : errorSummary
     };
 
     Object.assign(item, updates);
@@ -600,9 +675,9 @@ class Scheduler {
     if (allSuccess) {
       telegramNotifier.notifyItemPublished(destination, item, publishResults);
     } else {
-      const errorSummary = failedResults.length > 0 
-        ? failedResults.map(r => `[${r.platform}] ${r.error}`).join('; ')
-        : (lastError || 'One or more channels failed.');
+      if (currentRetries >= MAX_RETRIES && typeof telegramNotifier.notifyPersistentFailure === 'function') {
+        telegramNotifier.notifyPersistentFailure(destination, item, errorSummary);
+      }
       telegramNotifier.notifyError(destination, item, errorSummary);
     }
 

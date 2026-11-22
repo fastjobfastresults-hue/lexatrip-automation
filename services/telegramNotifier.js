@@ -488,7 +488,7 @@ class TelegramNotifier {
   }
 
   /**
-   * 7. Error Alert (Bot ONLY, De-duplicated)
+   * 7. Error Alert (Both Admin and Telegram Channel, De-duplicated)
    */
   async notifyError(destination, item, errorMsg) {
     try {
@@ -497,16 +497,48 @@ class TelegramNotifier {
 
       const token = this.getTokenForDestination(destination);
       const adminChatId = this.getChatIdForDestination(destination);
-      if (!token || !adminChatId) return;
+      const channelId = destination?.telegram?.channelId;
+      if (!token) return;
 
       const msg = `⚠️ *[त्रुटि अलर्ट]* ${destination?.name || 'Lexa Trip'}\n\n` +
         `📌 *कंटेंट:* ${item?.title || 'टास्क'}\n` +
         `🛑 *कारण:* \`${errorMsg}\`\n\n` +
         `डैशबोर्ड में जाकर टोकन या नेटवर्क चेक करें।`;
 
-      await this.sendMessage(token, adminChatId, msg, { parse_mode: 'Markdown' });
+      const targets = [adminChatId, channelId].filter(Boolean);
+      for (const tId of [...new Set(targets)]) {
+        await this.sendMessage(token, tId, msg, { parse_mode: 'Markdown' });
+      }
     } catch (err) {
       console.error('[TelegramNotifier notifyError]:', err.message);
+    }
+  }
+
+  /**
+   * Persistent Failure Alert (Triggered when maximum retries are exhausted)
+   */
+  async notifyPersistentFailure(destination, item, errorMsg) {
+    try {
+      const dedupKey = `persistent_fail_${item?.id || 'general'}`;
+      if (this.isDuplicate(dedupKey, 60)) return;
+
+      const token = this.getTokenForDestination(destination);
+      const adminChatId = this.getChatIdForDestination(destination);
+      const channelId = destination?.telegram?.channelId;
+      if (!token) return;
+
+      const msg = `🚨 *[स्थायी विफलता अलर्ट / अधिकतम प्रयास समाप्त]* ${destination?.name || 'Lexa Trip'}\n\n` +
+        `📌 *कंटेंट:* ${item?.title || 'टास्क'}\n` +
+        `🔄 *प्रयास:* ${(item?.retryCount || 3)}/3 (पुनः प्रयास सीमा समाप्त)\n` +
+        `🛑 *अंतिम त्रुटि:* \`${errorMsg}\`\n\n` +
+        `कृपया क्रेडेंशियल्स और नेटवर्क कनेक्शन की तुरंत जांच करें।`;
+
+      const targets = [adminChatId, channelId].filter(Boolean);
+      for (const tId of [...new Set(targets)]) {
+        await this.sendMessage(token, tId, msg, { parse_mode: 'Markdown' });
+      }
+    } catch (err) {
+      console.error('[TelegramNotifier notifyPersistentFailure]:', err.message);
     }
   }
 

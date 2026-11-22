@@ -6,7 +6,7 @@ class InstagramPublisher {
   /**
    * Helper method to poll Instagram container status until processing completes
    */
-  async pollContainerStatus(creationId, accessToken, maxAttempts = 20, delayMs = 3000) {
+  async pollContainerStatus(creationId, accessToken, maxAttempts = 60, delayMs = 3000) {
     let attempts = 0;
     while (attempts < maxAttempts) {
       await new Promise(r => setTimeout(r, delayMs));
@@ -15,8 +15,8 @@ class InstagramPublisher {
         timeout: 15000
       });
       const status = check.data?.status_code;
-      if (status === 'FINISHED') {
-        return true;
+      if (status === 'FINISHED' || status === 'PUBLISHED') {
+        return { success: true, alreadyPublished: status === 'PUBLISHED' };
       }
       if (status === 'ERROR') {
         throw new Error(`Instagram container ${creationId} processing failed: ${check.data?.status || 'ERROR'}`);
@@ -264,19 +264,21 @@ class InstagramPublisher {
         throw new Error('Instagram failed to initiate Reel container: no ID returned.');
       }
 
-      // Step 2: Poll Container Status until ready (45 attempts * 4s = 180s timeout for Meta transcoding)
-      await this.pollContainerStatus(creationId, accessToken, 45, 4000);
+      // Step 2: Poll Container Status until ready (60 attempts * 3s = 180s timeout for Meta transcoding)
+      const pollRes = await this.pollContainerStatus(creationId, accessToken, 60, 3000);
 
-      // Step 3: Publish Reel
-      const publishRes = await axios.post(`${url}/media_publish`, null, {
-        params: {
-          creation_id: creationId,
-          access_token: accessToken
-        },
-        timeout: 45000
-      });
-
-      const mediaId = publishRes.data?.id || creationId;
+      let mediaId = creationId;
+      if (!pollRes?.alreadyPublished) {
+        // Step 3: Publish Reel
+        const publishRes = await axios.post(`${url}/media_publish`, null, {
+          params: {
+            creation_id: creationId,
+            access_token: accessToken
+          },
+          timeout: 45000
+        });
+        mediaId = publishRes.data?.id || creationId;
+      }
       let permalink = null;
       try {
         const mediaCheck = await axios.get(`https://graph.facebook.com/v19.0/${mediaId}`, {

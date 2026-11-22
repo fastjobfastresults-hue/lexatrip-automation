@@ -5482,9 +5482,149 @@
       ],
       "createdAt": "2026-11-19T19:08:22.930Z",
       "lastError": "Invalid local Windows path in cloud environment"
+    },
+    {
+      "id": "q_reel_retry_dup_1795331798290",
+      "batchId": "batch_dup_test",
+      "destinationId": "dest_jaisalmer",
+      "destinationName": "Lexa Trip Jaisalmer",
+      "itemType": "reel",
+      "title": "Reel: Duplicate Prevention Test",
+      "mediaPath": "nonexistent.mp4",
+      "targets": [
+        "facebook",
+        "instagram"
+      ],
+      "retryCount": 1,
+      "status": "published",
+      "publishResults": [
+        {
+          "platform": "facebook",
+          "status": "published",
+          "details": {
+            "success": true,
+            "simulated": false,
+            "platform": "facebook",
+            "postId": "1828218241427789",
+            "reelUrl": "https://www.facebook.com/reel/1828218241427789/"
+          }
+        },
+        {
+          "platform": "instagram",
+          "status": "published",
+          "details": {
+            "success": true,
+            "postUrl": "https://instagr.am/reel/456"
+          }
+        }
+      ],
+      "publishedAt": "2026-11-22T07:16:38.336Z",
+      "lastError": null
     }
   ],
   "logs": [
+    {
+      "id": "log_1795331823431_oiit4",
+      "timestamp": "2026-11-22T07:17:03.431Z",
+      "type": "publish",
+      "queueId": "q_reel_sim_1795331823406",
+      "destination": "लेक्सा ट्रिप जैसलमेर (Lexa Trip Jaisalmer)",
+      "itemType": "reel",
+      "title": "Reel: Simulated Check Test",
+      "status": "success",
+      "results": [
+        {
+          "platform": "facebook",
+          "status": "published",
+          "details": {
+            "success": true,
+            "postUrl": "https://fb.com/reel/real123"
+          }
+        }
+      ]
+    },
+    {
+      "id": "log_1795331823310_2v0te",
+      "timestamp": "2026-11-22T07:17:03.311Z",
+      "type": "publish",
+      "queueId": "q_reel_retry_dup_1795331823275",
+      "destination": "लेक्सा ट्रिप जैसलमेर (Lexa Trip Jaisalmer)",
+      "itemType": "reel",
+      "title": "Reel: Duplicate Prevention Test",
+      "status": "success",
+      "results": [
+        {
+          "platform": "facebook",
+          "status": "published",
+          "details": {
+            "success": true,
+            "simulated": false,
+            "platform": "facebook",
+            "postId": "1828218241427789",
+            "reelUrl": "https://www.facebook.com/reel/1828218241427789/"
+          }
+        },
+        {
+          "platform": "instagram",
+          "status": "published",
+          "details": {
+            "success": true,
+            "postUrl": "https://instagr.am/reel/456"
+          }
+        }
+      ]
+    },
+    {
+      "id": "log_1795331798477_ic1iy",
+      "timestamp": "2026-11-22T07:16:38.477Z",
+      "type": "publish",
+      "queueId": "q_reel_sim_1795331798440",
+      "destination": "लेक्सा ट्रिप जैसलमेर (Lexa Trip Jaisalmer)",
+      "itemType": "reel",
+      "title": "Reel: Simulated Check Test",
+      "status": "success",
+      "results": [
+        {
+          "platform": "facebook",
+          "status": "published",
+          "details": {
+            "success": true,
+            "postUrl": "https://fb.com/reel/real123"
+          }
+        }
+      ]
+    },
+    {
+      "id": "log_1795331798346_i6fa8",
+      "timestamp": "2026-11-22T07:16:38.346Z",
+      "type": "publish",
+      "queueId": "q_reel_retry_dup_1795331798290",
+      "destination": "लेक्सा ट्रिप जैसलमेर (Lexa Trip Jaisalmer)",
+      "itemType": "reel",
+      "title": "Reel: Duplicate Prevention Test",
+      "status": "success",
+      "results": [
+        {
+          "platform": "facebook",
+          "status": "published",
+          "details": {
+            "success": true,
+            "simulated": false,
+            "platform": "facebook",
+            "postId": "1828218241427789",
+            "reelUrl": "https://www.facebook.com/reel/1828218241427789/"
+          }
+        },
+        {
+          "platform": "instagram",
+          "status": "published",
+          "details": {
+            "success": true,
+            "postUrl": "https://instagr.am/reel/456"
+          }
+        }
+      ]
+    },
     {
       "id": "log_1795172313338_08ty3",
       "timestamp": "2026-11-20T10:58:33.338Z",
