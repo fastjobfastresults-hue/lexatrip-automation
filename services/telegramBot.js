@@ -115,18 +115,60 @@ class NativeTelegramBot {
     this.isPolling = false;
   }
 
-  async pollLoop() {
-    // Fast-forward offset on startup so stale backlogs never re-trigger video processing
-    try {
-      const initRes = await axios.get(`${this.baseUrl}/getUpdates?offset=-1`, { timeout: 10000 });
-      if (initRes.data?.ok && Array.isArray(initRes.data.result) && initRes.data.result.length > 0) {
-        this.offset = initRes.data.result[initRes.data.result.length - 1].update_id + 1;
-        console.log(`🤖 Telegram Bot acknowledged backlog. Listening from offset: ${this.offset}`);
+  async processUpdate(update) {
+    if (!update) return;
+
+    // 1. Handle Callback Queries (Inline Button Clicks)
+    if (update.callback_query) {
+      for (const cb of this.handlers.callback_query) {
+        try { await cb(update.callback_query); } catch (e) { console.error('callback_query error:', e); }
       }
-    } catch (e) {
-      console.warn('Telegram init offset notice:', e.message);
+      return;
     }
 
+    // 2. Handle Messages & Channel Posts
+    const msg = update.channel_post || update.message;
+    if (!msg) return;
+
+    // Only skip messages older than 2 hours to avoid ancient backlogs from days ago
+    const msgAgeSeconds = Math.floor(Date.now() / 1000) - (msg.date || 0);
+    if (msg.date && msgAgeSeconds > 7200) {
+      console.log(`[TelegramBot] 🛑 Dropping stale message (${msgAgeSeconds}s old): ${msg.message_id}`);
+      return;
+    }
+
+    if (update.channel_post) {
+      for (const cb of this.handlers.channel_post) {
+        try { await cb(msg); } catch (e) { console.error('Channel post handler error:', e); }
+      }
+    } else if (update.message) {
+      for (const cb of this.handlers.message) {
+        try { await cb(msg); } catch (e) { console.error('Message handler error:', e); }
+      }
+
+      if (msg.photo && msg.photo.length > 0) {
+        for (const cb of this.handlers.photo) {
+          try { await cb(msg); } catch (e) { console.error('Photo handler error:', e); }
+        }
+      }
+
+      const text = (msg.text || '').trim();
+      if (text) {
+        for (const cb of this.handlers.text) {
+          try { await cb(msg); } catch (e) { console.error('Text handler error:', e); }
+        }
+        for (const { regex, callback } of this.textHandlers) {
+          const match = text.match(regex);
+          if (match) {
+            try { await callback(msg, match); } catch (e) { console.error('onText handler error:', e); }
+          }
+        }
+      }
+    }
+  }
+
+  async pollLoop() {
+    console.log('🤖 Telegram Bot polling active. Listening for channel posts and messages...');
     while (this.isPolling) {
       try {
         const res = await axios.get(`${this.baseUrl}/getUpdates`, {
@@ -141,54 +183,19 @@ class NativeTelegramBot {
         if (res.data?.ok && Array.isArray(res.data.result)) {
           for (const update of res.data.result) {
             this.offset = update.update_id + 1;
-
-            // 1. Handle Callback Queries (Inline Button Clicks)
-            if (update.callback_query) {
-              for (const cb of this.handlers.callback_query) {
-                try { await cb(update.callback_query); } catch (e) { console.error('callback_query error:', e); }
-              }
-              continue;
-            }
-
-            // 2. Handle Messages & Channel Posts
-            const msg = update.channel_post || update.message;
-            if (!msg) continue;
-
-            if (update.channel_post) {
-              for (const cb of this.handlers.channel_post) {
-                try { await cb(msg); } catch (e) { console.error('Channel post handler error:', e); }
-              }
-            } else if (update.message) {
-              for (const cb of this.handlers.message) {
-                try { await cb(msg); } catch (e) { console.error('Message handler error:', e); }
-              }
-
-              if (msg.photo && msg.photo.length > 0) {
-                for (const cb of this.handlers.photo) {
-                  try { await cb(msg); } catch (e) { console.error('Photo handler error:', e); }
-                }
-              }
-
-              const text = (msg.text || '').trim();
-              if (text) {
-                for (const cb of this.handlers.text) {
-                  try { await cb(msg); } catch (e) { console.error('Text handler error:', e); }
-                }
-                for (const { regex, callback } of this.textHandlers) {
-                  const match = text.match(regex);
-                  if (match) {
-                    try { await callback(msg, match); } catch (e) { console.error('onText handler error:', e); }
-                  }
-                }
-              }
-            }
+            await this.processUpdate(update);
           }
         }
       } catch (err) {
         for (const cb of this.handlers.polling_error) {
           try { cb(err); } catch (e) {}
         }
-        await new Promise(r => setTimeout(r, 2000));
+        if (err.response?.status === 409) {
+          console.warn('[TelegramBot Polling] 409 Conflict: Webhook is active or concurrent instance polling.');
+          await new Promise(r => setTimeout(r, 10000));
+        } else {
+          await new Promise(r => setTimeout(r, 2000));
+        }
       }
     }
   }
@@ -245,6 +252,12 @@ class TelegramBotService {
 
   clearInbox(destinationId = 'dest_jaisalmer') {
     this.inbox.set(destinationId, []);
+  }
+
+  async handleWebhookUpdate(update) {
+    if (this.bot) {
+      await this.bot.processUpdate(update);
+    }
   }
 
   resolveDestination(msg, textHint = '') {

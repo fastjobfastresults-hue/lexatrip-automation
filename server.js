@@ -553,6 +553,18 @@ app.post('/api/destinations/:id/telegram-inbox/clear', (req, res) => {
   res.json({ success: true });
 });
 
+// Live Telegram Webhook Endpoint (Supports Instant Wake-up & Event Dispatch)
+app.post('/api/telegram/webhook', async (req, res) => {
+  res.status(200).json({ ok: true });
+  try {
+    if (req.body && (req.body.message || req.body.channel_post || req.body.callback_query)) {
+      await telegramBot.handleWebhookUpdate(req.body);
+    }
+  } catch (err) {
+    console.error('[Telegram Webhook Error]:', err.message);
+  }
+});
+
 // Test Telegram Notification
 app.post('/api/telegram/test-alert', async (req, res) => {
   try {
@@ -1007,5 +1019,18 @@ server.listen(PORT, '0.0.0.0', async () => {
     }
   } catch (err) {
     console.error('Tunnel notice:', err.message);
+  }
+
+  // Render Anti-Spin-Down Keep-Alive (Runs every 9 mins so Render never spins down)
+  const keepAliveUrl = process.env.PUBLIC_BASE_URL || 'https://lexa-trip-automation.onrender.com';
+  if (keepAliveUrl && keepAliveUrl.startsWith('http')) {
+    setInterval(async () => {
+      try {
+        await axios.get(`${keepAliveUrl}/health`, { timeout: 15000 });
+        console.log(`[KeepAlive] 💓 Pinged ${keepAliveUrl}/health - server remaining active.`);
+      } catch (e) {
+        console.warn('[KeepAlive] Ping notice:', e.message);
+      }
+    }, 9 * 60 * 1000);
   }
 });
