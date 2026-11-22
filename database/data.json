@@ -149,7 +149,7 @@
       "platform": "facebook",
       "name": "Facebook Page - Lexa Trip Jaisalmer",
       "destination": "Jaisalmer",
-      "handle": "facebook.com/lexatripjaisalmer",
+      "handle": "https://www.facebook.com/profile.php?id=61594513580628",
       "connected": false,
       "authType": "api_token",
       "credentials": {
