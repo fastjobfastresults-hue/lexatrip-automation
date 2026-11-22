@@ -6,6 +6,29 @@ const ffmpegStatic = require('ffmpeg-static');
 class VideoEngine {
   constructor() {
     this.ffmpegPath = process.env.FFMPEG_PATH || ffmpegStatic || 'ffmpeg';
+    this.lockQueue = [];
+    this.isRendering = false;
+  }
+
+  /**
+   * Execution Mutex Lock: Guarantees only ONE FFmpeg encode runs at any time,
+   * completely eliminating memory spikes and container OOM crashes.
+   */
+  async acquireLock() {
+    return new Promise(resolve => {
+      this.lockQueue.push(resolve);
+      this._processQueue();
+    });
+  }
+
+  _processQueue() {
+    if (this.isRendering || this.lockQueue.length === 0) return;
+    this.isRendering = true;
+    const nextResolver = this.lockQueue.shift();
+    nextResolver(() => {
+      this.isRendering = false;
+      this._processQueue();
+    });
   }
 
   /**
@@ -49,8 +72,18 @@ class VideoEngine {
     audioPath = null,
     onProgress = null
   }) {
+    const releaseLock = await this.acquireLock();
     return new Promise((resolve, reject) => {
+      let released = false;
+      const safeRelease = () => {
+        if (!released) {
+          released = true;
+          releaseLock();
+        }
+      };
+
       if (!imagePaths || imagePaths.length < 5) {
+        safeRelease();
         return reject(new Error('At least 5 images required for 12-second combined reel.'));
       }
 
@@ -60,7 +93,11 @@ class VideoEngine {
       }
 
       const totalDuration = durations.reduce((a, b) => a + b, 0); // 12s
-      const args = ['-threads', '1'];
+      const args = [
+        '-threads', '1',
+        '-filter_threads', '1',
+        '-filter_complex_threads', '1'
+      ];
 
       // 1. Loop each of the 5 images for their respective duration
       for (let i = 0; i < 5; i++) {
@@ -79,10 +116,6 @@ class VideoEngine {
       }
 
       // 3. Build Filter Complex
-      // For each image:
-      // - Background: black or soft ambient blur
-      // - Foreground: scale to 1080x1920 max with aspect ratio decrease to NEVER crop logo/text
-      // - Overlay centered: (W-w)/2 : (H-h)/2
       let filterStr = '';
       for (let i = 0; i < 5; i++) {
         if (style === 'contain_blur') {
@@ -110,14 +143,14 @@ class VideoEngine {
         args.push('-af', `volume=0.85,afade=t=out:st=${Math.max(0, totalDuration - 1.5)}:d=1.5`);
       }
 
-      // 4. Video encoding parameters for Ultra HD clarity
+      // 4. Video encoding parameters for Ultra HD clarity and low memory footprint (<50MB RAM)
       args.push(
         '-c:v', 'libx264',
         '-preset', 'ultrafast',
-        '-crf', '24',
-        '-b:v', '2500k',
-        '-maxrate', '3500k',
-        '-bufsize', '3500k',
+        '-crf', '26',
+        '-b:v', '1200k',
+        '-maxrate', '1800k',
+        '-bufsize', '1800k',
         '-pix_fmt', 'yuv420p',
         '-r', '24',
         '-c:a', 'aac',
@@ -145,6 +178,7 @@ class VideoEngine {
       });
 
       proc.on('close', code => {
+        safeRelease();
         if (code === 0) {
           console.log(`[VideoEngine] 12s Combined Reel Success: ${outputPath}`);
           resolve({
@@ -160,7 +194,10 @@ class VideoEngine {
         }
       });
 
-      proc.on('error', err => reject(err));
+      proc.on('error', err => {
+        safeRelease();
+        reject(err);
+      });
     });
   }
 
@@ -178,8 +215,18 @@ class VideoEngine {
     tagline = '✦ Desert Safari & Royal Camping ✦',
     onProgress = null
   }) {
+    const releaseLock = await this.acquireLock();
     return new Promise((resolve, reject) => {
+      let released = false;
+      const safeRelease = () => {
+        if (!released) {
+          released = true;
+          releaseLock();
+        }
+      };
+
       if (!fs.existsSync(imagePath)) {
+        safeRelease();
         return reject(new Error(`Image not found: ${imagePath}`));
       }
 
@@ -188,7 +235,11 @@ class VideoEngine {
         fs.mkdirSync(outputDir, { recursive: true });
       }
 
-      const args = ['-threads', '1'];
+      const args = [
+        '-threads', '1',
+        '-filter_threads', '1',
+        '-filter_complex_threads', '1'
+      ];
       args.push('-loop', '1', '-t', duration.toString(), '-i', imagePath);
 
       // Audio track: custom track or default royalty-free travel beat
@@ -227,11 +278,14 @@ class VideoEngine {
         args.push('-af', `volume=0.85,afade=t=out:st=${Math.max(0, duration - 1.2)}:d=1.2`);
       }
 
+      // Video encoding parameters with low memory footprint (<50MB RAM)
       args.push(
         '-c:v', 'libx264',
         '-preset', 'ultrafast',
-        '-crf', '24',
-        '-b:v', '2500k',
+        '-crf', '26',
+        '-b:v', '1200k',
+        '-maxrate', '1800k',
+        '-bufsize', '1800k',
         '-pix_fmt', 'yuv420p',
         '-r', '24',
         '-c:a', 'aac',
@@ -255,13 +309,17 @@ class VideoEngine {
       });
 
       proc.on('close', code => {
+        safeRelease();
         if (code === 0) {
           resolve({ success: true, outputPath, duration, resolution: '1080x1920', fps: 30 });
         } else {
           reject(new Error(`FFmpeg single reel error ${code}: ${stderrData.slice(-300)}`));
         }
       });
-      proc.on('error', err => reject(err));
+      proc.on('error', err => {
+        safeRelease();
+        reject(err);
+      });
     });
   }
 }

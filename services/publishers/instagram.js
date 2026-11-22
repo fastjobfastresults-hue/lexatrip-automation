@@ -76,12 +76,26 @@ class InstagramPublisher {
         timeout: 30000
       });
 
+      const mediaId = publishRes.data?.id || creationId;
+      let permalink = null;
+      try {
+        const mediaCheck = await axios.get(`https://graph.facebook.com/v19.0/${mediaId}`, {
+          params: { fields: 'permalink', access_token: accessToken },
+          timeout: 10000
+        });
+        permalink = mediaCheck.data?.permalink;
+      } catch (e) {
+        console.warn('[Instagram Image permalink warning]:', e.message);
+      }
+
       return {
         success: true,
         simulated: false,
         platform: 'instagram',
         type: 'image',
-        postId: publishRes.data?.id || creationId,
+        postId: mediaId,
+        postUrl: permalink || 'https://www.instagram.com/lexatripjaisalmer/',
+        permalink: permalink,
         publishedAt: new Date().toISOString()
       };
     } catch (err) {
@@ -259,13 +273,28 @@ class InstagramPublisher {
         timeout: 45000
       });
 
+      const mediaId = publishRes.data?.id || creationId;
+      let permalink = null;
+      try {
+        const mediaCheck = await axios.get(`https://graph.facebook.com/v19.0/${mediaId}`, {
+          params: { fields: 'permalink', access_token: accessToken },
+          timeout: 10000
+        });
+        permalink = mediaCheck.data?.permalink;
+      } catch (e) {
+        console.warn('[Instagram Reel permalink warning]:', e.message);
+      }
+
       return {
         success: true,
         simulated: false,
         platform: 'instagram',
         type: 'reel',
-        postId: publishRes.data?.id || creationId,
-        videoId: publishRes.data?.id || creationId,
+        postId: mediaId,
+        videoId: mediaId,
+        reelUrl: permalink || 'https://www.instagram.com/lexatripjaisalmer/reels/',
+        postUrl: permalink || 'https://www.instagram.com/lexatripjaisalmer/reels/',
+        permalink: permalink,
         publishedAt: new Date().toISOString()
       };
     } catch (err) {

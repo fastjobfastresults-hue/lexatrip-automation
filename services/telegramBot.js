@@ -162,23 +162,23 @@ class NativeTelegramBot {
               for (const cb of this.handlers.message) {
                 try { await cb(msg); } catch (e) { console.error('Message handler error:', e); }
               }
-            }
 
-            if (msg.photo && msg.photo.length > 0) {
-              for (const cb of this.handlers.photo) {
-                try { await cb(msg); } catch (e) { console.error('Photo handler error:', e); }
+              if (msg.photo && msg.photo.length > 0) {
+                for (const cb of this.handlers.photo) {
+                  try { await cb(msg); } catch (e) { console.error('Photo handler error:', e); }
+                }
               }
-            }
 
-            const text = (msg.text || '').trim();
-            if (text) {
-              for (const cb of this.handlers.text) {
-                try { await cb(msg); } catch (e) { console.error('Text handler error:', e); }
-              }
-              for (const { regex, callback } of this.textHandlers) {
-                const match = text.match(regex);
-                if (match) {
-                  try { await callback(msg, match); } catch (e) { console.error('onText handler error:', e); }
+              const text = (msg.text || '').trim();
+              if (text) {
+                for (const cb of this.handlers.text) {
+                  try { await cb(msg); } catch (e) { console.error('Text handler error:', e); }
+                }
+                for (const { regex, callback } of this.textHandlers) {
+                  const match = text.match(regex);
+                  if (match) {
+                    try { await callback(msg, match); } catch (e) { console.error('onText handler error:', e); }
+                  }
                 }
               }
             }
@@ -199,6 +199,7 @@ class TelegramBotService {
     this.bot = null;
     this.sessions = new Map();
     this.inbox = new Map();
+    this.processedMessages = new Map();
     this.dailyReportInterval = null;
   }
 
@@ -253,13 +254,34 @@ class TelegramBotService {
     const chatUsername = (msg?.chat?.username || '').toLowerCase();
     const messageContent = (textHint || msg?.text || msg?.caption || '').toLowerCase();
 
-    // 1. Direct Explicit Channel ID match (Strict Priority #1)
+    // 1. Direct Explicit Channel ID match (Strict Priority #1 - 100% Channel Isolation)
     for (const d of destinations) {
       if (d.telegram?.channelId && String(d.telegram.channelId) === chatId) return d;
     }
 
-    // 2. Explicit Destination Mention in Text/SEO (e.g. "डेस्टिनेशन: लेक्सा ट्रिप जैसलमेर", "Mount Abu", "Tirupati")
-    if (messageContent) {
+    // 2. Direct Match by Channel Username (Strict Priority #2)
+    if (chatUsername) {
+      const cleanUser = chatUsername.replace(/^@/, '');
+      for (const d of destinations) {
+        const dUser = (d.telegram?.channelUsername || '').toLowerCase().replace(/^@/, '');
+        if (dUser && dUser === cleanUser) return d;
+      }
+    }
+
+    // 3. Match from Chat Title or Chat Username (Strict Priority #3)
+    if (chatTitle) {
+      for (const d of destinations) {
+        const slug = (d.slug || '').toLowerCase();
+        const name = (d.name || '').toLowerCase();
+        const city = name.replace(/lexa\s*trip/i, '').trim();
+        if (city && city.length > 2 && chatTitle.includes(city)) return d;
+        if (slug && slug.length > 2 && chatTitle.includes(slug)) return d;
+      }
+    }
+
+    // 4. Fallback ONLY for 1-on-1 Direct Private Chats with Bot: Match by Text/SEO
+    const isDirectPrivateChat = !msg?.chat?.type || msg?.chat?.type === 'private';
+    if (isDirectPrivateChat && messageContent) {
       for (const d of destinations) {
         const slug = (d.slug || '').toLowerCase();
         const cityEnglish = (d.name.match(/\((.*?)\)/)?.[1] || '').toLowerCase().replace(/lexa\s*trip/i, '').trim();
@@ -275,28 +297,15 @@ class TelegramBotService {
       }
     }
 
-    // 3. Match from Chat Title or Chat Username (for telegram destination groups)
-    for (const d of destinations) {
-      const slug = (d.slug || '').toLowerCase();
-      const name = (d.name || '').toLowerCase();
-      const city = name.replace(/lexa\s*trip/i, '').trim();
-      if (city && city.length > 2 && (chatTitle.includes(city) || chatUsername.includes(city))) {
-        return d;
-      }
-      if (slug && slug.length > 2 && (chatTitle.includes(slug) || chatUsername.includes(slug))) {
-        return d;
-      }
-    }
-
-    // 4. Session Active Destination
+    // 5. Session Active Destination
     const session = this.sessions.get(chatId);
     if (session?.destinationId) {
       const found = db.getDestination(session.destinationId);
       if (found) return found;
     }
 
-    // 5. Fallback to default Jaisalmer
-    return destinations[0] || { id: 'dest_jaisalmer', name: 'Lexa Trip Jaisalmer', slug: 'jaisalmer' };
+    // 6. Fallback to default Jaisalmer
+    return destinations.find(d => d.id === 'dest_jaisalmer') || destinations[0] || { id: 'dest_jaisalmer', name: 'Lexa Trip Jaisalmer', slug: 'jaisalmer' };
   }
 
   getSession(key, destination = null) {
@@ -753,6 +762,20 @@ class TelegramBotService {
     // 8. Incoming Photo Handler (Single Post with SEO Caption)
     const handlePhotoMessage = async (msg) => {
       const chatId = msg.chat.id;
+      const messageId = msg.message_id;
+      const dedupeKey = `${chatId}_${messageId}`;
+
+      // Atomic Deduplication: Drop duplicate webhook/polling dispatches
+      if (this.processedMessages.has(dedupeKey)) {
+        console.log(`[TelegramBot Dedupe] 🛑 Dropping duplicate photo message: ${dedupeKey}`);
+        return;
+      }
+      this.processedMessages.set(dedupeKey, Date.now());
+      if (this.processedMessages.size > 500) {
+        const oldestKey = this.processedMessages.keys().next().value;
+        this.processedMessages.delete(oldestKey);
+      }
+
       const photoArray = msg.photo;
       if (!photoArray || photoArray.length === 0) return;
 
@@ -821,7 +844,7 @@ class TelegramBotService {
           caption: parsedSeo.caption,
           mediaPath: processedPath,
           scheduledTime: new Date(Date.now() - 5000).toISOString(),
-          status: 'queued',
+          status: 'publishing',
           targets: ['instagram', 'facebook', 'linkedin', 'pinterest', 'blogger'],
           createdAt: new Date().toISOString()
         };
@@ -948,7 +971,7 @@ class TelegramBotService {
               caption: parsedSeo.caption,
               mediaPath: reelPath,
               scheduledTime: new Date().toISOString(),
-              status: 'queued',
+              status: 'publishing',
               targets: ['facebook', 'instagram', 'youtube'],
               createdAt: new Date().toISOString()
             };
@@ -966,7 +989,7 @@ class TelegramBotService {
               for (const r of rPublished) {
                 const icon = telegramNotifier.getPlatformIcon(r.platform);
                 const name = telegramNotifier.formatPlatformName(r.platform);
-                const postUrl = r.details?.postUrl || r.postUrl;
+                const postUrl = r.details?.reelUrl || r.details?.postUrl || r.details?.watchUrl || r.details?.permalink || r.postUrl || r.reelUrl;
                 rMsg += postUrl ? `• [${icon} ${name} Reel](${postUrl})\n` : `• ✅ ${icon} ${name}: रील लाइव\n`;
               }
               if (rFailed.length > 0) {
@@ -1000,6 +1023,18 @@ class TelegramBotService {
       if (!text || text.startsWith('/')) return;
 
       const chatId = msg.chat.id;
+      const messageId = msg.message_id;
+      const dedupeKey = `${chatId}_${messageId}`;
+
+      if (this.processedMessages.has(dedupeKey)) {
+        return;
+      }
+      this.processedMessages.set(dedupeKey, Date.now());
+      if (this.processedMessages.size > 500) {
+        const oldestKey = this.processedMessages.keys().next().value;
+        this.processedMessages.delete(oldestKey);
+      }
+
       const dest = this.resolveDestination(msg, text);
       const session = this.getSession(chatId, dest);
 

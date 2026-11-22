@@ -39,8 +39,20 @@ class FacebookPublisher {
       const rawPostId = res.data.id || res.data.post_id;
       const cleanPostId = rawPostId?.includes('_') ? rawPostId.split('_')[1] : rawPostId;
       const photoId = res.data.id || cleanPostId;
-      // Universal direct Facebook photo URL that resolves publicly on all platforms
-      const postUrl = `https://www.facebook.com/photo.php?fbid=${photoId}`;
+      
+      // Query Graph API for the direct canonical photo link
+      let postUrl = `https://www.facebook.com/photo.php?fbid=${photoId}`;
+      try {
+        const photoInfo = await axios.get(`https://graph.facebook.com/v19.0/${photoId}`, {
+          params: { fields: 'link', access_token: pageAccessToken },
+          timeout: 10000
+        });
+        if (photoInfo.data?.link) {
+          postUrl = photoInfo.data.link;
+        }
+      } catch (e) {
+        console.warn('[Facebook Photo link fetch warning]:', e.message);
+      }
 
       return {
         success: true,
@@ -92,8 +104,21 @@ class FacebookPublisher {
       });
 
       const rawVideoId = res.data.id;
-      // Universal direct Facebook Watch / Reel URL that resolves publicly without requiring user login
-      const postUrl = `https://www.facebook.com/watch/?v=${rawVideoId}`;
+      // Direct Facebook Reel permalink from Graph API
+      let reelUrl = `https://www.facebook.com/reel/${rawVideoId}/`;
+      try {
+        const vidInfo = await axios.get(`https://graph.facebook.com/v19.0/${rawVideoId}`, {
+          params: { fields: 'permalink_url', access_token: pageAccessToken },
+          timeout: 10000
+        });
+        if (vidInfo.data?.permalink_url) {
+          reelUrl = vidInfo.data.permalink_url.startsWith('http')
+            ? vidInfo.data.permalink_url
+            : `https://www.facebook.com${vidInfo.data.permalink_url}`;
+        }
+      } catch (e) {
+        console.warn('[Facebook Reel permalink fetch warning]:', e.message);
+      }
 
       return {
         success: true,
@@ -102,9 +127,9 @@ class FacebookPublisher {
         type: 'reel',
         postId: rawVideoId,
         videoId: rawVideoId,
-        reelUrl: postUrl,
-        watchUrl: postUrl,
-        postUrl,
+        reelUrl: reelUrl,
+        watchUrl: reelUrl,
+        postUrl: reelUrl,
         publishedAt: new Date().toISOString()
       };
     } catch (err) {

@@ -45,6 +45,27 @@ class Scheduler {
     const recovered = [];
 
     for (const item of orphaned) {
+      // Do not re-publish instant or partially published jobs on container reboot to avoid duplicate posts
+      if (item.publishResults && item.publishResults.some(r => r.status === 'published' || r.status === 'success')) {
+        const note = 'Preserved as published/partial after container restart (duplicate prevention).';
+        db.updateQueueItem(item.id, {
+          status: 'partial_or_failed',
+          recoveryNote: note
+        });
+        recovered.push({ id: item.id, status: 'partial_or_failed', note });
+        continue;
+      }
+      if (item.id && (item.id.startsWith('q_instant_') || item.id.startsWith('q_reel_'))) {
+        const note = 'Instant Telegram pipeline job dropped after restart to avoid duplicate posts.';
+        db.updateQueueItem(item.id, {
+          status: 'failed',
+          recoveryNote: note,
+          lastError: note
+        });
+        recovered.push({ id: item.id, status: 'failed', note });
+        continue;
+      }
+
       const currentRetries = Number(item.retryCount || 0);
       const nextRetries = currentRetries + 1;
 
@@ -499,7 +520,7 @@ class Scheduler {
           const normalizedDetails = {
             ...res,
             postId: res.postId || res.pinId || res.id || res.videoId,
-            postUrl: res.postUrl || res.url || res.liveUrl || res.searchUrl
+            postUrl: res.postUrl || res.reelUrl || res.watchUrl || res.permalink || res.url || res.liveUrl || res.searchUrl
           };
           publishResults.push({
             platform: targetPlatform,
