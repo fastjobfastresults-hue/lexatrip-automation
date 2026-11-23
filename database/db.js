@@ -285,18 +285,57 @@ class Database {
   }
 
   // --- DESTINATIONS ---
+  ensureDestinationBloggerChannel(dest) {
+    if (!dest) return dest;
+    dest.channels = dest.channels || {};
+    const slug = dest.slug || dest.id.replace('dest_', '');
+    const clean = slug.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+    if (!dest.channels.blogger) {
+      dest.channels.blogger = {
+        enabled: true,
+        name: `Blogger - ${dest.name || clean}`,
+        handle: `lexatrip${clean}.blogspot.com`,
+        authType: 'dual_lifetime_oauth_and_email',
+        credentials: {
+          blogId: `lexatrip${clean}`,
+          blogUrl: `https://lexatrip${clean}.blogspot.com/`,
+          secretEmail: `lexatrip.${clean}@blogger.com`,
+          apiKey: 'AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8'
+        },
+        supports: ['post', 'article']
+      };
+    } else {
+      dest.channels.blogger.enabled = true;
+      dest.channels.blogger.credentials = dest.channels.blogger.credentials || {};
+      if (!dest.channels.blogger.handle) {
+        dest.channels.blogger.handle = `lexatrip${clean}.blogspot.com`;
+      }
+      if (!dest.channels.blogger.credentials.blogUrl) {
+        dest.channels.blogger.credentials.blogUrl = `https://lexatrip${clean}.blogspot.com/`;
+      }
+      if (!dest.channels.blogger.credentials.secretEmail) {
+        dest.channels.blogger.credentials.secretEmail = `lexatrip.${clean}@blogger.com`;
+      }
+    }
+    return dest;
+  }
+
   getDestinations() {
-    return this.read().destinations || defaultData.destinations;
+    const list = this.read().destinations || defaultData.destinations;
+    return list.map(d => this.ensureDestinationBloggerChannel(d));
   }
 
   getDestination(id) {
     const list = this.getDestinations();
-    return list.find(d => d.id === id || d.slug === id);
+    const dest = list.find(d => d.id === id || d.slug === id);
+    return dest ? this.ensureDestinationBloggerChannel(dest) : null;
   }
 
   saveDestination(dest) {
     const data = this.read();
     data.destinations = data.destinations || [];
+    this.ensureDestinationBloggerChannel(dest);
     const idx = data.destinations.findIndex(d => d.id === dest.id);
     if (idx >= 0) {
       data.destinations[idx] = { ...data.destinations[idx], ...dest };

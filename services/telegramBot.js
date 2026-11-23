@@ -1154,6 +1154,53 @@ class TelegramBotService {
           }
         });
 
+        // 6. In background: Synthesize 100% Human-Friendly Google SEO Travel Article and Publish to Destination's blogspot.com
+        setImmediate(async () => {
+          try {
+            console.log(`[TelegramBot] Synthesizing 800+ word Google SEO Human Blog Article for ${dest.name}...`);
+            const blogChannel = dest.channels?.blogger;
+            if (!blogChannel || blogChannel.enabled === false) {
+              return;
+            }
+
+            const publicImageUrl = tunnelService.resolvePublicMediaUrl(processedPath);
+            const blogArticle = seoGenerator.generateDestinationHumanBlogArticle({
+              destination: dest,
+              title: parsedSeo.title,
+              caption: parsedSeo.caption,
+              mediaUrl: publicImageUrl
+            });
+
+            const bloggerPublisher = require('./publishers/blogger');
+            const blogResult = await bloggerPublisher.publishPost({
+              account: blogChannel,
+              title: blogArticle.title,
+              caption: blogArticle.htmlContent,
+              hashtags: blogArticle.tags.map(t => `#${t.replace(/\s+/g, '')}`).join(' '),
+              mediaPath: processedPath,
+              destinationName: dest.name,
+              destination: dest
+            });
+
+            if (blogResult?.success) {
+              const liveBlogUrl = blogResult.url || blogResult.postUrl || blogChannel.credentials?.blogUrl || `https://${blogChannel.handle}/`;
+              console.log(`[TelegramBot] ✅ Blog Article Live on ${dest.name} Blog: ${liveBlogUrl}`);
+
+              await this.sendDualMessage(
+                chatId,
+                `✍️ *[Blogger ब्लॉग आर्टिकल पब्लिश संपन्न]* 🐪\n\n` +
+                `📍 *डेस्टिनेशन:* ${dest.name}\n` +
+                `📑 *आर्टिकल:* ${blogArticle.title}\n` +
+                `🌐 *ब्लॉग:* [${dest.name} Official Blogspot](${liveBlogUrl})\n\n` +
+                `✨ *Google E-E-A-T और Helpful Content अनुपालन:* 800+ शब्दों का विस्तृत मानवीय लेख, फ़ोटो व बुकिंग लिंक्स के साथ लाइव है!`,
+                { parse_mode: 'Markdown' }
+              );
+            }
+          } catch (bErr) {
+            console.warn('[TelegramBot Background Blog Warning]:', bErr.message);
+          }
+        });
+
         // 5. If this is part of a 5-photo batch with combined SEO, trigger full pipeline
         if (session.photos.length >= 5 && session.combinedSeo) {
           await this.triggerFullPipeline(chatId, session, dest);

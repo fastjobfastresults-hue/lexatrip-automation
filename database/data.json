@@ -9751,7 +9751,8 @@
           "credentials": {
             "blogId": "4024327205805487932",
             "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
-            "blogUrl": "https://lexatripjaisalmer.blogspot.com/"
+            "blogUrl": "https://lexatripjaisalmer.blogspot.com/",
+            "secretEmail": "lexatrip.jaisalmer@blogger.com"
           },
           "supports": [
             "post"
@@ -9962,7 +9963,8 @@
           "credentials": {
             "blogId": "",
             "apiKey": "",
-            "blogUrl": "https://lexatripmountabu.blogspot.com"
+            "blogUrl": "https://lexatripmountabu.blogspot.com",
+            "secretEmail": "lexatrip.mountabu@blogger.com"
           },
           "supports": [
             "post"
@@ -10151,7 +10153,8 @@
           "credentials": {
             "blogId": "",
             "apiKey": "",
-            "blogUrl": "https://lexatripudaipur.blogspot.com/"
+            "blogUrl": "https://lexatripudaipur.blogspot.com/",
+            "secretEmail": "lexatrip.udaipur@blogger.com"
           },
           "supports": [
             "post"
@@ -10359,7 +10362,8 @@
           "credentials": {
             "blogId": "",
             "apiKey": "",
-            "blogUrl": "https://lexatripjaipur.blogspot.com/"
+            "blogUrl": "https://lexatripjaipur.blogspot.com/",
+            "secretEmail": "lexatrip.jaipur@blogger.com"
           },
           "supports": [
             "post"
@@ -10584,7 +10588,8 @@
           "credentials": {
             "blogId": "",
             "apiKey": "",
-            "blogUrl": "https://lexatripmanali.blogspot.com/"
+            "blogUrl": "https://lexatripmanali.blogspot.com/",
+            "secretEmail": "lexatrip.manali@blogger.com"
           },
           "supports": [
             "post"
@@ -10809,7 +10814,8 @@
           "credentials": {
             "blogId": "",
             "apiKey": "",
-            "blogUrl": "https://lexatriprishikesh.blogspot.com/"
+            "blogUrl": "https://lexatriprishikesh.blogspot.com/",
+            "secretEmail": "lexatrip.rishikesh@blogger.com"
           },
           "supports": [
             "post"
@@ -11034,7 +11040,8 @@
           "credentials": {
             "blogId": "",
             "apiKey": "",
-            "blogUrl": "https://lexatripgoa.blogspot.com/"
+            "blogUrl": "https://lexatripgoa.blogspot.com/",
+            "secretEmail": "lexatrip.goa@blogger.com"
           },
           "supports": [
             "post"
@@ -11242,7 +11249,8 @@
           "credentials": {
             "blogId": "",
             "apiKey": "",
-            "blogUrl": "https://lexatripmunnar.blogspot.com/"
+            "blogUrl": "https://lexatripmunnar.blogspot.com/",
+            "secretEmail": "lexatrip.munnar@blogger.com"
           },
           "supports": [
             "post"
@@ -11450,7 +11458,8 @@
           "credentials": {
             "blogId": "",
             "apiKey": "",
-            "blogUrl": "https://lexatripvaranasi.blogspot.com/"
+            "blogUrl": "https://lexatripvaranasi.blogspot.com/",
+            "secretEmail": "lexatrip.varanasi@blogger.com"
           },
           "supports": [
             "post"
@@ -11657,7 +11666,8 @@
           "credentials": {
             "blogId": "",
             "apiKey": "",
-            "blogUrl": "https://lexatriptirupati.blogspot.com/"
+            "blogUrl": "https://lexatriptirupati.blogspot.com/",
+            "secretEmail": "lexatrip.tirupati@blogger.com"
           },
           "supports": [
             "post"
@@ -11841,8 +11851,11 @@
         "blogger": {
           "enabled": true,
           "credentials": {
-            "blogId": "4024327205805487932"
-          }
+            "blogId": "4024327205805487932",
+            "secretEmail": "lexatrip.ranthambore@blogger.com",
+            "blogUrl": "https://lexatripranthambore.blogspot.com/"
+          },
+          "handle": "lexatripranthambore.blogspot.com"
         },
         "twitter": {
           "enabled": false,
@@ -11951,8 +11964,11 @@
         "blogger": {
           "enabled": true,
           "credentials": {
-            "blogId": "4024327205805487932"
-          }
+            "blogId": "4024327205805487932",
+            "secretEmail": "lexatrip.rajasthan@blogger.com",
+            "blogUrl": "https://lexatriprajasthan.blogspot.com/"
+          },
+          "handle": "lexatriprajasthan.blogspot.com"
         },
         "twitter": {
           "enabled": false,
@@ -12061,8 +12077,11 @@
         "blogger": {
           "enabled": true,
           "credentials": {
-            "blogId": "4024327205805487932"
-          }
+            "blogId": "4024327205805487932",
+            "secretEmail": "lexatrip.amritsar@blogger.com",
+            "blogUrl": "https://lexatripamritsar.blogspot.com/"
+          },
+          "handle": "lexatripamritsar.blogspot.com"
         },
         "twitter": {
           "enabled": false,
@@ -12171,8 +12190,11 @@
         "blogger": {
           "enabled": true,
           "credentials": {
-            "blogId": "4024327205805487932"
-          }
+            "blogId": "4024327205805487932",
+            "secretEmail": "lexatrip.mysuru@blogger.com",
+            "blogUrl": "https://lexatripmysuru.blogspot.com/"
+          },
+          "handle": "lexatripmysuru.blogspot.com"
         },
         "twitter": {
           "enabled": false,
