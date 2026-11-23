@@ -73,10 +73,14 @@ class TelegramNotifier {
     if (!ch) return null;
 
     const isNonJaisalmer = destination?.id && destination.id !== 'dest_jaisalmer';
+    const isTirupati = destination?.id === 'dest_tirupati';
     const hasJaisalmerLeak = (val) => {
       if (!val || typeof val !== 'string') return false;
       const lower = val.toLowerCase();
-      return lower.includes('lexatripjaisalmer') || lower.includes('lexatrip-jaisalmer') || lower.includes('1385624654624388');
+      if (isTirupati && lower.includes('1385624654624388')) {
+        return false; // Legitimate Tirupati Page ID
+      }
+      return lower.includes('lexatripjaisalmer') || lower.includes('lexatrip-jaisalmer') || (!isTirupati && lower.includes('1385624654624388'));
     };
 
     if (isNonJaisalmer && hasJaisalmerLeak(ch.handle)) {
@@ -107,7 +111,7 @@ class TelegramNotifier {
     } else if (platform === 'reddit' && ch.url) {
       url = ch.url;
     } else if (platform === 'facebook' && ch.credentials?.pageId) {
-      if (isNonJaisalmer && String(ch.credentials.pageId) === '1385624654624388') {
+      if (!isTirupati && String(ch.credentials.pageId) === '1385624654624388') {
         return null;
       }
       url = `https://www.facebook.com/profile.php?id=${ch.credentials.pageId}`;
@@ -121,10 +125,14 @@ class TelegramNotifier {
 
   getVerifiedLinks(destination, publishResults = null) {
     const isNonJaisalmer = destination?.id && destination.id !== 'dest_jaisalmer';
+    const isTirupati = destination?.id === 'dest_tirupati';
     const hasJaisalmerLeak = (val) => {
       if (!val || typeof val !== 'string') return false;
       const lower = val.toLowerCase();
-      return lower.includes('lexatripjaisalmer') || lower.includes('lexatrip-jaisalmer') || lower.includes('1385624654624388');
+      if (isTirupati && lower.includes('1385624654624388')) {
+        return false;
+      }
+      return lower.includes('lexatripjaisalmer') || lower.includes('lexatrip-jaisalmer') || (!isTirupati && lower.includes('1385624654624388'));
     };
 
     const links = [];

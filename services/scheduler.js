@@ -559,8 +559,9 @@ class Scheduler {
         lastError = err.message;
 
         // Trigger instant security & policy alert if error involves permissions, review or community guidelines
+        const isInstantTelegramPost = String(item.id).startsWith('q_instant_');
         const isPolicyIssue = /permission|OAuthException|policy|review|deprecated|restricted|community|guideline|checkpoint|strike|blocked|auth.*fail/i.test(err.message);
-        if (isPolicyIssue) {
+        if (isPolicyIssue && !isInstantTelegramPost) {
           telegramNotifier.notifyPolicyAlert({
             destination,
             platform: targetPlatform,
@@ -675,10 +676,13 @@ class Scheduler {
     if (allSuccess) {
       telegramNotifier.notifyItemPublished(destination, item, publishResults);
     } else {
-      if (currentRetries >= MAX_RETRIES && typeof telegramNotifier.notifyPersistentFailure === 'function') {
-        telegramNotifier.notifyPersistentFailure(destination, item, errorSummary);
+      const isInstantTelegramPost = String(item.id).startsWith('q_instant_');
+      if (!isInstantTelegramPost) {
+        if (currentRetries >= MAX_RETRIES && typeof telegramNotifier.notifyPersistentFailure === 'function') {
+          telegramNotifier.notifyPersistentFailure(destination, item, errorSummary);
+        }
+        telegramNotifier.notifyError(destination, item, errorSummary);
       }
-      telegramNotifier.notifyError(destination, item, errorSummary);
     }
 
     return updated || item;

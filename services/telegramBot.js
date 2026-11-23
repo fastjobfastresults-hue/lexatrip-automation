@@ -430,6 +430,52 @@ class TelegramBotService {
   }
 
   /**
+   * Intelligently resolve targets for an instant single-photo social post.
+   * Only includes channels that are authentic, verified, and not in pending/trial review.
+   */
+  resolveSinglePostTargets(dest) {
+    const targets = [];
+    const channels = dest?.channels || {};
+
+    // 1. Facebook Page (Active if pageAccessToken & pageId present)
+    if (channels.facebook?.enabled !== false && channels.facebook?.credentials?.pageAccessToken) {
+      targets.push('facebook');
+    }
+
+    // 2. Instagram Business (Active if accessToken & instagramAccountId present)
+    if (channels.instagram?.enabled !== false && channels.instagram?.credentials?.accessToken) {
+      targets.push('instagram');
+    }
+
+    // 3. LinkedIn (Active if accessToken present)
+    if (channels.linkedin?.enabled !== false && channels.linkedin?.credentials?.accessToken) {
+      targets.push('linkedin');
+    }
+
+    // 4. Pinterest: ONLY include if standard write access is active (NOT trial_access_pending)
+    if (channels.pinterest?.enabled !== false && 
+        channels.pinterest?.credentials?.accessToken && 
+        channels.pinterest?.credentials?.status !== 'trial_access_pending' &&
+        !String(channels.pinterest.credentials.accessToken).startsWith('smart_')) {
+      targets.push('pinterest');
+    }
+
+    // 5. Threads (Active if accessToken present)
+    if (channels.threads?.enabled !== false && channels.threads?.credentials?.accessToken) {
+      targets.push('threads');
+    }
+
+    // 6. Google Business Profile: Active if OAuth user accessToken present (NOT just API key)
+    if (channels.google_business?.enabled !== false && 
+        channels.google_business?.credentials?.accessToken &&
+        !String(channels.google_business.credentials.accessToken).startsWith('AIzaSy')) {
+      targets.push('google_business');
+    }
+
+    return targets.length > 0 ? targets : ['facebook', 'instagram'];
+  }
+
+  /**
    * 🛡️ Genuine Channel Health Audit via external API verification
    */
   async generateHealthReport(dest) {
@@ -836,16 +882,18 @@ class TelegramBotService {
         await imageProcessor.processTo4x5(localPath, processedPath);
 
         // 2. Immediately acknowledge receipt and announce instant dispatch to Telegram
+        const singleTargets = this.resolveSinglePostTargets(dest);
+        const targetNames = singleTargets.map(t => telegramNotifier.formatPlatformName(t)).join(', ');
         await this.sendDualMessage(
           chatId,
           `📸 *[लाइव फ़ोटो व SEO प्राप्त]* 🐪\n\n` +
           `📌 *टाइटल:* ${parsedSeo.title}\n` +
           `📍 *डेस्टिनेशन:* ${dest.name}\n\n` +
-          `🚀 *लाइव पब्लिशिंग इंजन सक्रिय...* सभी कनेक्टेड सोशल मीडिया पेजेस (Facebook, Instagram, LinkedIn, Pinterest, Blogger, Telegram) पर अभी लाइव पब्लिश किया जा रहा है!`,
+          `🚀 *लाइव पब्लिशिंग इंजन सक्रिय...* कनेक्टेड सोशल मीडिया पेजेस (${targetNames}) पर अभी लाइव पब्लिश किया जा रहा है!`,
           { parse_mode: 'Markdown' }
         );
 
-        // 3. Immediately queue and dispatch Post (4:5) to all connected channels
+        // 3. Immediately queue and dispatch Post (4:5) to all active, verified channels
         const queueRecord = {
           id: `q_instant_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
           batchId: `batch_live_${Date.now()}`,
@@ -858,7 +906,7 @@ class TelegramBotService {
           mediaPath: processedPath,
           scheduledTime: new Date(Date.now() - 5000).toISOString(),
           status: 'publishing',
-          targets: ['instagram', 'facebook', 'linkedin', 'pinterest', 'blogger'],
+          targets: singleTargets,
           createdAt: new Date().toISOString()
         };
 
@@ -898,9 +946,19 @@ class TelegramBotService {
               reportMsg += chanUrl ? `• [${icon} ${name} Profile](${chanUrl})\n` : `• ${icon} ${name}: लाइव पब्लिश संपन्न ✅\n`;
             }
           }
+
+          // Channel Status Advisory for Pending / Batch Channels
+          reportMsg += `\n📋 *अन्य चैनल्स स्थिति:*\n`;
+          const ch = dest.channels || {};
+          if (ch.pinterest?.credentials?.status === 'trial_access_pending' || !singleTargets.includes('pinterest')) {
+            reportMsg += `• ⏳ 📌 Pinterest: नया ऐप (ID ${ch.pinterest?.credentials?.appId || '1642972'}) Pinterest रिव्यू में है (Standard Access अप्रूवल के बाद पब्लिशिंग स्वतः शुरू होगी)\n`;
+          }
+          if (ch.blogger?.enabled) {
+            reportMsg += `• 📰 Blogger: 5-फ़ोटो बैच आर्टिकल इंजन के लिए आरक्षित (सिंगल फ़ोटो सोशल फ़ीड के लिए नहीं)\n`;
+          }
         } else if (publishedTargets.length > 0 && failedTargets.length > 0) {
           // Partial Success
-          reportMsg = `⚠️ *[आंशिक पब्लिशिंग चेतावनी — कुछ चैनल्स में विफलता]* 🐪\n\n` +
+          reportMsg = `⚠️ *[आंशिक पब्लिशिंग सूचना]* 🐪\n\n` +
             `📍 *डेस्टिनेशन:* ${dest.name}\n` +
             `📝 *कंटेंट:* ${parsedSeo.title}\n` +
             `🕒 *समय:* ${new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}\n\n` +
@@ -918,6 +976,16 @@ class TelegramBotService {
             const icon = telegramNotifier.getPlatformIcon(r.platform);
             const name = telegramNotifier.formatPlatformName(r.platform);
             reportMsg += `• ❌ ${icon} ${name}: \`${r.error || 'अज्ञात त्रुटि'}\`\n`;
+          }
+
+          // Channel Status Advisory for Pending / Batch Channels
+          reportMsg += `\n📋 *अन्य चैनल्स स्थिति:*\n`;
+          const ch = dest.channels || {};
+          if (ch.pinterest?.credentials?.status === 'trial_access_pending' || !singleTargets.includes('pinterest')) {
+            reportMsg += `• ⏳ 📌 Pinterest: नया ऐप (ID ${ch.pinterest?.credentials?.appId || '1642972'}) Pinterest रिव्यू में है\n`;
+          }
+          if (ch.blogger?.enabled) {
+            reportMsg += `• 📰 Blogger: 5-फ़ोटो बैच आर्टिकल इंजन के लिए आरक्षित\n`;
           }
 
           if (skippedTargets.length > 0) {
@@ -1158,6 +1226,7 @@ class TelegramBotService {
           { parse_mode: 'Markdown' }
         );
 
+        const singleTargets = this.resolveSinglePostTargets(dest);
         const queueRecord = {
           id: `q_instant_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
           batchId: `batch_live_${Date.now()}`,
@@ -1170,7 +1239,7 @@ class TelegramBotService {
           mediaPath: lastPhoto.localPath,
           scheduledTime: new Date(Date.now() - 5000).toISOString(),
           status: 'queued',
-          targets: ['instagram', 'facebook', 'linkedin', 'pinterest', 'blogger'],
+          targets: singleTargets,
           createdAt: new Date().toISOString()
         };
 

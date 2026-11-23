@@ -61,13 +61,15 @@ class LinkedInPublisher {
       });
 
       const postId = res.headers['x-restli-id'] || ('li_' + Date.now());
-      console.log(`[LinkedIn] Post published successfully: ${postId} (Author: ${authorUrn})`);
+      const postUrl = postId.startsWith('urn:li:') ? `https://www.linkedin.com/feed/update/${encodeURIComponent(postId)}/` : 'https://www.linkedin.com/feed/';
+      console.log(`[LinkedIn] Post published successfully: ${postId} (Author: ${authorUrn}) Link: ${postUrl}`);
 
       return {
         success: true,
         simulated: false,
         platform: 'linkedin',
         postId: postId,
+        postUrl: postUrl,
         author: authorUrn,
         publishedAt: new Date().toISOString()
       };

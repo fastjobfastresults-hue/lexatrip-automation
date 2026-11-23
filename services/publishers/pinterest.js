@@ -17,6 +17,10 @@ class PinterestPublisher {
       throw new Error('Invalid Pinterest credentials: smart_ placeholder tokens cannot be used for live publishing.');
     }
 
+    if (creds.status === 'trial_access_pending') {
+      throw new Error(`Pinterest pin publish failed: Pinterest App (ID ${creds.appId || '1642972'}) is currently under Trial review by Pinterest. Pinterest requires Standard Access approval before allowing pin creation via API.`);
+    }
+
     const publicImageUrl = tunnelService.resolvePublicMediaUrl(imageUrl);
     if (!publicImageUrl || (!publicImageUrl.startsWith('http://') && !publicImageUrl.startsWith('https://'))) {
       throw new Error(`Pinterest requires a publicly accessible HTTP/HTTPS image URL. Resolved: "${publicImageUrl}"`);
@@ -44,17 +48,24 @@ class PinterestPublisher {
         timeout: 30000
       });
 
+      const pinId = res.data.id;
+      const pinUrl = `https://www.pinterest.com/pin/${pinId}/`;
       return {
         success: true,
         simulated: false,
         platform: 'pinterest',
         type: 'standard_pin',
-        pinId: res.data.id,
+        pinId: pinId,
+        pinUrl: pinUrl,
+        postUrl: pinUrl,
         publishedAt: new Date().toISOString()
       };
     } catch (err) {
       const errMsg = err.response?.data?.message || (err.response ? JSON.stringify(err.response.data) : err.message);
       console.error('[Pinterest Error]:', errMsg);
+      if (err.response?.data?.code === 3 || String(errMsg).includes('consumer type is not supported')) {
+        throw new Error('Pinterest pin publish failed: Your application is currently in Trial access on Pinterest. Pinterest requires Standard access approval before allowing pin creation via API.');
+      }
       throw new Error(`Pinterest pin publish failed: ${errMsg}`);
     }
   }

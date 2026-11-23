@@ -60,7 +60,7 @@
       "accessToken": "AQVEUNZLO91zZlJbtdlyj3W5JBu4Ms4M7vi9BRnkplrAvMEpX0NzbwFAVm-Z9Zw6CZi7Nns1jUkdGnsBJqqEPazGnf4UBPc4FKk4b212KJ6hCbRG4BbC8pa1TkZPrWutwNtQd9EF4iCQM3LHnoS96I-N0j1Pg0CwINgi005ffIkrNPK3ucH_cOOKWVEgdxLeOrXKsd7XZNKqjFcEGjVtb7fO6nbtjlbNCl-FcDeoA2u2GTwb46A2QUpiPOpq0pCiX0yMFhinE3V-q3xg9M1Xik7bp2nDeOaLhAbTbLtfkXVO0njwu2_JegcZpaGqI-e0_8ZErjShJLE--IaCaAuqrFA2f17ZnQ"
     },
     "pinterest": {
-      "appId": "1641166",
+      "appId": "1642972",
       "masterAccessToken": "live_pinterest_master_token_active"
     },
     "googleBusiness": {
@@ -97,7 +97,7 @@
       "credentials": {
         "accessToken": "live_pinterest_master_token_active",
         "boardId": "1131740650051300286",
-        "appId": "1641166"
+        "appId": "1642972"
       },
       "proxy": ""
     },
@@ -9722,7 +9722,8 @@
             "accessToken": "live_pinterest_master_token_active",
             "boardId": "1131740650051300286",
             "boardName": "LexaTrip Jaisalmer",
-            "appId": "1641166"
+            "appId": "1642972",
+            "status": "trial_access_pending"
           },
           "supports": [
             "post",
@@ -9934,7 +9935,9 @@
           "handle": "Click to Connect",
           "authType": "api_token",
           "credentials": {
-            "accessToken": "live_pinterest_master_token_active"
+            "accessToken": "live_pinterest_master_token_active",
+            "appId": "1642972",
+            "status": "trial_access_pending"
           },
           "supports": [
             "post",
@@ -10121,7 +10124,9 @@
           "handle": "Click to Connect",
           "authType": "api_token",
           "credentials": {
-            "accessToken": "live_pinterest_master_token_active"
+            "accessToken": "live_pinterest_master_token_active",
+            "appId": "1642972",
+            "status": "trial_access_pending"
           },
           "supports": [
             "post",
@@ -10327,7 +10332,9 @@
           "handle": "Click to Connect",
           "authType": "api_token",
           "credentials": {
-            "accessToken": "live_pinterest_master_token_active"
+            "accessToken": "live_pinterest_master_token_active",
+            "appId": "1642972",
+            "status": "trial_access_pending"
           },
           "supports": [
             "post",
@@ -10550,7 +10557,9 @@
           "handle": "Click to Connect",
           "authType": "api_token",
           "credentials": {
-            "accessToken": "live_pinterest_master_token_active"
+            "accessToken": "live_pinterest_master_token_active",
+            "appId": "1642972",
+            "status": "trial_access_pending"
           },
           "supports": [
             "post",
@@ -10773,7 +10782,9 @@
           "handle": "Click to Connect",
           "authType": "api_token",
           "credentials": {
-            "accessToken": "live_pinterest_master_token_active"
+            "accessToken": "live_pinterest_master_token_active",
+            "appId": "1642972",
+            "status": "trial_access_pending"
           },
           "supports": [
             "post",
@@ -10996,7 +11007,9 @@
           "handle": "Click to Connect",
           "authType": "api_token",
           "credentials": {
-            "accessToken": "live_pinterest_master_token_active"
+            "accessToken": "live_pinterest_master_token_active",
+            "appId": "1642972",
+            "status": "trial_access_pending"
           },
           "supports": [
             "post",
@@ -11202,7 +11215,9 @@
           "handle": "Click to Connect",
           "authType": "api_token",
           "credentials": {
-            "accessToken": "live_pinterest_master_token_active"
+            "accessToken": "live_pinterest_master_token_active",
+            "appId": "1642972",
+            "status": "trial_access_pending"
           },
           "supports": [
             "post",
@@ -11408,7 +11423,9 @@
           "handle": "Click to Connect",
           "authType": "api_token",
           "credentials": {
-            "accessToken": "live_pinterest_master_token_active"
+            "accessToken": "live_pinterest_master_token_active",
+            "appId": "1642972",
+            "status": "trial_access_pending"
           },
           "supports": [
             "post",
@@ -11613,7 +11630,9 @@
           "handle": "Click to Connect",
           "authType": "api_token",
           "credentials": {
-            "accessToken": "live_pinterest_master_token_active"
+            "accessToken": "live_pinterest_master_token_active",
+            "appId": "1642972",
+            "status": "trial_access_pending"
           },
           "supports": [
             "post",
@@ -11807,7 +11826,11 @@
         },
         "pinterest": {
           "enabled": true,
-          "credentials": {}
+          "credentials": {
+            "appId": "1642972",
+            "accessToken": "live_pinterest_master_token_active",
+            "status": "trial_access_pending"
+          }
         },
         "youtube": {
           "enabled": true,
@@ -11913,7 +11936,11 @@
         },
         "pinterest": {
           "enabled": true,
-          "credentials": {}
+          "credentials": {
+            "appId": "1642972",
+            "accessToken": "live_pinterest_master_token_active",
+            "status": "trial_access_pending"
+          }
         },
         "youtube": {
           "enabled": true,
@@ -12019,7 +12046,11 @@
         },
         "pinterest": {
           "enabled": true,
-          "credentials": {}
+          "credentials": {
+            "appId": "1642972",
+            "accessToken": "live_pinterest_master_token_active",
+            "status": "trial_access_pending"
+          }
         },
         "youtube": {
           "enabled": true,
@@ -12125,7 +12156,11 @@
         },
         "pinterest": {
           "enabled": true,
-          "credentials": {}
+          "credentials": {
+            "appId": "1642972",
+            "accessToken": "live_pinterest_master_token_active",
+            "status": "trial_access_pending"
+          }
         },
         "youtube": {
           "enabled": true,

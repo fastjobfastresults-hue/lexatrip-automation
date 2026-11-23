@@ -23,6 +23,7 @@ const crmEngine = require('./services/crmEngine');
 const QAEngine = require('./services/qaEngine');
 const qaEngine = new QAEngine();
 const { deepHealthHandler } = require('./services/deepHealth');
+const tokenLifetimeEngine = require('./services/tokenLifetimeEngine');
 
 const app = express();
 const server = http.createServer(app);
@@ -298,6 +299,19 @@ app.post('/api/social/meta/exchange-long-lived', async (req, res) => {
       longLivedUserToken: finalUserToken,
       ...detected
     });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 🛡️ Proactive Preflight Channel Health Audit for any Destination
+app.get('/api/destinations/:id/preflight-health', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const dest = db.getDestination(id);
+    if (!dest) return res.status(404).json({ error: 'Destination not found' });
+    const health = await tokenLifetimeEngine.preflightDestinationChannels(dest);
+    res.json(health);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

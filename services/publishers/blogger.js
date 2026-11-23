@@ -103,6 +103,9 @@ class BloggerPublisher {
     } catch (err) {
       const errMsg = err.response?.data?.error?.message || (err.response ? JSON.stringify(err.response.data) : err.message);
       console.error('[Blogger API Error]:', errMsg);
+      if (err.response?.status === 403 && apiKey.startsWith('AIzaSy')) {
+        throw new Error(`Blogger post publish failed: Google API Key (AIzaSy...) cannot publish blog posts. Google Blogger API requires OAuth2 Access Token with scope https://www.googleapis.com/auth/blogger or Generative Language API authorization.`);
+      }
       throw new Error(`Blogger post publish failed: ${errMsg}`);
     }
   }
