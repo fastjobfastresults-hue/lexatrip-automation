@@ -9,7 +9,24 @@ class BloggerPublisher {
   async publishPost({ account, title, caption, hashtags = '', mediaPath = null, destinationName = 'Lexa Trip' }) {
     const creds = account?.credentials || {};
     const blogId = creds.blogId || account?.handle || '';
-    const apiKey = creds.accessToken || creds.apiKey || '';
+    let apiKey = creds.accessToken || creds.apiKey || '';
+
+    // Automatic Google OAuth2 Token Refresh for Lifetime Publishing
+    if (creds.refreshToken && creds.clientId && creds.clientSecret) {
+      try {
+        const tokenRes = await axios.post('https://oauth2.googleapis.com/token', {
+          client_id: creds.clientId,
+          client_secret: creds.clientSecret,
+          refresh_token: creds.refreshToken,
+          grant_type: 'refresh_token'
+        }, { timeout: 10000 });
+        if (tokenRes.data?.access_token) {
+          apiKey = tokenRes.data.access_token;
+        }
+      } catch (refErr) {
+        console.warn('[Blogger Publisher] OAuth token refresh warning:', refErr.response?.data?.error_description || refErr.message);
+      }
+    }
 
     if (!blogId || !apiKey) {
       throw new Error('Blogger credentials missing: blogId and OAuth2 accessToken/apiKey are required.');

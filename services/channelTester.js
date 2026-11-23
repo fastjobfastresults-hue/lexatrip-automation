@@ -195,12 +195,15 @@ class ChannelTester {
           timeout: 10000
         });
 
+        const hasWriteAuth = !!(accessToken || credentials.refreshToken);
         return {
           success: true,
           platform: 'blogger',
           accountName: res.data.name || 'Google Blogger',
           handle: res.data.url ? res.data.url.replace(/^https?:\/\//, '') : `${blogId}.blogspot.com`,
-          details: `Connected to Blogger! Blog: "${res.data.name}" (Posts: ${res.data.posts?.totalItems ?? 0})`
+          details: hasWriteAuth 
+            ? `Connected to Blogger with Full Publishing Access! Blog: "${res.data.name}" (Posts: ${res.data.posts?.totalItems ?? 0})`
+            : `Connected to Blogger! Blog: "${res.data.name}" (Posts: ${res.data.posts?.totalItems ?? 0})`
         };
       }
 

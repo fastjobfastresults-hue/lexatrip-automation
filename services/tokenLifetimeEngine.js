@@ -144,6 +144,36 @@ class TokenLifetimeEngine {
   }
 
   /**
+   * Automatically refresh Google Blogger OAuth2 Token using offline refresh token
+   */
+  async refreshGoogleBloggerToken({ clientId, clientSecret, refreshToken }) {
+    if (!clientId || !clientSecret || !refreshToken) {
+      throw new Error('Google OAuth refresh requires clientId, clientSecret, and refreshToken.');
+    }
+
+    try {
+      const res = await axios.post('https://oauth2.googleapis.com/token', {
+        client_id: clientId,
+        client_secret: clientSecret,
+        refresh_token: refreshToken,
+        grant_type: 'refresh_token'
+      }, { timeout: 10000 });
+
+      return {
+        success: true,
+        accessToken: res.data.access_token,
+        expiresIn: res.data.expires_in,
+        tokenType: res.data.token_type,
+        refreshedAt: new Date().toISOString()
+      };
+    } catch (err) {
+      const errMsg = err.response?.data?.error_description || err.response?.data?.error || err.message;
+      console.error('[TokenLifetimeEngine] Google Blogger refresh failed:', errMsg);
+      throw new Error(`Google Blogger token refresh failed: ${errMsg}`);
+    }
+  }
+
+  /**
    * Pre-flight Health Check across all channels for a given destination.
    * Runs non-destructive health checks so that scheduling or publishing never fails blind.
    */
