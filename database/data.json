@@ -9745,17 +9745,20 @@
         },
         "blogger": {
           "enabled": true,
-          "name": "Blogger - LexaTrip Jaisalmer",
+          "name": "Blogger - Lexa Trip Jaisalmer",
           "handle": "lexatripjaisalmer.blogspot.com",
-          "authType": "api_token",
+          "authType": "dual_lifetime_oauth_and_email",
           "credentials": {
             "blogId": "4024327205805487932",
-            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8",
             "blogUrl": "https://lexatripjaisalmer.blogspot.com/",
-            "secretEmail": "lexatrip.jaisalmer@blogger.com"
+            "secretEmail": "infolexatrip.jaisalmer@blogger.com",
+            "secretWord": "jaisalmer",
+            "publishMethod": "mail",
+            "apiKey": "AIzaSyAIKqB59ziqR64YfkHWgovqNiVLH8wDbC8"
           },
           "supports": [
-            "post"
+            "post",
+            "article"
           ]
         },
         "twitter": {

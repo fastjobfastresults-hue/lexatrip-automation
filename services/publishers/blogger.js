@@ -44,12 +44,14 @@ class BloggerPublisher {
     if (preferMail && secretEmail) {
       console.log(`[Blogger Publisher] Using Mail2Blogger Secret Mail Engine for ${destinationName} -> ${secretEmail}`);
       return await this.publishViaEmail({
+        account,
         secretEmail,
         title,
         caption,
         hashtags,
         mediaPath,
         destinationName,
+        destination,
         smtpConfig: creds.smtp || null
       });
     }
@@ -157,7 +159,7 @@ class BloggerPublisher {
   /**
    * Mail2Blogger: Publish Article via Official Google Blogger Secret Email
    */
-  async publishViaEmail({ secretEmail, title, caption, hashtags = '', mediaPath = null, destinationName = 'Lexa Trip', smtpConfig = null }) {
+  async publishViaEmail({ account, secretEmail, title, caption, hashtags = '', mediaPath = null, destinationName = 'Lexa Trip', destination = null, smtpConfig = null }) {
     if (!secretEmail) {
       throw new Error('Mail2Blogger requires secretEmail.');
     }
@@ -219,8 +221,8 @@ class BloggerPublisher {
 
     const info = await transporter.sendMail(mailOptions);
     const mockPostId = 'mail_post_' + Date.now();
-    const handle = secretEmail.split('@')[0].split('.')[0] || 'lexatrip';
-    const postUrl = `https://${handle}.blogspot.com/`;
+    const destBlogUrl = account?.credentials?.blogUrl || (account?.handle ? (account.handle.startsWith('http') ? account.handle : `https://${account.handle}/`) : null);
+    const postUrl = destBlogUrl || `https://${secretEmail.split('@')[0].split('.')[0] || 'lexatrip'}.blogspot.com/`;
 
     return {
       success: true,
