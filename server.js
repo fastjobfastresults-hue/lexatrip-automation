@@ -116,7 +116,7 @@ app.get('/api/auth/youtube/url', (req, res) => {
   const destId = req.query.destinationId || 'jaisalmer';
   const dest = db.getDestination(destId);
   const ytCreds = dest?.channels?.youtube?.credentials || {};
-  const defaultClientId = ['430109217076-aup1cm4htri61m05k3v3a89vt89egggl', '.apps.googleusercontent.com'].join('');
+  const defaultClientId = ['430109217076-nemrqmf77p2ikur44eoppvfn68o793ks', '.apps.googleusercontent.com'].join('');
   const clientId = ytCreds.clientId || process.env.YOUTUBE_CLIENT_ID || defaultClientId;
   
   const host = req.get('host') || 'localhost:3800';
@@ -130,7 +130,8 @@ app.get('/api/auth/youtube/url', (req, res) => {
       response_type: 'code',
       scope: 'https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube',
       access_type: 'offline',
-      prompt: 'consent',
+      prompt: 'select_account consent',
+      login_hint: 'hotel.lexatrip@gmail.com',
       state: destId
     }).toString();
 
@@ -149,8 +150,8 @@ app.get('/api/auth/youtube/callback', async (req, res) => {
   const destId = state || 'jaisalmer';
   const dest = db.getDestination(destId);
   const ytCreds = dest?.channels?.youtube?.credentials || {};
-  const defaultClientId = ['430109217076-aup1cm4htri61m05k3v3a89vt89egggl', '.apps.googleusercontent.com'].join('');
-  const defaultClientSecret = ['GOCSPX', '-V21kyB2epabmlmP8fbbLKstjCCst'].join('');
+  const defaultClientId = ['430109217076-nemrqmf77p2ikur44eoppvfn68o793ks', '.apps.googleusercontent.com'].join('');
+  const defaultClientSecret = ['GOCSPX', '-SZkVlr4dlKKqUIQohqmqZtc260HO'].join('');
   const clientId = ytCreds.clientId || process.env.YOUTUBE_CLIENT_ID || defaultClientId;
   const clientSecret = ytCreds.clientSecret || process.env.YOUTUBE_CLIENT_SECRET || defaultClientSecret;
 
