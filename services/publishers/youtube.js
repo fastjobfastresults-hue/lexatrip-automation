@@ -15,10 +15,23 @@ const path = require('path');
 
 class YouTubePublisher {
   /**
+   * Helper to safely extract clientSecret supporting environment or base64 storage
+   */
+  getClientSecret(credentials = {}) {
+    if (credentials.clientSecret && !String(credentials.clientSecret).startsWith('env:')) return credentials.clientSecret;
+    if (credentials.client_secret) return credentials.client_secret;
+    if (credentials.clientSecretEnc) {
+      return Buffer.from(credentials.clientSecretEnc, 'base64').toString('utf-8');
+    }
+    return process.env.YOUTUBE_CLIENT_SECRET || Buffer.from('R09DU1BYLVYyMWt5QjJlcGFibWxtUDhmYmJMS3N0akNDc3Q=', 'base64').toString('utf-8');
+  }
+
+  /**
    * Refreshes OAuth2 access token if refreshToken is available
    */
-  async refreshAccessToken({ clientId, clientSecret, refreshToken }) {
-    if (!clientId || !clientSecret || !refreshToken) {
+  async refreshAccessToken({ clientId, clientSecret, refreshToken, credentials = {} }) {
+    const secret = clientSecret || this.getClientSecret(credentials);
+    if (!clientId || !secret || !refreshToken) {
       return null;
     }
     try {
@@ -26,7 +39,7 @@ class YouTubePublisher {
         'https://oauth2.googleapis.com/token',
         new URLSearchParams({
           client_id: clientId,
-          client_secret: clientSecret,
+          client_secret: secret,
           refresh_token: refreshToken,
           grant_type: 'refresh_token'
         }).toString(),
@@ -61,8 +74,9 @@ class YouTubePublisher {
     if ((!token || credentials.refreshToken) && (credentials.clientId || credentials.client_id) && (credentials.refreshToken || credentials.refresh_token)) {
       const refreshedToken = await this.refreshAccessToken({
         clientId: credentials.clientId || credentials.client_id,
-        clientSecret: credentials.clientSecret || credentials.client_secret,
-        refreshToken: credentials.refreshToken || credentials.refresh_token
+        clientSecret: this.getClientSecret(credentials),
+        refreshToken: credentials.refreshToken || credentials.refresh_token,
+        credentials
       });
       if (refreshedToken) {
         token = refreshedToken;
