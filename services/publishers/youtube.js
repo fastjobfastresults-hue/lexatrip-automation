@@ -57,21 +57,25 @@ class YouTubePublisher {
       throw new Error("Synthetic 'smart_' tokens are not permitted for live YouTube publishing. Real OAuth 2.0 credentials required.");
     }
 
-    // Check if only an API key is provided
-    if (!token && (credentials.apiKey || credentials.api_key)) {
-      throw new Error(
-        "YouTube video upload requires an OAuth 2.0 User Access Token with 'https://www.googleapis.com/auth/youtube.upload' scope. " +
-        "A simple Google API Key (AIzaSy...) only provides read-only access for public data and cannot upload videos to YouTube."
-      );
-    }
-
-    // If token is missing but refresh token exists, attempt refresh
-    if (!token && credentials.refreshToken) {
-      token = await this.refreshAccessToken({
+    // If access token is missing or if refresh token exists, attempt refresh
+    if ((!token || credentials.refreshToken) && (credentials.clientId || credentials.client_id) && (credentials.refreshToken || credentials.refresh_token)) {
+      const refreshedToken = await this.refreshAccessToken({
         clientId: credentials.clientId || credentials.client_id,
         clientSecret: credentials.clientSecret || credentials.client_secret,
         refreshToken: credentials.refreshToken || credentials.refresh_token
       });
+      if (refreshedToken) {
+        token = refreshedToken;
+        credentials.accessToken = refreshedToken;
+      }
+    }
+
+    // Check if only an API key is provided without any OAuth tokens
+    if (!token && (credentials.apiKey || credentials.api_key) && !credentials.refreshToken) {
+      throw new Error(
+        "YouTube video upload requires an OAuth 2.0 User Access Token with 'https://www.googleapis.com/auth/youtube.upload' scope. " +
+        "A simple Google API Key (AIzaSy...) only provides read-only access for public data and cannot upload videos to YouTube."
+      );
     }
 
     if (!token) {

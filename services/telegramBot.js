@@ -460,8 +460,11 @@ class TelegramBotService {
       targets.push('pinterest');
     }
 
-    // 5. Threads (Active if accessToken present)
-    if (channels.threads?.enabled !== false && channels.threads?.credentials?.accessToken) {
+    // 5. Threads (Active if valid non-Facebook Threads token is present)
+    if (channels.threads?.enabled !== false && 
+        channels.threads?.credentials?.accessToken && 
+        !String(channels.threads.credentials.accessToken).startsWith('EAAW') &&
+        !String(channels.threads.credentials.accessToken).startsWith('smart_')) {
       targets.push('threads');
     }
 
@@ -1051,6 +1054,12 @@ class TelegramBotService {
             }
             if (dest.channels?.youtube?.enabled === true && (dest.channels?.youtube?.credentials?.accessToken || dest.channels?.youtube?.credentials?.refreshToken)) {
               reelTargets.push('youtube');
+            }
+            if (dest.channels?.threads?.enabled === true && 
+                dest.channels?.threads?.credentials?.accessToken && 
+                !String(dest.channels.threads.credentials.accessToken).startsWith('EAAW') &&
+                !String(dest.channels.threads.credentials.accessToken).startsWith('smart_')) {
+              reelTargets.push('threads');
             }
             const targets = reelTargets.length > 0 ? reelTargets : ['facebook', 'instagram'];
 

@@ -73,8 +73,26 @@ class ChannelTester {
       }
 
       if (platform === 'youtube') {
-        const { apiKey, accessToken, channelId } = credentials;
-        const token = accessToken || (apiKey && String(apiKey).startsWith('ya29.') ? apiKey : null);
+        let { apiKey, accessToken, channelId, clientId, clientSecret, refreshToken } = credentials;
+        let token = accessToken || (apiKey && String(apiKey).startsWith('ya29.') ? apiKey : null);
+
+        // Auto-refresh token if refreshToken is available
+        if (!token && refreshToken && clientId && clientSecret) {
+          try {
+            const tokenRes = await axios.post('https://oauth2.googleapis.com/token', new URLSearchParams({
+              client_id: clientId,
+              client_secret: clientSecret,
+              refresh_token: refreshToken,
+              grant_type: 'refresh_token'
+            }).toString(), {
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              timeout: 10000
+            });
+            token = tokenRes.data?.access_token;
+          } catch (e) {
+            console.warn('[ChannelTester YouTube refresh warning]:', e.message);
+          }
+        }
 
         if (token) {
           // OAuth2 verification: queries authenticated channel
