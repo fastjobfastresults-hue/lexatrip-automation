@@ -11,19 +11,25 @@ class BloggerPublisher {
    * 1. Google Blogger API v3 via Lifetime OAuth2 Auto-Refresh Token
    * 2. Mail2Blogger (Publish via Secret Email - 100% Zero-Maintenance Native Blogger Feature)
    */
-  async publishPost({ account, title, caption, hashtags = '', mediaPath = null, destinationName = 'Lexa Trip', destination = null }) {
+  async publishPost({ account, title, caption, hashtags = '', mediaPath = null, imageUrl = null, destinationName = 'Lexa Trip', destination = null }) {
     const creds = account?.credentials || {};
     const blogId = creds.blogId || account?.handle || '';
     let apiKey = creds.accessToken || creds.apiKey || '';
     const secretEmail = creds.secretEmail || creds.email || null;
 
+    // Inherit Google OAuth credentials from destination YouTube channel if not directly configured
+    const ytCreds = destination?.channels?.youtube?.credentials;
+    const refreshToken = creds.refreshToken || ytCreds?.refreshToken;
+    const clientId = creds.clientId || ytCreds?.clientId;
+    const clientSecret = creds.clientSecret || ytCreds?.clientSecret;
+
     // Automatic Google OAuth2 Token Refresh for Lifetime Publishing
-    if (creds.refreshToken && creds.clientId && creds.clientSecret) {
+    if (refreshToken && clientId && clientSecret) {
       try {
         const tokenRes = await axios.post('https://oauth2.googleapis.com/token', {
-          client_id: creds.clientId,
-          client_secret: creds.clientSecret,
-          refresh_token: creds.refreshToken,
+          client_id: clientId,
+          client_secret: clientSecret,
+          refresh_token: refreshToken,
           grant_type: 'refresh_token'
         }, { timeout: 10000 });
         if (tokenRes.data?.access_token) {
@@ -39,9 +45,10 @@ class BloggerPublisher {
     }
 
     // Determine Publishing Mode:
-    // If Mail2Blogger is explicitly preferred or if API key is AIzaSy and secretEmail is configured
-    const preferMail = creds.publishMethod === 'mail' || (String(apiKey).startsWith('AIzaSy') && secretEmail);
-    if (preferMail && secretEmail) {
+    // If Mail2Blogger is explicitly preferred AND real SMTP is available
+    const hasSmtp = !!(creds.smtp?.host || process.env.SMTP_HOST);
+    const preferMail = creds.publishMethod === 'mail' && hasSmtp && secretEmail;
+    if (preferMail) {
       console.log(`[Blogger Publisher] Using Mail2Blogger Secret Mail Engine for ${destinationName} -> ${secretEmail}`);
       return await this.publishViaEmail({
         account,
@@ -49,7 +56,7 @@ class BloggerPublisher {
         title,
         caption,
         hashtags,
-        mediaPath,
+        mediaPath: mediaPath || imageUrl,
         destinationName,
         destination,
         smtpConfig: creds.smtp || null
@@ -74,8 +81,14 @@ class BloggerPublisher {
 
       // Resolve public image URL if available
       let imageHtml = '';
-      if (mediaPath) {
-        const publicMediaUrl = tunnelService.resolvePublicMediaUrl(mediaPath);
+      const mediaTarget = mediaPath || imageUrl;
+      if (mediaTarget) {
+        let publicMediaUrl = null;
+        if (typeof mediaTarget === 'string' && mediaTarget.startsWith('http')) {
+          publicMediaUrl = mediaTarget;
+        } else {
+          publicMediaUrl = tunnelService.resolvePublicMediaUrl(mediaTarget);
+        }
         if (publicMediaUrl) {
           imageHtml = `
             <div class="separator" style="clear: both; text-align: center; margin-bottom: 20px;">
@@ -178,10 +191,7 @@ class BloggerPublisher {
         auth: { user, pass }
       });
     } else {
-      // Local/JSON transporter fallback for environments without external SMTP
-      transporter = nodemailer.createTransport({
-        jsonTransport: true
-      });
+      throw new Error('Mail2Blogger requires configured SMTP credentials (SMTP_HOST, SMTP_USER, SMTP_PASS). Direct Google Blogger API v3 is the recommended zero-maintenance publishing engine.');
     }
 
     const attachments = [];

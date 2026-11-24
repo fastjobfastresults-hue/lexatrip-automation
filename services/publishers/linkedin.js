@@ -1,10 +1,85 @@
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
 
 class LinkedInPublisher {
   /**
-   * Publish Post to LinkedIn Company Page / Profile
+   * Helper to fetch or read image buffer and detect MIME type
    */
-  async publishPost({ account, text, imageUrl = null, videoUrl = null, title = '' }) {
+  async getImageBuffer(mediaPath, imageUrl) {
+    const target = mediaPath || imageUrl;
+    if (!target) return null;
+
+    try {
+      if (typeof target === 'string' && fs.existsSync(target)) {
+        const ext = path.extname(target).toLowerCase();
+        let mime = 'image/jpeg';
+        if (ext === '.png') mime = 'image/png';
+        else if (ext === '.webp') mime = 'image/webp';
+        else if (ext === '.gif') mime = 'image/gif';
+        return { buffer: fs.readFileSync(target), mime };
+      }
+
+      if (typeof target === 'string' && target.startsWith('http')) {
+        const resp = await axios.get(target, { responseType: 'arraybuffer', timeout: 15000 });
+        const contentType = resp.headers['content-type'] || 'image/jpeg';
+        return { buffer: Buffer.from(resp.data), mime: contentType.split(';')[0].trim() };
+      }
+    } catch (err) {
+      console.warn('[LinkedIn] Could not load image for upload:', err.message);
+    }
+    return null;
+  }
+
+  /**
+   * Upload image to LinkedIn DMS and return image URN (urn:li:image:...)
+   */
+  async uploadImage(accessToken, authorUrn, imageInfo) {
+    if (!imageInfo || !imageInfo.buffer) return null;
+
+    try {
+      // Step 1: Initialize upload
+      const initRes = await axios.post('https://api.linkedin.com/rest/images?action=initializeUpload', {
+        initializeUploadRequest: {
+          owner: authorUrn
+        }
+      }, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'LinkedIn-Version': '202601',
+          'X-Restli-Protocol-Version': '2.0.0',
+          'Content-Type': 'application/json'
+        },
+        timeout: 15000
+      });
+
+      const { uploadUrl, image } = initRes.data?.value || {};
+      if (!uploadUrl || !image) {
+        console.warn('[LinkedIn] Failed to get uploadUrl from initializeUpload');
+        return null;
+      }
+
+      // Step 2: Upload image binary
+      await axios.put(uploadUrl, imageInfo.buffer, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': imageInfo.mime || 'image/jpeg'
+        },
+        timeout: 30000
+      });
+
+      console.log(`[LinkedIn] Image uploaded successfully to LinkedIn: ${image}`);
+      return image;
+    } catch (err) {
+      console.warn('[LinkedIn] Image upload failed:', err.response?.data?.message || err.message);
+      return null;
+    }
+  }
+
+  /**
+   * Publish Post to LinkedIn Company Page / Profile with Full Photo & Formatting
+   */
+  async publishPost({ account, text, imageUrl = null, mediaPath = null, videoUrl = null, title = '' }) {
     if (!account?.credentials || !account.credentials.accessToken) {
       throw new Error('LinkedIn credentials missing: accessToken is required.');
     }
@@ -17,8 +92,8 @@ class LinkedInPublisher {
     const url = 'https://api.linkedin.com/rest/posts';
     const linkedinVersion = '202601';
 
-    // Auto-detect author: use member URN (urn:li:person:...) since personal token has w_member_social
-    let authorUrn = organizationUrn;
+    // Auto-detect member URN via OpenID userinfo
+    let memberUrn = null;
     try {
       const userInfoRes = await axios.get('https://api.linkedin.com/v2/userinfo', {
         headers: { Authorization: `Bearer ${accessToken}` },
@@ -26,19 +101,33 @@ class LinkedInPublisher {
       });
       const memberSub = userInfoRes.data?.sub;
       if (memberSub) {
-        authorUrn = `urn:li:person:${memberSub}`;
+        memberUrn = `urn:li:person:${memberSub}`;
       }
     } catch (e) {
-      console.warn('[LinkedIn] Could not fetch userinfo, checking configured author:', authorUrn);
+      console.warn('[LinkedIn] Could not fetch userinfo:', e.message);
     }
 
-    if (!authorUrn) {
+    // Determine target author: try organization if explicitly preferred/requested, otherwise personal member URN
+    let targetAuthor = memberUrn || organizationUrn;
+    if ((account.credentials.preferOrganization || account.credentials.publishAsOrganization) && organizationUrn) {
+      targetAuthor = organizationUrn;
+    }
+    if (!targetAuthor) {
       throw new Error('LinkedIn publish failed: unable to determine author URN. Please configure organizationUrn or ensure token has w_member_social/openid permissions.');
     }
 
-    try {
+    // Load image buffer if media is provided
+    const imageInfo = await this.getImageBuffer(mediaPath, imageUrl);
+
+    // Inner publish helper
+    const attemptPublish = async (author) => {
+      let imageUrn = null;
+      if (imageInfo) {
+        imageUrn = await this.uploadImage(accessToken, author, imageInfo);
+      }
+
       const payload = {
-        author: authorUrn,
+        author: author,
         commentary: text || title || '',
         visibility: 'PUBLIC',
         distribution: {
@@ -49,6 +138,15 @@ class LinkedInPublisher {
         lifecycleState: 'PUBLISHED',
         isReshareDisabledByAuthor: false
       };
+
+      if (imageUrn) {
+        payload.content = {
+          media: {
+            id: imageUrn,
+            title: title || 'Lexa Trip Destination'
+          }
+        };
+      }
 
       const res = await axios.post(url, payload, {
         headers: {
@@ -62,7 +160,7 @@ class LinkedInPublisher {
 
       const postId = res.headers['x-restli-id'] || ('li_' + Date.now());
       const postUrl = postId.startsWith('urn:li:') ? `https://www.linkedin.com/feed/update/${encodeURIComponent(postId)}/` : 'https://www.linkedin.com/feed/';
-      console.log(`[LinkedIn] Post published successfully: ${postId} (Author: ${authorUrn}) Link: ${postUrl}`);
+      console.log(`[LinkedIn] Post published successfully: ${postId} (Author: ${author}, HasImage: ${!!imageUrn}) Link: ${postUrl}`);
 
       return {
         success: true,
@@ -70,11 +168,31 @@ class LinkedInPublisher {
         platform: 'linkedin',
         postId: postId,
         postUrl: postUrl,
-        author: authorUrn,
+        author: author,
+        hasImage: !!imageUrn,
         publishedAt: new Date().toISOString()
       };
+    };
+
+    try {
+      return await attemptPublish(targetAuthor);
     } catch (err) {
       const errMsg = err.response?.data?.message || (err.response ? JSON.stringify(err.response.data) : err.message);
+      
+      // If organization permission is missing (requires w_organization_social via Community Management API),
+      // gracefully fall back to personal profile so content is NEVER dropped!
+      if (targetAuthor !== memberUrn && memberUrn && (err.response?.status === 400 || err.response?.status === 403)) {
+        console.warn(`[LinkedIn] Organization publish not authorized for ${targetAuthor} (${errMsg}). Gracefully falling back to personal profile ${memberUrn}.`);
+        try {
+          const fallbackResult = await attemptPublish(memberUrn);
+          fallbackResult.warning = `Posted to personal profile (${memberUrn}) because LinkedIn Company Page posting requires the Community Management API (w_organization_social scope).`;
+          return fallbackResult;
+        } catch (fallbackErr) {
+          const fbMsg = fallbackErr.response?.data?.message || fallbackErr.message;
+          throw new Error(`LinkedIn post failed: ${fbMsg}`);
+        }
+      }
+
       console.error('[LinkedIn Error]:', errMsg);
       throw new Error(`LinkedIn post failed: ${errMsg}`);
     }

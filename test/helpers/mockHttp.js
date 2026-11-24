@@ -341,6 +341,15 @@ class MockHttp {
       name: 'Lexa Trip Founder',
       email: 'admin@lexatrip.com'
     });
+    this.onPost('https://api.linkedin.com/rest/images?action=initializeUpload', {
+      value: {
+        uploadUrl: 'https://example.com/linkedin_image_upload',
+        image: 'urn:li:image:li_image_301'
+      }
+    });
+    this.onPut('https://example.com/linkedin_image_upload', {
+      status: 201
+    });
     this.onPost('https://api.linkedin.com/rest/posts', (config) => {
       return {
         status: 201,

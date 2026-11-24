@@ -123,12 +123,53 @@ app.get('/api/auth/youtube/url', (req, res) => {
   const protocol = req.protocol === 'https' || req.get('x-forwarded-proto') === 'https' ? 'https' : 'http';
   const redirectUri = `${protocol}://${host}/api/auth/youtube/callback`;
 
+  const googleScopes = [
+    'https://www.googleapis.com/auth/youtube.upload',
+    'https://www.googleapis.com/auth/youtube.readonly',
+    'https://www.googleapis.com/auth/youtube',
+    'https://www.googleapis.com/auth/blogger'
+  ].join(' ');
+
   const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
     new URLSearchParams({
       client_id: clientId,
       redirect_uri: redirectUri,
       response_type: 'code',
-      scope: 'https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube',
+      scope: googleScopes,
+      access_type: 'offline',
+      prompt: 'select_account consent',
+      login_hint: 'hotel.lexatrip@gmail.com',
+      state: destId
+    }).toString();
+
+  res.json({ authUrl, clientId, redirectUri, destinationId: destId });
+});
+
+// Unified Google / Blogger OAuth URL Alias
+app.get(['/api/auth/blogger/url', '/api/auth/google/url'], (req, res) => {
+  const destId = req.query.destinationId || 'dest_jaisalmer';
+  const dest = db.getDestination(destId) || db.getDestination('jaisalmer') || db.getDestination('dest_jaisalmer');
+  const ytCreds = dest?.channels?.youtube?.credentials || {};
+  const defaultClientId = ['430109217076-nemrqmf77p2ikur44eoppvfn68o793ks', '.apps.googleusercontent.com'].join('');
+  const clientId = ytCreds.clientId || process.env.YOUTUBE_CLIENT_ID || defaultClientId;
+  
+  const host = req.get('host') || 'localhost:3800';
+  const protocol = req.protocol === 'https' || req.get('x-forwarded-proto') === 'https' ? 'https' : 'http';
+  const redirectUri = `${protocol}://${host}/api/auth/youtube/callback`;
+
+  const googleScopes = [
+    'https://www.googleapis.com/auth/youtube.upload',
+    'https://www.googleapis.com/auth/youtube.readonly',
+    'https://www.googleapis.com/auth/youtube',
+    'https://www.googleapis.com/auth/blogger'
+  ].join(' ');
+
+  const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+    new URLSearchParams({
+      client_id: clientId,
+      redirect_uri: redirectUri,
+      response_type: 'code',
+      scope: googleScopes,
       access_type: 'offline',
       prompt: 'select_account consent',
       login_hint: 'hotel.lexatrip@gmail.com',
@@ -173,24 +214,75 @@ app.get('/api/auth/youtube/callback', async (req, res) => {
 
     const { access_token, refresh_token, expires_in } = tokenRes.data;
 
-    if (dest && dest.channels?.youtube) {
-      dest.channels.youtube.credentials = {
-        ...dest.channels.youtube.credentials,
-        accessToken: access_token,
-        refreshToken: refresh_token || dest.channels.youtube.credentials?.refreshToken,
-        clientId,
-        clientSecret,
-        tokenExpiry: new Date(Date.now() + (expires_in || 3600) * 1000).toISOString(),
-        isLifetime: true
-      };
+    if (dest) {
+      if (dest.channels?.youtube) {
+        dest.channels.youtube.credentials = {
+          ...dest.channels.youtube.credentials,
+          accessToken: access_token,
+          refreshToken: refresh_token || dest.channels.youtube.credentials?.refreshToken,
+          clientId,
+          clientSecret,
+          tokenExpiry: new Date(Date.now() + (expires_in || 3600) * 1000).toISOString(),
+          isLifetime: true
+        };
+      }
+      if (dest.channels?.blogger) {
+        dest.channels.blogger.credentials = {
+          ...dest.channels.blogger.credentials,
+          accessToken: access_token,
+          refreshToken: refresh_token || dest.channels.blogger.credentials?.refreshToken || dest.channels.youtube?.credentials?.refreshToken,
+          clientId,
+          clientSecret,
+          tokenExpiry: new Date(Date.now() + (expires_in || 3600) * 1000).toISOString(),
+          blogId: dest.channels.blogger.credentials?.blogId || '4024327205805487932',
+          blogUrl: dest.channels.blogger.credentials?.blogUrl || 'https://lexatripjaisalmer.blogspot.com/',
+          publishMethod: 'api',
+          isLifetime: true
+        };
+      }
       db.saveDestination(dest);
+    }
+
+    // Sync global account in data.json
+    try {
+      const allData = db.getData ? db.getData() : null;
+      if (allData && allData.accounts) {
+        const blogAcc = allData.accounts.find(a => a.id === 'acc_blog' || a.platform === 'blog');
+        if (blogAcc) {
+          blogAcc.credentials = {
+            ...blogAcc.credentials,
+            accessToken: access_token,
+            refreshToken: refresh_token || blogAcc.credentials?.refreshToken,
+            clientId,
+            clientSecret,
+            blogId: '4024327205805487932',
+            blogUrl: 'https://lexatripjaisalmer.blogspot.com/',
+            publishMethod: 'api',
+            isLifetime: true
+          };
+        }
+        const ytAcc = allData.accounts.find(a => a.id === 'acc_youtube' || a.platform === 'youtube');
+        if (ytAcc) {
+          ytAcc.credentials = {
+            ...ytAcc.credentials,
+            accessToken: access_token,
+            refreshToken: refresh_token || ytAcc.credentials?.refreshToken,
+            clientId,
+            clientSecret,
+            isLifetime: true
+          };
+        }
+        db.saveData(allData);
+      }
+    } catch (syncErr) {
+      console.warn('[Google OAuth Callback] Global sync warning:', syncErr.message);
     }
 
     res.send(`
       <div style="font-family: sans-serif; text-align: center; padding: 40px;">
-        <h2 style="color: #16a34a;">✅ YouTube Shorts Lifetime OAuth Connected Successfully!</h2>
-        <p>Refresh token has been securely saved for destination <b>${dest?.name || destId}</b>.</p>
-        <p>Shorts & Reels can now publish with zero maintenance.</p>
+        <h2 style="color: #16a34a;">✅ Google Cloud Services (YouTube Shorts + Blogger API v3) Connected!</h2>
+        <p>Lifetime Refresh Token has been securely saved for destination <b>${dest?.name || destId}</b>.</p>
+        <p>Shorts, Reels & Blogger Articles can now publish with zero maintenance and automatic lifetime refresh.</p>
         <br/>
         <a href="/" style="background: #2563eb; color: #fff; padding: 10px 20px; border-radius: 6px; text-decoration: none;">Go to Dashboard</a>
       </div>
