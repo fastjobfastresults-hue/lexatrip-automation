@@ -513,6 +513,27 @@ class Database {
     return (this.read().logs || []).slice(0, limit);
   }
 
+  // --- QUOTA TRACKER ---
+  getDailyQuotaUsage(platform = 'youtube', dateStr = null) {
+    const data = this.read();
+    const today = dateStr || new Date().toISOString().split('T')[0];
+    const platformTracker = data.quotaTracker?.[platform] || {};
+    return platformTracker[today] || { uploadCount: 0, unitsUsed: 0, date: today };
+  }
+
+  recordQuotaUsage(platform = 'youtube', units = 1600, dateStr = null) {
+    const data = this.read();
+    const today = dateStr || new Date().toISOString().split('T')[0];
+    data.quotaTracker = data.quotaTracker || {};
+    data.quotaTracker[platform] = data.quotaTracker[platform] || {};
+    const current = data.quotaTracker[platform][today] || { uploadCount: 0, unitsUsed: 0, date: today };
+    current.uploadCount = (current.uploadCount || 0) + 1;
+    current.unitsUsed = (current.unitsUsed || 0) + units;
+    data.quotaTracker[platform][today] = current;
+    this.save(data);
+    return current;
+  }
+
   getRawData() {
     return this.read();
   }

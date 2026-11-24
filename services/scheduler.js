@@ -332,6 +332,57 @@ class Scheduler {
   }
 
   /**
+   * Smart YouTube Quota Sentinel:
+   * Enforces 10,000 daily units limit (1,600 units per video upload).
+   * Prioritizes:
+   * 1. Combined 12s Cinematic Highlight Reels
+   * 2. Direct user-uploaded ready-to-use custom reels
+   * Gracefully skips low-priority single-image reels when approaching the daily ceiling (>= 4 uploads),
+   * while allowing Instagram, Facebook, Threads, LinkedIn & Pinterest to publish without failure.
+   */
+  checkYouTubeDailyQuota(destinationId, item) {
+    const usage = db.getDailyQuotaUsage('youtube');
+    const uploadCount = usage.uploadCount || 0;
+    const unitsUsed = usage.unitsUsed || (uploadCount * 1600);
+    const MAX_DAILY_UPLOADS = 6;
+
+    const titleLower = (item.title || '').toLowerCase();
+    const isCombinedOrCustom = item.isCombinedReel ||
+                               item.isCustomReel ||
+                               item.itemType === 'custom_reel' ||
+                               titleLower.includes('combined') ||
+                               titleLower.includes('12s cinematic') ||
+                               titleLower.includes('highlight');
+
+    // Hard ceiling: 6 uploads reached (9,600+ units used)
+    if (uploadCount >= MAX_DAILY_UPLOADS) {
+      return {
+        shouldSkip: true,
+        reason: `Daily YouTube API quota ceiling reached (${uploadCount}/${MAX_DAILY_UPLOADS} uploads, ${unitsUsed} units used today). Skipped gracefully to protect Google Cloud quota limit.`,
+        uploadCount,
+        unitsRemaining: Math.max(0, 10000 - unitsUsed)
+      };
+    }
+
+    // Soft ceiling: 4 uploads reached
+    // If not a combined or custom priority reel, reserve the remaining slots and skip single image reels
+    if (uploadCount >= 4 && !isCombinedOrCustom) {
+      return {
+        shouldSkip: true,
+        reason: `Daily YouTube quota budget reserved for Combined Highlight Reel & Custom Reels (${uploadCount} uploads today). Skipped single image reel to protect quota while other platforms publish.`,
+        uploadCount,
+        unitsRemaining: Math.max(0, 10000 - unitsUsed)
+      };
+    }
+
+    return {
+      shouldSkip: false,
+      uploadCount,
+      unitsRemaining: Math.max(0, 10000 - unitsUsed)
+    };
+  }
+
+  /**
    * Dispatch a single queue item to all target platforms
    */
   async dispatchSingleQueueItem(item) {
@@ -373,6 +424,23 @@ class Scheduler {
           reason: 'Quora operates in Assisted Copy/Paste mode. Dispatched to AI Q&A queue.'
         });
         continue;
+      }
+
+      // --- SMART YOUTUBE QUOTA SENTINEL ---
+      if (targetPlatform === 'youtube') {
+        const quotaCheck = this.checkYouTubeDailyQuota(destination?.id, item);
+        if (quotaCheck.shouldSkip) {
+          console.log(`[Scheduler] 🛡️ YouTube Quota Sentinel: ${quotaCheck.reason}`);
+          publishResults.push({
+            platform: 'youtube',
+            status: 'skipped',
+            reason: quotaCheck.reason,
+            quotaLimitReached: true,
+            uploadCountToday: quotaCheck.uploadCount,
+            unitsRemaining: quotaCheck.unitsRemaining
+          });
+          continue;
+        }
       }
 
       const accountAdapter = {
@@ -434,6 +502,7 @@ class Scheduler {
               title: item.title,
               description: item.caption
             });
+            db.recordQuotaUsage('youtube', 1600);
           } else if (targetPlatform === 'custom') {
             res = await customPublisher.publish({
               account: accountAdapter,
@@ -489,6 +558,7 @@ class Scheduler {
             res = await threadsPublisher.publishPost({ account: accountAdapter, text: `${item.title}\n\n${item.caption}`, videoUrl: item.mediaPath });
           } else if (targetPlatform === 'youtube') {
             res = await youtubePublisher.uploadShort({ account: accountAdapter, videoPath: item.mediaPath, title: item.title, description: item.caption });
+            db.recordQuotaUsage('youtube', 1600);
           } else if (targetPlatform === 'pinterest') {
             res = await pinterestPublisher.publishPin({ account: accountAdapter, imageUrl: item.mediaPath, videoUrl: item.mediaPath, title: item.title, description: item.caption });
           } else if (targetPlatform === 'twitter') {
