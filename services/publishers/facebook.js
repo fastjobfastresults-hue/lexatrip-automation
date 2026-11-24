@@ -1,6 +1,7 @@
 const axios = require('axios');
 const fs = require('fs');
 const FormData = require('form-data');
+const { sanitizePostText } = require('../textSanitizer');
 
 class FacebookPublisher {
   /**
@@ -25,8 +26,9 @@ class FacebookPublisher {
     try {
       const url = `https://graph.facebook.com/v19.0/${pageId}/photos`;
       const form = new FormData();
-      if (caption) {
-        form.append('caption', caption);
+      const cleanCaption = sanitizePostText(caption || '');
+      if (cleanCaption) {
+        form.append('caption', cleanCaption);
       }
       form.append('access_token', pageAccessToken);
       form.append('source', fs.createReadStream(filePath));
@@ -78,6 +80,7 @@ class FacebookPublisher {
   async publishReel({ account, videoPath, caption }) {
     const creds = account?.credentials || {};
     const { pageAccessToken, pageId } = creds;
+    const cleanCaption = sanitizePostText(caption || '');
 
     if (!pageAccessToken || !pageId) {
       throw new Error('Facebook Reel credentials missing: pageAccessToken and pageId are required.');
@@ -131,7 +134,7 @@ class FacebookPublisher {
           access_token: pageAccessToken,
           video_id: videoId,
           video_state: 'PUBLISHED',
-          description: caption || ''
+          description: cleanCaption
         }, { timeout: 45000 });
 
         postFeedId = finishRes.data?.post_id;

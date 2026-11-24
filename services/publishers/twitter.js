@@ -15,6 +15,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const FormData = require('form-data');
+const { sanitizePostText } = require('../textSanitizer');
 
 class TwitterPublisher {
   /**
@@ -175,9 +176,11 @@ class TwitterPublisher {
    * Sanitize and truncate tweet text to 280 characters
    */
   formatTweetText(text, title = '') {
-    let combined = text || title || '';
-    if (title && text && !text.includes(title)) {
-      combined = `${title}\n\n${text}`;
+    const cleanText = sanitizePostText(text || '');
+    const cleanTitle = sanitizePostText(title || '');
+    let combined = cleanText || cleanTitle || '';
+    if (cleanTitle && cleanText && !cleanText.includes(cleanTitle)) {
+      combined = `${cleanTitle}\n\n${cleanText}`;
     }
     combined = combined.trim();
 

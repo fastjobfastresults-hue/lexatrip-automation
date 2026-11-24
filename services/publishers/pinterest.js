@@ -1,5 +1,6 @@
 const axios = require('axios');
 const tunnelService = require('../tunnelService');
+const { sanitizePostText } = require('../textSanitizer');
 
 class PinterestPublisher {
   /**
@@ -29,10 +30,12 @@ class PinterestPublisher {
     const url = 'https://api.pinterest.com/v5/pins';
 
     try {
+      const cleanTitle = sanitizePostText(title || 'Lexa Trip Travel Experience');
+      const cleanDesc = sanitizePostText(description || 'Experience the wonders of luxury travel with Lexa Trip.');
       const payload = {
         board_id: boardId,
-        title: title || 'Lexa Trip Travel Experience',
-        description: description || 'Experience the wonders of luxury travel with Lexa Trip.',
+        title: cleanTitle,
+        description: cleanDesc,
         link: link || 'https://lexatrip.com',
         media_source: {
           source_type: 'image_url',

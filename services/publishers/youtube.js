@@ -12,6 +12,7 @@
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
+const { sanitizePostText } = require('../textSanitizer');
 
 class YouTubePublisher {
   /**
@@ -106,7 +107,7 @@ class YouTubePublisher {
    */
   formatShortsTitle(title) {
     const shortsTag = '#Shorts';
-    let clean = (title || 'Travel Highlight').trim();
+    let clean = sanitizePostText(title || 'Travel Highlight');
     if (!clean.includes(shortsTag)) {
       if (clean.length + 1 + shortsTag.length > 100) {
         clean = clean.substring(0, 100 - (shortsTag.length + 1)).trim();
@@ -127,11 +128,12 @@ class YouTubePublisher {
    * @param {string} [params.privacyStatus] - 'public' | 'unlisted' | 'private'
    */
   async uploadShort({ account, videoPath, title, description, tags = [], privacyStatus = 'public' }) {
+    const cleanDesc = sanitizePostText(description || '');
     return this.publishVideo({
       account,
       videoPath,
       title: this.formatShortsTitle(title),
-      description: description ? `${description}\n\n#Shorts` : '#Shorts',
+      description: cleanDesc ? `${cleanDesc}\n\n#Shorts` : '#Shorts',
       tags: Array.isArray(tags) ? Array.from(new Set([...tags, 'Shorts', 'travel'])) : ['Shorts', 'travel'],
       categoryId: '19', // Travel & Events
       privacyStatus,

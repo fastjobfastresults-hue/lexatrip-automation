@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { sanitizePostText } = require('../textSanitizer');
 
 class BlogPublisher {
   /**
@@ -22,12 +23,14 @@ class BlogPublisher {
 
     try {
       const endpoint = `${apiUrl.replace(/\/$/, '')}/posts`;
+      const cleanTitle = sanitizePostText(title || '');
+      const cleanExcerpt = sanitizePostText(excerpt || '');
       const res = await axios.post(
         endpoint,
         {
-          title: title,
+          title: cleanTitle,
           content: content,
-          excerpt: excerpt,
+          excerpt: cleanExcerpt,
           status: 'publish'
         },
         {

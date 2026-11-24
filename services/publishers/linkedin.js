@@ -1,6 +1,7 @@
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
+const { sanitizePostText } = require('../textSanitizer');
 
 class LinkedInPublisher {
   /**
@@ -116,6 +117,10 @@ class LinkedInPublisher {
       throw new Error('LinkedIn publish failed: unable to determine author URN. Please configure organizationUrn or ensure token has w_member_social/openid permissions.');
     }
 
+    // Sanitize commentary and title against raw entity tags and formatting artifacts
+    const cleanCommentary = sanitizePostText(text || title || '');
+    const cleanPostTitle = sanitizePostText(title || 'Lexa Trip Destination');
+
     // Load image buffer if media is provided
     const imageInfo = await this.getImageBuffer(mediaPath, imageUrl);
 
@@ -128,7 +133,7 @@ class LinkedInPublisher {
 
       const payload = {
         author: author,
-        commentary: text || title || '',
+        commentary: cleanCommentary,
         visibility: 'PUBLIC',
         distribution: {
           feedDistribution: 'MAIN_FEED',
@@ -143,7 +148,7 @@ class LinkedInPublisher {
         payload.content = {
           media: {
             id: imageUrn,
-            title: title || 'Lexa Trip Destination'
+            title: cleanPostTitle
           }
         };
       }

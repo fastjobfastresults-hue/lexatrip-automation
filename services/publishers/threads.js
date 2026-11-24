@@ -1,5 +1,6 @@
 const axios = require('axios');
 const tunnelService = require('../tunnelService');
+const { sanitizePostText } = require('../textSanitizer');
 
 class ThreadsPublisher {
   /**
@@ -20,10 +21,11 @@ class ThreadsPublisher {
     }
 
     try {
+      const cleanText = sanitizePostText(text || '');
       let mediaType = 'TEXT';
       const containerParams = {
         access_token: accessToken,
-        text: text || ''
+        text: cleanText
       };
 
       if (videoUrl) {

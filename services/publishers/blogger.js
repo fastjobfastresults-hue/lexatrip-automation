@@ -3,6 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const tunnelService = require('../tunnelService');
+const seoGenerator = require('../seoGenerator');
+const { sanitizePostText } = require('../textSanitizer');
 
 class BloggerPublisher {
   /**
@@ -81,9 +83,9 @@ class BloggerPublisher {
 
       // Resolve public image URL if available
       let imageHtml = '';
+      let publicMediaUrl = null;
       const mediaTarget = mediaPath || imageUrl;
       if (mediaTarget) {
-        let publicMediaUrl = null;
         if (typeof mediaTarget === 'string' && mediaTarget.startsWith('http')) {
           publicMediaUrl = mediaTarget;
         } else {
@@ -98,37 +100,22 @@ class BloggerPublisher {
         }
       }
 
-      // Check if caption is already a full HTML article (e.g. from seoGenerator)
+      // Sanitize title and caption against entity markers and bracket artifacts
+      const cleanTitle = sanitizePostText(title || `${destinationName} Royal Travel Guide`);
+      const cleanCaption = sanitizePostText(caption || '');
+
+      // Generate a 100% Human-Friendly, Google Helpful Content E-E-A-T Compliant Blog Article
       let htmlContent = '';
-      if (caption && caption.includes('<article') || (caption && caption.includes('<div') && caption.includes('<h2'))) {
-        htmlContent = caption;
+      if (cleanCaption && (cleanCaption.includes('<article') || (cleanCaption.includes('<div') && cleanCaption.includes('<h2')))) {
+        htmlContent = cleanCaption;
       } else {
-        htmlContent = `
-          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.8; color: #2d3748; font-size: 16px;">
-            ${imageHtml}
-            
-            <h2 style="color: #1a202c; font-size: 24px; font-weight: 700; margin-top: 10px; margin-bottom: 16px;">
-              ✦ ${title} ✦
-            </h2>
-            
-            <p style="font-size: 17px; margin-bottom: 20px; color: #4a5568;">
-              ${(caption || '').replace(/\n/g, '<br/>')}
-            </p>
-
-            <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 5px solid #d97706; border-radius: 12px; padding: 20px; margin: 25px 0;">
-              <h4 style="margin: 0 0 8px 0; color: #92400e; font-size: 18px; font-weight: 700;">
-                ✈️ Plan Your Unforgettable Journey to ${destinationName}
-              </h4>
-              <p style="margin: 0; color: #78350f; font-size: 14px;">
-                Lexa Trip offers personalized royal itineraries, luxury desert camping, seamless sightseeing, and unforgettable travel experiences.
-              </p>
-            </div>
-
-            <div style="margin-top: 30px; padding-top: 15px; border-top: 1px solid #e2e8f0; font-size: 13px; color: #718096;">
-              <b>Tags:</b> ${labels.map(l => `<span style="background: #edf2f7; padding: 4px 10px; border-radius: 20px; margin-right: 6px; display: inline-block; margin-top: 5px;">#${l}</span>`).join(' ')}
-            </div>
-          </div>
-        `;
+        const fullArticle = seoGenerator.generateDestinationHumanBlogArticle({
+          destination: destination || { name: destinationName, slug: destinationName.toLowerCase().replace(/[^a-z0-9]/g, '') },
+          title: cleanTitle,
+          caption: cleanCaption,
+          mediaUrl: publicMediaUrl
+        });
+        htmlContent = fullArticle.htmlContent;
       }
 
       const headers = { 'Content-Type': 'application/json' };
@@ -210,21 +197,22 @@ class BloggerPublisher {
       imageHtml = `<div style="text-align: center; margin-bottom: 25px;"><img src="cid:${imageCid}" style="max-width: 100%; border-radius: 12px;" /></div>`;
     }
 
-    const htmlBody = `
-      <div style="font-family: sans-serif; line-height: 1.8; color: #2d3748;">
-        ${imageHtml}
-        <h2>${title}</h2>
-        <div>${(caption || '').replace(/\n/g, '<br/>')}</div>
-        <br/><hr/>
-        <p><b>Tags:</b> ${hashtags}</p>
-        <p>Book luxury travel with <a href="https://bookings.lexatrip.com/">Lexa Trip</a> • WhatsApp: +91 90798 54982</p>
-      </div>
-    `;
+    const cleanTitle = sanitizePostText(title || `${destinationName} Royal Travel Experience`);
+    const cleanCaption = sanitizePostText(caption || '');
+
+    const fullArticle = seoGenerator.generateDestinationHumanBlogArticle({
+      destination: destination || { name: destinationName, slug: destinationName.toLowerCase().replace(/[^a-z0-9]/g, '') },
+      title: cleanTitle,
+      caption: cleanCaption,
+      mediaUrl: null
+    });
+
+    const htmlBody = fullArticle.htmlContent;
 
     const mailOptions = {
       from: user || 'concierge@lexatrip.com',
       to: secretEmail,
-      subject: title,
+      subject: cleanTitle,
       html: htmlBody,
       attachments
     };

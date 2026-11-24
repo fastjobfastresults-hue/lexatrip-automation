@@ -1,6 +1,7 @@
 const axios = require('axios');
 const fs = require('fs');
 const tunnelService = require('../tunnelService');
+const { sanitizePostText } = require('../textSanitizer');
 
 class InstagramPublisher {
   /**
@@ -54,10 +55,11 @@ class InstagramPublisher {
       const url = `https://graph.facebook.com/v19.0/${instagramAccountId}`;
 
       // Step 1: Create Media Container
+      const cleanCaption = sanitizePostText(caption || '');
       const containerRes = await axios.post(`${url}/media`, null, {
         params: {
           image_url: publicImageUrl,
-          caption: caption,
+          caption: cleanCaption,
           access_token: accessToken
         },
         timeout: 30000
@@ -145,11 +147,12 @@ class InstagramPublisher {
         childrenIds.push(itemRes.data.id);
       }
 
+      const cleanCarouselCaption = sanitizePostText(caption || '');
       const carouselRes = await axios.post(`${url}/media`, null, {
         params: {
           media_type: 'CAROUSEL',
           children: childrenIds.join(','),
-          caption: caption,
+          caption: cleanCarouselCaption,
           access_token: accessToken
         },
         timeout: 30000
@@ -200,6 +203,7 @@ class InstagramPublisher {
 
     try {
       const url = `https://graph.facebook.com/v19.0/${instagramAccountId}`;
+      const cleanReelCaption = sanitizePostText(caption || '');
       let creationId = null;
 
       // Attempt 1: Direct Resumable Binary Upload (Streams directly from disk to Graph API!)
@@ -209,7 +213,7 @@ class InstagramPublisher {
           params: {
             media_type: 'REELS',
             upload_type: 'resumable',
-            caption: caption,
+            caption: cleanReelCaption,
             share_to_feed: true,
             access_token: accessToken
           },

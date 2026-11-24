@@ -6,6 +6,7 @@
 const OFFICIAL_PHONE = '+91 90798 54982';
 const OFFICIAL_BOOKING_URL = 'https://bookings.lexatrip.com/';
 const OFFICIAL_WEBSITE_URL = 'https://www.lexatrip.com/';
+const { sanitizePostText } = require('./textSanitizer');
 
 const destinationData = {
   jaisalmer: {
@@ -600,7 +601,8 @@ ${dest.themes.flatMap(t => t.hashtags.slice(0, 3)).join(' ')}`;
     const destName = destination?.name || 'Lexa Trip Destination';
     const destSlug = destination?.slug || 'jaisalmer';
     const location = destination?.state ? `${destName}, ${destination.state}` : destName;
-    const cleanTitle = title || `A Journey of Wonder: Experiencing ${destName} with Lexa Trip`;
+    const cleanTitle = sanitizePostText(title || `A Journey of Wonder: Experiencing ${destName} with Lexa Trip`);
+    const cleanCaption = sanitizePostText(caption || '');
 
     const imageHtml = mediaUrl ? `
       <div class="separator" style="clear: both; text-align: center; margin: 25px 0 35px 0;">
@@ -628,7 +630,7 @@ ${dest.themes.flatMap(t => t.hashtags.slice(0, 3)).join(' ')}`;
         ${imageHtml}
 
         <div style="font-size: 18px; color: #334155; line-height: 1.9; margin-bottom: 25px;">
-          ${caption ? caption.replace(/\n/g, '<br/>') : `Every journey tells a story, but traveling through ${location} with Lexa Trip is an experience that stays etched in your heart forever.`}
+          ${cleanCaption ? cleanCaption.replace(/\n/g, '<br/>') : `Every journey tells a story, but traveling through ${location} with Lexa Trip is an experience that stays etched in your heart forever.`}
         </div>
 
         <section style="margin: 35px 0;">
