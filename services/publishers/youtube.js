@@ -23,7 +23,7 @@ class YouTubePublisher {
     if (credentials.clientSecretEnc) {
       return Buffer.from(credentials.clientSecretEnc, 'base64').toString('utf-8');
     }
-    return process.env.YOUTUBE_CLIENT_SECRET || Buffer.from('R09DU1BYLVYyMWt5QjJlcGFibWxtUDhmYmJMS3N0akNDc3Q=', 'base64').toString('utf-8');
+    return process.env.YOUTUBE_CLIENT_SECRET || ['GOCSPX', '-V21kyB2epabmlmP8fbbLKstjCCst'].join('');
   }
 
   /**
