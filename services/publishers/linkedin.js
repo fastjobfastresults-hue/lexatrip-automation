@@ -108,9 +108,9 @@ class LinkedInPublisher {
       console.warn('[LinkedIn] Could not fetch userinfo:', e.message);
     }
 
-    // Determine target author: try organization if explicitly preferred/requested, otherwise personal member URN
+    // Determine target author: try organization if requested or configured, otherwise personal member URN
     let targetAuthor = memberUrn || organizationUrn;
-    if ((account.credentials.preferOrganization || account.credentials.publishAsOrganization) && organizationUrn) {
+    if ((account.credentials.preferOrganization || account.credentials.publishAsOrganization || account.publishAsOrganization || account.isOrganization) && organizationUrn) {
       targetAuthor = organizationUrn;
     }
     if (!targetAuthor) {

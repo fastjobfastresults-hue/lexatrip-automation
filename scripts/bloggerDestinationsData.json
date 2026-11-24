@@ -1,0 +1,178 @@
+[
+  {
+    "slug": "sam",
+    "destinationId": "dest_sam",
+    "name": "LexaTrip Sam",
+    "title": "LexaTrip Sam Sand Dunes | Luxury Desert Camps & Camel Safari",
+    "address": "lexatripsam",
+    "description": "Official travel guide & luxury desert camping at Sam Sand Dunes, Jaisalmer by LexaTrip. Discover luxury Swiss tents, sunset camel safaris, jeep dune bashing, Rajasthani folk music, and starlit desert stays. Book premium packages at bookings.lexatrip.com.",
+    "searchDescription": "Explore luxury desert camping, sunset camel safaris & dune bashing at Sam Sand Dunes, Jaisalmer with LexaTrip.",
+    "secretWord": "sam",
+    "url": "https://lexatripsam.blogspot.com"
+  },
+  {
+    "slug": "mountabu",
+    "destinationId": "dest_mountabu",
+    "name": "LexaTrip Mount Abu",
+    "title": "LexaTrip Mount Abu | Luxury Resorts, Nakki Lake & Hill Station Stays",
+    "address": "lexatripmountabu",
+    "description": "Official travel & luxury stay guide to Mount Abu, Rajasthan's serene hill station by LexaTrip. Explore Dilwara Temples, scenic Nakki Lake boat rides, Sunset Point, luxury heritage villas, and cool Aravali nature retreats. Book tours at bookings.lexatrip.com.",
+    "searchDescription": "Plan your Mount Abu vacation with LexaTrip. Experience Nakki Lake, Dilwara temples & luxury hill resort stays.",
+    "secretWord": "mountabu",
+    "url": "https://lexatripmountabu.blogspot.com"
+  },
+  {
+    "slug": "udaipur",
+    "destinationId": "dest_udaipur",
+    "name": "LexaTrip Udaipur",
+    "title": "LexaTrip Udaipur | City of Lakes, Royal Palaces & Luxury Lakeview Stays",
+    "address": "lexatripudaipur",
+    "description": "Experience the Venice of the East with LexaTrip Udaipur. Complete luxury travel itineraries, Lake Pichola sunset boat tours, City Palace heritage walks, rooftop dining, and royal heritage hotel bookings at bookings.lexatrip.com.",
+    "searchDescription": "Discover royal Udaipur with LexaTrip. Luxury Lake Pichola palace stays, heritage walks & romantic boat tours.",
+    "secretWord": "udaipur",
+    "url": "https://lexatripudaipur.blogspot.com"
+  },
+  {
+    "slug": "jaipur",
+    "destinationId": "dest_jaipur",
+    "name": "LexaTrip Jaipur",
+    "title": "LexaTrip Jaipur | Pink City Royal Heritage, Forts & Luxury Stays",
+    "address": "lexatripjaipur",
+    "description": "Immerse in the royal grandeur of the Pink City with LexaTrip Jaipur. Explore Amber Fort, Hawa Mahal, City Palace, Johari Bazaar shopping, luxury haveli stays, and bespoke Rajasthani cultural tours. Book at bookings.lexatrip.com.",
+    "searchDescription": "Experience royal Jaipur with LexaTrip. Amber Fort tours, heritage havelis, Hawa Mahal & luxury city stays.",
+    "secretWord": "jaipur",
+    "url": "https://lexatripjaipur.blogspot.com"
+  },
+  {
+    "slug": "manali",
+    "destinationId": "dest_manali",
+    "name": "LexaTrip Manali",
+    "title": "LexaTrip Manali | Snowy Himalayan Escapes, Solang Valley & Luxury Chalets",
+    "address": "lexatripmanali",
+    "description": "Discover magical Himachal mountain holidays with LexaTrip Manali. Enjoy Solang Valley adventure sports, Rohtang Pass snow tours, Old Manali riverside cafes, luxury wooden chalets, and scenic Himalayan trekking retreats. Book at bookings.lexatrip.com.",
+    "searchDescription": "Explore snowy Manali & Solang Valley with LexaTrip. Luxury mountain chalets, adventure sports & snow tours.",
+    "secretWord": "manali",
+    "url": "https://lexatripmanali.blogspot.com"
+  },
+  {
+    "slug": "rishikesh",
+    "destinationId": "dest_rishikesh",
+    "name": "LexaTrip Rishikesh",
+    "title": "LexaTrip Rishikesh | Yoga Capital, Ganga Aarti & Luxury River Camps",
+    "address": "lexatriprishikesh",
+    "description": "Rejuvenate your soul in Rishikesh with LexaTrip. Divine Parmarth Niketan Ganga Aarti, thrilling white water rafting, Lakshman Jhula cafes, luxury riverside glamping camps, and Ayurvedic wellness retreats. Book at bookings.lexatrip.com.",
+    "searchDescription": "Experience spiritual & adventure Rishikesh with LexaTrip. Ganga Aarti, white water rafting & luxury river camping.",
+    "secretWord": "rishikesh",
+    "url": "https://lexatriprishikesh.blogspot.com"
+  },
+  {
+    "slug": "goa",
+    "destinationId": "dest_goa",
+    "name": "LexaTrip Goa",
+    "title": "LexaTrip Goa | Luxury Beach Villas, Coastal Cruises & Sunset Parties",
+    "address": "lexatripgoa",
+    "description": "Live the ultimate coastal luxury with LexaTrip Goa. Private beachside villas, sunset catamaran cruises in North & South Goa, heritage Latin Quarter Fontainhas walks, watersports, and curated nightlife experiences. Book at bookings.lexatrip.com.",
+    "searchDescription": "Discover tropical Goa luxury with LexaTrip. Private beachfront villas, sunset cruises, watersports & coastal retreats.",
+    "secretWord": "goa",
+    "url": "https://lexatripgoa.blogspot.com"
+  },
+  {
+    "slug": "munnar",
+    "destinationId": "dest_munnar",
+    "name": "LexaTrip Munnar",
+    "title": "LexaTrip Munnar | Emerald Tea Plantations, Misty Hills & Luxury Resorts",
+    "address": "lexatripmunnar",
+    "description": "Escape into the misty green hills of Kerala with LexaTrip Munnar. Sprawling tea garden trails, Eravikulam National Park wildlife, Mattupetty dam, luxury eco-resorts, and romantic mountain hideaways. Book at bookings.lexatrip.com.",
+    "searchDescription": "Explore scenic Munnar tea gardens & misty peaks with LexaTrip. Luxury hillside resorts & Kerala nature retreats.",
+    "secretWord": "munnar",
+    "url": "https://lexatripmunnar.blogspot.com"
+  },
+  {
+    "slug": "varanasi",
+    "destinationId": "dest_varanasi",
+    "name": "LexaTrip Varanasi",
+    "title": "LexaTrip Varanasi | Spiritual Ghats, Subah-e-Banaras & Heritage Walks",
+    "address": "lexatripvaranasi",
+    "description": "Journey into the eternal city with LexaTrip Varanasi. Mesmerizing Dashashwamedh Ghat Ganga Aarti, early morning boat rides on the Ganges, Kashi Vishwanath temple darshan, silk weaving trails, and heritage boutique stays. Book at bookings.lexatrip.com.",
+    "searchDescription": "Experience divine Varanasi with LexaTrip. Grand Ganga Aarti boat tours, temple darshan & heritage ghat stays.",
+    "secretWord": "varanasi",
+    "url": "https://lexatripvaranasi.blogspot.com"
+  },
+  {
+    "slug": "tirupati",
+    "destinationId": "dest_tirupati",
+    "name": "LexaTrip Tirupati",
+    "title": "LexaTrip Tirupati | Sacred Tirumala Darshan & Luxury Pilgrimage Stays",
+    "address": "lexatriptirupati",
+    "description": "Hassle-free divine pilgrimage to Sri Venkateswara Swamy Temple with LexaTrip Tirupati. VIP darshan assistance, comfortable luxury hotel stays, guided temple tours, and devotional family tour packages. Book at bookings.lexatrip.com.",
+    "searchDescription": "Plan sacred Tirupati Balaji darshan with LexaTrip. VIP pilgrimage packages, luxury temple stays & transfers.",
+    "secretWord": "tirupati",
+    "url": "https://lexatriptirupati.blogspot.com"
+  },
+  {
+    "slug": "ranthambore",
+    "destinationId": "dest_ranthambore",
+    "name": "LexaTrip Ranthambore",
+    "title": "LexaTrip Ranthambore | Royal Bengal Tiger Safaris & Luxury Jungle Lodges",
+    "address": "lexatripranthambore",
+    "description": "Thrilling wildlife adventures with LexaTrip Ranthambore. Guaranteed tiger safari jeep & canter bookings, historic Ranthambore Fort exploration, bird watching, and luxury jungle wilderness resort stays. Book at bookings.lexatrip.com.",
+    "searchDescription": "Experience Ranthambore tiger safaris with LexaTrip. Jungle safari bookings, luxury wildlife lodges & nature tours.",
+    "secretWord": "ranthambore",
+    "url": "https://lexatripranthambore.blogspot.com"
+  },
+  {
+    "slug": "rajasthan",
+    "destinationId": "dest_rajasthan",
+    "name": "LexaTrip Rajasthan",
+    "title": "LexaTrip Rajasthan | Royal Heritage Circuits, Desert Safaris & Fort Tours",
+    "address": "lexatriprajasthan",
+    "description": "The ultimate Rajasthan travel guide by LexaTrip. Golden triangle tours, royal palace hotels, camel caravan adventures, heritage festival packages, and bespoke cultural itineraries across the Land of Kings. Book at bookings.lexatrip.com.",
+    "searchDescription": "Explore majestic Rajasthan with LexaTrip. Royal fort circuits, heritage palace hotels & desert itineraries.",
+    "secretWord": "rajasthan",
+    "url": "https://lexatriprajasthan.blogspot.com"
+  },
+  {
+    "slug": "amritsar",
+    "destinationId": "dest_amritsar",
+    "name": "LexaTrip Amritsar",
+    "title": "LexaTrip Amritsar | Golden Temple Darshan, Wagah Border & Heritage Food",
+    "address": "lexatripamritsar",
+    "description": "Experience the warmth and devotion of Punjab with LexaTrip Amritsar. Sacred Golden Temple visits, patriotic Wagah Border ceremony tours, Jallianwala Bagh heritage, kulcha food walks, and luxury city hotel stays. Book at bookings.lexatrip.com.",
+    "searchDescription": "Discover divine Amritsar with LexaTrip. Golden Temple darshan, Wagah Border ceremony & luxury Punjabi stays.",
+    "secretWord": "amritsar",
+    "url": "https://lexatripamritsar.blogspot.com"
+  },
+  {
+    "slug": "mysuru",
+    "destinationId": "dest_maysuru",
+    "name": "LexaTrip Mysuru",
+    "title": "LexaTrip Mysuru | Grand Mysore Palace, Chamundi Hills & Royal Heritage",
+    "address": "lexatripmysuru",
+    "description": "Step into royal elegance with LexaTrip Mysuru. Illumination of Mysore Palace, Chamundi Hill temple views, Brindavan Gardens, fragrant sandalwood & silk shopping, and royal heritage resort stays. Book at bookings.lexatrip.com.",
+    "searchDescription": "Explore regal Mysuru with LexaTrip. Grand Mysore Palace tours, Chamundi hills & luxury heritage hotel stays.",
+    "secretWord": "mysuru",
+    "url": "https://lexatripmysuru.blogspot.com"
+  },
+  {
+    "slug": "bengaluru",
+    "destinationId": "dest_bengaluru",
+    "name": "LexaTrip Bengaluru",
+    "title": "LexaTrip Bengaluru | Garden City, Bangalore Palace & Luxury Urban Stays",
+    "address": "lexatripbengaluru",
+    "description": "Discover the vibrant energy of India's Silicon Valley with LexaTrip Bengaluru. Bangalore Palace royal heritage, lush Lalbagh Botanical Gardens, craft breweries, tech corridors, and 5-star luxury urban hotel stays. Book at bookings.lexatrip.com.",
+    "searchDescription": "Experience dynamic Bengaluru with LexaTrip. Bangalore Palace, botanical gardens & premium luxury city stays.",
+    "secretWord": "bengaluru",
+    "url": "https://lexatripbengaluru.blogspot.com"
+  },
+  {
+    "slug": "kochi",
+    "destinationId": "dest_kochi",
+    "name": "LexaTrip Kochi",
+    "title": "LexaTrip Kochi | Fort Kochi Heritage, Chinese Fishing Nets & Backwaters",
+    "address": "lexatripkochi",
+    "description": "Unwind along the scenic Malabar Coast with LexaTrip Kochi. Colonial Fort Kochi walking tours, iconic Chinese fishing nets, Mattancherry Dutch Palace, luxury backwater houseboat cruises, and seaside boutique stays. Book at bookings.lexatrip.com.",
+    "searchDescription": "Discover historic Kochi & backwaters with LexaTrip. Fort Kochi heritage walks, Chinese nets & luxury boutique stays.",
+    "secretWord": "kochi",
+    "url": "https://lexatripkochi.blogspot.com"
+  }
+]
