@@ -268,56 +268,102 @@ class TelegramBotService {
     const messageContent = (textHint || msg?.text || msg?.caption || '').toLowerCase();
 
     // 1. Direct Explicit Channel ID match (Strict Priority #1 - 100% Channel Isolation)
-    for (const d of destinations) {
-      if (d.telegram?.channelId && String(d.telegram.channelId) === chatId) return d;
+    if (chatId) {
+      for (const d of destinations) {
+        const destChanId = d.telegram?.channelId || d.channels?.telegram?.credentials?.channelId;
+        if (destChanId && String(destChanId) === chatId) return d;
+      }
     }
 
     // 2. Direct Match by Channel Username (Strict Priority #2)
     if (chatUsername) {
       const cleanUser = chatUsername.replace(/^@/, '');
       for (const d of destinations) {
-        const dUser = (d.telegram?.channelUsername || '').toLowerCase().replace(/^@/, '');
+        const dUser = (d.telegram?.channelUsername || d.channels?.telegram?.credentials?.channelUsername || '').toLowerCase().replace(/^@/, '');
         if (dUser && dUser === cleanUser) return d;
       }
     }
 
-    // 3. Match from Chat Title or Chat Username (Strict Priority #3)
+    // Comprehensive Aliases Map for 100% Deterministic Destination Matching
+    const destinationAliases = {
+      dest_jaisalmer: ['jaisalmer', 'जैसलमेर', 'golden fort', 'sonar qila', 'sam dunes camp'],
+      dest_mountabu: ['mountabu', 'mount abu', 'माउंट आबू', 'mount-abu', 'mt abu', 'nakki lake', 'guru shikhar'],
+      dest_udaipur: ['udaipur', 'उदयपुर', 'lake pichola', 'city palace', 'fateh sagar'],
+      dest_jaipur: ['jaipur', 'जयपुर', 'hawa mahal', 'amber fort', 'pink city'],
+      dest_manali: ['manali', 'मनाली', 'solang', 'rohtang', 'atal tunnel'],
+      dest_rishikesh: ['rishikesh', 'ऋषिकेश', 'ram jhula', 'laxman jhula', 'triveni ghat', 'rafting'],
+      dest_goa: ['goa', 'गोवा', 'calangute', 'baga', 'panaji', 'benaulim', 'mobor'],
+      dest_munnar: ['munnar', 'मुन्नार', 'tea gardens', 'eravikulam', 'mattupetty'],
+      dest_varanasi: ['varanasi', 'बनारस', 'वाराणसी', 'kashi', 'काशी', 'dashashwamedh', 'ganga aarti'],
+      dest_tirupati: ['tirupati', 'तिरुपति', 'balaji', 'venkateswara', 'tirumala'],
+      dest_ranthambore: ['ranthambore', 'ranthambhore', 'रणथंभौर', 'tiger reserve', 'sawai madhopur'],
+      dest_rajasthan: ['rajasthan', 'राजस्थान', 'rajasthan travel'],
+      dest_amritsar: ['amritsar', 'अमृतसर', 'golden temple', 'harmandir sahib', 'wagah'],
+      dest_maysuru: ['mysuru', 'mysore', 'मैसूर', 'mysore palace', 'chamundi'],
+      dest_sam: ['sam sand dunes', 'sam dunes', 'सैम सैंड', 'सैम', 'sam'],
+      dest_bengaluru: ['bengaluru', 'bangalore', 'बेंगलुरु', 'lalbagh', 'cubbon'],
+      dest_kochi: ['kochi', 'cochin', 'कोच्चि', 'fort kochi', 'marine drive']
+    };
+
+    // Helper: Normalize string (strip punctuation, spaces)
+    const norm = (s) => (s || '').toLowerCase().replace(/[^a-z0-9\u0900-\u097F]/g, '');
+    const normChatTitle = norm(chatTitle);
+    const normContent = norm(messageContent);
+
+    // 3. Match from Chat Title (Strict Priority #3)
     if (chatTitle) {
       for (const d of destinations) {
-        const slug = (d.slug || '').toLowerCase();
-        const name = (d.name || '').toLowerCase();
-        const city = name.replace(/lexa\s*trip/i, '').trim();
-        if (city && city.length > 2 && chatTitle.includes(city)) return d;
-        if (slug && slug.length > 2 && chatTitle.includes(slug)) return d;
-      }
-    }
-
-    // 4. Fallback ONLY for 1-on-1 Direct Private Chats with Bot: Match by Text/SEO
-    const isDirectPrivateChat = !msg?.chat?.type || msg?.chat?.type === 'private';
-    if (isDirectPrivateChat && messageContent) {
-      for (const d of destinations) {
-        const slug = (d.slug || '').toLowerCase();
-        const cityEnglish = (d.name.match(/\((.*?)\)/)?.[1] || '').toLowerCase().replace(/lexa\s*trip/i, '').trim();
-        const cityHindi = d.name.split('(')[0].replace(/लेक्सा\s*ट्रिप/i, '').trim();
-
-        if (
-          (cityEnglish && cityEnglish.length > 2 && messageContent.includes(cityEnglish)) ||
-          (cityHindi && cityHindi.length > 2 && messageContent.includes(cityHindi)) ||
-          (slug && slug.length > 2 && messageContent.includes(slug))
-        ) {
-          return d;
+        const aliases = destinationAliases[d.id] || [d.slug, d.name];
+        for (const alias of aliases) {
+          const normAlias = norm(alias);
+          if (normAlias && normAlias.length >= 3 && normChatTitle.includes(normAlias)) {
+            // Auto-bind channel ID on first discovery so subsequent posts are 100% matched by ID!
+            if (chatId && chatId.startsWith('-') && !d.telegram?.channelId) {
+              d.telegram = d.telegram || {};
+              d.telegram.channelId = chatId;
+              try { db.saveDestination(d); } catch (e) {}
+              console.log(`[TelegramBot Auto-Bind] Successfully bound ${d.name} (${d.id}) to Telegram Channel ID: ${chatId}`);
+            }
+            return d;
+          }
         }
       }
     }
 
-    // 5. Session Active Destination
+    // 4. Match by Text Content / SEO Hints
+    if (messageContent) {
+      for (const d of destinations) {
+        const aliases = destinationAliases[d.id] || [d.slug, d.name];
+        for (const alias of aliases) {
+          const normAlias = norm(alias);
+          if (normAlias && normAlias.length >= 3 && normContent.includes(normAlias)) {
+            if (chatId && chatId.startsWith('-') && !d.telegram?.channelId) {
+              d.telegram = d.telegram || {};
+              d.telegram.channelId = chatId;
+              try { db.saveDestination(d); } catch (e) {}
+              console.log(`[TelegramBot Auto-Bind via Content] Bound ${d.name} (${d.id}) to Telegram Channel ID: ${chatId}`);
+            }
+            return d;
+          }
+        }
+      }
+    }
+
+    // 5. Session Active Destination (for private DM chats)
     const session = this.sessions.get(chatId);
     if (session?.destinationId) {
       const found = db.getDestination(session.destinationId);
       if (found) return found;
     }
 
-    // 6. Fallback to default Jaisalmer
+    // 6. Strict Channel Post Safeguard: If coming from an unknown Channel, DO NOT silently dump to Jaisalmer!
+    const isChannelPost = msg?.chat?.type === 'channel' || (chatId && chatId.startsWith('-100'));
+    if (isChannelPost) {
+      console.warn(`[TelegramBot] ⚠️ Unidentified channel post from Chat ID ${chatId} (${chatTitle}). Refusing silent cross-post fallback.`);
+      return null;
+    }
+
+    // 7. Fallback ONLY for 1-on-1 Direct Private Chats with Bot
     return destinations.find(d => d.id === 'dest_jaisalmer') || destinations[0] || { id: 'dest_jaisalmer', name: 'Lexa Trip Jaisalmer', slug: 'jaisalmer' };
   }
 
@@ -437,17 +483,17 @@ class TelegramBotService {
     const targets = [];
     const channels = dest?.channels || {};
 
-    // 1. Facebook Page (Active if pageAccessToken & pageId present)
-    if (channels.facebook?.enabled !== false && channels.facebook?.credentials?.pageAccessToken) {
+    // 1. Facebook Page: ONLY include if page is enabled AND has dedicated pageId + token
+    if (channels.facebook?.enabled === true && channels.facebook?.credentials?.pageAccessToken && channels.facebook?.credentials?.pageId) {
       targets.push('facebook');
     }
 
-    // 2. Instagram Business (Active if accessToken & instagramAccountId present)
-    if (channels.instagram?.enabled !== false && channels.instagram?.credentials?.accessToken) {
+    // 2. Instagram Business: ONLY include if enabled AND has dedicated instagramAccountId + token
+    if (channels.instagram?.enabled === true && channels.instagram?.credentials?.accessToken && channels.instagram?.credentials?.instagramAccountId) {
       targets.push('instagram');
     }
 
-    // 3. LinkedIn (Active if accessToken present)
+    // 3. LinkedIn: ONLY include if enabled AND has token
     if (channels.linkedin?.enabled !== false && channels.linkedin?.credentials?.accessToken) {
       targets.push('linkedin');
     }
@@ -475,7 +521,12 @@ class TelegramBotService {
       targets.push('google_business');
     }
 
-    return targets.length > 0 ? targets : ['facebook', 'instagram'];
+    // 7. Google Blogger: Active if blogId is configured (EVERY SINGLE POST creates an article)
+    if (channels.blogger?.enabled !== false && channels.blogger?.credentials?.blogId) {
+      targets.push('blogger');
+    }
+
+    return targets;
   }
 
   /**
@@ -950,14 +1001,17 @@ class TelegramBotService {
             }
           }
 
-          // Channel Status Advisory for Pending / Batch Channels
+          // Channel Status Advisory for Pending / Dedicated Channels
           reportMsg += `\n📋 *अन्य चैनल्स स्थिति:*\n`;
           const ch = dest.channels || {};
+          if (ch.facebook?.credentials?.status === 'pending_dedicated_page' || (!ch.facebook?.enabled && !singleTargets.includes('facebook'))) {
+            reportMsg += `• ⏸️ 📘 Facebook: LexaTrip ${dest.name} का स्वतंत्र पेज कनेक्ट होना बाकी है (क्रॉस-पोस्टिंग सुरक्षित रूप से रोकी गई)\n`;
+          }
+          if (ch.instagram?.credentials?.status === 'pending_dedicated_account' || (!ch.instagram?.enabled && !singleTargets.includes('instagram'))) {
+            reportMsg += `• ⏸️ 📸 Instagram: LexaTrip ${dest.name} का स्वतंत्र अकाउंट कनेक्ट होना बाकी है\n`;
+          }
           if (ch.pinterest?.credentials?.status === 'trial_access_pending' || !singleTargets.includes('pinterest')) {
             reportMsg += `• ⏳ 📌 Pinterest: नया ऐप (ID ${ch.pinterest?.credentials?.appId || '1642972'}) Pinterest रिव्यू में है (Standard Access अप्रूवल के बाद पब्लिशिंग स्वतः शुरू होगी)\n`;
-          }
-          if (ch.blogger?.enabled) {
-            reportMsg += `• 📰 Blogger: 5-फ़ोटो बैच आर्टिकल इंजन के लिए आरक्षित (सिंगल फ़ोटो सोशल फ़ीड के लिए नहीं)\n`;
           }
         } else if (publishedTargets.length > 0 && failedTargets.length > 0) {
           // Partial Success
@@ -981,14 +1035,17 @@ class TelegramBotService {
             reportMsg += `• ❌ ${icon} ${name}: \`${r.error || 'अज्ञात त्रुटि'}\`\n`;
           }
 
-          // Channel Status Advisory for Pending / Batch Channels
+          // Channel Status Advisory for Pending / Dedicated Channels
           reportMsg += `\n📋 *अन्य चैनल्स स्थिति:*\n`;
           const ch = dest.channels || {};
+          if (ch.facebook?.credentials?.status === 'pending_dedicated_page' || (!ch.facebook?.enabled && !singleTargets.includes('facebook'))) {
+            reportMsg += `• ⏸️ 📘 Facebook: LexaTrip ${dest.name} का स्वतंत्र पेज कनेक्ट होना बाकी है (क्रॉस-पोस्टिंग रोकी गई)\n`;
+          }
+          if (ch.instagram?.credentials?.status === 'pending_dedicated_account' || (!ch.instagram?.enabled && !singleTargets.includes('instagram'))) {
+            reportMsg += `• ⏸️ 📸 Instagram: LexaTrip ${dest.name} का स्वतंत्र अकाउंट कनेक्ट होना बाकी है\n`;
+          }
           if (ch.pinterest?.credentials?.status === 'trial_access_pending' || !singleTargets.includes('pinterest')) {
             reportMsg += `• ⏳ 📌 Pinterest: नया ऐप (ID ${ch.pinterest?.credentials?.appId || '1642972'}) Pinterest रिव्यू में है\n`;
-          }
-          if (ch.blogger?.enabled) {
-            reportMsg += `• 📰 Blogger: 5-फ़ोटो बैच आर्टिकल इंजन के लिए आरक्षित\n`;
           }
 
           if (skippedTargets.length > 0) {
