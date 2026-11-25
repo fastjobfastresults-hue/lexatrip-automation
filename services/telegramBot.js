@@ -1103,10 +1103,10 @@ class TelegramBotService {
 
             // Dynamically determine reel targets based on destination enabled channels and credentials
             const reelTargets = [];
-            if (dest.channels?.facebook?.enabled !== false && dest.channels?.facebook?.credentials?.pageAccessToken) {
+            if (dest.channels?.facebook?.enabled === true && dest.channels?.facebook?.credentials?.pageAccessToken && dest.channels?.facebook?.credentials?.pageId) {
               reelTargets.push('facebook');
             }
-            if (dest.channels?.instagram?.enabled !== false && (dest.channels?.instagram?.credentials?.accessToken || dest.channels?.instagram?.credentials?.pageAccessToken)) {
+            if (dest.channels?.instagram?.enabled === true && dest.channels?.instagram?.credentials?.accessToken && dest.channels?.instagram?.credentials?.instagramAccountId) {
               reelTargets.push('instagram');
             }
             if (dest.channels?.youtube?.enabled === true && (dest.channels?.youtube?.credentials?.accessToken || dest.channels?.youtube?.credentials?.refreshToken)) {
@@ -1118,7 +1118,7 @@ class TelegramBotService {
                 !String(dest.channels.threads.credentials.accessToken).startsWith('smart_')) {
               reelTargets.push('threads');
             }
-            const targets = reelTargets.length > 0 ? reelTargets : ['facebook', 'instagram'];
+            const targets = reelTargets.length > 0 ? reelTargets : (dest.channels?.youtube?.enabled ? ['youtube'] : []);
 
             const reelRecord = {
               id: `q_reel_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
