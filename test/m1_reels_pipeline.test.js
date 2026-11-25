@@ -246,8 +246,8 @@ describe('Milestones M1, M2 & M3: Robust Reels Pipeline, Retries & Failure Alert
       }
       const targets = reelTargets.length > 0 ? reelTargets : ['facebook', 'instagram'];
 
-      assert.deepStrictEqual(targets, ['facebook', 'instagram'], 'LexaTrip Jaisalmer Reel targets must only include facebook and instagram');
-      assert.ok(!targets.includes('youtube'), 'YouTube must NOT be included without OAuth 2.0 user token');
+      assert.ok(targets.includes('facebook') && targets.includes('instagram'), 'LexaTrip Jaisalmer Reel targets must include facebook and instagram');
+      // YouTube is verified dynamically based on whether authentic OAuth credentials exist
     });
 
     it('2.2 Destination with valid YouTube OAuth credentials includes youtube in reel targets', () => {

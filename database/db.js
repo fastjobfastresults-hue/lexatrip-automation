@@ -329,7 +329,7 @@ class Database {
   getDestination(id) {
     const list = this.getDestinations();
     const dest = list.find(d => d.id === id || d.slug === id);
-    return dest ? this.ensureDestinationBloggerChannel(dest) : null;
+    return dest ? this.ensureDestinationBloggerChannel(dest) : undefined;
   }
 
   saveDestination(dest) {

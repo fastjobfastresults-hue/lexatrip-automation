@@ -1,29 +1,48 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html>
-<html b:css='false' b:defaultwidgetversion='2' b:layoutsversion='3' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<html b:css='false' b:defaultwidgetversion='2' b:layoutsversion='3' b:responsive='true' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
 <head>
   <b:include data='blog' name='all-head-content'/>
-  <meta content='width=device-width, initial-scale=1, maximum-scale=5' name='viewport'/>
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes' name='viewport'/>
+  <meta content='True' name='HandheldFriendly'/>
+  <meta content='320' name='MobileOptimized'/>
+  <meta content='telephone=no' name='format-detection'/>
+  <meta content='#0F172A' name='theme-color'/>
+  
   <title><data:blog.pageTitle/></title>
   
+  <!-- Lifetime Mobile Template Bypass Script: Forces Full Responsive Theme on All Devices (?m=1 -> ?m=0) -->
+  <script type='text/javascript'>
+  //<![CDATA[
+    (function() {
+      var u = window.location.href;
+      if (u.indexOf('m=1') !== -1) {
+        var clean = u.replace(/([?&])m=1(&|$)/, '$1m=0$2').replace(/[?&]$/, '');
+        window.location.replace(clean);
+      }
+    })();
+  //]]>
+  </script>
+
   <!-- Favicon & Canonical -->
   <link href='https://bookings.lexatrip.com/favicon.ico' rel='icon' type='image/x-icon'/>
   <link href='https://bookings.lexatrip.com/favicon.ico' rel='shortcut icon' type='image/x-icon'/>
   <link href='https://fonts.googleapis.com' rel='preconnect'/>
   <link crossorigin='' href='https://fonts.gstatic.com' rel='preconnect'/>
-  <link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Outfit:wght@500;600;700;800;900&amp;display=swap' rel='stylesheet'/>
+  <link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Outfit:wght@500;600;700;800;900&amp;family=Noto+Sans+Devanagari:wght@400;500;600;700;800&amp;display=swap' rel='stylesheet'/>
 
   <!-- SEO & Social OpenGraph Tags -->
-  <meta content='LexaTrip - India Premier Experiential Luxury Travel Network' name='description'/>
+  <meta content='LexaTrip VARANASI - Official Verified Stays, Luxury Resorts &amp; Tours' name='description'/>
   <meta content='summary_large_image' name='twitter:card'/>
-  <meta content='LexaTrip™' property='og:site_name'/>
+  <meta content='LexaTrip™ VARANASI' property='og:site_name'/>
   <meta expr:content='data:blog.pageTitle' property='og:title'/>
   <meta expr:content='data:blog.canonicalUrl' property='og:url'/>
 
   <b:skin><![CDATA[
   /* ==========================================================================
-     LEXATRIP ULTRA-LUXURY EXPERIENTIAL MASTER THEME (2026 EDITION)
+     LEXATRIP ULTRA-LUXURY EXPERIENTIAL MASTER THEME (2026 UNIVERSAL FLEET EDITION)
      Solid Navy (#0F172A), Sunset Orange (#FF6B00), Amber (#FFA000)
+     100% Fluid Auto-Responsive on Mobile, Tablet, iOS, Android, Desktop & PC
      ========================================================================== */
   :root {
     --primary: #FF6B00;
@@ -46,60 +65,68 @@
     --shadow-lg: 0 16px 36px rgba(255, 107, 0, 0.16);
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Universal Reset & Zero Horizontal Overflow */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  html, body {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background-color: var(--bg-page);
     color: var(--text-main);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
-    padding-bottom: 76px; /* space for sticky mobile bottom bar */
+    padding-bottom: 84px; /* Space for bottom dock */
   }
 
-  /* Top Header Layout Section */
-  #top-banner-ads {
-    width: 100%;
-  }
-
-  /* Main Luxury Header */
+  /* =======================================================================
+     1. MASTER HEADER (Fully Responsive, Enhanced Destination Typography)
+     ======================================================================= */
   .main-header {
     background: #FFFFFF;
     border-bottom: 1px solid var(--border);
     position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+    width: 100%;
   }
   .header-container {
     max-width: 1280px;
     margin: 0 auto;
-    padding: 12px 20px;
+    padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
   }
 
-  /* Brand Logo & Typography */
+  /* Brand Logo with 100% Lifetime Base64 Emblem & Prominent Destination Word */
   .brand-logo-link {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     text-decoration: none;
     flex-shrink: 0;
   }
   .brand-logo-circle {
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
+    overflow: hidden;
     background: #FFFFFF;
     border: 2px solid #FF6B00;
+    box-shadow: 0 2px 8px rgba(255, 107, 0, 0.25);
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(255, 107, 0, 0.2);
-    flex-shrink: 0;
   }
   .brand-logo-img {
     width: 100%;
@@ -118,564 +145,722 @@
     line-height: 1.1;
   }
   .brand-word-lexa {
-    font-family: 'Outfit', 'Inter', sans-serif;
-    font-size: 26px;
+    font-family: 'Outfit', sans-serif;
     font-weight: 900;
-    color: var(--navy);
+    font-size: 20px;
     letter-spacing: 0.5px;
+    color: #0F1E36;
   }
-  /* Official Dual-line / Outline Orange TRIP */
   .brand-word-trip {
-    font-family: 'Outfit', 'Inter', sans-serif;
-    font-size: 26px;
+    font-family: 'Outfit', sans-serif;
     font-weight: 900;
-    color: #FFFFFF;
-    -webkit-text-stroke: 1.8px #FF6B00;
-    letter-spacing: 2px;
-    display: inline-block;
-    text-shadow: 0 0 1px #FF6B00, 1px 1px 0px rgba(255, 107, 0, 0.35);
+    font-size: 20px;
+    letter-spacing: 0.5px;
+    color: transparent;
+    -webkit-text-stroke: 1.5px #FF6B00;
+    text-stroke: 1.5px #FF6B00;
+    position: relative;
   }
-  .brand-dest-badge {
-    background: var(--navy);
-    color: #FFA000;
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    padding: 3px 8px;
-    border-radius: 4px;
-    margin-left: 4px;
+  /* Large, bold, official trip-colored destination name */
+  .brand-dest-word {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 900;
+    font-size: 19px;
+    letter-spacing: 0.8px;
+    color: #FF6B00;
     text-transform: uppercase;
+    margin-left: 2px;
+    display: inline-block;
   }
   .brand-tagline {
-    font-size: 9px;
+    font-size: 9.5px;
     font-weight: 700;
-    color: var(--text-muted);
-    letter-spacing: 2px;
+    color: #64748B;
+    letter-spacing: 1.2px;
     margin-top: 2px;
-    text-transform: uppercase;
   }
 
-  /* Header Quick Action Buttons */
+  /* Header Right Actions */
   .header-actions {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
+    flex-shrink: 0;
   }
   .btn-header {
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    padding: 7px 14px;
+    border-radius: 20px;
     font-size: 13px;
     font-weight: 700;
-    padding: 8px 14px;
-    border-radius: 20px;
     text-decoration: none;
     transition: all 0.2s ease;
-    white-space: nowrap;
+    cursor: pointer;
+  }
+  .btn-header-lang {
+    background: #F1F5F9;
+    color: #0F172A;
+    border: 1px solid #CBD5E1;
   }
   .btn-header-book {
-    background: var(--primary);
+    background: linear-gradient(135deg, #FF6B00, #E65100);
     color: #FFFFFF;
-    box-shadow: 0 2px 8px rgba(255, 107, 0, 0.3);
-  }
-  .btn-header-book:hover {
-    background: var(--primary-dark);
-    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.25);
   }
   .btn-header-wa {
     background: #25D366;
     color: #FFFFFF;
   }
-  .btn-header-wa:hover {
-    background: #1EBE5B;
-  }
   .btn-header-app {
-    background: var(--navy);
+    background: #0F172A;
     color: #FFFFFF;
-  }
-  .btn-header-app:hover {
-    background: var(--navy-light);
+    border: 1px solid #334155;
   }
 
-  /* Language Switcher Button */
-  .lang-switcher {
-    position: relative;
-    cursor: pointer;
-    background: #F1F5F9;
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 6px 12px;
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--navy);
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    user-select: none;
-  }
+  /* Language Dropdown */
   .lang-dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  .lang-menu {
     display: none;
     position: absolute;
-    top: 100%;
     right: 0;
+    top: 100%;
     margin-top: 6px;
     background: #FFFFFF;
     border: 1px solid var(--border);
-    border-radius: 10px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-md);
     min-width: 140px;
     z-index: 1001;
     overflow: hidden;
   }
-  .lang-dropdown a {
+  .lang-item {
     display: block;
     padding: 8px 14px;
     font-size: 13px;
     color: var(--text-main);
     text-decoration: none;
+    transition: background 0.15s;
   }
-  .lang-dropdown a:hover, .lang-dropdown a.active {
+  .lang-item:hover {
     background: var(--primary-light);
     color: var(--primary);
-    font-weight: 700;
   }
 
-  /* Category Navigation Bar (Horizontally Scrollable) */
-  .category-nav-wrapper {
+  /* =======================================================================
+     2. CATEGORY NAVIGATION BAR (Smooth Native Touch Swipe on Mobile)
+     ======================================================================= */
+  .cat-nav-wrapper {
     background: #FFFFFF;
     border-bottom: 1px solid var(--border);
-    position: relative;
-    display: flex;
-    align-items: center;
+    position: sticky;
+    top: 65px;
+    z-index: 990;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+    width: 100%;
   }
-  .category-nav-container {
+  .cat-nav-flex {
     max-width: 1280px;
     margin: 0 auto;
-    width: 100%;
-    position: relative;
     display: flex;
     align-items: center;
+    position: relative;
+    padding: 6px 12px;
   }
-  .cat-nav-scroll-btn {
+  .cat-scroll-btn {
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: #FFFFFF;
-    border: 1px solid var(--border);
-    color: var(--navy);
     cursor: pointer;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    z-index: 5;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    font-size: 14px;
     flex-shrink: 0;
-    margin: 0 4px;
-    font-weight: 900;
-    user-select: none;
+    color: #0F172A;
+    transition: background 0.2s;
   }
-  .cat-nav-scroll-btn:hover {
-    background: var(--primary-light);
-    color: var(--primary);
+  .cat-scroll-btn:hover {
+    background: #F1F5F9;
   }
-  .category-nav-flex {
+  .cat-nav-bar {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     overflow-x: auto;
-    overflow-y: hidden;
-    scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
-    padding: 10px 12px;
-    white-space: nowrap;
-    scrollbar-width: thin;
-    scrollbar-color: #CBD5E1 transparent;
-    flex-grow: 1;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+    padding: 4px 6px;
+    width: 100%;
   }
-  .category-nav-flex::-webkit-scrollbar {
-    height: 3px;
-  }
-  .category-nav-flex::-webkit-scrollbar-thumb {
-    background: #CBD5E1;
-    border-radius: 3px;
+  .cat-nav-bar::-webkit-scrollbar {
+    display: none;
   }
   .cat-pill {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: #F8FAFC;
-    color: var(--text-main);
-    border: 1px solid var(--border);
     padding: 8px 16px;
     border-radius: 24px;
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 700;
+    color: #475569;
+    background: #F1F5F9;
     text-decoration: none;
+    white-space: nowrap;
+    border: 1px solid transparent;
     transition: all 0.2s ease;
     flex-shrink: 0;
+    cursor: pointer;
   }
   .cat-pill:hover, .cat-pill.active {
-    background: var(--navy);
+    background: linear-gradient(135deg, #FF6B00, #E65100);
     color: #FFFFFF;
-    border-color: var(--navy);
-    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
-  }
-  .cat-pill.active {
-    background: var(--primary);
-    border-color: var(--primary);
+    border-color: #E65100;
+    box-shadow: 0 3px 10px rgba(255, 107, 0, 0.25);
   }
 
-  /* Compact Luxury Hero Section */
-  .hero-compact {
-    background: linear-gradient(135deg, #090D16 0%, #0F172A 60%, #1E293B 100%);
+  /* =======================================================================
+     3. HERO SECTION
+     ======================================================================= */
+  .hero-section {
+    background: linear-gradient(145deg, #090D16 0%, #0F172A 60%, #1A2234 100%);
     color: #FFFFFF;
-    padding: 24px 20px;
+    padding: 32px 18px;
     text-align: center;
-    border-bottom: 2px solid var(--primary);
+    position: relative;
+    overflow: hidden;
+    border-bottom: 2px solid #FF6B00;
   }
-  .hero-container {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-  .hero-badge-pill {
+  .hero-badge {
     display: inline-block;
     background: rgba(255, 107, 0, 0.15);
     border: 1px solid rgba(255, 107, 0, 0.4);
     color: #FFA000;
     font-size: 11px;
     font-weight: 800;
-    letter-spacing: 1.5px;
     padding: 4px 14px;
     border-radius: 20px;
     text-transform: uppercase;
+    letter-spacing: 1px;
     margin-bottom: 10px;
   }
-  .hero-compact-title {
-    font-family: 'Outfit', sans-serif;
+  .hero-title {
+    font-family: 'Outfit', 'Noto Sans Devanagari', sans-serif;
     font-size: 26px;
-    font-weight: 800;
-    color: #FFFFFF;
+    font-weight: 900;
     margin-bottom: 8px;
     line-height: 1.25;
+    color: #FFFFFF;
   }
-  .hero-compact-desc {
-    font-size: 14px;
-    color: #CBD5E1;
-    line-height: 1.5;
-    max-width: 780px;
+  .hero-subtitle {
+    font-size: 13.5px;
+    color: #94A3B8;
+    max-width: 680px;
     margin: 0 auto;
+    line-height: 1.5;
   }
 
-  /* Main Content Layout */
-  .content-wrapper {
+  /* Floating Exclusive Offer Pill */
+  .hero-offer-banner {
+    margin-top: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 107, 0, 0.2);
+    border: 1px dashed #FF6B00;
+    padding: 8px 18px;
+    border-radius: 30px;
+    color: #FFD180;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .hero-offer-banner:hover {
+    transform: scale(1.03);
+    background: rgba(255, 107, 0, 0.3);
+  }
+
+  /* =======================================================================
+     4. 2-COLUMN MOBILE & MULTI-COLUMN DESKTOP GRID (Min 6-8 Posts Pairs)
+     ======================================================================= */
+  .main-wrapper {
     max-width: 1280px;
-    margin: 24px auto;
-    padding: 0 16px;
+    margin: 20px auto;
+    padding: 0 14px;
   }
-
-  /* 4:5 Vertical Aspect Ratio Post Card Grid */
   .post-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 22px;
+    gap: 20px;
   }
   .post-card {
     background: #FFFFFF;
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
     display: flex;
     flex-direction: column;
-    box-shadow: var(--shadow-sm);
-    transition: all 0.25s ease;
-    position: relative;
   }
   .post-card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-md);
-    border-color: #CBD5E1;
   }
 
-  /* Strict 4:5 Media Container */
+  /* 4:5 Portrait Travel Media Ratio */
   .card-media-wrapper {
     position: relative;
     width: 100%;
     aspect-ratio: 4 / 5;
-    background: #0F172A;
     overflow: hidden;
+    background: #0F172A;
   }
   .card-media-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.4s ease;
     display: block;
+    transition: transform 0.3s ease;
   }
   .post-card:hover .card-media-img {
-    transform: scale(1.05);
+    transform: scale(1.04);
   }
-
-  /* Card Badges */
   .card-badge-cat {
     position: absolute;
-    top: 12px;
-    left: 12px;
+    top: 10px;
+    left: 10px;
     background: rgba(15, 23, 42, 0.85);
     backdrop-filter: blur(4px);
     color: #FFA000;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 800;
-    padding: 4px 10px;
-    border-radius: 20px;
+    padding: 3px 8px;
+    border-radius: 6px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    z-index: 2;
   }
   .card-badge-discount {
     position: absolute;
-    top: 12px;
-    right: 12px;
-    background: var(--primary);
+    top: 10px;
+    right: 10px;
+    background: #FF6B00;
     color: #FFFFFF;
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 900;
-    padding: 4px 10px;
-    border-radius: 20px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    z-index: 2;
+    padding: 3px 8px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
   }
 
   .card-body {
-    padding: 16px;
+    padding: 14px;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    justify-content: space-between;
   }
   .card-title {
-    font-family: 'Outfit', sans-serif;
-    font-size: 17px;
-    font-weight: 700;
-    color: var(--navy);
+    font-family: 'Outfit', 'Noto Sans Devanagari', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    color: #0F172A;
     line-height: 1.35;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
   .card-snippet {
-    font-size: 13px;
+    font-size: 12.5px;
     color: var(--text-muted);
-    line-height: 1.5;
-    margin-bottom: 14px;
+    line-height: 1.45;
+    margin-bottom: 12px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    flex-grow: 1;
   }
-  .card-actions {
+
+  /* 3 Action Buttons per Card */
+  .card-actions-wrapper {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .card-actions-top-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-top: auto;
+    gap: 6px;
   }
   .card-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
-    font-size: 12px;
+    gap: 4px;
+    padding: 8px 6px;
+    font-size: 11px;
     font-weight: 700;
-    padding: 9px 12px;
     border-radius: 8px;
     text-decoration: none;
     text-align: center;
-    transition: all 0.2s ease;
+    transition: transform 0.15s ease, background 0.15s ease;
+    white-space: nowrap;
+  }
+  .card-btn:active {
+    transform: scale(0.96);
   }
   .card-btn-book {
-    background: var(--navy);
+    background: linear-gradient(135deg, #FF6B00, #E65100);
     color: #FFFFFF;
-  }
-  .card-btn-book:hover {
-    background: var(--primary);
+    box-shadow: 0 2px 6px rgba(255, 107, 0, 0.25);
   }
   .card-btn-wa {
-    background: #E8F5E9;
-    color: #1B5E20;
-    border: 1px solid #C8E6C9;
-  }
-  .card-btn-wa:hover {
     background: #25D366;
     color: #FFFFFF;
   }
+  .card-btn-read {
+    background: #0F172A;
+    color: #FFFFFF;
+    border: 1px solid #334155;
+    width: 100%;
+    padding: 7px 6px;
+  }
 
-  /* Single Article View & In-Article Booking Engine */
+  /* Load More Button */
+  .load-more-box {
+    text-align: center;
+    margin: 32px 0 16px;
+  }
+  .btn-load-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #0F172A;
+    color: #FFA000;
+    font-size: 14px;
+    font-weight: 800;
+    padding: 12px 28px;
+    border-radius: 30px;
+    border: 1.5px solid #FF6B00;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.2);
+    transition: all 0.2s ease;
+  }
+  .btn-load-more:hover {
+    background: #FF6B00;
+    color: #FFFFFF;
+    transform: translateY(-2px);
+  }
+
+  /* =======================================================================
+     5. ARTICLE DETAIL PAGE & IN-ARTICLE INSTANT LANGUAGE SWITCHER
+     ======================================================================= */
   .article-container {
-    max-width: 860px;
+    max-width: 900px;
     margin: 0 auto;
     background: #FFFFFF;
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 32px 28px;
+    padding: 28px 24px;
     box-shadow: var(--shadow-sm);
   }
-  .article-category {
-    color: var(--primary);
-    font-size: 13px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 8px;
-    display: block;
+
+  /* In-Article Language Switcher Bar */
+  .article-lang-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 8px 12px;
+    margin-bottom: 20px;
   }
+  .article-lang-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .article-lang-pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .art-lang-pill {
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    color: #0F172A;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .art-lang-pill:hover, .art-lang-pill.active {
+    background: #FF6B00;
+    color: #FFFFFF;
+    border-color: #E65100;
+  }
+
   .article-title {
-    font-family: 'Outfit', sans-serif;
-    font-size: 30px;
+    font-family: 'Outfit', 'Noto Sans Devanagari', sans-serif;
+    font-size: 24px;
     font-weight: 900;
-    color: var(--navy);
-    line-height: 1.25;
+    color: #0F172A;
     margin-bottom: 14px;
+    line-height: 1.3;
   }
   .article-meta {
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 13px;
     color: var(--text-muted);
-    padding-bottom: 16px;
+    font-size: 12.5px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
     border-bottom: 1px solid var(--border);
-    margin-bottom: 24px;
     flex-wrap: wrap;
   }
-  .author-badge {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 700;
-    color: var(--navy);
+  .article-hero-media {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    margin-bottom: 22px;
   }
-  .author-avatar {
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    background: var(--primary);
-    color: #FFFFFF;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    font-weight: 900;
+  .article-content {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #334155;
+  }
+  .article-content h2, .article-content h3 {
+    color: #0F172A;
+    margin: 26px 0 12px;
+    font-family: 'Outfit', 'Noto Sans Devanagari', sans-serif;
+  }
+  .article-content p {
+    margin-bottom: 16px;
+  }
+  .article-content ul, .article-content ol {
+    margin: 0 0 18px 24px;
+  }
+  .article-content li {
+    margin-bottom: 8px;
   }
 
-  /* Interactive Booking Engine Card */
-  .booking-engine-box {
-    background: linear-gradient(135deg, #FFF5EB 0%, #FFFFFF 100%);
-    border: 2px solid var(--primary);
-    border-radius: var(--radius-md);
-    padding: 24px;
+  /* Interactive Booking Engine inside Article */
+  .article-booking-card {
+    background: linear-gradient(145deg, #090D16, #0F172A);
+    color: #FFFFFF;
+    border: 1.5px solid #FF6B00;
+    border-radius: var(--radius-lg);
+    padding: 22px;
     margin: 28px 0;
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-lg);
   }
-  .booking-box-header {
+  .engine-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 10px;
   }
-  .booking-box-title {
-    font-family: 'Outfit', sans-serif;
-    font-size: 20px;
+  .engine-title {
+    font-size: 17px;
     font-weight: 800;
-    color: var(--navy);
+    color: #FFA000;
     display: flex;
     align-items: center;
     gap: 8px;
   }
-  .booking-box-tag {
-    background: var(--primary);
-    color: #FFFFFF;
+  .engine-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .engine-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .engine-field label {
     font-size: 11px;
-    font-weight: 800;
-    padding: 3px 10px;
-    border-radius: 12px;
+    font-weight: 700;
+    color: #94A3B8;
     text-transform: uppercase;
   }
-  .booking-fields-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 12px;
-    margin-bottom: 18px;
-  }
-  .booking-field label {
-    display: block;
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--navy);
-    margin-bottom: 6px;
-  }
-  .booking-field input, .booking-field select {
-    width: 100%;
+  .engine-input, .engine-select {
+    background: #1E293B;
+    border: 1px solid #334155;
+    color: #FFFFFF;
     padding: 10px 12px;
-    border: 1px solid #CBD5E1;
     border-radius: 8px;
     font-size: 13px;
-    font-family: inherit;
-    background: #FFFFFF;
-    color: var(--navy);
+    outline: none;
   }
-  .booking-engine-actions {
+  .engine-input:focus, .engine-select:focus {
+    border-color: #FF6B00;
+  }
+  .engine-actions {
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
   }
   .engine-btn {
     flex: 1;
-    min-width: 180px;
+    min-width: 160px;
     padding: 12px 18px;
-    border-radius: 30px;
-    font-size: 14px;
+    border-radius: 12px;
     font-weight: 800;
-    text-align: center;
+    font-size: 13px;
     text-decoration: none;
-    cursor: pointer;
+    text-align: center;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    transition: all 0.2s ease;
+    transition: transform 0.15s ease;
   }
   .engine-btn-book {
-    background: var(--primary);
+    background: linear-gradient(135deg, #FF6B00, #E65100);
     color: #FFFFFF;
-    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
-  }
-  .engine-btn-book:hover {
-    background: var(--primary-dark);
+    box-shadow: 0 4px 14px rgba(255, 107, 0, 0.35);
   }
   .engine-btn-wa {
     background: #25D366;
     color: #FFFFFF;
-    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
-  }
-  .engine-btn-wa:hover {
-    background: #1EBE5B;
   }
 
-  /* Compact Sleek Footer */
+  /* =======================================================================
+     6. EXCLUSIVE OFFER VIP LEAD POPUP MODAL
+     ======================================================================= */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 100000;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    box-sizing: border-box;
+  }
+  .modal-card {
+    background: #FFFFFF;
+    border-radius: 20px;
+    max-width: 440px;
+    width: 100%;
+    padding: 26px 22px;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    border: 2px solid #FF6B00;
+  }
+  .modal-close-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: #F1F5F9;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+    color: #64748B;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 20px;
+    font-weight: 900;
+    color: #0F172A;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+  .modal-subtitle {
+    font-size: 13px;
+    color: #64748B;
+    text-align: center;
+    margin-bottom: 18px;
+  }
+  .modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+  .modal-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #CBD5E1;
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+  }
+  .modal-input:focus {
+    border-color: #FF6B00;
+  }
+  .modal-submit-btn {
+    background: linear-gradient(135deg, #FF6B00, #E65100);
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 800;
+    padding: 12px 18px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(255, 107, 0, 0.3);
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  /* =======================================================================
+     7. COMPACT LUXURY FOOTER
+     ======================================================================= */
   .main-footer {
     background: #090D16;
-    color: #CBD5E1;
-    padding: 40px 20px 24px;
-    border-top: 3px solid var(--primary);
+    color: #E2E8F0;
+    padding: 34px 18px 24px;
+    border-top: 2px solid #FF6B00;
+    margin-top: 36px;
   }
   .footer-container {
     max-width: 1280px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 26px;
   }
   .footer-brand-section {
     display: flex;
@@ -688,347 +873,269 @@
     gap: 12px;
   }
   .footer-desc {
-    font-size: 13px;
     color: #94A3B8;
-    max-width: 720px;
-    line-height: 1.5;
-  }
-
-  /* Official Portals as Premium Pill Buttons */
-  .footer-portals-section {
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    padding-top: 20px;
-  }
-  .footer-heading {
-    color: #FFA000;
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    margin-bottom: 14px;
-  }
-  .footer-portal-buttons {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 12px;
-  }
-  .portal-btn {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: var(--radius-md);
-    padding: 12px 14px;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    transition: all 0.2s ease;
-  }
-  .portal-btn:hover {
-    background: rgba(255, 107, 0, 0.15);
-    border-color: var(--primary);
-    transform: translateY(-2px);
-  }
-  .portal-btn-icon {
-    font-size: 20px;
-    flex-shrink: 0;
-  }
-  .portal-btn-info {
-    display: flex;
-    flex-direction: column;
-  }
-  .portal-btn-title {
-    color: #FFFFFF;
     font-size: 13px;
-    font-weight: 700;
+    max-width: 600px;
+    line-height: 1.6;
   }
-  .portal-btn-sub {
-    color: #94A3B8;
-    font-size: 11px;
-  }
-
-  /* 24/7 Helpline & Concierge Row */
-  .footer-support-section {
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    padding-top: 20px;
-  }
-  .footer-contact-grid {
+  .footer-portals-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 10px;
   }
-  .contact-pill {
-    background: rgba(15, 23, 42, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    padding: 10px 14px;
-    text-decoration: none;
-    color: #E2E8F0;
+  .portal-btn {
+    background: #111827;
+    border: 1px solid #1F2937;
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
     display: flex;
-    flex-direction: column;
-    gap: 2px;
-    transition: all 0.2s ease;
-  }
-  .contact-pill:hover {
-    border-color: var(--primary);
-    background: rgba(255, 107, 0, 0.1);
-  }
-  .contact-pill span {
-    font-size: 11px;
-    color: #94A3B8;
-  }
-  .contact-pill strong {
-    font-size: 13px;
-    color: #FFA000;
-  }
-
-  /* Footer Legal & Copyright */
-  .footer-legal-bar {
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    padding-top: 18px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
     align-items: center;
     gap: 12px;
-  }
-  .legal-links-row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    flex-wrap: wrap;
-  }
-  .legal-links-row a {
-    color: #CBD5E1;
-    font-size: 12px;
-    font-weight: 600;
+    color: #FFFFFF;
     text-decoration: none;
-    transition: color 0.2s;
+    transition: all 0.2s;
   }
-  .legal-links-row a:hover {
-    color: var(--primary);
-    text-decoration: underline;
+  .portal-btn:hover {
+    border-color: #FF6B00;
+    background: #1F2937;
   }
-  .legal-links-row .sep {
-    color: #475569;
+  .portal-btn-sub {
+    font-size: 11px;
+    color: #9CA3AF;
   }
-  .copyright-text {
+  .footer-legal-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 18px;
+    border-top: 1px solid #1E293B;
     font-size: 12px;
     color: #64748B;
   }
+  .footer-legal-links {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .footer-legal-link {
+    color: #94A3B8;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-legal-link:hover {
+    color: #FF6B00;
+  }
 
   /* =======================================================================
-     LUXURY ULTRA-PREMIUM BOTTOM ACTION BAR (Animated & Eye-Catching)
+     8. 100% RESPONSIVE 4-BUTTON FIXED BOTTOM DOCK (Never Overflows)
      ======================================================================= */
   .mobile-bottom-bar {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1.35fr 1fr;
     position: fixed;
-    bottom: 20px;
+    bottom: 12px;
     left: 50%;
     transform: translateX(-50%);
-    width: 92%;
-    max-width: 580px;
-    height: 72px;
+    width: calc(100% - 20px);
+    max-width: 520px;
+    height: 64px;
     background: rgba(10, 15, 29, 0.96);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1.5px solid rgba(255, 107, 0, 0.45);
-    border-radius: 22px;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55), 0 0 25px rgba(255, 107, 0, 0.22);
-    z-index: 9999;
-    padding: 6px 10px;
-    gap: 8px;
+    border: 1.5px solid rgba(255, 107, 0, 0.5);
+    border-radius: 20px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55), 0 0 20px rgba(255, 107, 0, 0.25);
+    z-index: 99999;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.25fr 1fr;
+    gap: 4px;
+    padding: 4px 6px;
     align-items: center;
     box-sizing: border-box;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
   .bar-btn {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3px;
+    gap: 2px;
     text-decoration: none;
     font-size: 11px;
     font-weight: 700;
-    height: 56px;
-    border-radius: 14px;
-    transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
-    position: relative;
+    height: 54px;
+    border-radius: 12px;
+    transition: transform 0.15s ease, background 0.15s ease;
     overflow: hidden;
   }
   .bar-btn:active {
-    transform: scale(0.93);
+    transform: scale(0.95);
   }
-  
-  /* Call Button */
-  .bar-btn-call {
-    color: #F8FAFC;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-  }
-  .bar-btn-call:hover {
-    background: rgba(255, 255, 255, 0.12);
-  }
-  @keyframes phoneWiggle {
-    0%, 75%, 100% { transform: rotate(0deg) scale(1); }
-    80% { transform: rotate(-18deg) scale(1.15); }
-    85% { transform: rotate(18deg) scale(1.15); }
-    90% { transform: rotate(-12deg) scale(1.08); }
-    95% { transform: rotate(10deg) scale(1.05); }
-  }
-  .icon-call-svg {
-    animation: phoneWiggle 3.5s ease-in-out infinite;
-    transform-origin: center;
-  }
-
-  /* WhatsApp Button */
-  .bar-btn-wa {
-    color: #FFFFFF;
-    background: rgba(37, 211, 102, 0.12);
-    border: 1px solid rgba(37, 211, 102, 0.35);
-  }
-  .bar-btn-wa:hover {
-    background: rgba(37, 211, 102, 0.22);
-  }
-  @keyframes waPulseGlow {
-    0%, 100% {
-      transform: scale(1);
-      filter: drop-shadow(0 0 2px rgba(37, 211, 102, 0.4));
-    }
-    50% {
-      transform: scale(1.12);
-      filter: drop-shadow(0 0 10px rgba(37, 211, 102, 0.95));
-    }
-  }
-  .icon-wa-svg {
-    animation: waPulseGlow 2.6s ease-in-out infinite;
-    transform-origin: center;
-  }
-  .online-indicator {
-    position: absolute;
-    top: 4px;
-    right: 8px;
-    width: 6px;
-    height: 6px;
-    background: #25D366;
-    border-radius: 50%;
-    box-shadow: 0 0 6px #25D366;
-    animation: blinkIndicator 1.4s ease-in-out infinite;
-  }
-  @keyframes blinkIndicator {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.3; transform: scale(0.7); }
-  }
-
-  /* Book Now Button (Hero CTA) */
-  .bar-btn-book {
-    color: #FFFFFF !important;
-    background: linear-gradient(135deg, #FF6B00 0%, #FF9033 50%, #FF6B00 100%) !important;
-    background-size: 200% 100% !important;
-    border: 1.5px solid rgba(255, 255, 255, 0.4) !important;
-    box-shadow: 0 4px 18px rgba(255, 107, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
-    animation: shimmerSlide 3s linear infinite, bookFloat 2.8s ease-in-out infinite !important;
-  }
-  @keyframes shimmerSlide {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-  }
-  @keyframes bookFloat {
-    0%, 100% { transform: translateY(0); box-shadow: 0 4px 18px rgba(255, 107, 0, 0.55); }
-    50% { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(255, 107, 0, 0.85); }
-  }
-  .deal-tag {
-    font-size: 8px;
-    background: rgba(0, 0, 0, 0.35);
-    padding: 1px 5px;
-    border-radius: 6px;
-    font-weight: 800;
-    letter-spacing: 0.3px;
-    margin-top: -1px;
-  }
-
-  /* Get App Button */
-  .bar-btn-app {
-    color: #E2E8F0;
-    background: rgba(99, 102, 241, 0.12);
-    border: 1px solid rgba(99, 102, 241, 0.35);
-  }
-  .bar-btn-app:hover {
-    background: rgba(99, 102, 241, 0.22);
-  }
-  @keyframes appDownloadSlide {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(3px); }
-  }
-  .app-download-arrow {
-    animation: appDownloadSlide 1.8s ease-in-out infinite;
-  }
-
-  .bar-btn .bar-label {
+  .bar-icon {
+    font-size: 19px;
     line-height: 1;
-    font-size: 11px;
-    letter-spacing: 0.2px;
   }
+  .bar-label {
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+  }
+  .bar-btn-call { color: #FFA000; }
+  .bar-btn-call:hover { background: rgba(255, 160, 0, 0.15); }
+  .bar-btn-wa { color: #25D366; }
+  .bar-btn-wa:hover { background: rgba(37, 211, 102, 0.15); }
+  .bar-btn-book {
+    background: linear-gradient(135deg, #FF6B00, #E65100);
+    color: #FFFFFF;
+    box-shadow: 0 3px 10px rgba(255, 107, 0, 0.35);
+  }
+  .bar-btn-book .bar-label { color: #FFFFFF; font-weight: 800; }
+  .bar-btn-app { color: #60A5FA; }
+  .bar-btn-app:hover { background: rgba(96, 165, 250, 0.15); }
 
+  /* =======================================================================
+     9. RESPONSIVE MEDIA QUERIES (Mobile 2-Column Grid & Header Layout)
+     ======================================================================= */
   @media (max-width: 768px) {
+    /* Compact Header on Mobile */
+    .header-container {
+      padding: 8px 12px;
+      gap: 8px;
+    }
+    .brand-logo-circle {
+      width: 36px;
+      height: 36px;
+    }
+    .brand-word-lexa, .brand-word-trip {
+      font-size: 17px;
+    }
+    .brand-dest-word {
+      font-size: 15px;
+    }
+    .brand-tagline {
+      display: none;
+    }
+    .btn-header-wa {
+      display: none;
+    }
+    .btn-header {
+      padding: 5px 8px;
+      font-size: 11px;
+      gap: 3px;
+    }
+
+    /* Hero section */
+    .hero-section {
+      padding: 24px 14px;
+    }
+    .hero-title {
+      font-size: 21px;
+    }
+    .hero-subtitle {
+      font-size: 12.5px;
+    }
+
+    /* 2-COLUMN MOBILE POST CARDS GRID */
+    .post-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .card-body {
+      padding: 10px 8px;
+    }
+    .card-title {
+      font-size: 13px;
+      margin-bottom: 6px;
+      -webkit-line-clamp: 2;
+    }
+    .card-snippet {
+      display: none;
+    }
+    .card-badge-cat, .card-badge-discount {
+      font-size: 9px;
+      padding: 2px 6px;
+      top: 6px;
+    }
+    .card-badge-cat { left: 6px; }
+    .card-badge-discount { right: 6px; }
+
+    .card-btn {
+      padding: 6px 4px;
+      font-size: 10px;
+      border-radius: 6px;
+    }
+
+    /* Bottom dock */
     .mobile-bottom-bar {
-      width: 100%;
-      max-width: 100%;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      transform: none;
-      border-radius: 0;
-      border-left: none;
-      border-right: none;
-      border-bottom: none;
-      padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px));
-      height: 68px;
-      gap: 6px;
+      bottom: 8px;
+      width: calc(100% - 16px);
+      height: 60px;
+      border-radius: 16px;
+      padding: 3px 4px;
+      gap: 3px;
+    }
+    .bar-btn {
+      height: 50px;
+      font-size: 10px;
+    }
+    .bar-icon {
+      font-size: 17px;
     }
   }
 
-  /* Desktop Call Prompt Modal */
-  .call-modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-    z-index: 10000;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-  }
-  .call-modal-box {
-    background: #FFFFFF;
-    border-radius: var(--radius-lg);
-    padding: 24px;
-    max-width: 400px;
-    width: 100%;
-    text-align: center;
-    box-shadow: 0 16px 40px rgba(0,0,0,0.25);
+  @media (max-width: 380px) {
+    .brand-word-lexa, .brand-word-trip {
+      font-size: 15px;
+    }
+    .brand-dest-word {
+      font-size: 13px;
+    }
+    .btn-header-book span {
+      display: none;
+    }
+    .post-grid {
+      gap: 8px;
+    }
+    .card-body {
+      padding: 8px 6px;
+    }
+    .card-title {
+      font-size: 12px;
+    }
+    .mobile-bottom-bar {
+      bottom: 6px;
+      width: calc(100% - 10px);
+      height: 56px;
+      padding: 2px 3px;
+      gap: 2px;
+    }
+    .bar-btn {
+      height: 48px;
+      font-size: 9px;
+    }
+    .bar-icon {
+      font-size: 15px;
+    }
   }
   ]]></b:skin>
 </head>
 <body>
 
   <!-- =======================================================================
-       TOP CUSTOMIZABLE GADGETS & ADS (Blogger Layout Editable)
+       LAYOUT SECTION 1: TOP ADS & SMART LINKS (Blogger Layout Editable)
        ======================================================================= -->
-  <b:section id='top-banner-ads' name='[Top of Page] Ads &amp; Announcement Gadgets' maxwidgets='5' showaddelement='yes'/>
+  <b:section id='smart-links-top' name='[Smart Links &amp; Ads] Top Header Banner / Direct Link / Adsterra' showaddelement='yes'/>
 
   <!-- =======================================================================
-       2. MAIN LUXURY HEADER
+       LAYOUT SECTION 2: HEADER CUSTOM OVERRIDES (Blogger Layout Editable)
+       ======================================================================= -->
+  <b:section id='header-branding-custom' name='[Header] Custom Logo, Title &amp; Description' showaddelement='yes'/>
+
+  <!-- =======================================================================
+       MAIN LUXURY HEADER (LEXA TRIP VARANASI In Pure Typography)
        ======================================================================= -->
   <header class='main-header'>
     <div class='header-container'>
       
-      <!-- Official Logo with Embedded Lifetime Base64 Data URI -->
+      <!-- Official Logo with Lifetime Base64 Emblem & Prominent Destination Word -->
       <a class='brand-logo-link' href='/'>
         <div class='brand-logo-circle'>
           <img alt='LexaTrip Emblem' class='brand-logo-img' src='data:image/jpeg;base64,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'/>
@@ -1037,78 +1144,90 @@
           <div class='brand-name-row'>
             <span class='brand-word-lexa'>LEXA</span>
             <span class='brand-word-trip'>TRIP</span>
-            <span class='brand-dest-badge'>VARANASI</span>
+            <span class='brand-dest-word'>VARANASI</span>
           </div>
           <span class='brand-tagline'>BOOK. EXPLORE. REPEAT.</span>
         </div>
       </a>
 
-      <!-- Quick Action Buttons -->
+      <!-- Header Action Buttons (Language, Book Online, App) -->
       <div class='header-actions'>
-        <!-- Language Switcher -->
-        <div class='lang-switcher' onclick='toggleLangMenu(event)'>
-          <span>🌐</span>
-          <span>EN</span>
-          <span>▾</span>
-          <div class='lang-dropdown' id='langDropdown'>
-            <a class='active' href='#' onclick='selectLang("en", event)'>English (Default)</a>
-            <a href='#' onclick='selectLang("hi", event)'>हिन्दी (Hindi)</a>
+        <!-- Language Switcher Dropdown -->
+        <div class='lang-dropdown'>
+          <button class='btn-header btn-header-lang' onclick='toggleLangMenu(event)' type='button'>
+            <span>🌐</span> EN ▾
+          </button>
+          <div class='lang-menu' id='langDropdown'>
+            <a class='lang-item' href='#' onclick='selectLang("en", event)'>English (EN)</a>
+            <a class='lang-item' href='#' onclick='selectLang("hi", event)'>हिन्दी (Hindi)</a>
+            <a class='lang-item' href='#' onclick='selectLang("gu", event)'>ગુજરાતી (Gujarati)</a>
+            <a class='lang-item' href='#' onclick='selectLang("mr", event)'>मराठी (Marathi)</a>
           </div>
         </div>
 
         <a class='btn-header btn-header-book' href='https://bookings.lexatrip.com/' target='_blank'>
-          <span>🏨 Book Online</span>
+          <span>🏨</span> Book Online
         </a>
-        <a class='btn-header btn-header-wa' href='https://wa.me/919079854982?text=Hello%20LexaTrip,%20I%20would%20like%20to%20inquire%20about%20VARANASI%20stays' target='_blank'>
-          <span>💬 WhatsApp</span>
+        <a class='btn-header btn-header-wa' href='https://wa.me/919079854982?text=Hello%20LexaTrip%20VARANASI' target='_blank'>
+          <span>💬</span> WhatsApp
         </a>
         <a class='btn-header btn-header-app' href='https://www.lexatrip.com/app' target='_blank'>
-          <span>📲 App</span>
+          <span>📲</span> App
         </a>
       </div>
 
-    </div>
-
-    <!-- =======================================================================
-         3. CATEGORY NAVIGATION BAR (Horizontally Scrollable in Pure English)
-         ======================================================================= -->
-    <div class='category-nav-wrapper'>
-      <div class='category-nav-container'>
-        <button class='cat-nav-scroll-btn' onclick='scrollCatNav(-180)' title='Scroll Left'>‹</button>
-        <nav class='category-nav-flex' id='categoryNav'>
-          <a class='cat-pill active' href='#' onclick='filterCategory("all", event)'>
-            <span>🏠 Home</span>
-          </a>
-          <a class='cat-pill' href='#' onclick='filterCategory("camp", event)'>
-            <span>⛺ Luxury Camps</span>
-          </a>
-          <a class='cat-pill' href='#' onclick='filterCategory("5-star", event)'>
-            <span>⭐ 5-Star Hotels</span>
-          </a>
-          <a class='cat-pill' href='#' onclick='filterCategory("4-star", event)'>
-            <span>🏨 4-Star Hotels</span>
-          </a>
-          <a class='cat-pill' href='#' onclick='filterCategory("3-star", event)'>
-            <span>🛏️ 3-Star Hotels</span>
-          </a>
-          <a class='cat-pill' href='#' onclick='filterCategory("budget", event)'>
-            <span>💰 Budget Friendly Hotels</span>
-          </a>
-        </nav>
-        <button class='cat-nav-scroll-btn' onclick='scrollCatNav(180)' title='Scroll Right'>›</button>
-      </div>
     </div>
   </header>
 
   <!-- =======================================================================
-       ABOVE POSTS ADS & PROMO (Blogger Layout Editable)
+       LAYOUT SECTION 3: MENU & CATEGORY LABELS (Blogger Layout Editable)
        ======================================================================= -->
-  <b:section id='above-posts-ads' name='[Above Posts] Promo Banner &amp; Sponsored Ads' maxwidgets='5' showaddelement='yes'/>
+  <b:section id='category-menu-custom' name='[Menu Bar] Custom Menu Links &amp; Category Labels (LinkList / Pages)' showaddelement='yes'/>
 
   <!-- =======================================================================
-       5. MAIN CONTENT & BLOG WIDGET
+       CATEGORY NAVIGATION BAR (Smooth Native Touch Swipe on Mobile/Tablet)
        ======================================================================= -->
-  <div class='content-wrapper'>
+  <nav class='cat-nav-wrapper'>
+    <div class='cat-nav-flex'>
+      <button class='cat-scroll-btn' onclick='scrollCatNav(-200)' type='button'>‹</button>
+      <div class='cat-nav-bar' id='categoryNav'>
+        <a class='cat-pill active' href='#' onclick='filterCategory("all", event)'>🏠 होम पेज</a>
+        <a class='cat-pill' href='#' onclick='filterCategory("camp", event)'>⛺ लक्ज़री कैंप्स</a>
+        <a class='cat-pill' href='#' onclick='filterCategory("5-star", event)'>⭐ 5-स्टार होटल्स</a>
+        <a class='cat-pill' href='#' onclick='filterCategory("4-star", event)'>🏨 4-स्टार होटल्स</a>
+        <a class='cat-pill' href='#' onclick='filterCategory("3-star", event)'>🛏️ 3-स्टार होटल्स</a>
+        <a class='cat-pill' href='#' onclick='filterCategory("budget", event)'>💰 बजट फ्रेंडली होटल</a>
+      </div>
+      <button class='cat-scroll-btn' onclick='scrollCatNav(200)' type='button'>›</button>
+    </div>
+  </nav>
+
+  <!-- =======================================================================
+       HERO BANNER SECTION
+       ======================================================================= -->
+  <section class='hero-section'>
+    <span class='hero-badge'>✦ Verified Experiential Luxury Travel &amp; Stays ✦</span>
+    <h1 class='hero-title'>VARANASI लक्ज़री स्टे व हेरिटेज गाइड</h1>
+    <p class='hero-subtitle'>Journey into the eternal city with LexaTrip Varanasi. Mesmerizing Dashashwamedh Ghat Ganga Aarti, early morning boat rides on the Ganges, Kashi Vishwanath temple darshan, silk weaving trails, and heritage boutique stays. Book at bookings.lexatrip.com.</p>
+    
+    <!-- Floating Lead Form Trigger Pill -->
+    <div>
+      <div class='hero-offer-banner' onclick='openVipOfferModal()'>
+        <span>🎁</span>
+        <span>एक्सक्लूसिव 50% छूट व सीक्रेट कूपन कोड प्राप्त करें (Click Here)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- =======================================================================
+       LAYOUT SECTION 4: ADS ABOVE POSTS
+       ======================================================================= -->
+  <b:section id='smart-links-above-cards' name='[Smart Links &amp; Ads] Above Hotel Cards Banner' showaddelement='yes'/>
+
+  <!-- =======================================================================
+       MAIN CONTENT CONTAINER
+       ======================================================================= -->
+  <main class='main-wrapper'>
     <b:section id='main' name='Main Content Area' maxwidgets='1' showaddelement='no'>
       <b:widget id='Blog1' locked='true' title='Blog Posts' type='Blog' version='2'>
         <b:includable id='main' var='this'>
@@ -1120,13 +1239,65 @@
         </b:includable>
       </b:widget>
     </b:section>
-  </div>
-
-  <!-- Optional In-Article / In-Feed Ads Section (Blogger Layout Customizable) -->
-  <b:section id='in-feed-promo-ads' name='[Between Posts] In-Feed Promo &amp; Advertisements' maxwidgets='5' showaddelement='yes'/>
+  </main>
 
   <!-- =======================================================================
-       6. COMPACT SLEEK FOOTER (English, No Bulky Categories, Button Portals)
+       LAYOUT SECTION 5: IN-FEED / IN-ARTICLE ADS
+       ======================================================================= -->
+  <b:section id='smart-links-inside-article' name='[Smart Links &amp; Ads] Inside Article / Feed Banner' showaddelement='yes'/>
+
+  <!-- =======================================================================
+       LAYOUT SECTION 6: VIP LEAD POPUP / EXCLUSIVE OFFER FORM
+       ======================================================================= -->
+  <b:section id='vip-exclusive-lead-popup' name='[Popup &amp; Lead Form] Exclusive VIP Offer / Popup Modal' showaddelement='yes'/>
+
+  <!-- =======================================================================
+       EXCLUSIVE VIP OFFER LEAD CAPTURE MODAL (Built-in)
+       ======================================================================= -->
+  <div class='modal-overlay' id='vipOfferModal'>
+    <div class='modal-card'>
+      <button class='modal-close-btn' onclick='closeVipOfferModal()'>✕</button>
+      <div style='font-size:36px; text-align:center; margin-bottom:8px;'>🎉</div>
+      <h3 class='modal-title'>VARANASI एक्सक्लूसिव 50% ऑफर</h3>
+      <p class='modal-subtitle'>नीचे अपना विवरण भरें—हमारा 24/7 डेस्क तुरंत आपको स्पेशल डिस्काउंट वाउचर व्हाट्सएप करेगा।</p>
+      
+      <form class='modal-form' onsubmit='handleLeadFormSubmit(event)'>
+        <input class='modal-input' id='leadName' placeholder='आपका नाम (Full Name)' required='required' type='text'/>
+        <input class='modal-input' id='leadPhone' placeholder='व्हाट्सएप नंबर (WhatsApp No.)' required='required' type='tel'/>
+        <input class='modal-input' id='leadDate' placeholder='यात्रा की तारीख (Travel Date / Month)' type='text'/>
+        <select class='modal-input' id='leadStayType'>
+          <option value='Luxury Resort / Camp'>लक्ज़री रिसॉर्ट / कैंप स्टे</option>
+          <option value='5-Star Heritage Palace'>5-स्टार हेरिटेज होटल</option>
+          <option value='4-Star Comfort Stay'>4-स्टार कंफर्ट होटल</option>
+          <option value='Guided Tour Package'>टूर व साइटसीइंग पैकेज</option>
+          <option value='Budget Stay'>बजट फ्रेंडली स्टे</option>
+        </select>
+        <button class='modal-submit-btn' type='submit'>
+          <span>💬</span> व्हाट्सएप पर इंस्टेंट ऑफर पाएं
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Desktop Call Prompt Modal -->
+  <div class='modal-overlay' id='callModal'>
+    <div class='modal-card' style='text-align:center;'>
+      <button class='modal-close-btn' onclick='document.getElementById("callModal").style.display="none"'>✕</button>
+      <div style='font-size:38px; margin-bottom:10px;'>📞</div>
+      <h3 class='modal-title'>LexaTrip 24/7 Helpline</h3>
+      <p class='modal-subtitle'>तत्काल बुकिंग सहायता व पूछताछ के लिए हमारे हेल्पलाइन नंबर पर कॉल करें:</p>
+      <div style='background:#F8FAFC; border:1px solid #E2E8F0; border-radius:12px; padding:14px; margin:16px 0;'>
+        <p style='font-size:20px; font-weight:800; color:#FF6B00; margin-bottom:4px;'>+91 90798 54982</p>
+        <p style='font-size:16px; font-weight:700; color:#0F172A;'>+91 90790 17880</p>
+      </div>
+      <a class='modal-submit-btn' href='tel:+919079854982' style='text-decoration:none;'>
+        <span>📞</span> अभी कॉल करें (Call Now)
+      </a>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       COMPACT LUXURY FOOTER
        ======================================================================= -->
   <footer class='main-footer'>
     <div class='footer-container'>
@@ -1141,167 +1312,114 @@
             <div class='brand-name-row'>
               <span class='brand-word-lexa' style='color:#FFFFFF;'>LEXA</span>
               <span class='brand-word-trip'>TRIP</span>
-              <span class='brand-dest-badge'>VARANASI</span>
+              <span class='brand-dest-word' style='color:#FF6B00;'>VARANASI</span>
             </div>
             <span class='brand-tagline' style='color:#94A3B8;'>BOOK. EXPLORE. REPEAT.</span>
           </div>
         </div>
         <p class='footer-desc'>
-          India's premier experiential luxury travel network. Curated luxury desert camps, heritage palace hotels, and verified tours in VARANASI.
+          भारत का प्रमुख एक्सपीरियंसियल ट्रैवल ब्रांड। VARANASI में लक्ज़री स्टे, हेरिटेज फोर्ट्स, रिजॉर्ट्स और एक्सक्लूसिव टूर पैकेजेस।
         </p>
       </div>
 
       <!-- Official Portals (Button-style pills) -->
-      <div class='footer-portals-section'>
-        <h4 class='footer-heading'>OFFICIAL PORTALS</h4>
-        <div class='footer-portal-buttons'>
-          <a class='portal-btn' href='https://bookings.lexatrip.com/' target='_blank'>
-            <span class='portal-btn-icon'>🏨</span>
-            <div class='portal-btn-info'>
-              <span class='portal-btn-title'>Online Reservations</span>
-              <span class='portal-btn-sub'>bookings.lexatrip.com</span>
-            </div>
-          </a>
-          <a class='portal-btn' href='https://www.lexatrip.com/' target='_blank'>
-            <span class='portal-btn-icon'>🌐</span>
-            <div class='portal-btn-info'>
-              <span class='portal-btn-title'>Main Website</span>
-              <span class='portal-btn-sub'>lexatrip.com</span>
-            </div>
-          </a>
-          <a class='portal-btn' href='https://www.lexatrip.in/' target='_blank'>
-            <span class='portal-btn-icon'>🇮🇳</span>
-            <div class='portal-btn-info'>
-              <span class='portal-btn-title'>National Portal</span>
-              <span class='portal-btn-sub'>lexatrip.in</span>
-            </div>
-          </a>
-          <a class='portal-btn' href='https://www.lexatrip.com/app' target='_blank'>
-            <span class='portal-btn-icon'>📲</span>
-            <div class='portal-btn-info'>
-              <span class='portal-btn-title'>Mobile App</span>
-              <span class='portal-btn-sub'>Android &amp; iOS App</span>
-            </div>
+      <div class='footer-portals-grid'>
+        <a class='portal-btn' href='https://bookings.lexatrip.com/' target='_blank'>
+          <span style='font-size:22px;'>🏨</span>
+          <div>
+            <strong>Online Reservations</strong><br/>
+            <span class='portal-btn-sub'>bookings.lexatrip.com</span>
+          </div>
+        </a>
+        <a class='portal-btn' href='https://www.lexatrip.com/' target='_blank'>
+          <span style='font-size:22px;'>🌐</span>
+          <div>
+            <strong>Main Website</strong><br/>
+            <span class='portal-btn-sub'>lexatrip.com</span>
+          </div>
+        </a>
+        <a class='portal-btn' href='https://www.lexatrip.in/' target='_blank'>
+          <span style='font-size:22px;'>🇮🇳</span>
+          <div>
+            <strong>National Portal</strong><br/>
+            <span class='portal-btn-sub'>lexatrip.in</span>
+          </div>
+        </a>
+        <a class='portal-btn' href='https://www.lexatrip.com/app' target='_blank'>
+          <span style='font-size:22px;'>📲</span>
+          <div>
+            <strong>Mobile App</strong><br/>
+            <span class='portal-btn-sub'>Android &amp; iOS App</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- 24/7 Helpline Strip -->
+      <div style='background:#111827; border:1px solid #1F2937; border-radius:12px; padding:16px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:12px;'>
+        <div>
+          <span style='color:#FFA000; font-size:12px; font-weight:800; text-transform:uppercase;'>24/7 HELPLINE &amp; GUEST SUPPORT</span><br/>
+          <strong style='color:#FFFFFF; font-size:15px;'>+91 90798 54982 &nbsp;|&nbsp; +91 90790 17880</strong>
+        </div>
+        <div>
+          <a href='https://wa.me/919079854982' target='_blank' style='display:inline-flex; align-items:center; gap:6px; background:#25D366; color:#FFF; font-weight:700; font-size:12px; padding:8px 16px; border-radius:20px; text-decoration:none;'>
+            <span>💬</span> Official WhatsApp Desk
           </a>
         </div>
       </div>
 
-      <!-- Optional Customizable Portal Section in Blogger Layout -->
-      <b:section id='footer-custom-links' name='[Footer Top] Custom Links, Social &amp; Partner Portals' maxwidgets='5' showaddelement='yes'/>
-
-      <!-- 24/7 Helpline & Support -->
-      <div class='footer-support-section'>
-        <h4 class='footer-heading'>24/7 HELPLINE &amp; GUEST SUPPORT</h4>
-        <div class='footer-contact-grid'>
-          <a class='contact-pill' href='tel:+919079854982' onclick='handleCallClick(event)'>
-            <span>📞 24/7 Priority Helpline 1</span>
-            <strong>+91 90798 54982</strong>
-          </a>
-          <a class='contact-pill' href='tel:+919079017880' onclick='handleCallClick(event)'>
-            <span>📞 24/7 Priority Helpline 2</span>
-            <strong>+91 90790 17880</strong>
-          </a>
-          <a class='contact-pill' href='https://wa.me/919079854982?text=Hello%20LexaTrip,%20I%20need%20assistance' target='_blank'>
-            <span>💬 Official WhatsApp Desk</span>
-            <strong>+91 90798 54982</strong>
-          </a>
-          <a class='contact-pill' href='mailto:info@lexatrip.com'>
-            <span>✉️ Official Email Desk</span>
-            <strong>info@lexatrip.com</strong>
-          </a>
-        </div>
-      </div>
-
-      <!-- Legal Links & Copyright -->
+      <!-- Footer Bottom Legal & Links -->
       <div class='footer-legal-bar'>
-        <div class='legal-links-row'>
-          <a href='/p/about-us.html'>About Us</a>
-          <span class='sep'>•</span>
-          <a href='/p/contact-us.html'>Contact Us</a>
-          <span class='sep'>•</span>
-          <a href='/p/privacy-policy.html'>Privacy Policy</a>
-          <span class='sep'>•</span>
-          <a href='/p/terms-conditions.html'>Terms &amp; Conditions</a>
+        <div class='footer-legal-links'>
+          <a class='footer-legal-link' href='/p/about-us.html'>About Us</a>
+          <a class='footer-legal-link' href='/p/contact-us.html'>Contact Us</a>
+          <a class='footer-legal-link' href='/p/privacy-policy.html'>Privacy Policy</a>
+          <a class='footer-legal-link' href='/p/terms-conditions.html'>Terms &amp; Conditions</a>
         </div>
-        <p class='copyright-text'>
+        <div>
           © 2026 LexaTrip™ Technologies Pvt. Ltd. All rights reserved. Book. Explore. Repeat.
-        </p>
+        </div>
       </div>
 
     </div>
   </footer>
 
-  <!-- Optional Footer Bottom Ad Banner Section -->
-  <b:section id='footer-bottom-ads' name='[Footer Bottom] Custom Ads, Disclaimer &amp; Tracking Codes' maxwidgets='5' showaddelement='yes'/>
+  <!-- =======================================================================
+       LAYOUT SECTION 7: FOOTER SMART LINKS & TRACKING
+       ======================================================================= -->
+  <b:section id='footer-bottom-smart-links' name='[Footer] Bottom Smart Links &amp; Tracking Codes' showaddelement='yes'/>
 
   <!-- =======================================================================
-       LUXURY ULTRA-PREMIUM BOTTOM ACTION BAR (Fixed, Eye-Catching & Animated)
+       100% RESPONSIVE 4-BUTTON FIXED BOTTOM DOCK (Never Overflows)
        ======================================================================= -->
-  <div class='mobile-bottom-bar'>
-    <!-- 1. Call Button with Phone Wiggle -->
-    <a class='bar-btn bar-btn-call' href='tel:+919079854982' onclick='handleCallClick(event)' title='Call LexaTrip 24/7 Helpline'>
-      <svg class='icon-call-svg' viewBox='0 0 24 24' width='22' height='22' fill='none' stroke='#FF6B00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>
-        <path d='M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z'></path>
-      </svg>
-      <span class='bar-label'>Call</span>
+  <div class='mobile-bottom-bar' id='bottomBar'>
+    <a class='bar-btn bar-btn-call' href='tel:+919079854982' onclick='handleCallClick(event)' title='24/7 Call Support'>
+      <span class='bar-icon'>📞</span>
+      <span class='bar-label'>कॉल करें</span>
     </a>
-
-    <!-- 2. Official WhatsApp Button with Pulse Glow & Online Dot -->
-    <a class='bar-btn bar-btn-wa' href='https://wa.me/919079854982?text=Hello%20LexaTrip,%20I%20would%20like%20to%20inquire%20about%20VARANASI%20packages' target='_blank' title='Direct WhatsApp Chat'>
-      <span class='online-indicator'></span>
-      <svg class='icon-wa-svg' viewBox='0 0 24 24' width='24' height='24' fill='none'>
-        <circle cx='12' cy='12' r='12' fill='#25D366'/>
-        <path d='M17.5 14.3c-.2-.1-1.3-.6-1.5-.7-.2-.1-.4-.1-.5.1-.2.2-.6.7-.8.9-.1.1-.3.2-.5.1-.2-.1-.9-.3-1.7-1-.6-.5-1-1.2-1.1-1.4-.1-.2 0-.3.1-.4.1-.1.2-.2.3-.4.1-.1.1-.2.2-.3 0-.1 0-.3 0-.4 0-.1-.5-1.2-.7-1.6-.2-.4-.4-.3-.5-.3h-.4c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9 0 1.1.8 2.2 1 2.3.1.2 1.6 2.5 3.9 3.5.5.2 1 .4 1.3.5.6.2 1.1.2 1.5.1.5-.1 1.3-.5 1.5-1.1.2-.5.2-1 .1-1.1-.1-.1-.3-.2-.5-.3z' fill='#FFFFFF'/>
-        <path d='M12 4a8 8 0 0 0-6.9 12L4 20l4.2-1.1A8 8 0 1 0 12 4zm0 14.5c-1.3 0-2.5-.4-3.6-1l-.3-.2-2.5.7.7-2.4-.2-.3a6.5 6.5 0 1 1 5.9 3.2z' fill='#FFFFFF'/>
-      </svg>
+    <a class='bar-btn bar-btn-wa' href='https://wa.me/919079854982?text=Hello%20LexaTrip%20VARANASI' target='_blank' title='Direct WhatsApp Booking'>
+      <span class='bar-icon'>💬</span>
       <span class='bar-label'>WhatsApp</span>
     </a>
-
-    <!-- 3. Book Now Elevated Hero CTA with Shimmer Gradient -->
     <a class='bar-btn bar-btn-book' href='https://bookings.lexatrip.com/' target='_blank' title='Instant Online Reservation'>
-      <svg viewBox='0 0 24 24' width='20' height='20' fill='none' stroke='#FFFFFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>
-        <path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'></path>
-        <polyline points='9 22 9 12 15 12 15 22'></polyline>
-      </svg>
-      <span class='bar-label'>Book Now</span>
-      <span class='deal-tag'>⚡ Instant</span>
+      <span class='bar-icon'>🏨</span>
+      <span class='bar-label'>बुक नाउ</span>
     </a>
-
-    <!-- 4. Get App Button with Animated Download -->
     <a class='bar-btn bar-btn-app' href='https://www.lexatrip.com/app' target='_blank' title='Download LexaTrip Mobile App'>
-      <svg viewBox='0 0 24 24' width='20' height='20' fill='none' stroke='#818CF8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>
-        <rect x='5' y='2' width='14' height='20' rx='2' ry='2'></rect>
-        <line x1='12' y1='18' x2='12.01' y2='18'></line>
-        <path class='app-download-arrow' d='M12 7v5m-2.5-2.5l2.5 2.5 2.5-2.5' stroke='#38BDF8'></path>
-      </svg>
-      <span class='bar-label'>Get App</span>
+      <span class='bar-icon'>📲</span>
+      <span class='bar-label'>ऐप डाउनलोड</span>
     </a>
-  </div>
-
-  <!-- Desktop Call Dialog Modal -->
-  <div class='call-modal-overlay' id='callModal' onclick='if(event.target===this)this.style.display="none";'>
-    <div class='call-modal-box'>
-      <div style='font-size:36px; margin-bottom:12px;'>📞</div>
-      <h3 style='margin-bottom:8px; color:#0F172A;'>LexaTrip™ 24/7 Helpline</h3>
-      <p style='color:#64748B; font-size:13px; margin-bottom:20px;'>Connect directly with our destination travel concierge:</p>
-      <div style='display:flex; flex-direction:column; gap:10px; margin-bottom:20px;'>
-        <a href='tel:+919079854982' style='background:#FF6B00; color:#FFFFFF; padding:12px; border-radius:8px; font-weight:700; text-decoration:none;'>📞 Call +91 90798 54982</a>
-        <a href='tel:+919079017880' style='background:#0F172A; color:#FFFFFF; padding:12px; border-radius:8px; font-weight:700; text-decoration:none;'>📞 Call +91 90790 17880</a>
-        <a href='https://wa.me/919079854982' target='_blank' style='background:#25D366; color:#FFFFFF; padding:12px; border-radius:8px; font-weight:700; text-decoration:none;'>💬 Chat on WhatsApp</a>
-      </div>
-      <button onclick='document.getElementById("callModal").style.display="none";' style='background:#F1F5F9; border:none; padding:8px 20px; border-radius:20px; font-weight:700; color:#475569; cursor:pointer;'>Close</button>
-    </div>
   </div>
 
   <!-- =======================================================================
-       8. CLIENT-SIDE HYBRID ENGINE (Dynamic Discounts, Category Filter & Legal)
+       HYBRID CLIENT-SIDE ENGINE (Dynamic Feed, Routing, Pagination & Modals)
        ======================================================================= -->
   <script type='text/javascript'>
   //<![CDATA[
     let allPostsData = [];
     let currentCategoryFilter = 'all';
+    let displayedPostsCount = 8; // Shows minimum 6-8 cards by default (Pairs of 2)
 
-    // Horizontal Scroll for Category Pills
+    // Touch / Button Category Scroll
     function scrollCatNav(offset) {
       const el = document.getElementById('categoryNav');
       if (el) el.scrollBy({ left: offset, behavior: 'smooth' });
@@ -1319,7 +1437,35 @@
       }
     }
 
-    // Language Toggle
+    // VIP Offer Modal Open / Close
+    function openVipOfferModal() {
+      const m = document.getElementById('vipOfferModal');
+      if (m) m.style.display = 'flex';
+    }
+    function closeVipOfferModal() {
+      const m = document.getElementById('vipOfferModal');
+      if (m) m.style.display = 'none';
+    }
+
+    // Lead Form Handler (Auto WhatsApp Concierge Connect)
+    function handleLeadFormSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('leadName').value;
+      const phone = document.getElementById('leadPhone').value;
+      const date = document.getElementById('leadDate').value || 'Immediate';
+      const stay = document.getElementById('leadStayType').value;
+
+      const msg = '🎉 *New Exclusive 50% VIP Lead - ' + "VARANASI" + '*' +
+                  '\n👤 Guest Name: ' + name +
+                  '\n📱 WhatsApp: ' + phone +
+                  '\n📅 Travel Date: ' + date +
+                  '\n🏨 Category: ' + stay;
+
+      closeVipOfferModal();
+      window.open('https://wa.me/919079854982?text=' + encodeURIComponent(msg), '_blank');
+    }
+
+    // Language Toggle (Header)
     function toggleLangMenu(e) {
       if (e) e.stopPropagation();
       const dd = document.getElementById('langDropdown');
@@ -1331,15 +1477,23 @@
     });
     function selectLang(lang, e) {
       if (e) e.preventDefault();
-      if (lang === 'hi') {
-        window.location.href = 'https://translate.google.com/translate?sl=en&tl=hi&u=' + encodeURIComponent(window.location.href);
+      translatePageTo(lang);
+    }
+
+    // Instant Page & Article Translation Function
+    function translatePageTo(lang) {
+      const dd = document.getElementById('langDropdown');
+      if (dd) dd.style.display = 'none';
+
+      if (lang === 'en') {
+        const u = window.location.href.split('?')[0];
+        window.location.href = u;
       } else {
-        const dd = document.getElementById('langDropdown');
-        if (dd) dd.style.display = 'none';
+        window.location.href = 'https://translate.google.com/translate?sl=auto&tl=' + encodeURIComponent(lang) + '&u=' + encodeURIComponent(window.location.href);
       }
     }
 
-    // Dynamic Realistic Discount Generator
+    // Dynamic Discount Generator (Randomized 35% - 60% Off)
     function getPostDiscount(title, id) {
       const match = (title + '').match(/(\d{2})%\s*off/i);
       if (match) return match[1] + '% Off';
@@ -1358,7 +1512,7 @@
       const currentPath = window.location.pathname;
       const lowPath = currentPath.toLowerCase();
 
-      // 1. Legal / Static Page Routing
+      // 1. Legal Static Page Routing
       if (lowPath.includes('about-us')) {
         renderLegalStaticPage(container, "About Us - LexaTrip™ VARANASI", "\n        <h2>Welcome to LexaTrip™ VARANASI</h2>\n        <p><strong>LexaTrip™ Technologies Pvt. Ltd.</strong> is India's leading experiential luxury travel and hospitality network. LexaTrip™ VARANASI is our dedicated official portal curating the finest 100% verified luxury stays, resorts, heritage properties, and bespoke tours in VARANASI.</p>\n        \n        <h3>Our Core Philosophy: Book. Explore. Repeat.</h3>\n        <p>At LexaTrip, we believe true travel luxury combines authentic local culture with seamless, stress-free hospitality. Whether you are experiencing Ganga Ghat Heritage Stays, Morning Boat Tours & Divine Aarti, every LexaTrip partner property is physically inspected and audited for guest safety, premium hygiene, verified amenities, and world-class hospitality.</p>\n\n        <h3>Why Travelers Choose LexaTrip™ VARANASI:</h3>\n        <ul>\n          <li><strong>100% Physically Verified Properties:</strong> Every hotel, luxury camp, and resort in VARANASI is rigorously audited by our local destination concierges.</li>\n          <li><strong>Best Rate Guarantee:</strong> Direct hotelier partnerships give you up to 50-60% exclusive seasonal discounts with zero hidden charges.</li>\n          <li><strong>24/7 Dedicated Concierge Support:</strong> Priority assistance via phone (+91 90798 54982 / +91 90790 17880) and WhatsApp.</li>\n          <li><strong>Instant Confirmation &amp; Vouchers:</strong> Real-time booking access via <a href=\"https://bookings.lexatrip.com\" target=\"_blank\">bookings.lexatrip.com</a>.</li>\n        </ul>\n\n        <h3>Corporate Contact &amp; Portals</h3>\n        <p><strong>LexaTrip Technologies Private Limited</strong><br/>\n        Official Portals: <a href=\"https://bookings.lexatrip.com\">bookings.lexatrip.com</a> | <a href=\"https://www.lexatrip.com\">lexatrip.com</a> | <a href=\"https://www.lexatrip.in\">lexatrip.in</a><br/>\n        24/7 Helplines: <a href=\"tel:+919079854982\">+91 90798 54982</a>, <a href=\"tel:+919079017880\">+91 90790 17880</a><br/>\n        Official Email: <a href=\"mailto:infolexatrip@gmail.com\">infolexatrip@gmail.com</a></p>\n      ");
         return;
@@ -1400,6 +1554,7 @@
     function filterCategory(cat, event) {
       if (event) event.preventDefault();
       currentCategoryFilter = cat;
+      displayedPostsCount = 8; // Reset to 8 posts on category switch
 
       document.querySelectorAll('.cat-pill').forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('onclick').includes("'" + cat + "'") || btn.getAttribute('onclick').includes('"' + cat + '"'));
@@ -1409,7 +1564,14 @@
       if (container) renderPostGrid(container, cat);
     }
 
-    // Render 4:5 Card Grid
+    // Load More Posts Handler
+    function loadMorePosts() {
+      displayedPostsCount += 6;
+      const container = document.getElementById('lexa-dynamic-root');
+      if (container) renderPostGrid(container, currentCategoryFilter);
+    }
+
+    // Render 4:5 Card Grid (2-Column Mobile Grid + 3 Action Buttons per Card)
     function renderPostGrid(container, cat) {
       let filtered = allPostsData;
       if (cat !== 'all') {
@@ -1432,46 +1594,37 @@
         container.innerHTML = 
           '<div style="text-align:center; padding:60px 20px; background:#FFFFFF; border-radius:16px; border:1px solid #E2E8F0; margin:20px 0;">' +
             '<div style="font-size:48px; margin-bottom:12px;">🏨</div>' +
-            '<h3 style="font-size:20px; font-weight:800; color:#0F172A; margin-bottom:8px;">New verified hotels &amp; camps coming soon!</h3>' +
-            '<p style="color:#64748B; font-size:14px; max-width:500px; margin:0 auto 20px;">For immediate reservation quotes and priority bookings in this category, contact our 24/7 travel desk.</p>' +
+            '<h3 style="font-size:20px; font-weight:800; color:#0F172A; margin-bottom:8px;">इस श्रेणी में जल्द ही नए होटल्स और स्टे जोड़े जा रहे हैं।</h3>' +
+            '<p style="color:#64748B; font-size:14px; max-width:500px; margin:0 auto 20px;">तत्काल बुकिंग व पूछताछ के लिए हमारी 24/7 हेल्पलाइन पर संपर्क करें।</p>' +
             '<a href="https://wa.me/919079854982" target="_blank" style="display:inline-block; background:#25D366; color:#FFF; font-weight:700; padding:10px 22px; border-radius:24px; text-decoration:none;">💬 WhatsApp Concierge</a>' +
           '</div>';
         return;
       }
 
+      // Slice to display min 6-8 posts (Pairs of 2)
+      const visiblePosts = filtered.slice(0, displayedPostsCount);
+
       let html = '<div class="post-grid" id="postGrid">';
-      filtered.forEach((entry, idx) => {
-        const title = (entry.title && entry.title.$t) || 'LexaTrip Luxury Stay';
-        const content = (entry.content && entry.content.$t) || (entry.summary && entry.summary.$t) || '';
-        const id = (entry.id && entry.id.$t) || ('post_' + idx);
+
+      visiblePosts.forEach(entry => {
+        const title = (entry.title && entry.title.$t) || ('LexaTrip ' + "VARANASI" + ' Stay');
+        const postUrl = (entry.link && entry.link.find(l => l.rel === 'alternate')) ? entry.link.find(l => l.rel === 'alternate').href : '#';
+        const rawContent = (entry.content && entry.content.$t) || (entry.summary && entry.summary.$t) || '';
         
-        let postUrl = '#';
-        if (entry.link) {
-          const altLink = entry.link.find(l => l.rel === 'alternate');
-          if (altLink) postUrl = altLink.href;
+        let imgUrl = 'https://images.unsplash.com/photo-1544644181-1484b3fdfc62?w=800&q=80';
+        const imgMatch = rawContent.match(/<img[^>]+src=["']([^"']+)["']/i);
+        if (imgMatch && imgMatch[1]) {
+          imgUrl = imgMatch[1].replace('/s72-c/', '/w800-h1000-c/').replace('/s1600/', '/w800-h1000-c/');
         }
 
-        // Image extraction
-        let imgUrl = 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=800&q=80';
-        if (entry.media$thumbnail && entry.media$thumbnail.url) {
-          imgUrl = entry.media$thumbnail.url.replace('/s72-c/', '/s800/').replace('/w72-h72-p-k-no-nu/', '/w800-h1000-c/');
-        } else {
-          const m = content.match(/<img[^>]+src=['"]([^'"]+)['"]/i);
-          if (m && m[1]) imgUrl = m[1];
-        }
+        const snippet = rawContent.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim().slice(0, 100) + '...';
+        const discountBadge = getPostDiscount(title, entry.id ? entry.id.$t : '');
 
-        // Category Tag
-        let catLabel = 'Luxury Stay';
-        if (entry.category && entry.category.length > 0) catLabel = entry.category[0].term;
-
-        // Dynamic Realistic Discount
-        const discountBadge = getPostDiscount(title, id);
-
-        // Clean Snippet
-        const tmp = document.createElement('div');
-        tmp.innerHTML = content;
-        const textOnly = (tmp.textContent || tmp.innerText || '').trim();
-        const snippet = textOnly.slice(0, 110) + '...';
+        let catLabel = 'Verified Stay';
+        if (title.toLowerCase().includes('camp') || title.includes('कैंप')) catLabel = 'Camp';
+        else if (title.includes('5 Star') || title.includes('5-Star')) catLabel = '5-Star';
+        else if (title.includes('4 Star') || title.includes('4-Star')) catLabel = '4-Star';
+        else if (title.includes('Fort') || title.includes('किला')) catLabel = 'Heritage';
 
         html += 
           '<article class="post-card">' +
@@ -1485,192 +1638,187 @@
             '<div class="card-body">' +
               '<h3 class="card-title"><a href="' + postUrl + '" style="color:inherit; text-decoration:none;">' + title + '</a></h3>' +
               '<p class="card-snippet">' + snippet + '</p>' +
-              '<div class="card-actions">' +
-                '<a class="card-btn card-btn-book" href="https://bookings.lexatrip.com/" target="_blank">🏨 Book Now</a>' +
-                '<a class="card-btn card-btn-wa" href="https://wa.me/919079854982?text=' + encodeURIComponent('Hello LexaTrip, I would like to book: ' + title) + '" target="_blank">💬 WhatsApp</a>' +
+              
+              '<!-- 3 Action Buttons per Card (Clean Two-Row Compact Layout) -->' +
+              '<div class="card-actions-wrapper">' +
+                '<div class="card-actions-top-row">' +
+                  '<a class="card-btn card-btn-book" href="https://bookings.lexatrip.com/" target="_blank">🏨 Book Now</a>' +
+                  '<a class="card-btn card-btn-wa" href="https://wa.me/919079854982?text=' + encodeURIComponent('Hello LexaTrip, I would like to book: ' + title) + '" target="_blank">💬 WhatsApp</a>' +
+                '</div>' +
+                '<a class="card-btn card-btn-read" href="' + postUrl + '">📖 पूरा पढ़ें (Read Article)</a>' +
               '</div>' +
             '</div>' +
           '</article>';
       });
       html += '</div>';
 
+      // Load More Button if remaining posts exist
+      if (filtered.length > displayedPostsCount) {
+        html += 
+          '<div class="load-more-box">' +
+            '<button class="btn-load-more" onclick="loadMorePosts()" type="button">' +
+              '<span>📥</span> और देखें (Load More Hotels &amp; Stays)' +
+            '</button>' +
+          '</div>';
+      }
+
       container.innerHTML = html;
     }
 
-    // Render Single Article with Interactive Booking Engine
+    // Render Single Article with Interactive Booking Engine & Language Switcher
     function renderSingleArticle(container, currentPath) {
       let matched = null;
       for (const entry of allPostsData) {
         if (entry.link) {
           const altLink = entry.link.find(l => l.rel === 'alternate');
-          if (altLink && altLink.href && altLink.href.includes(currentPath)) {
+          if (altLink && (altLink.href.includes(currentPath) || currentPath.includes(new URL(altLink.href).pathname))) {
             matched = entry;
             break;
           }
         }
       }
 
-      const postTitle = matched ? ((matched.title && matched.title.$t) || '') : document.title;
-      const postContent = matched ? ((matched.content && matched.content.$t) || '') : (document.querySelector('.post-body, .entry-content')?.innerHTML || '');
-      const dynamicDiscount = getPostDiscount(postTitle, currentPath);
+      if (!matched && allPostsData.length > 0) matched = allPostsData[0];
+
+      if (!matched) {
+        container.innerHTML = '<div style="text-align:center; padding:50px;">आर्टिकल लोड हो रहा है...</div>';
+        return;
+      }
+
+      const title = (matched.title && matched.title.$t) || ('LexaTrip ' + "VARANASI" + ' Stay');
+      const content = (matched.content && matched.content.$t) || '';
+      const published = (matched.published && matched.published.$t) ? new Date(matched.published.$t).toLocaleDateString('hi-IN', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Verified Stay';
+      const discount = getPostDiscount(title, matched.id ? matched.id.$t : '');
+
+      let heroImg = 'https://images.unsplash.com/photo-1544644181-1484b3fdfc62?w=1200&q=80';
+      const imgMatch = content.match(/<img[^>]+src=["']([^"']+)["']/i);
+      if (imgMatch && imgMatch[1]) heroImg = imgMatch[1];
+
+      let cleanedContent = content.replace(/<img[^>]+>/i, '');
 
       container.innerHTML = 
-        '<article class="article-container">' +
-          '<span class="article-category">' + "VARANASI Luxury Travel & Stays" + '</span>' +
-          '<h1 class="article-title">' + postTitle + '</h1>' +
+        '<div class="article-container">' +
+          '<!-- In-Article Instant Language Switcher Bar -->' +
+          '<div class="article-lang-bar">' +
+            '<span class="article-lang-label">🌐 Translate Article / भाषा चुनें:</span>' +
+            '<div class="article-lang-pills">' +
+              '<button class="art-lang-pill active" onclick="translatePageTo('hi')" type="button">हिन्दी</button>' +
+              '<button class="art-lang-pill" onclick="translatePageTo('en')" type="button">English</button>' +
+              '<button class="art-lang-pill" onclick="translatePageTo('gu')" type="button">ગુજરાતી</button>' +
+              '<button class="art-lang-pill" onclick="translatePageTo('mr')" type="button">मराठी</button>' +
+              '<button class="art-lang-pill" onclick="translatePageTo('bn')" type="button">বাংলা</button>' +
+            '</div>' +
+          '</div>' +
+
+          '<h1 class="article-title">' + title + '</h1>' +
           '<div class="article-meta">' +
-            '<div class="author-badge">' +
-              '<div class="author-avatar">LT</div>' +
-              '<span>LexaTrip™ Verified Concierge</span>' +
-            '</div>' +
-            '<span>•</span>' +
-            '<span>⭐ Verified 5.0 Rating</span>' +
-            '<span>•</span>' +
-            '<span style="color:#FF6B00; font-weight:800;">⚡ ' + dynamicDiscount + ' Available</span>' +
+            '<span>🗓️ ' + published + '</span>' +
+            '<span>📍 ' + "VARANASI" + '</span>' +
+            '<span>⭐ 100% LexaTrip Verified</span>' +
+            '<span style="color:#FF6B00; font-weight:800;">🏷️ ' + discount + '</span>' +
           '</div>' +
-
-          // Interactive Booking Engine Card
-          '<div class="booking-engine-box">' +
-            '<div class="booking-box-header">' +
-              '<div class="booking-box-title">' +
-                '<span>📅</span> Reserve Tour &amp; Check Availability' +
-              '</div>' +
-              '<span class="booking-box-tag">' + dynamicDiscount + '</span>' +
+          '<img alt="' + title.replace(/"/g, '&quot;') + '" class="article-hero-media" src="' + heroImg + '"/>' +
+          
+          '<!-- Interactive Live Booking Engine -->' +
+          '<div class="article-booking-card">' +
+            '<div class="engine-header">' +
+              '<div class="engine-title"><span>⚡</span> इंस्टेंट चेक-इन व बुकिंग इंजन</div>' +
+              '<div style="background:#FF6B00; color:#FFF; font-size:11px; font-weight:800; padding:4px 10px; border-radius:20px;">' + discount + ' Special</div>' +
             '</div>' +
-            '<div class="booking-fields-grid">' +
-              '<div class="booking-field">' +
-                '<label>Check-in Date</label>' +
-                '<input id="bookCheckIn" type="date"/>' +
+            '<div class="engine-grid">' +
+              '<div class="engine-field">' +
+                '<label>Check-In Date</label>' +
+                '<input class="engine-input" id="engineCheckIn" type="date"/>' +
               '</div>' +
-              '<div class="booking-field">' +
-                '<label>Check-out Date</label>' +
-                '<input id="bookCheckOut" type="date"/>' +
-              '</div>' +
-              '<div class="booking-field">' +
+              '<div class="engine-field">' +
                 '<label>Guests (Pax)</label>' +
-                '<select id="bookPax">' +
-                  '<option value="1 Adult">1 Guest (Solo)</option>' +
-                  '<option selected="selected" value="2 Adults">2 Guests (Couple)</option>' +
-                  '<option value="3 Guests">3 Guests</option>' +
-                  '<option value="4 Guests (Family)">4 Guests (Family)</option>' +
-                  '<option value="5+ Guests (Group)">5+ Guests (Group)</option>' +
+                '<select class="engine-select" id="enginePax">' +
+                  '<option value="2">2 Adults (Couples)</option>' +
+                  '<option value="1">1 Adult (Solo)</option>' +
+                  '<option value="3">3 Adults (Triple Sharing)</option>' +
+                  '<option value="4">4+ Family / Group</option>' +
                 '</select>' +
               '</div>' +
-              '<div class="booking-field">' +
-                '<label>Room / Camp Category</label>' +
-                '<select id="bookRoomType">' +
-                  '<option value="Luxury Royal Camp">Luxury Royal Camp (AC/Heater)</option>' +
-                  '<option value="5-Star Palace Suite">5-Star Palace Suite</option>' +
-                  '<option value="4-Star Heritage Room">4-Star Heritage Room</option>' +
-                  '<option value="3-Star Deluxe Room">3-Star Deluxe Room</option>' +
-                  '<option value="Budget Friendly Room">Budget Friendly Stay</option>' +
+              '<div class="engine-field">' +
+                '<label>Room / Stay Category</label>' +
+                '<select class="engine-select" id="engineCategory">' +
+                  '<option value="Luxury Resort Room">Luxury Resort Room</option>' +
+                  '<option value="Deluxe Cottage / Tent">Deluxe Cottage / Tent</option>' +
+                  '<option value="Heritage Suite">Heritage Suite</option>' +
+                  '<option value="5-Star Pool Villa">5-Star Luxury Villa</option>' +
                 '</select>' +
               '</div>' +
             '</div>' +
-            '<div class="booking-engine-actions">' +
-              '<a class="engine-btn engine-btn-book" href="https://bookings.lexatrip.com/" onclick="triggerDirectBooking(event, '' + postTitle.replace(/'/g, '\\'') + '')">' +
-                '<span>🏨 Instant Online Booking</span>' +
-              '</a>' +
-              '<a class="engine-btn engine-btn-wa" href="#" onclick="triggerWhatsAppBooking(event, '' + postTitle.replace(/'/g, '\\'') + '')">' +
-                '<span>💬 Get Instant WhatsApp Quote</span>' +
-              '</a>' +
+            '<div class="engine-actions">' +
+              '<a class="engine-btn engine-btn-book" href="https://bookings.lexatrip.com/" onclick="triggerDirectBooking(event, '' + title.replace(/'/g, "\'") + '')">🏨 Book Online (Instant Voucher)</a>' +
+              '<a class="engine-btn engine-btn-wa" href="https://wa.me/919079854982" onclick="triggerDirectWa(event, '' + title.replace(/'/g, "\'") + '')">💬 WhatsApp Concierge Rate</a>' +
             '</div>' +
           '</div>' +
 
-          '<div class="article-content" style="font-size:16px; line-height:1.8;">' +
-            postContent +
-          '</div>' +
+          '<div class="article-content">' + cleanedContent + '</div>' +
 
-          '<div style="margin-top:40px; padding-top:24px; border-top:1px solid #E2E8F0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">' +
-            '<a href="/" style="display:inline-block; background:#0F172A; color:#FFFFFF; font-weight:700; padding:10px 22px; border-radius:30px; text-decoration:none;">← Back to All Stays</a>' +
-            '<a href="https://bookings.lexatrip.com/" target="_blank" style="display:inline-block; background:#FF6B00; color:#FFFFFF; font-weight:700; padding:10px 22px; border-radius:30px; text-decoration:none;">Explore More Destinations →</a>' +
+          '<div style="margin-top:36px; padding:20px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:12px; text-align:center;">' +
+            '<h4 style="margin-bottom:8px; color:#0F172A;">इस प्रॉपर्टी के बारे में कोई सवाल है?</h4>' +
+            '<p style="color:#64748B; font-size:13px; margin-bottom:14px;">हमारे 24/7 स्थानीय विशेषज्ञ से सीधे बात करें या बेस्ट डिस्काउंट पर रूम ब्लॉक करवाएं।</p>' +
+            '<a href="https://wa.me/919079854982?text=' + encodeURIComponent('नमस्ते, मुझे ' + title + ' के बारे में विस्तृत जानकारी चाहिए।') + '" target="_blank" style="display:inline-block; background:#25D366; color:#FFF; font-weight:700; padding:10px 24px; border-radius:24px; text-decoration:none;">💬 WhatsApp पर संपर्क करें</a>' +
           '</div>' +
-        '</article>';
+        '</div>';
 
-      // Set default check-in/out dates
-      const today = new Date();
-      const tomorrow = new Date(today);
+      const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
-      const inEl = document.getElementById('bookCheckIn');
-      const outEl = document.getElementById('bookCheckOut');
-      if (inEl) inEl.value = today.toISOString().split('T')[0];
-      if (outEl) outEl.value = tomorrow.toISOString().split('T')[0];
+      const dateInput = document.getElementById('engineCheckIn');
+      if (dateInput) dateInput.value = tomorrow.toISOString().split('T')[0];
     }
 
-    // Direct Online Booking Trigger
-    function triggerDirectBooking(event, title) {
-      if (event) event.preventDefault();
-      const checkIn = document.getElementById('bookCheckIn')?.value || '';
-      const checkOut = document.getElementById('bookCheckOut')?.value || '';
-      const pax = document.getElementById('bookPax')?.value || '2 Adults';
-      const roomType = document.getElementById('bookRoomType')?.value || 'Luxury Camp';
-      
+    // Direct Booking Trigger
+    function triggerDirectBooking(e, hotelTitle) {
+      if (e) e.preventDefault();
+      const checkIn = document.getElementById('engineCheckIn') ? document.getElementById('engineCheckIn').value : '';
+      const pax = document.getElementById('enginePax') ? document.getElementById('enginePax').value : '2';
+      const cat = document.getElementById('engineCategory') ? document.getElementById('engineCategory').value : '';
+
       const params = new URLSearchParams({
-        dest: "VARANASI",
-        hotel: title,
+        hotel: hotelTitle,
         checkIn: checkIn,
-        checkOut: checkOut,
         pax: pax,
-        category: roomType,
-        coupon: 'LEXA50ACTIVE'
+        category: cat,
+        source: "varanasi_blog"
       });
       window.open('https://bookings.lexatrip.com/?' + params.toString(), '_blank');
     }
 
-    // Instant WhatsApp Quote Trigger
-    function triggerWhatsAppBooking(event, title) {
-      if (event) event.preventDefault();
-      const checkIn = document.getElementById('bookCheckIn')?.value || '';
-      const checkOut = document.getElementById('bookCheckOut')?.value || '';
-      const pax = document.getElementById('bookPax')?.value || '2 Adults';
-      const roomType = document.getElementById('bookRoomType')?.value || 'Luxury Camp';
+    // Direct WhatsApp Concierge Trigger
+    function triggerDirectWa(e, hotelTitle) {
+      if (e) e.preventDefault();
+      const checkIn = document.getElementById('engineCheckIn') ? document.getElementById('engineCheckIn').value : 'Tomorrow';
+      const pax = document.getElementById('enginePax') ? document.getElementById('enginePax').value : '2';
+      const cat = document.getElementById('engineCategory') ? document.getElementById('engineCategory').value : '';
 
-      const waText = encodeURIComponent(
-        'Hello LexaTrip Concierge! 🏨✨\n\n' +
-        'I would like to book a verified stay in ' + "VARANASI" + ':\n\n' +
-        '📍 Hotel/Camp: ' + (title || 'Tour & Stay') + '\n' +
-        '🛏️ Category: ' + roomType + '\n' +
-        '📅 Check-in: ' + (checkIn || 'Earliest') + '\n' +
-        '📅 Check-out: ' + (checkOut || 'Next Day') + '\n' +
-        '👥 Number of Guests: ' + pax + '\n' +
-        '🏷️ Promo Code: LEXAACTIVE\n\n' +
-        'Please confirm availability and the best discounted quotation!'
-      );
-      window.open('https://wa.me/919079854982?text=' + waText, '_blank');
+      const msg = 'नमस्ते LexaTrip Concierge, मुझे निम्नलिखित स्टे की तत्काल बुकिंग/रेट कोटेशन चाहिए:\n\n' +
+                  '🏨 Property: ' + hotelTitle + '\n' +
+                  '📅 Check-In: ' + checkIn + '\n' +
+                  '👥 Guests: ' + pax + ' Person(s)\n' +
+                  '⛺ Preferred Stay: ' + cat;
+
+      window.open('https://wa.me/919079854982?text=' + encodeURIComponent(msg), '_blank');
     }
 
     // Render Legal / Static Page
     function renderLegalStaticPage(container, title, content) {
       container.innerHTML = 
-        '<article class="article-container">' +
-          '<span class="article-category">LexaTrip™ Official Verified Page</span>' +
+        '<div class="article-container">' +
           '<h1 class="article-title">' + title + '</h1>' +
-          '<div class="article-meta">' +
-            '<div class="author-badge">' +
-              '<div class="author-avatar">LT</div>' +
-              '<span>LexaTrip Legal &amp; Compliance Team</span>' +
-            '</div>' +
-            '<span>•</span>' +
-            '<span>📅 Updated: 2026</span>' +
-            '<span>•</span>' +
-            '<span>★ Verified Official Policy</span>' +
+          '<div class="article-content" style="margin-top:20px;">' + content + '</div>' +
+          '<div style="margin-top:40px; text-align:center;">' +
+            '<a href="/" style="display:inline-block; background:#0F172A; color:#FFA000; font-weight:700; padding:10px 24px; border-radius:24px; text-decoration:none;">← होम पेज पर वापस जाएं</a>' +
           '</div>' +
-          '<div class="article-content" style="font-size:15px; line-height:1.8;">' +
-            content +
-          '</div>' +
-          '<div style="margin-top:30px; padding-top:20px; border-top:1px solid #E2E8F0; text-align:center;">' +
-            '<a href="/" style="display:inline-block; background:#0F172A; color:#FFFFFF; font-weight:700; padding:10px 24px; border-radius:30px; text-decoration:none;">← Back to Home</a>' +
-          '</div>' +
-        '</article>';
+        '</div>';
     }
 
-    // Initialize on load
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', loadLexaBlogContent);
-    } else {
-      loadLexaBlogContent();
-    }
+    // Initialize on DOM Ready
+    window.addEventListener('DOMContentLoaded', loadLexaBlogContent);
   //]]>
   </script>
+
 </body>
 </html>

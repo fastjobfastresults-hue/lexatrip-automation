@@ -161,6 +161,24 @@ class YouTubePublisher {
       throw new Error(`YouTube video upload failed: Video file at "${resolvedPath}" is empty (0 bytes).`);
     }
 
+    // Strict Channel Isolation Guard: Prevent cross-channel contamination
+    if (creds.channelId && creds.channelId !== 'UCGoH0bF9aH2MVV0RupzsGqQ') {
+      try {
+        const chanCheck = await axios.get('https://www.googleapis.com/youtube/v3/channels?part=id&mine=true', {
+          headers: { Authorization: `Bearer ${accessToken}` },
+          timeout: 10000
+        });
+        const currentChannelId = chanCheck.data?.items?.[0]?.id;
+        if (currentChannelId && currentChannelId !== creds.channelId) {
+          throw new Error(
+            `YouTube channel mismatch: Destination expects channel "${creds.handle || creds.channelId}", but authorized token belongs to "${currentChannelId}" (LexaTrip Jaisalmer). Upload blocked to protect LexaTrip Jaisalmer channel.`
+          );
+        }
+      } catch (cErr) {
+        if (cErr.message.includes('YouTube channel mismatch')) throw cErr;
+      }
+    }
+
     const fileSize = fileStats.size;
     const formattedTitle = (title || 'Lexa Trip Travel Video').substring(0, 100);
     const formattedDescription = (description || '').substring(0, 5000);

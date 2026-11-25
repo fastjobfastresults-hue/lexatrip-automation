@@ -1088,6 +1088,9 @@ class TelegramBotService {
               const chanUrl = telegramNotifier.getChannelUrl(dest, r.platform);
               reportMsg += chanUrl ? `• [${icon} ${name} Profile](${chanUrl})\n` : `• ${icon} ${name}: लाइव पब्लिश संपन्न ✅\n`;
             }
+            if (r.warning) {
+              reportMsg += `  ↳ ⚠️ ${r.warning}\n`;
+            }
           }
 
           // Channel Status Advisory for Pending / Dedicated Channels
@@ -1115,6 +1118,9 @@ class TelegramBotService {
             const name = telegramNotifier.formatPlatformName(r.platform);
             const postUrl = r.details?.postUrl || r.postUrl;
             reportMsg += postUrl ? `• ✅ [${icon} ${name} Live Post](${postUrl})\n` : `• ✅ ${icon} ${name}: लाइव पब्लिश संपन्न\n`;
+            if (r.warning) {
+              reportMsg += `  ↳ ⚠️ ${r.warning}\n`;
+            }
           }
 
           reportMsg += `\n*विफल चैनल्स (एरर विवरणी):*\n`;
@@ -1353,6 +1359,17 @@ class TelegramBotService {
             }
           } catch (bErr) {
             console.warn('[TelegramBot Background Blog Warning]:', bErr.message);
+            try {
+              await this.sendDualMessage(
+                chatId,
+                `⚠️ *[Blogger ब्लॉग आर्टिकल सूचना]* 🐪\n\n` +
+                `📍 *डेस्टिनेशन:* ${dest.name}\n` +
+                `📑 *टाइटल:* ${parsedSeo.title}\n` +
+                `ℹ️ *स्टेटस:* \`${bErr.message}\`\n\n` +
+                `💡 *समाधान:* Google Cloud OAuth टोकन में Blogger API परमिशन (scope) अपडेट करें या Mail2Blogger सीक्रेट ईमेल सक्षम करें।`,
+                { parse_mode: 'Markdown' }
+              );
+            } catch (notifyErr) {}
           }
         });
 

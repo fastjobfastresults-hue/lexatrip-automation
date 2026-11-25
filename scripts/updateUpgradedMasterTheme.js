@@ -1,0 +1,1862 @@
+const fs = require('fs');
+const path = require('path');
+
+// Read Jaisalmer template as the gold reference
+const jaisalmerCode = fs.readFileSync(path.join(__dirname, 'buildJaisalmerMasterTheme.js'), 'utf8');
+
+// We extract generateJaisalmerXml and parameterize it for any destination!
+const upgradedMasterContent = `const fs = require('fs');
+const path = require('path');
+
+// 1. Load Base64 Logo Assets
+const logoData = JSON.parse(fs.readFileSync(path.join(__dirname, 'logoB64.json'), 'utf8'));
+const EMBLEM_B64 = logoData.emblemB64;
+
+// 2. Load Legal Pages Fallback Data
+let legalDataFallback = {};
+try {
+  legalDataFallback = JSON.parse(fs.readFileSync(path.join(__dirname, 'legalPagesData.json'), 'utf8'));
+} catch (e) {
+  console.warn('Could not read legalPagesData.json, using fallback');
+}
+
+function generateMasterThemeXml(options = {}) {
+  const destBadge = options.badge || 'JAISALMER';
+  const destTitle = options.title || ('LexaTrip ' + destBadge + ' | Luxury Stays, Experiential Tours & Verified Heritage Guide');
+  const destDesc = options.desc || ('Explore verified luxury stays, boutique resorts, and experiential tours in ' + destBadge + ' with LexaTrip.');
+  const destPhone1 = options.phone1 || '+91 90798 54982';
+  const destPhone2 = options.phone2 || '+91 90790 17880';
+  const destWaNum = options.waNum || '919079854982';
+  const legalPages = options.legalPages || legalDataFallback;
+
+  return \`<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html b:css='false' b:defaultwidgetversion='2' b:layoutsversion='3' b:responsive='true' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<head>
+  <b:include data='blog' name='all-head-content'/>
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes' name='viewport'/>
+  <meta content='True' name='HandheldFriendly'/>
+  <meta content='320' name='MobileOptimized'/>
+  <meta content='telephone=no' name='format-detection'/>
+  <meta content='#0F172A' name='theme-color'/>
+  
+  <title><data:blog.pageTitle/></title>
+  
+  <!-- Lifetime Mobile Template Bypass Script: Forces Full Responsive Theme on All Devices (?m=1 -> ?m=0) -->
+  <script type='text/javascript'>
+  //<![CDATA[
+    (function() {
+      var u = window.location.href;
+      if (u.indexOf('m=1') !== -1) {
+        var clean = u.replace(/([?&])m=1(&|$)/, '$1m=0$2').replace(/[?&]$/, '');
+        window.location.replace(clean);
+      }
+    })();
+  //]]>
+  </script>
+
+  <!-- Favicon & Canonical -->
+  <link href='https://bookings.lexatrip.com/favicon.ico' rel='icon' type='image/x-icon'/>
+  <link href='https://bookings.lexatrip.com/favicon.ico' rel='shortcut icon' type='image/x-icon'/>
+  <link href='https://fonts.googleapis.com' rel='preconnect'/>
+  <link crossorigin='' href='https://fonts.gstatic.com' rel='preconnect'/>
+  <link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Outfit:wght@500;600;700;800;900&amp;family=Noto+Sans+Devanagari:wght@400;500;600;700;800&amp;display=swap' rel='stylesheet'/>
+
+  <!-- SEO & Social OpenGraph Tags -->
+  <meta content='LexaTrip \${destBadge} - Official Verified Stays, Luxury Resorts &amp; Tours' name='description'/>
+  <meta content='summary_large_image' name='twitter:card'/>
+  <meta content='LexaTrip™ \${destBadge}' property='og:site_name'/>
+  <meta expr:content='data:blog.pageTitle' property='og:title'/>
+  <meta expr:content='data:blog.canonicalUrl' property='og:url'/>
+
+  <b:skin><![CDATA[
+  /* ==========================================================================
+     LEXATRIP ULTRA-LUXURY EXPERIENTIAL MASTER THEME (2026 UNIVERSAL FLEET EDITION)
+     Solid Navy (#0F172A), Sunset Orange (#FF6B00), Amber (#FFA000)
+     100% Fluid Auto-Responsive on Mobile, Tablet, iOS, Android, Desktop & PC
+     ========================================================================== */
+  :root {
+    --primary: #FF6B00;
+    --primary-dark: #E65100;
+    --primary-light: #FFF5EB;
+    --accent: #FFA000;
+    --navy: #0F172A;
+    --navy-light: #1E293B;
+    --navy-dark: #090D16;
+    --bg-page: #F8FAFC;
+    --card-bg: #FFFFFF;
+    --text-main: #1E293B;
+    --text-muted: #64748B;
+    --border: #E2E8F0;
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
+    --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.05);
+    --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
+    --shadow-lg: 0 16px 36px rgba(255, 107, 0, 0.16);
+  }
+
+  /* Universal Reset & Zero Horizontal Overflow */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  html, body {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 84px; /* Space for bottom dock */
+  }
+
+  /* =======================================================================
+     1. MASTER HEADER (Fully Responsive, Enhanced Destination Typography)
+     ======================================================================= */
+  .main-header {
+    background: #FFFFFF;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+    width: 100%;
+  }
+  .header-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  /* Brand Logo with 100% Lifetime Base64 Emblem & Prominent Destination Word */
+  .brand-logo-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+  .brand-logo-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #FFFFFF;
+    border: 2px solid #FF6B00;
+    box-shadow: 0 2px 8px rgba(255, 107, 0, 0.25);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .brand-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+  }
+  .brand-name-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1.1;
+  }
+  .brand-word-lexa {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 900;
+    font-size: 20px;
+    letter-spacing: 0.5px;
+    color: #0F1E36;
+  }
+  .brand-word-trip {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 900;
+    font-size: 20px;
+    letter-spacing: 0.5px;
+    color: transparent;
+    -webkit-text-stroke: 1.5px #FF6B00;
+    text-stroke: 1.5px #FF6B00;
+    position: relative;
+  }
+  /* Large, bold, official trip-colored destination name */
+  .brand-dest-word {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 900;
+    font-size: 19px;
+    letter-spacing: 0.8px;
+    color: #FF6B00;
+    text-transform: uppercase;
+    margin-left: 2px;
+    display: inline-block;
+  }
+  .brand-tagline {
+    font-size: 9.5px;
+    font-weight: 700;
+    color: #64748B;
+    letter-spacing: 1.2px;
+    margin-top: 2px;
+  }
+
+  /* Header Right Actions */
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .btn-header {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+  .btn-header-lang {
+    background: #F1F5F9;
+    color: #0F172A;
+    border: 1px solid #CBD5E1;
+  }
+  .btn-header-book {
+    background: linear-gradient(135deg, #FF6B00, #E65100);
+    color: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.25);
+  }
+  .btn-header-wa {
+    background: #25D366;
+    color: #FFFFFF;
+  }
+  .btn-header-app {
+    background: #0F172A;
+    color: #FFFFFF;
+    border: 1px solid #334155;
+  }
+
+  /* Language Dropdown */
+  .lang-dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  .lang-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    margin-top: 6px;
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-md);
+    min-width: 140px;
+    z-index: 1001;
+    overflow: hidden;
+  }
+  .lang-item {
+    display: block;
+    padding: 8px 14px;
+    font-size: 13px;
+    color: var(--text-main);
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .lang-item:hover {
+    background: var(--primary-light);
+    color: var(--primary);
+  }
+
+  /* =======================================================================
+     2. CATEGORY NAVIGATION BAR (Smooth Native Touch Swipe on Mobile)
+     ======================================================================= */
+  .cat-nav-wrapper {
+    background: #FFFFFF;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 65px;
+    z-index: 990;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+    width: 100%;
+  }
+  .cat-nav-flex {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 6px 12px;
+  }
+  .cat-scroll-btn {
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    font-size: 14px;
+    flex-shrink: 0;
+    color: #0F172A;
+    transition: background 0.2s;
+  }
+  .cat-scroll-btn:hover {
+    background: #F1F5F9;
+  }
+  .cat-nav-bar {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+    padding: 4px 6px;
+    width: 100%;
+  }
+  .cat-nav-bar::-webkit-scrollbar {
+    display: none;
+  }
+  .cat-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 24px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #475569;
+    background: #F1F5F9;
+    text-decoration: none;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  .cat-pill:hover, .cat-pill.active {
+    background: linear-gradient(135deg, #FF6B00, #E65100);
+    color: #FFFFFF;
+    border-color: #E65100;
+    box-shadow: 0 3px 10px rgba(255, 107, 0, 0.25);
+  }
+
+  /* =======================================================================
+     3. HERO SECTION
+     ======================================================================= */
+  .hero-section {
+    background: linear-gradient(145deg, #090D16 0%, #0F172A 60%, #1A2234 100%);
+    color: #FFFFFF;
+    padding: 32px 18px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 2px solid #FF6B00;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255, 107, 0, 0.15);
+    border: 1px solid rgba(255, 107, 0, 0.4);
+    color: #FFA000;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 4px 14px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+  .hero-title {
+    font-family: 'Outfit', 'Noto Sans Devanagari', sans-serif;
+    font-size: 26px;
+    font-weight: 900;
+    margin-bottom: 8px;
+    line-height: 1.25;
+    color: #FFFFFF;
+  }
+  .hero-subtitle {
+    font-size: 13.5px;
+    color: #94A3B8;
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  /* Floating Exclusive Offer Pill */
+  .hero-offer-banner {
+    margin-top: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 107, 0, 0.2);
+    border: 1px dashed #FF6B00;
+    padding: 8px 18px;
+    border-radius: 30px;
+    color: #FFD180;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .hero-offer-banner:hover {
+    transform: scale(1.03);
+    background: rgba(255, 107, 0, 0.3);
+  }
+
+  /* =======================================================================
+     4. 2-COLUMN MOBILE & MULTI-COLUMN DESKTOP GRID (Min 6-8 Posts Pairs)
+     ======================================================================= */
+  .main-wrapper {
+    max-width: 1280px;
+    margin: 20px auto;
+    padding: 0 14px;
+  }
+  .post-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .post-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  .post-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* 4:5 Portrait Travel Media Ratio */
+  .card-media-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: #0F172A;
+  }
+  .card-media-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+  .post-card:hover .card-media-img {
+    transform: scale(1.04);
+  }
+  .card-badge-cat {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(4px);
+    color: #FFA000;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .card-badge-discount {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #FF6B00;
+    color: #FFFFFF;
+    font-size: 10.5px;
+    font-weight: 900;
+    padding: 3px 8px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  }
+
+  .card-body {
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: space-between;
+  }
+  .card-title {
+    font-family: 'Outfit', 'Noto Sans Devanagari', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    color: #0F172A;
+    line-height: 1.35;
+    margin-bottom: 6px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .card-snippet {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.45;
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* 3 Action Buttons per Card */
+  .card-actions-wrapper {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .card-actions-top-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .card-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 6px;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 8px;
+    text-decoration: none;
+    text-align: center;
+    transition: transform 0.15s ease, background 0.15s ease;
+    white-space: nowrap;
+  }
+  .card-btn:active {
+    transform: scale(0.96);
+  }
+  .card-btn-book {
+    background: linear-gradient(135deg, #FF6B00, #E65100);
+    color: #FFFFFF;
+    box-shadow: 0 2px 6px rgba(255, 107, 0, 0.25);
+  }
+  .card-btn-wa {
+    background: #25D366;
+    color: #FFFFFF;
+  }
+  .card-btn-read {
+    background: #0F172A;
+    color: #FFFFFF;
+    border: 1px solid #334155;
+    width: 100%;
+    padding: 7px 6px;
+  }
+
+  /* Load More Button */
+  .load-more-box {
+    text-align: center;
+    margin: 32px 0 16px;
+  }
+  .btn-load-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #0F172A;
+    color: #FFA000;
+    font-size: 14px;
+    font-weight: 800;
+    padding: 12px 28px;
+    border-radius: 30px;
+    border: 1.5px solid #FF6B00;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.2);
+    transition: all 0.2s ease;
+  }
+  .btn-load-more:hover {
+    background: #FF6B00;
+    color: #FFFFFF;
+    transform: translateY(-2px);
+  }
+
+  /* =======================================================================
+     5. ARTICLE DETAIL PAGE & IN-ARTICLE INSTANT LANGUAGE SWITCHER
+     ======================================================================= */
+  .article-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* In-Article Language Switcher Bar */
+  .article-lang-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 8px 12px;
+    margin-bottom: 20px;
+  }
+  .article-lang-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .article-lang-pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .art-lang-pill {
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    color: #0F172A;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .art-lang-pill:hover, .art-lang-pill.active {
+    background: #FF6B00;
+    color: #FFFFFF;
+    border-color: #E65100;
+  }
+
+  .article-title {
+    font-family: 'Outfit', 'Noto Sans Devanagari', sans-serif;
+    font-size: 24px;
+    font-weight: 900;
+    color: #0F172A;
+    margin-bottom: 14px;
+    line-height: 1.3;
+  }
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-muted);
+    font-size: 12.5px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .article-hero-media {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    margin-bottom: 22px;
+  }
+  .article-content {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #334155;
+  }
+  .article-content h2, .article-content h3 {
+    color: #0F172A;
+    margin: 26px 0 12px;
+    font-family: 'Outfit', 'Noto Sans Devanagari', sans-serif;
+  }
+  .article-content p {
+    margin-bottom: 16px;
+  }
+  .article-content ul, .article-content ol {
+    margin: 0 0 18px 24px;
+  }
+  .article-content li {
+    margin-bottom: 8px;
+  }
+
+  /* Interactive Booking Engine inside Article */
+  .article-booking-card {
+    background: linear-gradient(145deg, #090D16, #0F172A);
+    color: #FFFFFF;
+    border: 1.5px solid #FF6B00;
+    border-radius: var(--radius-lg);
+    padding: 22px;
+    margin: 28px 0;
+    box-shadow: var(--shadow-lg);
+  }
+  .engine-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .engine-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: #FFA000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .engine-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .engine-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .engine-field label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #94A3B8;
+    text-transform: uppercase;
+  }
+  .engine-input, .engine-select {
+    background: #1E293B;
+    border: 1px solid #334155;
+    color: #FFFFFF;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    outline: none;
+  }
+  .engine-input:focus, .engine-select:focus {
+    border-color: #FF6B00;
+  }
+  .engine-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .engine-btn {
+    flex: 1;
+    min-width: 160px;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 13px;
+    text-decoration: none;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: transform 0.15s ease;
+  }
+  .engine-btn-book {
+    background: linear-gradient(135deg, #FF6B00, #E65100);
+    color: #FFFFFF;
+    box-shadow: 0 4px 14px rgba(255, 107, 0, 0.35);
+  }
+  .engine-btn-wa {
+    background: #25D366;
+    color: #FFFFFF;
+  }
+
+  /* =======================================================================
+     6. EXCLUSIVE OFFER VIP LEAD POPUP MODAL
+     ======================================================================= */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 100000;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    box-sizing: border-box;
+  }
+  .modal-card {
+    background: #FFFFFF;
+    border-radius: 20px;
+    max-width: 440px;
+    width: 100%;
+    padding: 26px 22px;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    border: 2px solid #FF6B00;
+  }
+  .modal-close-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: #F1F5F9;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+    color: #64748B;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 20px;
+    font-weight: 900;
+    color: #0F172A;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+  .modal-subtitle {
+    font-size: 13px;
+    color: #64748B;
+    text-align: center;
+    margin-bottom: 18px;
+  }
+  .modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+  .modal-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #CBD5E1;
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+  }
+  .modal-input:focus {
+    border-color: #FF6B00;
+  }
+  .modal-submit-btn {
+    background: linear-gradient(135deg, #FF6B00, #E65100);
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 800;
+    padding: 12px 18px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(255, 107, 0, 0.3);
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  /* =======================================================================
+     7. COMPACT LUXURY FOOTER
+     ======================================================================= */
+  .main-footer {
+    background: #090D16;
+    color: #E2E8F0;
+    padding: 34px 18px 24px;
+    border-top: 2px solid #FF6B00;
+    margin-top: 36px;
+  }
+  .footer-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+  }
+  .footer-brand-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .footer-brand-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .footer-desc {
+    color: #94A3B8;
+    font-size: 13px;
+    max-width: 600px;
+    line-height: 1.6;
+  }
+  .footer-portals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+  }
+  .portal-btn {
+    background: #111827;
+    border: 1px solid #1F2937;
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #FFFFFF;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .portal-btn:hover {
+    border-color: #FF6B00;
+    background: #1F2937;
+  }
+  .portal-btn-sub {
+    font-size: 11px;
+    color: #9CA3AF;
+  }
+  .footer-legal-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 18px;
+    border-top: 1px solid #1E293B;
+    font-size: 12px;
+    color: #64748B;
+  }
+  .footer-legal-links {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .footer-legal-link {
+    color: #94A3B8;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-legal-link:hover {
+    color: #FF6B00;
+  }
+
+  /* =======================================================================
+     8. 100% RESPONSIVE 4-BUTTON FIXED BOTTOM DOCK (Never Overflows)
+     ======================================================================= */
+  .mobile-bottom-bar {
+    position: fixed;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 20px);
+    max-width: 520px;
+    height: 64px;
+    background: rgba(10, 15, 29, 0.96);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1.5px solid rgba(255, 107, 0, 0.5);
+    border-radius: 20px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55), 0 0 20px rgba(255, 107, 0, 0.25);
+    z-index: 99999;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.25fr 1fr;
+    gap: 4px;
+    padding: 4px 6px;
+    align-items: center;
+    box-sizing: border-box;
+  }
+  .bar-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 700;
+    height: 54px;
+    border-radius: 12px;
+    transition: transform 0.15s ease, background 0.15s ease;
+    overflow: hidden;
+  }
+  .bar-btn:active {
+    transform: scale(0.95);
+  }
+  .bar-icon {
+    font-size: 19px;
+    line-height: 1;
+  }
+  .bar-label {
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+  }
+  .bar-btn-call { color: #FFA000; }
+  .bar-btn-call:hover { background: rgba(255, 160, 0, 0.15); }
+  .bar-btn-wa { color: #25D366; }
+  .bar-btn-wa:hover { background: rgba(37, 211, 102, 0.15); }
+  .bar-btn-book {
+    background: linear-gradient(135deg, #FF6B00, #E65100);
+    color: #FFFFFF;
+    box-shadow: 0 3px 10px rgba(255, 107, 0, 0.35);
+  }
+  .bar-btn-book .bar-label { color: #FFFFFF; font-weight: 800; }
+  .bar-btn-app { color: #60A5FA; }
+  .bar-btn-app:hover { background: rgba(96, 165, 250, 0.15); }
+
+  /* =======================================================================
+     9. RESPONSIVE MEDIA QUERIES (Mobile 2-Column Grid & Header Layout)
+     ======================================================================= */
+  @media (max-width: 768px) {
+    /* Compact Header on Mobile */
+    .header-container {
+      padding: 8px 12px;
+      gap: 8px;
+    }
+    .brand-logo-circle {
+      width: 36px;
+      height: 36px;
+    }
+    .brand-word-lexa, .brand-word-trip {
+      font-size: 17px;
+    }
+    .brand-dest-word {
+      font-size: 15px;
+    }
+    .brand-tagline {
+      display: none;
+    }
+    .btn-header-wa {
+      display: none;
+    }
+    .btn-header {
+      padding: 5px 8px;
+      font-size: 11px;
+      gap: 3px;
+    }
+
+    /* Hero section */
+    .hero-section {
+      padding: 24px 14px;
+    }
+    .hero-title {
+      font-size: 21px;
+    }
+    .hero-subtitle {
+      font-size: 12.5px;
+    }
+
+    /* 2-COLUMN MOBILE POST CARDS GRID */
+    .post-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .card-body {
+      padding: 10px 8px;
+    }
+    .card-title {
+      font-size: 13px;
+      margin-bottom: 6px;
+      -webkit-line-clamp: 2;
+    }
+    .card-snippet {
+      display: none;
+    }
+    .card-badge-cat, .card-badge-discount {
+      font-size: 9px;
+      padding: 2px 6px;
+      top: 6px;
+    }
+    .card-badge-cat { left: 6px; }
+    .card-badge-discount { right: 6px; }
+
+    .card-btn {
+      padding: 6px 4px;
+      font-size: 10px;
+      border-radius: 6px;
+    }
+
+    /* Bottom dock */
+    .mobile-bottom-bar {
+      bottom: 8px;
+      width: calc(100% - 16px);
+      height: 60px;
+      border-radius: 16px;
+      padding: 3px 4px;
+      gap: 3px;
+    }
+    .bar-btn {
+      height: 50px;
+      font-size: 10px;
+    }
+    .bar-icon {
+      font-size: 17px;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .brand-word-lexa, .brand-word-trip {
+      font-size: 15px;
+    }
+    .brand-dest-word {
+      font-size: 13px;
+    }
+    .btn-header-book span {
+      display: none;
+    }
+    .post-grid {
+      gap: 8px;
+    }
+    .card-body {
+      padding: 8px 6px;
+    }
+    .card-title {
+      font-size: 12px;
+    }
+    .mobile-bottom-bar {
+      bottom: 6px;
+      width: calc(100% - 10px);
+      height: 56px;
+      padding: 2px 3px;
+      gap: 2px;
+    }
+    .bar-btn {
+      height: 48px;
+      font-size: 9px;
+    }
+    .bar-icon {
+      font-size: 15px;
+    }
+  }
+  ]]></b:skin>
+</head>
+<body>
+
+  <!-- =======================================================================
+       LAYOUT SECTION 1: TOP ADS & SMART LINKS (Blogger Layout Editable)
+       ======================================================================= -->
+  <b:section id='smart-links-top' name='[Smart Links &amp; Ads] Top Header Banner / Direct Link / Adsterra' showaddelement='yes'/>
+
+  <!-- =======================================================================
+       LAYOUT SECTION 2: HEADER CUSTOM OVERRIDES (Blogger Layout Editable)
+       ======================================================================= -->
+  <b:section id='header-branding-custom' name='[Header] Custom Logo, Title &amp; Description' showaddelement='yes'/>
+
+  <!-- =======================================================================
+       MAIN LUXURY HEADER (LEXA TRIP \${destBadge} In Pure Typography)
+       ======================================================================= -->
+  <header class='main-header'>
+    <div class='header-container'>
+      
+      <!-- Official Logo with Lifetime Base64 Emblem & Prominent Destination Word -->
+      <a class='brand-logo-link' href='/'>
+        <div class='brand-logo-circle'>
+          <img alt='LexaTrip Emblem' class='brand-logo-img' src='\${EMBLEM_B64}'/>
+        </div>
+        <div class='brand-text'>
+          <div class='brand-name-row'>
+            <span class='brand-word-lexa'>LEXA</span>
+            <span class='brand-word-trip'>TRIP</span>
+            <span class='brand-dest-word'>\${destBadge}</span>
+          </div>
+          <span class='brand-tagline'>BOOK. EXPLORE. REPEAT.</span>
+        </div>
+      </a>
+
+      <!-- Header Action Buttons (Language, Book Online, App) -->
+      <div class='header-actions'>
+        <!-- Language Switcher Dropdown -->
+        <div class='lang-dropdown'>
+          <button class='btn-header btn-header-lang' onclick='toggleLangMenu(event)' type='button'>
+            <span>🌐</span> EN ▾
+          </button>
+          <div class='lang-menu' id='langDropdown'>
+            <a class='lang-item' href='#' onclick='selectLang(\\"en\\", event)'>English (EN)</a>
+            <a class='lang-item' href='#' onclick='selectLang(\\"hi\\", event)'>हिन्दी (Hindi)</a>
+            <a class='lang-item' href='#' onclick='selectLang(\\"gu\\", event)'>ગુજરાતી (Gujarati)</a>
+            <a class='lang-item' href='#' onclick='selectLang(\\"mr\\", event)'>मराठी (Marathi)</a>
+          </div>
+        </div>
+
+        <a class='btn-header btn-header-book' href='https://bookings.lexatrip.com/' target='_blank'>
+          <span>🏨</span> Book Online
+        </a>
+        <a class='btn-header btn-header-wa' href='https://wa.me/\${destWaNum}?text=Hello%20LexaTrip%20\${encodeURIComponent(destBadge)}' target='_blank'>
+          <span>💬</span> WhatsApp
+        </a>
+        <a class='btn-header btn-header-app' href='https://www.lexatrip.com/app' target='_blank'>
+          <span>📲</span> App
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- =======================================================================
+       LAYOUT SECTION 3: MENU & CATEGORY LABELS (Blogger Layout Editable)
+       ======================================================================= -->
+  <b:section id='category-menu-custom' name='[Menu Bar] Custom Menu Links &amp; Category Labels (LinkList / Pages)' showaddelement='yes'/>
+
+  <!-- =======================================================================
+       CATEGORY NAVIGATION BAR (Smooth Native Touch Swipe on Mobile/Tablet)
+       ======================================================================= -->
+  <nav class='cat-nav-wrapper'>
+    <div class='cat-nav-flex'>
+      <button class='cat-scroll-btn' onclick='scrollCatNav(-200)' type='button'>‹</button>
+      <div class='cat-nav-bar' id='categoryNav'>
+        <a class='cat-pill active' href='#' onclick='filterCategory(\\"all\\", event)'>🏠 होम पेज</a>
+        <a class='cat-pill' href='#' onclick='filterCategory(\\"camp\\", event)'>⛺ लक्ज़री कैंप्स</a>
+        <a class='cat-pill' href='#' onclick='filterCategory(\\"5-star\\", event)'>⭐ 5-स्टार होटल्स</a>
+        <a class='cat-pill' href='#' onclick='filterCategory(\\"4-star\\", event)'>🏨 4-स्टार होटल्स</a>
+        <a class='cat-pill' href='#' onclick='filterCategory(\\"3-star\\", event)'>🛏️ 3-स्टार होटल्स</a>
+        <a class='cat-pill' href='#' onclick='filterCategory(\\"budget\\", event)'>💰 बजट फ्रेंडली होटल</a>
+      </div>
+      <button class='cat-scroll-btn' onclick='scrollCatNav(200)' type='button'>›</button>
+    </div>
+  </nav>
+
+  <!-- =======================================================================
+       HERO BANNER SECTION
+       ======================================================================= -->
+  <section class='hero-section'>
+    <span class='hero-badge'>✦ Verified Experiential Luxury Travel &amp; Stays ✦</span>
+    <h1 class='hero-title'>\${destBadge} लक्ज़री स्टे व हेरिटेज गाइड</h1>
+    <p class='hero-subtitle'>\${destDesc}</p>
+    
+    <!-- Floating Lead Form Trigger Pill -->
+    <div>
+      <div class='hero-offer-banner' onclick='openVipOfferModal()'>
+        <span>🎁</span>
+        <span>एक्सक्लूसिव 50% छूट व सीक्रेट कूपन कोड प्राप्त करें (Click Here)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- =======================================================================
+       LAYOUT SECTION 4: ADS ABOVE POSTS
+       ======================================================================= -->
+  <b:section id='smart-links-above-cards' name='[Smart Links &amp; Ads] Above Hotel Cards Banner' showaddelement='yes'/>
+
+  <!-- =======================================================================
+       MAIN CONTENT CONTAINER
+       ======================================================================= -->
+  <main class='main-wrapper'>
+    <b:section id='main' name='Main Content Area' maxwidgets='1' showaddelement='no'>
+      <b:widget id='Blog1' locked='true' title='Blog Posts' type='Blog' version='2'>
+        <b:includable id='main' var='this'>
+          <!-- Resilient Client-Side Hybrid Container -->
+          <div id='lexa-dynamic-root'>
+            <!-- Post Card Grid will be rendered dynamically here -->
+            <div class='post-grid' id='postGrid'></div>
+          </div>
+        </b:includable>
+      </b:widget>
+    </b:section>
+  </main>
+
+  <!-- =======================================================================
+       LAYOUT SECTION 5: IN-FEED / IN-ARTICLE ADS
+       ======================================================================= -->
+  <b:section id='smart-links-inside-article' name='[Smart Links &amp; Ads] Inside Article / Feed Banner' showaddelement='yes'/>
+
+  <!-- =======================================================================
+       LAYOUT SECTION 6: VIP LEAD POPUP / EXCLUSIVE OFFER FORM
+       ======================================================================= -->
+  <b:section id='vip-exclusive-lead-popup' name='[Popup &amp; Lead Form] Exclusive VIP Offer / Popup Modal' showaddelement='yes'/>
+
+  <!-- =======================================================================
+       EXCLUSIVE VIP OFFER LEAD CAPTURE MODAL (Built-in)
+       ======================================================================= -->
+  <div class='modal-overlay' id='vipOfferModal'>
+    <div class='modal-card'>
+      <button class='modal-close-btn' onclick='closeVipOfferModal()'>✕</button>
+      <div style='font-size:36px; text-align:center; margin-bottom:8px;'>🎉</div>
+      <h3 class='modal-title'>\${destBadge} एक्सक्लूसिव 50% ऑफर</h3>
+      <p class='modal-subtitle'>नीचे अपना विवरण भरें—हमारा 24/7 डेस्क तुरंत आपको स्पेशल डिस्काउंट वाउचर व्हाट्सएप करेगा।</p>
+      
+      <form class='modal-form' onsubmit='handleLeadFormSubmit(event)'>
+        <input class='modal-input' id='leadName' placeholder='आपका नाम (Full Name)' required='required' type='text'/>
+        <input class='modal-input' id='leadPhone' placeholder='व्हाट्सएप नंबर (WhatsApp No.)' required='required' type='tel'/>
+        <input class='modal-input' id='leadDate' placeholder='यात्रा की तारीख (Travel Date / Month)' type='text'/>
+        <select class='modal-input' id='leadStayType'>
+          <option value='Luxury Resort / Camp'>लक्ज़री रिसॉर्ट / कैंप स्टे</option>
+          <option value='5-Star Heritage Palace'>5-स्टार हेरिटेज होटल</option>
+          <option value='4-Star Comfort Stay'>4-स्टार कंफर्ट होटल</option>
+          <option value='Guided Tour Package'>टूर व साइटसीइंग पैकेज</option>
+          <option value='Budget Stay'>बजट फ्रेंडली स्टे</option>
+        </select>
+        <button class='modal-submit-btn' type='submit'>
+          <span>💬</span> व्हाट्सएप पर इंस्टेंट ऑफर पाएं
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Desktop Call Prompt Modal -->
+  <div class='modal-overlay' id='callModal'>
+    <div class='modal-card' style='text-align:center;'>
+      <button class='modal-close-btn' onclick='document.getElementById(\\"callModal\\").style.display=\\"none\\"'>✕</button>
+      <div style='font-size:38px; margin-bottom:10px;'>📞</div>
+      <h3 class='modal-title'>LexaTrip 24/7 Helpline</h3>
+      <p class='modal-subtitle'>तत्काल बुकिंग सहायता व पूछताछ के लिए हमारे हेल्पलाइन नंबर पर कॉल करें:</p>
+      <div style='background:#F8FAFC; border:1px solid #E2E8F0; border-radius:12px; padding:14px; margin:16px 0;'>
+        <p style='font-size:20px; font-weight:800; color:#FF6B00; margin-bottom:4px;'>\${destPhone1}</p>
+        <p style='font-size:16px; font-weight:700; color:#0F172A;'>\${destPhone2}</p>
+      </div>
+      <a class='modal-submit-btn' href='tel:\${destPhone1.replace(/\\s+/g, '')}' style='text-decoration:none;'>
+        <span>📞</span> अभी कॉल करें (Call Now)
+      </a>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       COMPACT LUXURY FOOTER
+       ======================================================================= -->
+  <footer class='main-footer'>
+    <div class='footer-container'>
+
+      <!-- Top Row: Logo & Brand Description -->
+      <div class='footer-brand-section'>
+        <div class='footer-brand-row'>
+          <div class='brand-logo-circle'>
+            <img alt='LexaTrip Emblem' class='brand-logo-img' src='\${EMBLEM_B64}'/>
+          </div>
+          <div class='brand-text'>
+            <div class='brand-name-row'>
+              <span class='brand-word-lexa' style='color:#FFFFFF;'>LEXA</span>
+              <span class='brand-word-trip'>TRIP</span>
+              <span class='brand-dest-word' style='color:#FF6B00;'>\${destBadge}</span>
+            </div>
+            <span class='brand-tagline' style='color:#94A3B8;'>BOOK. EXPLORE. REPEAT.</span>
+          </div>
+        </div>
+        <p class='footer-desc'>
+          भारत का प्रमुख एक्सपीरियंसियल ट्रैवल ब्रांड। \${destBadge} में लक्ज़री स्टे, हेरिटेज फोर्ट्स, रिजॉर्ट्स और एक्सक्लूसिव टूर पैकेजेस।
+        </p>
+      </div>
+
+      <!-- Official Portals (Button-style pills) -->
+      <div class='footer-portals-grid'>
+        <a class='portal-btn' href='https://bookings.lexatrip.com/' target='_blank'>
+          <span style='font-size:22px;'>🏨</span>
+          <div>
+            <strong>Online Reservations</strong><br/>
+            <span class='portal-btn-sub'>bookings.lexatrip.com</span>
+          </div>
+        </a>
+        <a class='portal-btn' href='https://www.lexatrip.com/' target='_blank'>
+          <span style='font-size:22px;'>🌐</span>
+          <div>
+            <strong>Main Website</strong><br/>
+            <span class='portal-btn-sub'>lexatrip.com</span>
+          </div>
+        </a>
+        <a class='portal-btn' href='https://www.lexatrip.in/' target='_blank'>
+          <span style='font-size:22px;'>🇮🇳</span>
+          <div>
+            <strong>National Portal</strong><br/>
+            <span class='portal-btn-sub'>lexatrip.in</span>
+          </div>
+        </a>
+        <a class='portal-btn' href='https://www.lexatrip.com/app' target='_blank'>
+          <span style='font-size:22px;'>📲</span>
+          <div>
+            <strong>Mobile App</strong><br/>
+            <span class='portal-btn-sub'>Android &amp; iOS App</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- 24/7 Helpline Strip -->
+      <div style='background:#111827; border:1px solid #1F2937; border-radius:12px; padding:16px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:12px;'>
+        <div>
+          <span style='color:#FFA000; font-size:12px; font-weight:800; text-transform:uppercase;'>24/7 HELPLINE &amp; GUEST SUPPORT</span><br/>
+          <strong style='color:#FFFFFF; font-size:15px;'>\${destPhone1} &nbsp;|&nbsp; \${destPhone2}</strong>
+        </div>
+        <div>
+          <a href='https://wa.me/\${destWaNum}' target='_blank' style='display:inline-flex; align-items:center; gap:6px; background:#25D366; color:#FFF; font-weight:700; font-size:12px; padding:8px 16px; border-radius:20px; text-decoration:none;'>
+            <span>💬</span> Official WhatsApp Desk
+          </a>
+        </div>
+      </div>
+
+      <!-- Footer Bottom Legal & Links -->
+      <div class='footer-legal-bar'>
+        <div class='footer-legal-links'>
+          <a class='footer-legal-link' href='/p/about-us.html'>About Us</a>
+          <a class='footer-legal-link' href='/p/contact-us.html'>Contact Us</a>
+          <a class='footer-legal-link' href='/p/privacy-policy.html'>Privacy Policy</a>
+          <a class='footer-legal-link' href='/p/terms-conditions.html'>Terms &amp; Conditions</a>
+        </div>
+        <div>
+          © 2026 LexaTrip™ Technologies Pvt. Ltd. All rights reserved. Book. Explore. Repeat.
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- =======================================================================
+       LAYOUT SECTION 7: FOOTER SMART LINKS & TRACKING
+       ======================================================================= -->
+  <b:section id='footer-bottom-smart-links' name='[Footer] Bottom Smart Links &amp; Tracking Codes' showaddelement='yes'/>
+
+  <!-- =======================================================================
+       100% RESPONSIVE 4-BUTTON FIXED BOTTOM DOCK (Never Overflows)
+       ======================================================================= -->
+  <div class='mobile-bottom-bar' id='bottomBar'>
+    <a class='bar-btn bar-btn-call' href='tel:\${destPhone1.replace(/\\s+/g, '')}' onclick='handleCallClick(event)' title='24/7 Call Support'>
+      <span class='bar-icon'>📞</span>
+      <span class='bar-label'>कॉल करें</span>
+    </a>
+    <a class='bar-btn bar-btn-wa' href='https://wa.me/\${destWaNum}?text=Hello%20LexaTrip%20\${encodeURIComponent(destBadge)}' target='_blank' title='Direct WhatsApp Booking'>
+      <span class='bar-icon'>💬</span>
+      <span class='bar-label'>WhatsApp</span>
+    </a>
+    <a class='bar-btn bar-btn-book' href='https://bookings.lexatrip.com/' target='_blank' title='Instant Online Reservation'>
+      <span class='bar-icon'>🏨</span>
+      <span class='bar-label'>बुक नाउ</span>
+    </a>
+    <a class='bar-btn bar-btn-app' href='https://www.lexatrip.com/app' target='_blank' title='Download LexaTrip Mobile App'>
+      <span class='bar-icon'>📲</span>
+      <span class='bar-label'>ऐप डाउनलोड</span>
+    </a>
+  </div>
+
+  <!-- =======================================================================
+       HYBRID CLIENT-SIDE ENGINE (Dynamic Feed, Routing, Pagination & Modals)
+       ======================================================================= -->
+  <script type='text/javascript'>
+  //<![CDATA[
+    let allPostsData = [];
+    let currentCategoryFilter = 'all';
+    let displayedPostsCount = 8; // Shows minimum 6-8 cards by default (Pairs of 2)
+
+    // Touch / Button Category Scroll
+    function scrollCatNav(offset) {
+      const el = document.getElementById('categoryNav');
+      if (el) el.scrollBy({ left: offset, behavior: 'smooth' });
+    }
+
+    // Call Action Handler
+    function handleCallClick(e) {
+      const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      if (isMobile) {
+        window.location.href = 'tel:\${destPhone1.replace(/\\s+/g, '')}';
+      } else {
+        if (e) e.preventDefault();
+        const modal = document.getElementById('callModal');
+        if (modal) modal.style.display = 'flex';
+      }
+    }
+
+    // VIP Offer Modal Open / Close
+    function openVipOfferModal() {
+      const m = document.getElementById('vipOfferModal');
+      if (m) m.style.display = 'flex';
+    }
+    function closeVipOfferModal() {
+      const m = document.getElementById('vipOfferModal');
+      if (m) m.style.display = 'none';
+    }
+
+    // Lead Form Handler (Auto WhatsApp Concierge Connect)
+    function handleLeadFormSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('leadName').value;
+      const phone = document.getElementById('leadPhone').value;
+      const date = document.getElementById('leadDate').value || 'Immediate';
+      const stay = document.getElementById('leadStayType').value;
+
+      const msg = '🎉 *New Exclusive 50% VIP Lead - ' + \${JSON.stringify(destBadge)} + '*' +
+                  '\\\\n👤 Guest Name: ' + name +
+                  '\\\\n📱 WhatsApp: ' + phone +
+                  '\\\\n📅 Travel Date: ' + date +
+                  '\\\\n🏨 Category: ' + stay;
+
+      closeVipOfferModal();
+      window.open('https://wa.me/\${destWaNum}?text=' + encodeURIComponent(msg), '_blank');
+    }
+
+    // Language Toggle (Header)
+    function toggleLangMenu(e) {
+      if (e) e.stopPropagation();
+      const dd = document.getElementById('langDropdown');
+      if (dd) dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+    }
+    document.addEventListener('click', () => {
+      const dd = document.getElementById('langDropdown');
+      if (dd) dd.style.display = 'none';
+    });
+    function selectLang(lang, e) {
+      if (e) e.preventDefault();
+      translatePageTo(lang);
+    }
+
+    // Instant Page & Article Translation Function
+    function translatePageTo(lang) {
+      const dd = document.getElementById('langDropdown');
+      if (dd) dd.style.display = 'none';
+
+      if (lang === 'en') {
+        const u = window.location.href.split('?')[0];
+        window.location.href = u;
+      } else {
+        window.location.href = 'https://translate.google.com/translate?sl=auto&tl=' + encodeURIComponent(lang) + '&u=' + encodeURIComponent(window.location.href);
+      }
+    }
+
+    // Dynamic Discount Generator (Randomized 35% - 60% Off)
+    function getPostDiscount(title, id) {
+      const match = (title + '').match(/(\\\\d{2})%\\\\s*off/i);
+      if (match) return match[1] + '% Off';
+      const discounts = ['35% Off', '40% Off', '45% Off', '50% Off', '55% Off', '60% Off'];
+      let hash = 0;
+      const str = (title || '') + (id || '');
+      for (let i = 0; i < str.length; i++) hash = (hash * 31 + str.charCodeAt(i)) >>> 0;
+      return discounts[hash % discounts.length];
+    }
+
+    // Main Engine Runner
+    async function loadLexaBlogContent() {
+      const container = document.getElementById('lexa-dynamic-root');
+      if (!container) return;
+
+      const currentPath = window.location.pathname;
+      const lowPath = currentPath.toLowerCase();
+
+      // 1. Legal Static Page Routing
+      if (lowPath.includes('about-us')) {
+        renderLegalStaticPage(container, \${JSON.stringify(legalPages.aboutUs ? legalPages.aboutUs.title : 'About Us')}, \${JSON.stringify(legalPages.aboutUs ? legalPages.aboutUs.content : '')});
+        return;
+      }
+      if (lowPath.includes('contact-us')) {
+        renderLegalStaticPage(container, \${JSON.stringify(legalPages.contactUs ? legalPages.contactUs.title : 'Contact Us')}, \${JSON.stringify(legalPages.contactUs ? legalPages.contactUs.content : '')});
+        return;
+      }
+      if (lowPath.includes('privacy-policy')) {
+        renderLegalStaticPage(container, \${JSON.stringify(legalPages.privacyPolicy ? legalPages.privacyPolicy.title : 'Privacy Policy')}, \${JSON.stringify(legalPages.privacyPolicy ? legalPages.privacyPolicy.content : '')});
+        return;
+      }
+      if (lowPath.includes('terms-conditions') || lowPath.includes('terms')) {
+        renderLegalStaticPage(container, \${JSON.stringify(legalPages.termsConditions ? legalPages.termsConditions.title : 'Terms & Conditions')}, \${JSON.stringify(legalPages.termsConditions ? legalPages.termsConditions.content : '')});
+        return;
+      }
+
+      // 2. Fetch Blogger JSON Feed
+      try {
+        const res = await fetch('/feeds/posts/default?alt=json&max-results=50');
+        if (res.ok) {
+          const data = await res.json();
+          allPostsData = (data.feed && data.feed.entry) ? data.feed.entry : [];
+        }
+      } catch (e) {
+        console.warn('Feed fetch error:', e);
+      }
+
+      // 3. Route: Single Post vs Grid
+      const isSinglePost = currentPath.endsWith('.html') && !currentPath.includes('/p/');
+      if (isSinglePost) {
+        renderSingleArticle(container, currentPath);
+      } else {
+        renderPostGrid(container, currentCategoryFilter);
+      }
+    }
+
+    // Real-Time Category Filtering
+    function filterCategory(cat, event) {
+      if (event) event.preventDefault();
+      currentCategoryFilter = cat;
+      displayedPostsCount = 8; // Reset to 8 posts on category switch
+
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('onclick').includes("'" + cat + "'") || btn.getAttribute('onclick').includes('\\"' + cat + '\\"'));
+      });
+
+      const container = document.getElementById('lexa-dynamic-root');
+      if (container) renderPostGrid(container, cat);
+    }
+
+    // Load More Posts Handler
+    function loadMorePosts() {
+      displayedPostsCount += 6;
+      const container = document.getElementById('lexa-dynamic-root');
+      if (container) renderPostGrid(container, currentCategoryFilter);
+    }
+
+    // Render 4:5 Card Grid (2-Column Mobile Grid + 3 Action Buttons per Card)
+    function renderPostGrid(container, cat) {
+      let filtered = allPostsData;
+      if (cat !== 'all') {
+        filtered = allPostsData.filter(entry => {
+          const catList = (entry.category || []).map(c => (c.term || '').toLowerCase());
+          const title = ((entry.title && entry.title.$t) || '').toLowerCase();
+          const content = ((entry.content && entry.content.$t) || '').toLowerCase();
+          const target = cat.toLowerCase();
+
+          if (target === 'camp') return catList.some(c => c.includes('camp') || c.includes('tent') || c.includes('कैंप')) || title.includes('camp') || content.includes('camp');
+          if (target === '5-star') return catList.some(c => c.includes('5-star') || c.includes('5 star') || c.includes('luxury') || c.includes('5-स्टार')) || title.includes('5 star') || content.includes('5 star');
+          if (target === '4-star') return catList.some(c => c.includes('4-star') || c.includes('4 star') || c.includes('premium') || c.includes('4-स्टार')) || title.includes('4 star') || content.includes('4 star');
+          if (target === '3-star') return catList.some(c => c.includes('3-star') || c.includes('3 star') || c.includes('comfort') || c.includes('3-स्टार')) || title.includes('3 star') || content.includes('3 star');
+          if (target === 'budget') return catList.some(c => c.includes('budget') || c.includes('affordable') || c.includes('बजट')) || title.includes('budget') || content.includes('budget');
+          return true;
+        });
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = 
+          '<div style=\\"text-align:center; padding:60px 20px; background:#FFFFFF; border-radius:16px; border:1px solid #E2E8F0; margin:20px 0;\\">' +
+            '<div style=\\"font-size:48px; margin-bottom:12px;\\">🏨</div>' +
+            '<h3 style=\\"font-size:20px; font-weight:800; color:#0F172A; margin-bottom:8px;\\">इस श्रेणी में जल्द ही नए होटल्स और स्टे जोड़े जा रहे हैं।</h3>' +
+            '<p style=\\"color:#64748B; font-size:14px; max-width:500px; margin:0 auto 20px;\\">तत्काल बुकिंग व पूछताछ के लिए हमारी 24/7 हेल्पलाइन पर संपर्क करें।</p>' +
+            '<a href=\\"https://wa.me/\${destWaNum}\\" target=\\"_blank\\" style=\\"display:inline-block; background:#25D366; color:#FFF; font-weight:700; padding:10px 22px; border-radius:24px; text-decoration:none;\\">💬 WhatsApp Concierge</a>' +
+          '</div>';
+        return;
+      }
+
+      // Slice to display min 6-8 posts (Pairs of 2)
+      const visiblePosts = filtered.slice(0, displayedPostsCount);
+
+      let html = '<div class=\\"post-grid\\" id=\\"postGrid\\">';
+
+      visiblePosts.forEach(entry => {
+        const title = (entry.title && entry.title.$t) || ('LexaTrip ' + \${JSON.stringify(destBadge)} + ' Stay');
+        const postUrl = (entry.link && entry.link.find(l => l.rel === 'alternate')) ? entry.link.find(l => l.rel === 'alternate').href : '#';
+        const rawContent = (entry.content && entry.content.$t) || (entry.summary && entry.summary.$t) || '';
+        
+        let imgUrl = 'https://images.unsplash.com/photo-1544644181-1484b3fdfc62?w=800&q=80';
+        const imgMatch = rawContent.match(/<img[^>]+src=[\\"']([^\\"']+)[\\"']/i);
+        if (imgMatch && imgMatch[1]) {
+          imgUrl = imgMatch[1].replace('/s72-c/', '/w800-h1000-c/').replace('/s1600/', '/w800-h1000-c/');
+        }
+
+        const snippet = rawContent.replace(/<[^>]*>/g, '').replace(/\\\\s+/g, ' ').trim().slice(0, 100) + '...';
+        const discountBadge = getPostDiscount(title, entry.id ? entry.id.$t : '');
+
+        let catLabel = 'Verified Stay';
+        if (title.toLowerCase().includes('camp') || title.includes('कैंप')) catLabel = 'Camp';
+        else if (title.includes('5 Star') || title.includes('5-Star')) catLabel = '5-Star';
+        else if (title.includes('4 Star') || title.includes('4-Star')) catLabel = '4-Star';
+        else if (title.includes('Fort') || title.includes('किला')) catLabel = 'Heritage';
+
+        html += 
+          '<article class=\\"post-card\\">' +
+            '<div class=\\"card-media-wrapper\\">' +
+              '<span class=\\"card-badge-cat\\">' + catLabel + '</span>' +
+              '<span class=\\"card-badge-discount\\">' + discountBadge + '</span>' +
+              '<a href=\\"' + postUrl + '\\">' +
+                '<img alt=\\"' + title.replace(/\\"/g, '&quot;') + '\\" class=\\"card-media-img\\" loading=\\"lazy\\" src=\\"' + imgUrl + '\\"/>' +
+              '</a>' +
+            '</div>' +
+            '<div class=\\"card-body\\">' +
+              '<h3 class=\\"card-title\\"><a href=\\"' + postUrl + '\\" style=\\"color:inherit; text-decoration:none;\\">' + title + '</a></h3>' +
+              '<p class=\\"card-snippet\\">' + snippet + '</p>' +
+              
+              '<!-- 3 Action Buttons per Card (Clean Two-Row Compact Layout) -->' +
+              '<div class=\\"card-actions-wrapper\\">' +
+                '<div class=\\"card-actions-top-row\\">' +
+                  '<a class=\\"card-btn card-btn-book\\" href=\\"https://bookings.lexatrip.com/\\" target=\\"_blank\\">🏨 Book Now</a>' +
+                  '<a class=\\"card-btn card-btn-wa\\" href=\\"https://wa.me/\${destWaNum}?text=' + encodeURIComponent('Hello LexaTrip, I would like to book: ' + title) + '\\" target=\\"_blank\\">💬 WhatsApp</a>' +
+                '</div>' +
+                '<a class=\\"card-btn card-btn-read\\" href=\\"' + postUrl + '\\">📖 पूरा पढ़ें (Read Article)</a>' +
+              '</div>' +
+            '</div>' +
+          '</article>';
+      });
+      html += '</div>';
+
+      // Load More Button if remaining posts exist
+      if (filtered.length > displayedPostsCount) {
+        html += 
+          '<div class=\\"load-more-box\\">' +
+            '<button class=\\"btn-load-more\\" onclick=\\"loadMorePosts()\\" type=\\"button\\">' +
+              '<span>📥</span> और देखें (Load More Hotels &amp; Stays)' +
+            '</button>' +
+          '</div>';
+      }
+
+      container.innerHTML = html;
+    }
+
+    // Render Single Article with Interactive Booking Engine & Language Switcher
+    function renderSingleArticle(container, currentPath) {
+      let matched = null;
+      for (const entry of allPostsData) {
+        if (entry.link) {
+          const altLink = entry.link.find(l => l.rel === 'alternate');
+          if (altLink && (altLink.href.includes(currentPath) || currentPath.includes(new URL(altLink.href).pathname))) {
+            matched = entry;
+            break;
+          }
+        }
+      }
+
+      if (!matched && allPostsData.length > 0) matched = allPostsData[0];
+
+      if (!matched) {
+        container.innerHTML = '<div style=\\"text-align:center; padding:50px;\\">आर्टिकल लोड हो रहा है...</div>';
+        return;
+      }
+
+      const title = (matched.title && matched.title.$t) || ('LexaTrip ' + \${JSON.stringify(destBadge)} + ' Stay');
+      const content = (matched.content && matched.content.$t) || '';
+      const published = (matched.published && matched.published.$t) ? new Date(matched.published.$t).toLocaleDateString('hi-IN', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Verified Stay';
+      const discount = getPostDiscount(title, matched.id ? matched.id.$t : '');
+
+      let heroImg = 'https://images.unsplash.com/photo-1544644181-1484b3fdfc62?w=1200&q=80';
+      const imgMatch = content.match(/<img[^>]+src=[\\"']([^\\"']+)[\\"']/i);
+      if (imgMatch && imgMatch[1]) heroImg = imgMatch[1];
+
+      let cleanedContent = content.replace(/<img[^>]+>/i, '');
+
+      container.innerHTML = 
+        '<div class=\\"article-container\\">' +
+          '<!-- In-Article Instant Language Switcher Bar -->' +
+          '<div class=\\"article-lang-bar\\">' +
+            '<span class=\\"article-lang-label\\">🌐 Translate Article / भाषा चुनें:</span>' +
+            '<div class=\\"article-lang-pills\\">' +
+              '<button class=\\"art-lang-pill active\\" onclick=\\"translatePageTo(\\'hi\\')\\" type=\\"button\\">हिन्दी</button>' +
+              '<button class=\\"art-lang-pill\\" onclick=\\"translatePageTo(\\'en\\')\\" type=\\"button\\">English</button>' +
+              '<button class=\\"art-lang-pill\\" onclick=\\"translatePageTo(\\'gu\\')\\" type=\\"button\\">ગુજરાતી</button>' +
+              '<button class=\\"art-lang-pill\\" onclick=\\"translatePageTo(\\'mr\\')\\" type=\\"button\\">मराठी</button>' +
+              '<button class=\\"art-lang-pill\\" onclick=\\"translatePageTo(\\'bn\\')\\" type=\\"button\\">বাংলা</button>' +
+            '</div>' +
+          '</div>' +
+
+          '<h1 class=\\"article-title\\">' + title + '</h1>' +
+          '<div class=\\"article-meta\\">' +
+            '<span>🗓️ ' + published + '</span>' +
+            '<span>📍 ' + \${JSON.stringify(destBadge)} + '</span>' +
+            '<span>⭐ 100% LexaTrip Verified</span>' +
+            '<span style=\\"color:#FF6B00; font-weight:800;\\">🏷️ ' + discount + '</span>' +
+          '</div>' +
+          '<img alt=\\"' + title.replace(/\\"/g, '&quot;') + '\\" class=\\"article-hero-media\\" src=\\"' + heroImg + '\\"/>' +
+          
+          '<!-- Interactive Live Booking Engine -->' +
+          '<div class=\\"article-booking-card\\">' +
+            '<div class=\\"engine-header\\">' +
+              '<div class=\\"engine-title\\"><span>⚡</span> इंस्टेंट चेक-इन व बुकिंग इंजन</div>' +
+              '<div style=\\"background:#FF6B00; color:#FFF; font-size:11px; font-weight:800; padding:4px 10px; border-radius:20px;\\">' + discount + ' Special</div>' +
+            '</div>' +
+            '<div class=\\"engine-grid\\">' +
+              '<div class=\\"engine-field\\">' +
+                '<label>Check-In Date</label>' +
+                '<input class=\\"engine-input\\" id=\\"engineCheckIn\\" type=\\"date\\"/>' +
+              '</div>' +
+              '<div class=\\"engine-field\\">' +
+                '<label>Guests (Pax)</label>' +
+                '<select class=\\"engine-select\\" id=\\"enginePax\\">' +
+                  '<option value=\\"2\\">2 Adults (Couples)</option>' +
+                  '<option value=\\"1\\">1 Adult (Solo)</option>' +
+                  '<option value=\\"3\\">3 Adults (Triple Sharing)</option>' +
+                  '<option value=\\"4\\">4+ Family / Group</option>' +
+                '</select>' +
+              '</div>' +
+              '<div class=\\"engine-field\\">' +
+                '<label>Room / Stay Category</label>' +
+                '<select class=\\"engine-select\\" id=\\"engineCategory\\">' +
+                  '<option value=\\"Luxury Resort Room\\">Luxury Resort Room</option>' +
+                  '<option value=\\"Deluxe Cottage / Tent\\">Deluxe Cottage / Tent</option>' +
+                  '<option value=\\"Heritage Suite\\">Heritage Suite</option>' +
+                  '<option value=\\"5-Star Pool Villa\\">5-Star Luxury Villa</option>' +
+                '</select>' +
+              '</div>' +
+            '</div>' +
+            '<div class=\\"engine-actions\\">' +
+              '<a class=\\"engine-btn engine-btn-book\\" href=\\"https://bookings.lexatrip.com/\\" onclick=\\"triggerDirectBooking(event, \\'' + title.replace(/'/g, \"\\\\'\") + '\\')\\">🏨 Book Online (Instant Voucher)</a>' +
+              '<a class=\\"engine-btn engine-btn-wa\\" href=\\"https://wa.me/\${destWaNum}\\" onclick=\\"triggerDirectWa(event, \\'' + title.replace(/'/g, \"\\\\'\") + '\\')\\">💬 WhatsApp Concierge Rate</a>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class=\\"article-content\\">' + cleanedContent + '</div>' +
+
+          '<div style=\\"margin-top:36px; padding:20px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:12px; text-align:center;\\">' +
+            '<h4 style=\\"margin-bottom:8px; color:#0F172A;\\">इस प्रॉपर्टी के बारे में कोई सवाल है?</h4>' +
+            '<p style=\\"color:#64748B; font-size:13px; margin-bottom:14px;\\">हमारे 24/7 स्थानीय विशेषज्ञ से सीधे बात करें या बेस्ट डिस्काउंट पर रूम ब्लॉक करवाएं।</p>' +
+            '<a href=\\"https://wa.me/\${destWaNum}?text=' + encodeURIComponent('नमस्ते, मुझे ' + title + ' के बारे में विस्तृत जानकारी चाहिए।') + '\\" target=\\"_blank\\" style=\\"display:inline-block; background:#25D366; color:#FFF; font-weight:700; padding:10px 24px; border-radius:24px; text-decoration:none;\\">💬 WhatsApp पर संपर्क करें</a>' +
+          '</div>' +
+        '</div>';
+
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const dateInput = document.getElementById('engineCheckIn');
+      if (dateInput) dateInput.value = tomorrow.toISOString().split('T')[0];
+    }
+
+    // Direct Booking Trigger
+    function triggerDirectBooking(e, hotelTitle) {
+      if (e) e.preventDefault();
+      const checkIn = document.getElementById('engineCheckIn') ? document.getElementById('engineCheckIn').value : '';
+      const pax = document.getElementById('enginePax') ? document.getElementById('enginePax').value : '2';
+      const cat = document.getElementById('engineCategory') ? document.getElementById('engineCategory').value : '';
+
+      const params = new URLSearchParams({
+        hotel: hotelTitle,
+        checkIn: checkIn,
+        pax: pax,
+        category: cat,
+        source: \${JSON.stringify(destBadge.toLowerCase() + '_blog')}
+      });
+      window.open('https://bookings.lexatrip.com/?' + params.toString(), '_blank');
+    }
+
+    // Direct WhatsApp Concierge Trigger
+    function triggerDirectWa(e, hotelTitle) {
+      if (e) e.preventDefault();
+      const checkIn = document.getElementById('engineCheckIn') ? document.getElementById('engineCheckIn').value : 'Tomorrow';
+      const pax = document.getElementById('enginePax') ? document.getElementById('enginePax').value : '2';
+      const cat = document.getElementById('engineCategory') ? document.getElementById('engineCategory').value : '';
+
+      const msg = 'नमस्ते LexaTrip Concierge, मुझे निम्नलिखित स्टे की तत्काल बुकिंग/रेट कोटेशन चाहिए:\\\\n\\\\n' +
+                  '🏨 Property: ' + hotelTitle + '\\\\n' +
+                  '📅 Check-In: ' + checkIn + '\\\\n' +
+                  '👥 Guests: ' + pax + ' Person(s)\\\\n' +
+                  '⛺ Preferred Stay: ' + cat;
+
+      window.open('https://wa.me/\${destWaNum}?text=' + encodeURIComponent(msg), '_blank');
+    }
+
+    // Render Legal / Static Page
+    function renderLegalStaticPage(container, title, content) {
+      container.innerHTML = 
+        '<div class=\\"article-container\\">' +
+          '<h1 class=\\"article-title\\">' + title + '</h1>' +
+          '<div class=\\"article-content\\" style=\\"margin-top:20px;\\">' + content + '</div>' +
+          '<div style=\\"margin-top:40px; text-align:center;\\">' +
+            '<a href=\\"/\\" style=\\"display:inline-block; background:#0F172A; color:#FFA000; font-weight:700; padding:10px 24px; border-radius:24px; text-decoration:none;\\">← होम पेज पर वापस जाएं</a>' +
+          '</div>' +
+        '</div>';
+    }
+
+    // Initialize on DOM Ready
+    window.addEventListener('DOMContentLoaded', loadLexaBlogContent);
+  //]]>
+  </script>
+
+</body>
+</html>\`;
+}
+
+module.exports = { generateMasterThemeXml };
+`;
+
+fs.writeFileSync(path.join(__dirname, 'buildUpgradedMasterTheme.js'), upgradedMasterContent, 'utf8');
+console.log('Successfully updated buildUpgradedMasterTheme.js with universal multi-destination support');

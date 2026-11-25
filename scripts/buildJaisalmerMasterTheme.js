@@ -63,7 +63,7 @@ function generateJaisalmerXml() {
 
   <b:skin><![CDATA[
   /* ==========================================================================
-     LEXATRIP ULTRA-LUXURY ALL-DEVICE MASTER THEME (2026 UNIVERSAL EDITION)
+     LEXATRIP ULTRA-LUXURY EXPERIENTIAL MASTER THEME (2026 UNIVERSAL EDITION)
      Solid Navy (#0F172A), Sunset Orange (#FF6B00), Amber (#FFA000)
      100% Fluid Auto-Responsive on Mobile, Tablet, iOS, Android, Desktop & PC
      ========================================================================== */
@@ -109,17 +109,7 @@ function generateJaisalmerXml() {
   }
 
   /* =======================================================================
-     1. LAYOUT SECTION GADGETS (Configurable in Blogger Layout Editor)
-     ======================================================================= */
-  .layout-widget-zone {
-    width: 100%;
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 16px;
-  }
-
-  /* =======================================================================
-     2. MASTER HEADER (Fully Responsive on Mobile, Tablet & PC)
+     1. MASTER HEADER (Fully Responsive, Enhanced JAISALMER Typography)
      ======================================================================= */
   .main-header {
     background: #FFFFFF;
@@ -140,7 +130,7 @@ function generateJaisalmerXml() {
     gap: 12px;
   }
 
-  /* Brand Logo with 100% Lifetime Base64 Emblem */
+  /* Brand Logo with 100% Lifetime Base64 Emblem & Prominent Destination Word */
   .brand-logo-link {
     display: flex;
     align-items: center;
@@ -194,16 +184,16 @@ function generateJaisalmerXml() {
     text-stroke: 1.5px #FF6B00;
     position: relative;
   }
-  .brand-dest-badge {
-    background: #0F172A;
-    color: #FFA000;
-    font-size: 10px;
-    font-weight: 800;
-    padding: 2px 7px;
-    border-radius: 6px;
-    letter-spacing: 0.6px;
+  /* Large, bold, official trip-colored destination name */
+  .brand-dest-word {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 900;
+    font-size: 19px;
+    letter-spacing: 0.8px;
+    color: #FF6B00;
     text-transform: uppercase;
     margin-left: 2px;
+    display: inline-block;
   }
   .brand-tagline {
     font-size: 9.5px;
@@ -213,7 +203,7 @@ function generateJaisalmerXml() {
     margin-top: 2px;
   }
 
-  /* Header Right Actions */
+  /* Header Right Actions (Includes App button on all devices) */
   .header-actions {
     display: flex;
     align-items: center;
@@ -249,6 +239,7 @@ function generateJaisalmerXml() {
   .btn-header-app {
     background: #0F172A;
     color: #FFFFFF;
+    border: 1px solid #334155;
   }
 
   /* Language Dropdown */
@@ -266,7 +257,7 @@ function generateJaisalmerXml() {
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     box-shadow: var(--shadow-md);
-    min-width: 130px;
+    min-width: 140px;
     z-index: 1001;
     overflow: hidden;
   }
@@ -284,7 +275,7 @@ function generateJaisalmerXml() {
   }
 
   /* =======================================================================
-     3. CATEGORY NAVIGATION BAR (Smooth Native Touch Swipe on Mobile)
+     2. CATEGORY NAVIGATION BAR (Smooth Native Touch Swipe on Mobile)
      ======================================================================= */
   .cat-nav-wrapper {
     background: #FFFFFF;
@@ -360,12 +351,12 @@ function generateJaisalmerXml() {
   }
 
   /* =======================================================================
-     4. HERO SECTION (Jaisalmer Exclusive)
+     3. HERO SECTION (Jaisalmer Exclusive)
      ======================================================================= */
   .hero-section {
     background: linear-gradient(145deg, #090D16 0%, #0F172A 60%, #1A2234 100%);
     color: #FFFFFF;
-    padding: 36px 20px;
+    padding: 32px 18px;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -382,18 +373,18 @@ function generateJaisalmerXml() {
     border-radius: 20px;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
   .hero-title {
     font-family: 'Outfit', 'Noto Sans Devanagari', sans-serif;
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 900;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     line-height: 1.25;
     color: #FFFFFF;
   }
   .hero-subtitle {
-    font-size: 14px;
+    font-size: 13.5px;
     color: #94A3B8;
     max-width: 680px;
     margin: 0 auto;
@@ -402,7 +393,7 @@ function generateJaisalmerXml() {
 
   /* Floating Exclusive Offer Pill */
   .hero-offer-banner {
-    margin-top: 18px;
+    margin-top: 16px;
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -422,17 +413,17 @@ function generateJaisalmerXml() {
   }
 
   /* =======================================================================
-     5. MAIN CONTAINER & 4:5 POST CARDS (Min 7-8 Posts + 3 Action Buttons)
+     4. 2-COLUMN MOBILE & MULTI-COLUMN DESKTOP GRID (Min 6-8 Posts Pairs)
      ======================================================================= */
   .main-wrapper {
     max-width: 1280px;
-    margin: 24px auto;
-    padding: 0 16px;
+    margin: 20px auto;
+    padding: 0 14px;
   }
   .post-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-    gap: 22px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
   }
   .post-card {
     background: #FFFFFF;
@@ -469,33 +460,33 @@ function generateJaisalmerXml() {
   }
   .card-badge-cat {
     position: absolute;
-    top: 12px;
-    left: 12px;
+    top: 10px;
+    left: 10px;
     background: rgba(15, 23, 42, 0.85);
     backdrop-filter: blur(4px);
     color: #FFA000;
-    font-size: 10.5px;
+    font-size: 10px;
     font-weight: 800;
-    padding: 4px 10px;
-    border-radius: 8px;
+    padding: 3px 8px;
+    border-radius: 6px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
   .card-badge-discount {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 10px;
+    right: 10px;
     background: #FF6B00;
     color: #FFFFFF;
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 900;
-    padding: 4px 9px;
-    border-radius: 8px;
+    padding: 3px 8px;
+    border-radius: 6px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.25);
   }
 
   .card-body {
-    padding: 16px;
+    padding: 14px;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -503,43 +494,48 @@ function generateJaisalmerXml() {
   }
   .card-title {
     font-family: 'Outfit', 'Noto Sans Devanagari', sans-serif;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 800;
     color: #0F172A;
     line-height: 1.35;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
   .card-snippet {
-    font-size: 13px;
+    font-size: 12.5px;
     color: var(--text-muted);
-    line-height: 1.5;
-    margin-bottom: 14px;
+    line-height: 1.45;
+    margin-bottom: 12px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
 
-  /* 3 Action Buttons per Card (Book Now, WhatsApp, Read Article) */
-  .card-actions-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1.15fr;
-    gap: 6px;
+  /* 3 Action Buttons per Card (Clean Two-Row Layout on Mobile 2-Column) */
+  .card-actions-wrapper {
     margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .card-actions-top-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
   }
   .card-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 4px;
-    padding: 8px 4px;
-    font-size: 11.5px;
+    padding: 8px 6px;
+    font-size: 11px;
     font-weight: 700;
-    border-radius: 10px;
+    border-radius: 8px;
     text-decoration: none;
     text-align: center;
     transition: transform 0.15s ease, background 0.15s ease;
@@ -551,7 +547,7 @@ function generateJaisalmerXml() {
   .card-btn-book {
     background: linear-gradient(135deg, #FF6B00, #E65100);
     color: #FFFFFF;
-    box-shadow: 0 2px 8px rgba(255, 107, 0, 0.25);
+    box-shadow: 0 2px 6px rgba(255, 107, 0, 0.25);
   }
   .card-btn-wa {
     background: #25D366;
@@ -561,6 +557,8 @@ function generateJaisalmerXml() {
     background: #0F172A;
     color: #FFFFFF;
     border: 1px solid #334155;
+    width: 100%;
+    padding: 7px 6px;
   }
 
   /* Load More Button */
@@ -590,7 +588,7 @@ function generateJaisalmerXml() {
   }
 
   /* =======================================================================
-     6. ARTICLE DETAIL PAGE WITH DIRECT BOOKING ENGINE
+     5. ARTICLE DETAIL PAGE & IN-ARTICLE INSTANT LANGUAGE SWITCHER
      ======================================================================= */
   .article-container {
     max-width: 900px;
@@ -598,15 +596,59 @@ function generateJaisalmerXml() {
     background: #FFFFFF;
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 32px 28px;
+    padding: 28px 24px;
     box-shadow: var(--shadow-sm);
   }
+
+  /* In-Article Language Switcher Bar */
+  .article-lang-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 8px 12px;
+    margin-bottom: 20px;
+  }
+  .article-lang-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .article-lang-pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .art-lang-pill {
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    color: #0F172A;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .art-lang-pill:hover, .art-lang-pill.active {
+    background: #FF6B00;
+    color: #FFFFFF;
+    border-color: #E65100;
+  }
+
   .article-title {
     font-family: 'Outfit', 'Noto Sans Devanagari', sans-serif;
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 900;
     color: #0F172A;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     line-height: 1.3;
   }
   .article-meta {
@@ -614,18 +656,18 @@ function generateJaisalmerXml() {
     align-items: center;
     gap: 12px;
     color: var(--text-muted);
-    font-size: 13px;
-    margin-bottom: 24px;
-    padding-bottom: 16px;
+    font-size: 12.5px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
     border-bottom: 1px solid var(--border);
     flex-wrap: wrap;
   }
   .article-hero-media {
     width: 100%;
-    max-height: 520px;
+    max-height: 500px;
     object-fit: cover;
     border-radius: var(--radius-md);
-    margin-bottom: 24px;
+    margin-bottom: 22px;
   }
   .article-content {
     font-size: 15px;
@@ -634,7 +676,7 @@ function generateJaisalmerXml() {
   }
   .article-content h2, .article-content h3 {
     color: #0F172A;
-    margin: 28px 0 14px;
+    margin: 26px 0 12px;
     font-family: 'Outfit', 'Noto Sans Devanagari', sans-serif;
   }
   .article-content p {
@@ -653,20 +695,20 @@ function generateJaisalmerXml() {
     color: #FFFFFF;
     border: 1.5px solid #FF6B00;
     border-radius: var(--radius-lg);
-    padding: 24px;
-    margin: 32px 0;
+    padding: 22px;
+    margin: 28px 0;
     box-shadow: var(--shadow-lg);
   }
   .engine-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
     flex-wrap: wrap;
     gap: 10px;
   }
   .engine-title {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 800;
     color: #FFA000;
     display: flex;
@@ -677,12 +719,12 @@ function generateJaisalmerXml() {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 12px;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
   }
   .engine-field {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 5px;
   }
   .engine-field label {
     font-size: 11px;
@@ -713,7 +755,7 @@ function generateJaisalmerXml() {
     padding: 12px 18px;
     border-radius: 12px;
     font-weight: 800;
-    font-size: 13.5px;
+    font-size: 13px;
     text-decoration: none;
     text-align: center;
     display: inline-flex;
@@ -733,7 +775,7 @@ function generateJaisalmerXml() {
   }
 
   /* =======================================================================
-     7. EXCLUSIVE OFFER VIP LEAD POPUP MODAL
+     6. EXCLUSIVE OFFER VIP LEAD POPUP MODAL
      ======================================================================= */
   .modal-overlay {
     display: none;
@@ -756,7 +798,7 @@ function generateJaisalmerXml() {
     border-radius: 20px;
     max-width: 440px;
     width: 100%;
-    padding: 28px 24px;
+    padding: 26px 22px;
     position: relative;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
     border: 2px solid #FF6B00;
@@ -790,12 +832,12 @@ function generateJaisalmerXml() {
     font-size: 13px;
     color: #64748B;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
   }
   .modal-form {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 11px;
   }
   .modal-input {
     width: 100%;
@@ -827,26 +869,26 @@ function generateJaisalmerXml() {
   }
 
   /* =======================================================================
-     8. COMPACT LUXURY FOOTER (With Verified Brand Emblem & Portal Badges)
+     7. COMPACT LUXURY FOOTER
      ======================================================================= */
   .main-footer {
     background: #090D16;
     color: #E2E8F0;
-    padding: 36px 20px 24px;
+    padding: 34px 18px 24px;
     border-top: 2px solid #FF6B00;
-    margin-top: 40px;
+    margin-top: 36px;
   }
   .footer-container {
     max-width: 1280px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 26px;
   }
   .footer-brand-section {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
   }
   .footer-brand-row {
     display: flex;
@@ -855,14 +897,14 @@ function generateJaisalmerXml() {
   }
   .footer-desc {
     color: #94A3B8;
-    font-size: 13.5px;
+    font-size: 13px;
     max-width: 600px;
     line-height: 1.6;
   }
   .footer-portals-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 12px;
+    gap: 10px;
   }
   .portal-btn {
     background: #111827;
@@ -910,7 +952,7 @@ function generateJaisalmerXml() {
   }
 
   /* =======================================================================
-     9. ULTRA-COMPACT 4-BUTTON FIXED BOTTOM DOCK (100% Fit on ALL Devices)
+     8. 100% RESPONSIVE 4-BUTTON FIXED BOTTOM DOCK (Never Overflows)
      ======================================================================= */
   .mobile-bottom-bar {
     position: fixed;
@@ -959,84 +1001,92 @@ function generateJaisalmerXml() {
     letter-spacing: 0.2px;
     white-space: nowrap;
   }
-  .bar-btn-call {
-    color: #FFA000;
-  }
-  .bar-btn-call:hover {
-    background: rgba(255, 160, 0, 0.15);
-  }
-  .bar-btn-wa {
-    color: #25D366;
-  }
-  .bar-btn-wa:hover {
-    background: rgba(37, 211, 102, 0.15);
-  }
+  .bar-btn-call { color: #FFA000; }
+  .bar-btn-call:hover { background: rgba(255, 160, 0, 0.15); }
+  .bar-btn-wa { color: #25D366; }
+  .bar-btn-wa:hover { background: rgba(37, 211, 102, 0.15); }
   .bar-btn-book {
     background: linear-gradient(135deg, #FF6B00, #E65100);
     color: #FFFFFF;
     box-shadow: 0 3px 10px rgba(255, 107, 0, 0.35);
   }
-  .bar-btn-book .bar-label {
-    color: #FFFFFF;
-    font-weight: 800;
-  }
-  .bar-btn-app {
-    color: #60A5FA;
-  }
-  .bar-btn-app:hover {
-    background: rgba(96, 165, 250, 0.15);
-  }
+  .bar-btn-book .bar-label { color: #FFFFFF; font-weight: 800; }
+  .bar-btn-app { color: #60A5FA; }
+  .bar-btn-app:hover { background: rgba(96, 165, 250, 0.15); }
 
   /* =======================================================================
-     10. COMPREHENSIVE RESPONSIVE MEDIA QUERIES (Mobile, Tablet, Desktop)
+     9. RESPONSIVE MEDIA QUERIES (Mobile 2-Column Grid & Header Layout)
      ======================================================================= */
   @media (max-width: 768px) {
-    /* Header optimization for Mobile/Tablet */
+    /* Compact Header on Mobile */
     .header-container {
       padding: 8px 12px;
+      gap: 8px;
     }
     .brand-logo-circle {
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
     }
     .brand-word-lexa, .brand-word-trip {
       font-size: 17px;
     }
-    .brand-tagline {
-      display: none; /* Hide tagline on mobile to keep header clean */
+    .brand-dest-word {
+      font-size: 15px;
     }
-    .btn-header-wa, .btn-header-app {
-      display: none; /* Already prominently visible in bottom bar */
+    .brand-tagline {
+      display: none;
+    }
+    .btn-header-wa {
+      display: none; /* In bottom bar */
     }
     .btn-header {
-      padding: 6px 10px;
-      font-size: 12px;
+      padding: 5px 8px;
+      font-size: 11px;
+      gap: 3px;
     }
 
     /* Hero section */
     .hero-section {
-      padding: 28px 16px;
+      padding: 24px 14px;
     }
     .hero-title {
-      font-size: 22px;
+      font-size: 21px;
     }
     .hero-subtitle {
-      font-size: 13px;
+      font-size: 12.5px;
     }
 
-    /* Cards */
+    /* 2-COLUMN MOBILE POST CARDS GRID */
     .post-grid {
-      grid-template-columns: 1fr;
-      gap: 16px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
     }
-    .article-container {
-      padding: 20px 14px;
+    .card-body {
+      padding: 10px 8px;
     }
-    .article-title {
-      font-size: 20px;
+    .card-title {
+      font-size: 13px;
+      margin-bottom: 6px;
+      -webkit-line-clamp: 2;
+    }
+    .card-snippet {
+      display: none; /* Clean card aesthetic on 2-column mobile */
+    }
+    .card-badge-cat, .card-badge-discount {
+      font-size: 9px;
+      padding: 2px 6px;
+      top: 6px;
+    }
+    .card-badge-cat { left: 6px; }
+    .card-badge-discount { right: 6px; }
+
+    .card-btn {
+      padding: 6px 4px;
+      font-size: 10px;
+      border-radius: 6px;
     }
 
-    /* Bottom dock on mobile */
+    /* Bottom dock */
     .mobile-bottom-bar {
       bottom: 8px;
       width: calc(100% - 16px);
@@ -1055,12 +1105,23 @@ function generateJaisalmerXml() {
   }
 
   @media (max-width: 380px) {
-    /* Ultra-small phones (e.g. iPhone SE) */
-    .brand-dest-badge {
-      display: none;
+    .brand-word-lexa, .brand-word-trip {
+      font-size: 15px;
+    }
+    .brand-dest-word {
+      font-size: 13px;
     }
     .btn-header-book span {
       display: none;
+    }
+    .post-grid {
+      gap: 8px;
+    }
+    .card-body {
+      padding: 8px 6px;
+    }
+    .card-title {
+      font-size: 12px;
     }
     .mobile-bottom-bar {
       bottom: 6px;
@@ -1075,12 +1136,6 @@ function generateJaisalmerXml() {
     }
     .bar-icon {
       font-size: 15px;
-    }
-    .card-actions-row {
-      grid-template-columns: 1fr 1fr;
-    }
-    .card-btn-read {
-      grid-column: span 2;
     }
   }
   ]]></b:skin>
@@ -1098,12 +1153,12 @@ function generateJaisalmerXml() {
   <b:section id='header-branding-custom' name='[Header] Custom Logo, Title &amp; Description' showaddelement='yes'/>
 
   <!-- =======================================================================
-       MAIN LUXURY HEADER (Always Centered, Responsive, Never Overflows)
+       MAIN LUXURY HEADER (LEXA TRIP JAISALMER In Pure Typography)
        ======================================================================= -->
   <header class='main-header'>
     <div class='header-container'>
       
-      <!-- Official Logo with Lifetime Base64 Emblem -->
+      <!-- Official Logo with Lifetime Base64 Emblem & Prominent JAISALMER -->
       <a class='brand-logo-link' href='/'>
         <div class='brand-logo-circle'>
           <img alt='LexaTrip Emblem' class='brand-logo-img' src='${EMBLEM_B64}'/>
@@ -1112,15 +1167,15 @@ function generateJaisalmerXml() {
           <div class='brand-name-row'>
             <span class='brand-word-lexa'>LEXA</span>
             <span class='brand-word-trip'>TRIP</span>
-            <span class='brand-dest-badge'>${destBadge}</span>
+            <span class='brand-dest-word'>${destBadge}</span>
           </div>
           <span class='brand-tagline'>BOOK. EXPLORE. REPEAT.</span>
         </div>
       </a>
 
-      <!-- Header Action Buttons -->
+      <!-- Header Action Buttons (Language, Book Online, App) -->
       <div class='header-actions'>
-        <!-- Language Switcher -->
+        <!-- Language Switcher Dropdown -->
         <div class='lang-dropdown'>
           <button class='btn-header btn-header-lang' onclick='toggleLangMenu(event)' type='button'>
             <span>🌐</span> EN ▾
@@ -1128,6 +1183,8 @@ function generateJaisalmerXml() {
           <div class='lang-menu' id='langDropdown'>
             <a class='lang-item' href='#' onclick='selectLang(\"en\", event)'>English (EN)</a>
             <a class='lang-item' href='#' onclick='selectLang(\"hi\", event)'>हिन्दी (Hindi)</a>
+            <a class='lang-item' href='#' onclick='selectLang(\"gu\", event)'>ગુજરાતી (Gujarati)</a>
+            <a class='lang-item' href='#' onclick='selectLang(\"mr\", event)'>मराठी (Marathi)</a>
           </div>
         </div>
 
@@ -1278,7 +1335,7 @@ function generateJaisalmerXml() {
             <div class='brand-name-row'>
               <span class='brand-word-lexa' style='color:#FFFFFF;'>LEXA</span>
               <span class='brand-word-trip'>TRIP</span>
-              <span class='brand-dest-badge'>${destBadge}</span>
+              <span class='brand-dest-word' style='color:#FF6B00;'>${destBadge}</span>
             </div>
             <span class='brand-tagline' style='color:#94A3B8;'>BOOK. EXPLORE. REPEAT.</span>
           </div>
@@ -1355,7 +1412,7 @@ function generateJaisalmerXml() {
   <b:section id='footer-bottom-smart-links' name='[Footer] Bottom Smart Links &amp; Tracking Codes' showaddelement='yes'/>
 
   <!-- =======================================================================
-       100% RESPONSIVE 4-BUTTON FIXED BOTTOM DOCK (Never Overflows, All 4 Fit)
+       100% RESPONSIVE 4-BUTTON FIXED BOTTOM DOCK (Never Overflows)
        ======================================================================= -->
   <div class='mobile-bottom-bar' id='bottomBar'>
     <a class='bar-btn bar-btn-call' href='tel:${destPhone1.replace(/\s+/g, '')}' onclick='handleCallClick(event)' title='24/7 Call Support'>
@@ -1383,7 +1440,7 @@ function generateJaisalmerXml() {
   //<![CDATA[
     let allPostsData = [];
     let currentCategoryFilter = 'all';
-    let displayedPostsCount = 8; // Shows minimum 7-8 cards by default
+    let displayedPostsCount = 8; // Shows minimum 6-8 cards by default (Pairs of 2)
 
     // Touch / Button Category Scroll
     function scrollCatNav(offset) {
@@ -1431,7 +1488,7 @@ function generateJaisalmerXml() {
       window.open('https://wa.me/${destWaNum}?text=' + encodeURIComponent(msg), '_blank');
     }
 
-    // Language Toggle
+    // Language Toggle (Header)
     function toggleLangMenu(e) {
       if (e) e.stopPropagation();
       const dd = document.getElementById('langDropdown');
@@ -1443,11 +1500,19 @@ function generateJaisalmerXml() {
     });
     function selectLang(lang, e) {
       if (e) e.preventDefault();
-      if (lang === 'hi') {
-        window.location.href = 'https://translate.google.com/translate?sl=en&tl=hi&u=' + encodeURIComponent(window.location.href);
+      translatePageTo(lang);
+    }
+
+    // Instant Page & Article Translation Function
+    function translatePageTo(lang) {
+      const dd = document.getElementById('langDropdown');
+      if (dd) dd.style.display = 'none';
+
+      if (lang === 'en') {
+        const u = window.location.href.split('?')[0];
+        window.location.href = u;
       } else {
-        const dd = document.getElementById('langDropdown');
-        if (dd) dd.style.display = 'none';
+        window.location.href = 'https://translate.google.com/translate?sl=auto&tl=' + encodeURIComponent(lang) + '&u=' + encodeURIComponent(window.location.href);
       }
     }
 
@@ -1529,7 +1594,7 @@ function generateJaisalmerXml() {
       if (container) renderPostGrid(container, currentCategoryFilter);
     }
 
-    // Render 4:5 Card Grid (At least 7-8 Posts + 3 Action Buttons per Card)
+    // Render 4:5 Card Grid (2-Column Mobile Grid + 3 Action Buttons per Card)
     function renderPostGrid(container, cat) {
       let filtered = allPostsData;
       if (cat !== 'all') {
@@ -1559,7 +1624,7 @@ function generateJaisalmerXml() {
         return;
       }
 
-      // Slice to display min 7-8 posts
+      // Slice to display min 6-8 posts (Pairs of 2)
       const visiblePosts = filtered.slice(0, displayedPostsCount);
 
       let html = '<div class=\"post-grid\" id=\"postGrid\">';
@@ -1576,14 +1641,14 @@ function generateJaisalmerXml() {
           imgUrl = imgMatch[1].replace('/s72-c/', '/w800-h1000-c/').replace('/s1600/', '/w800-h1000-c/');
         }
 
-        const snippet = rawContent.replace(/<[^>]*>/g, '').replace(/\\s+/g, ' ').trim().slice(0, 110) + '...';
+        const snippet = rawContent.replace(/<[^>]*>/g, '').replace(/\\s+/g, ' ').trim().slice(0, 100) + '...';
         const discountBadge = getPostDiscount(title, entry.id ? entry.id.$t : '');
 
         let catLabel = 'Desert Stay';
-        if (title.toLowerCase().includes('camp') || title.includes('कैंप')) catLabel = 'Luxury Camp';
-        else if (title.includes('5 Star') || title.includes('5-Star')) catLabel = '5-Star Luxury';
-        else if (title.includes('4 Star') || title.includes('4-Star')) catLabel = '4-Star Premium';
-        else if (title.includes('Fort') || title.includes('किला')) catLabel = 'Heritage Fort';
+        if (title.toLowerCase().includes('camp') || title.includes('कैंप')) catLabel = 'Camp';
+        else if (title.includes('5 Star') || title.includes('5-Star')) catLabel = '5-Star';
+        else if (title.includes('4 Star') || title.includes('4-Star')) catLabel = '4-Star';
+        else if (title.includes('Fort') || title.includes('किला')) catLabel = 'Fort';
 
         html += 
           '<article class=\"post-card\">' +
@@ -1598,11 +1663,13 @@ function generateJaisalmerXml() {
               '<h3 class=\"card-title\"><a href=\"' + postUrl + '\" style=\"color:inherit; text-decoration:none;\">' + title + '</a></h3>' +
               '<p class=\"card-snippet\">' + snippet + '</p>' +
               
-              '<!-- 3 Action Buttons per Card (Book Now, WhatsApp, Read Article) -->' +
-              '<div class=\"card-actions-row\">' +
-                '<a class=\"card-btn card-btn-book\" href=\"https://bookings.lexatrip.com/\" target=\"_blank\">🏨 बुक नाउ</a>' +
-                '<a class=\"card-btn card-btn-wa\" href=\"https://wa.me/${destWaNum}?text=' + encodeURIComponent('नमस्ते LexaTrip, मुझे ' + title + ' की बुकिंग/रेट कोटेशन चाहिए।') + '\" target=\"_blank\">💬 WhatsApp</a>' +
-                '<a class=\"card-btn card-btn-read\" href=\"' + postUrl + '\">📖 पूरा पढ़ें</a>' +
+              '<!-- 3 Action Buttons per Card (Clean Two-Row Compact Layout) -->' +
+              '<div class=\"card-actions-wrapper\">' +
+                '<div class=\"card-actions-top-row\">' +
+                  '<a class=\"card-btn card-btn-book\" href=\"https://bookings.lexatrip.com/\" target=\"_blank\">🏨 Book Now</a>' +
+                  '<a class=\"card-btn card-btn-wa\" href=\"https://wa.me/${destWaNum}?text=' + encodeURIComponent('Hello LexaTrip, I would like to book: ' + title) + '\" target=\"_blank\">💬 WhatsApp</a>' +
+                '</div>' +
+                '<a class=\"card-btn card-btn-read\" href=\"' + postUrl + '\">📖 पूरा पढ़ें (Read Article)</a>' +
               '</div>' +
             '</div>' +
           '</article>';
@@ -1622,7 +1689,7 @@ function generateJaisalmerXml() {
       container.innerHTML = html;
     }
 
-    // Render Single Article with Interactive Booking Engine
+    // Render Single Article with Interactive Booking Engine & Language Switcher
     function renderSingleArticle(container, currentPath) {
       let matched = null;
       for (const entry of allPostsData) {
@@ -1655,6 +1722,18 @@ function generateJaisalmerXml() {
 
       container.innerHTML = 
         '<div class=\"article-container\">' +
+          '<!-- In-Article Instant Language Switcher Bar -->' +
+          '<div class=\"article-lang-bar\">' +
+            '<span class=\"article-lang-label\">🌐 Translate Article / भाषा चुनें:</span>' +
+            '<div class=\"article-lang-pills\">' +
+              '<button class=\"art-lang-pill active\" onclick=\"translatePageTo(\\'hi\\')\" type=\"button\">हिन्दी</button>' +
+              '<button class=\"art-lang-pill\" onclick=\"translatePageTo(\\'en\\')\" type=\"button\">English</button>' +
+              '<button class=\"art-lang-pill\" onclick=\"translatePageTo(\\'gu\\')\" type=\"button\">ગુજરાતી</button>' +
+              '<button class=\"art-lang-pill\" onclick=\"translatePageTo(\\'mr\\')\" type=\"button\">मराठी</button>' +
+              '<button class=\"art-lang-pill\" onclick=\"translatePageTo(\\'bn\\')\" type=\"button\">বাংলা</button>' +
+            '</div>' +
+          '</div>' +
+
           '<h1 class=\"article-title\">' + title + '</h1>' +
           '<div class=\"article-meta\">' +
             '<span>🗓️ ' + published + '</span>' +

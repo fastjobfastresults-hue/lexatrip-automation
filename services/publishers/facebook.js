@@ -31,6 +31,8 @@ class FacebookPublisher {
         form.append('caption', cleanCaption);
       }
       form.append('access_token', pageAccessToken);
+      form.append('publish_to_reels', 'true');
+      form.append('is_reel', 'true');
       form.append('source', fs.createReadStream(filePath));
 
       const res = await axios.post(url, form, {
@@ -102,10 +104,13 @@ class FacebookPublisher {
     // --- STRATEGY 1: Meta Official 3-Phase Facebook Reels API (/video_reels) ---
     try {
       console.log(`[Facebook Reel] Phase 1: Initializing Reels upload for Page ${pageId}...`);
-      const initRes = await axios.post(`https://graph.facebook.com/v19.0/${pageId}/video_reels`, {
-        upload_phase: 'start',
-        access_token: pageAccessToken
-      }, { timeout: 30000 });
+      const initRes = await axios.post(`https://graph.facebook.com/v19.0/${pageId}/video_reels`, null, {
+        params: {
+          upload_phase: 'start',
+          access_token: pageAccessToken
+        },
+        timeout: 30000
+      });
 
       videoId = initRes.data?.video_id;
       const uploadUrl = initRes.data?.upload_url;
@@ -129,13 +134,16 @@ class FacebookPublisher {
         });
 
         console.log(`[Facebook Reel] Phase 3: Finishing and publishing Reel ${videoId} to Page feed...`);
-        const finishRes = await axios.post(`https://graph.facebook.com/v19.0/${pageId}/video_reels`, {
-          upload_phase: 'finish',
-          access_token: pageAccessToken,
-          video_id: videoId,
-          video_state: 'PUBLISHED',
-          description: cleanCaption
-        }, { timeout: 45000 });
+        const finishRes = await axios.post(`https://graph.facebook.com/v19.0/${pageId}/video_reels`, null, {
+          params: {
+            upload_phase: 'finish',
+            access_token: pageAccessToken,
+            video_id: videoId,
+            video_state: 'PUBLISHED',
+            description: cleanCaption
+          },
+          timeout: 45000
+        });
 
         postFeedId = finishRes.data?.post_id;
         reelUrl = `https://www.facebook.com/reel/${videoId}/`;

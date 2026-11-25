@@ -127,7 +127,8 @@ app.get('/api/auth/youtube/url', (req, res) => {
     'https://www.googleapis.com/auth/youtube.upload',
     'https://www.googleapis.com/auth/youtube.readonly',
     'https://www.googleapis.com/auth/youtube',
-    'https://www.googleapis.com/auth/blogger'
+    'https://www.googleapis.com/auth/blogger',
+    'https://www.googleapis.com/auth/business.manage'
   ].join(' ');
 
   const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
@@ -237,6 +238,16 @@ app.get('/api/auth/youtube/callback', async (req, res) => {
           blogId: dest.channels.blogger.credentials?.blogId || '4024327205805487932',
           blogUrl: dest.channels.blogger.credentials?.blogUrl || 'https://lexatripjaisalmer.blogspot.com/',
           publishMethod: 'api',
+          isLifetime: true
+        };
+      }
+      if (dest.channels?.google_business) {
+        dest.channels.google_business.credentials = {
+          ...dest.channels.google_business.credentials,
+          accessToken: access_token,
+          refreshToken: refresh_token || dest.channels.google_business.credentials?.refreshToken || dest.channels.youtube?.credentials?.refreshToken,
+          clientId,
+          clientSecret,
           isLifetime: true
         };
       }
