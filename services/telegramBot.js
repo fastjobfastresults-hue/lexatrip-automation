@@ -413,10 +413,98 @@ class TelegramBotService {
     };
   }
 
+  isChannelChat(chatId) {
+    if (!chatId) return false;
+    const s = String(chatId);
+    return s.startsWith('-') || s.startsWith('-100');
+  }
+
+  buildChannelShortSummary(text) {
+    if (!text || typeof text !== 'string') return text;
+
+    const lines = text.split('\n');
+    const socialLinks = [];
+    let header = '';
+    let destination = '';
+    let contentTitle = '';
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+
+      // Never allow website or dashboard links on destination channels
+      if (line.includes('onrender.com') || line.includes('लाइव डैशबोर्ड') || line.includes('लाइव वेब डैशबोर्ड') || line.includes('bookings.lexatrip.com')) {
+        continue;
+      }
+
+      // Skip admin troubleshooting / advisory sections on channels
+      if (line.includes('अन्य चैनल्स स्थिति') || line.includes('विफल चैनल्स के क्रेडेंशियल्स') || line.includes('सीक्रेट API वॉल्ट') || line.includes('समाधान:')) {
+        while (i + 1 < lines.length && (lines[i+1].trim().startsWith('• ⏸️') || lines[i+1].trim().startsWith('• ⏳') || lines[i+1].trim().startsWith('🛠️') || lines[i+1].trim().startsWith('⚠️'))) {
+          i++;
+        }
+        continue;
+      }
+
+      // Capture header
+      if (line.startsWith('✅') || line.startsWith('🎬') || line.startsWith('⚠️') || line.startsWith('🚨') || line.startsWith('🔄') || line.startsWith('📋')) {
+        if (!header) header = line;
+        continue;
+      }
+
+      // Capture destination
+      if (line.includes('डेस्टिनेशन:')) {
+        destination = line;
+        continue;
+      }
+
+      // Capture content / title
+      if (line.includes('पोस्ट:') || line.includes('कंटेंट:') || line.includes('टाइटल:') || line.includes('रील:')) {
+        contentTitle = line;
+        continue;
+      }
+
+      // Capture social media links
+      if (line.includes('Live Post') || line.includes('Reel') || line.includes('Article') || line.includes('Profile') || line.match(/•\s*(?:✅\s*)?\[.+\]\(http.+\)/)) {
+        socialLinks.push(line);
+        continue;
+      }
+    }
+
+    // If this is a publishing report with social media links, build clean short summary
+    if (socialLinks.length > 0) {
+      const out = [];
+      if (header) out.push(header);
+      out.push('');
+      if (destination) out.push(destination);
+      if (contentTitle) out.push(contentTitle);
+      out.push('🚀 *सोशल मीडिया:* ' + socialLinks.length + ' प्लेटफॉर्म्स पर लाइव\n');
+      out.push('🔗 *सोशल मीडिया लिंक्स:*');
+      socialLinks.forEach(l => out.push(l));
+      return out.join('\n');
+    }
+
+    // Otherwise, return text cleaned of website and dashboard links
+    return text
+      .split('\n')
+      .filter(l => !l.includes('onrender.com') && !l.includes('लाइव डैशबोर्ड') && !l.includes('लाइव वेब डैशबोर्ड') && !l.includes('bookings.lexatrip.com'))
+      .join('\n')
+      .trim();
+  }
+
   async sendDualMessage(chatId, text, options = {}) {
-    await this.bot.sendMessage(chatId, text, options);
+    const isChannel = this.isChannelChat(chatId);
+    if (isChannel) {
+      // 1. Destination Channel: clean short summary without website/dashboard links and without admin keyboard
+      const channelText = this.buildChannelShortSummary(text);
+      const channelOptions = { ...options };
+      delete channelOptions.reply_markup;
+      await this.bot.sendMessage(chatId, channelText, channelOptions);
+    } else {
+      await this.bot.sendMessage(chatId, text, options);
+    }
+
+    // 2. LexaTrip Automation (Admin): full detailed report with live dashboard link and admin keyboard
     const settings = db.getSettings();
-    const adminChatId = settings.telegram?.allowedChatId;
+    const adminChatId = settings.telegram?.allowedChatId || process.env.ADMIN_CHAT_ID || '8455865796';
     if (adminChatId && String(adminChatId) !== String(chatId)) {
       await this.bot.sendMessage(adminChatId, text, options);
     }
@@ -631,7 +719,8 @@ class TelegramBotService {
 
     destinations.forEach(async (d) => {
       if (d.telegram?.channelId && String(d.telegram.channelId) !== String(adminChatId)) {
-        await this.bot.sendMessage(d.telegram.channelId, reportMsg, { parse_mode: 'Markdown' });
+        const channelSummary = this.buildChannelShortSummary(reportMsg);
+        await this.bot.sendMessage(d.telegram.channelId, channelSummary, { parse_mode: 'Markdown' });
       }
     });
   }
