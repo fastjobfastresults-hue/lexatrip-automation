@@ -524,6 +524,51 @@ app.post('/api/crm/simulate-interaction', async (req, res) => {
   }
 });
 
+// Capture incoming leads from Blogger Website Form / WhatsApp Widget
+app.post('/api/crm/lead', async (req, res) => {
+  try {
+    const { name, phone, email, destination, travelDate, promoCode, source, sourceUrl } = req.body;
+    const raw = db.getRawData ? db.getRawData() : {};
+    if (!Array.isArray(raw.crmLeads)) raw.crmLeads = [];
+    
+    const leadRecord = {
+      id: 'lead_' + Date.now(),
+      name: name || 'Guest',
+      phone: phone || '',
+      email: email || '',
+      platform: 'blogger_website',
+      destination: destination || 'Jaisalmer',
+      travelDate: travelDate || '',
+      promoCode: promoCode || 'LEXA50ACTIVE',
+      source: source || 'Blogger Website Form',
+      sourceUrl: sourceUrl || '',
+      status: 'new',
+      capturedAt: new Date().toISOString()
+    };
+
+    raw.crmLeads.unshift(leadRecord);
+    if (db.saveRawData) db.saveRawData(raw);
+
+    // Notify Telegram Admin of incoming hot lead
+    const telegramNotifier = require('./services/telegramNotifier');
+    const alertText = `🔔 *[नया गेस्ट लीड प्राप्त]* 🐪✨\n\n` +
+      `👤 *नाम:* ${leadRecord.name}\n` +
+      `📱 *WhatsApp:* \`${leadRecord.phone}\`\n` +
+      (leadRecord.email ? `📧 *ईमेल:* ${leadRecord.email}\n` : '') +
+      `📍 *डेस्टिनेशन:* ${leadRecord.destination}\n` +
+      (leadRecord.travelDate ? `📅 *यात्रा तारीख:* ${leadRecord.travelDate}\n` : '') +
+      `🎟️ *कूपन कोड:* ${leadRecord.promoCode}\n` +
+      `🌐 *सोर्स:* ${leadRecord.source}`;
+
+    telegramNotifier.notifyTelegram(alertText).catch(() => {});
+    broadcast({ type: 'CRM_NEW_LEAD', lead: leadRecord });
+
+    res.json({ success: true, lead: leadRecord });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // 🚀 LIVE PUBLISHING RADAR & REAL-TIME TRACKING HUD API
 app.get('/api/tracking/live-radar', (req, res) => {
   try {
