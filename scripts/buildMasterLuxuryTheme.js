@@ -1113,8 +1113,28 @@ const themeXml = `<?xml version="1.0" encoding="UTF-8" ?>
         allBlogEntries = (data.feed && data.feed.entry) ? data.feed.entry : [];
 
         const currentPath = window.location.pathname;
-        const isSinglePost = currentPath.endsWith('.html') && !currentPath.includes('/p/');
+        const lowPath = currentPath.toLowerCase();
 
+        // 1. Check for Legal / Static Pages
+        if (lowPath.includes('about-us')) {
+          renderLegalStaticPage(container, 'हमारे बारे में (About Us) - LexaTrip', `<h2>LexaTrip: भारत का अग्रणी एक्सपीरियंसियल ट्रैवल व हॉस्पिटैलिटी ब्रांड</h2><p><strong>LexaTrip</strong> में आपका स्वागत है। हमारा विजन भारत के प्रत्येक यात्री को प्रामाणिक, पारदर्शी और लक्ज़री यात्रा अनुभव प्रदान करना है। 'Book. Explore. Repeat.' के मूलमंत्र के साथ, हम आपको जैसलमेर के सुनहरे थार रेगिस्तान से लेकर भारत के प्रमुख पर्यटन स्थलों तक सर्वश्रेष्ठ स्टे और टूर्स उपलब्ध कराते हैं।</p><h3>हमारी प्रमुख सेवाएं:</h3><ul><li><strong>100% वेरिफाइड प्रॉपर्टीज:</strong> प्रीमियम स्विस टेंट कैंप्स, हेरिटेज फोर्ट्स और 5-स्टार / 4-स्टार लक्ज़री होटल्स।</li><li><strong>बेस्ट प्राइस गारंटी:</strong> पारदर्शी दरें, बिना किसी छिपे हुए शुल्क के।</li><li><strong>24/7 स्थानीय गाइड व कस्टमर असिस्टेंस:</strong> हर कदम पर समर्पित ऑन-ग्राउंड सपोर्ट।</li></ul><p><strong>आधिकारिक वेबसाइट:</strong> <a href='https://www.lexatrip.com/'>lexatrip.com</a> | <a href='https://bookings.lexatrip.com/'>bookings.lexatrip.com</a><br/><strong>हेल्पलाइन:</strong> +91 90798 54982 / +91 90790 17880<br/><strong>ईमेल:</strong> info@lexatrip.com</p>`);
+          return;
+        }
+        if (lowPath.includes('contact-us')) {
+          renderLegalStaticPage(container, 'संपर्क करें (Contact Us) - LexaTrip', `<h2>LexaTrip 24/7 गेस्ट सपोर्ट व रिज़र्वेशन हेल्पडेस्क</h2><p>अपनी अगली यात्रा, डेज़र्ट कैंपिंग, हेरिटेज होटल बुकिंग अथवा कॉर्पोरेट टूर के लिए हमारी विशेषज्ञ टीम से संपर्क करें:</p><h3>हेल्पलाइन व संपर्क विवरण:</h3><ul><li><strong>24/7 प्राथमिक हेल्पलाइन:</strong> <a href='tel:+919079854982'>+91 90798 54982</a></li><li><strong>24/7 द्वितीयक हेल्पलाइन:</strong> <a href='tel:+919079017880'>+91 90790 17880</a></li><li><strong>आधिकारिक WhatsApp:</strong> <a href='https://wa.me/919079854982'>+91 90798 54982</a></li><li><strong>आधिकारिक ईमेल:</strong> <a href='mailto:info@lexatrip.com'>info@lexatrip.com</a></li><li><strong>मुख्यालय:</strong> LexaTrip Technologies Pvt. Ltd., जैसलमेर, राजस्थान (345001)</li></ul><p><strong>आधिकारिक बुकिंग पोर्टल:</strong> <a href='https://bookings.lexatrip.com/' target='_blank'>bookings.lexatrip.com</a></p>`);
+          return;
+        }
+        if (lowPath.includes('privacy-policy')) {
+          renderLegalStaticPage(container, 'गोपनीयता नीति (Privacy Policy) - LexaTrip', `<h2>गोपनीयता नीति (Privacy Policy) - LexaTrip</h2><p>अंतिम अपडेट: 2026। LexaTrip Technologies ('LexaTrip', 'हम', 'हमारा') हमारे उपयोगकर्ताओं की गोपनीयता का सम्मान करता है। यह नीति बताती है कि जब आप हमारी वेबसाइटों (lexatrip.com, bookings.lexatrip.com, lexatrip.in) और हमारे गंतव्य ब्लॉग्स का उपयोग करते हैं तो हम आपकी जानकारी को कैसे एकत्र, उपयोग और सुरक्षित रखते हैं।</p><h3>1. एकत्रित की जाने वाली जानकारी:</h3><p>जब आप हमारी वेबसाइट पर पूछताछ फॉर्म भरते हैं अथवा बुकिंग करते हैं, तो हम आपका नाम, मोबाइल/WhatsApp नंबर, ईमेल पता और यात्रा की तारीखें एकत्र करते हैं।</p><h3>2. डेटा का उपयोग:</h3><p>हम इस डेटा का उपयोग केवल आपकी बुकिंग की पुष्टि, डिस्काउंट कूपन प्रदान करने, और 24/7 ग्राहक सहायता उपलब्ध कराने के लिए करते हैं। हम आपका डेटा किसी भी तीसरे पक्ष को नहीं बेचते हैं।</p><h3>3. डेटा सुरक्षा:</h3><p>हम आपके डेटा को उद्योग-मानक एन्क्रिप्शन और सुरक्षा प्रोटोकॉल के साथ सुरक्षित रखते हैं।</p><p>प्रश्नों के लिए संपर्क करें: <strong>privacy@lexatrip.com</strong> अथवा हेल्पलाइन: <strong>+91 90798 54982</strong>।</p>`);
+          return;
+        }
+        if (lowPath.includes('terms-conditions') || lowPath.includes('terms')) {
+          renderLegalStaticPage(container, 'नियम व शर्तें (Terms & Conditions) - LexaTrip', `<h2>नियम व शर्तें (Terms & Conditions) - LexaTrip</h2><p>अंतिम अपडेट: 2026। LexaTrip के माध्यम से होटल, रिसॉर्ट, डेज़र्ट कैंप या टूर पैकेज बुक करते समय निम्नलिखित नियम व शर्तें लागू होती हैं:</p><h3>1. बुकिंग व भुगतान:</h3><p>सभी बुकिंग्स उपलब्धता के अधीन हैं। बुकिंग की पुष्टि आधिकारिक बुकिंग पोर्टल (bookings.lexatrip.com) या आधिकारिक WhatsApp (+91 90798 54982) के माध्यम से टोकन राशि प्राप्त होने पर ही मान्य होगी।</p><h3>2. चेक-इन व चेक-आउट:</h3><p>मानक चेक-इन समय दोपहर 12:00 बजे और चेक-आउट समय सुबह 10:00 बजे है। सभी अतिथियों के पास वैध सरकारी पहचान पत्र (आधार, पासपोर्ट या वोटर आईडी) होना अनिवार्य है।</p><h3>3. रद्दीकरण व रिफंड:</h3><p>चेक-इन से 72 घंटे पूर्व रद्दीकरण पर पॉलिसी के अनुसार रिफंड देय होगा। पीक सीज़न / न्यू ईयर पैकेज गैर-वापसी योग्य (Non-Refundable) हो सकते हैं।</p><p>अधिक जानकारी के लिए संपर्क करें: <strong>support@lexatrip.com</strong> | हेल्पलाइन: <strong>+91 90798 54982</strong>।</p>`);
+          return;
+        }
+
+        // 2. Single Post vs Homepage Grid
+        const isSinglePost = currentPath.endsWith('.html') && !currentPath.includes('/p/');
         if (isSinglePost) {
           renderSingleArticle(container, currentPath);
         } else {
@@ -1369,6 +1389,32 @@ const themeXml = `<?xml version="1.0" encoding="UTF-8" ?>
         );
         window.open('https://wa.me/919079854982?text=' + waText, '_blank');
       }
+    }
+
+
+    // Render Legal / Static Page
+    function renderLegalStaticPage(container, title, content) {
+      container.innerHTML = 
+        '<article class="article-container">' +
+          '<span class="article-category">LexaTrip Official Verified Page</span>' +
+          '<h1 class="article-title">' + title + '</h1>' +
+          '<div class="article-meta">' +
+            '<div class="author-badge">' +
+              '<div class="author-avatar">LT</div>' +
+              '<span>LexaTrip Legal & Compliance Team</span>' +
+            '</div>' +
+            '<span>•</span>' +
+            '<span>📅 अपडेटेड: 2026</span>' +
+            '<span>•</span>' +
+            '<span>★ Verified Official Policy</span>' +
+          '</div>' +
+          '<div class="article-content" style="font-size:15px; line-height:1.8;">' +
+            content +
+          '</div>' +
+          '<div style="margin-top:30px; padding-top:20px; border-top:1px solid #E2E8F0; text-align:center;">' +
+            '<a href="/" style="display:inline-block; background:#0F172A; color:#FFFFFF; font-weight:700; padding:10px 24px; border-radius:30px; text-decoration:none;">← वापस मुख्य पृष्ठ (Home) पर जाएं</a>' +
+          '</div>' +
+        '</article>';
     }
 
     // Initialize on load
