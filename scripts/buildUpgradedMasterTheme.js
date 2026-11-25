@@ -147,6 +147,7 @@ function generateMasterThemeXml(options = {}) {
   const destDesc = options.desc || 'Discover verified luxury Swiss tent camps at Sam Sand Dunes, heritage fort stays, and desert camel safaris in Jaisalmer with LexaTrip.';
   const destCode = options.destCode || 'JAISALMER';
   const destTag = options.destTag || 'Jaisalmer Luxury Travel Guide';
+  const legalPages = options.legalPages || legalPagesEn;
 
   const xml = `<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html>
@@ -1510,19 +1511,19 @@ function generateMasterThemeXml(options = {}) {
 
       // 1. Legal / Static Page Routing
       if (lowPath.includes('about-us')) {
-        renderLegalStaticPage(container, ${JSON.stringify(legalPagesEn.aboutUs.title)}, ${JSON.stringify(legalPagesEn.aboutUs.content)});
+        renderLegalStaticPage(container, ${JSON.stringify(legalPages.aboutUs.title)}, ${JSON.stringify(legalPages.aboutUs.content)});
         return;
       }
       if (lowPath.includes('contact-us')) {
-        renderLegalStaticPage(container, ${JSON.stringify(legalPagesEn.contactUs.title)}, ${JSON.stringify(legalPagesEn.contactUs.content)});
+        renderLegalStaticPage(container, ${JSON.stringify(legalPages.contactUs.title)}, ${JSON.stringify(legalPages.contactUs.content)});
         return;
       }
       if (lowPath.includes('privacy-policy')) {
-        renderLegalStaticPage(container, ${JSON.stringify(legalPagesEn.privacyPolicy.title)}, ${JSON.stringify(legalPagesEn.privacyPolicy.content)});
+        renderLegalStaticPage(container, ${JSON.stringify(legalPages.privacyPolicy.title)}, ${JSON.stringify(legalPages.privacyPolicy.content)});
         return;
       }
       if (lowPath.includes('terms-conditions') || lowPath.includes('terms')) {
-        renderLegalStaticPage(container, ${JSON.stringify(legalPagesEn.termsConditions.title)}, ${JSON.stringify(legalPagesEn.termsConditions.content)});
+        renderLegalStaticPage(container, ${JSON.stringify(legalPages.termsConditions.title)}, ${JSON.stringify(legalPages.termsConditions.content)});
         return;
       }
 

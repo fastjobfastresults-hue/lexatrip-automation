@@ -6,16 +6,24 @@
   <meta content='width=device-width, initial-scale=1, maximum-scale=5' name='viewport'/>
   <title><data:blog.pageTitle/></title>
   
-  <!-- Favicon & Fonts -->
+  <!-- Favicon & Canonical -->
   <link href='https://bookings.lexatrip.com/favicon.ico' rel='icon' type='image/x-icon'/>
+  <link href='https://bookings.lexatrip.com/favicon.ico' rel='shortcut icon' type='image/x-icon'/>
   <link href='https://fonts.googleapis.com' rel='preconnect'/>
   <link crossorigin='' href='https://fonts.gstatic.com' rel='preconnect'/>
-  <link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Outfit:wght@500;600;700;800;900&amp;family=Noto+Sans+Devanagari:wght@400;500;600;700;800&amp;display=swap' rel='stylesheet'/>
+  <link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Outfit:wght@500;600;700;800;900&amp;display=swap' rel='stylesheet'/>
+
+  <!-- SEO & Social OpenGraph Tags -->
+  <meta content='LexaTrip - India Premier Experiential Luxury Travel Network' name='description'/>
+  <meta content='summary_large_image' name='twitter:card'/>
+  <meta content='LexaTrip™' property='og:site_name'/>
+  <meta expr:content='data:blog.pageTitle' property='og:title'/>
+  <meta expr:content='data:blog.canonicalUrl' property='og:url'/>
 
   <b:skin><![CDATA[
   /* ==========================================================================
-     LEXATRIP ULTRA-LUXURY TRAVEL BLOGGER MASTER THEME
-     Brand Identity: Royal Deep Navy (#0F172A), Sunset Gold (#FF6B00), Amber (#FFA000)
+     LEXATRIP ULTRA-LUXURY EXPERIENTIAL MASTER THEME (2026 EDITION)
+     Solid Navy (#0F172A), Sunset Orange (#FF6B00), Amber (#FFA000)
      ========================================================================== */
   :root {
     --primary: #FF6B00;
@@ -40,262 +48,293 @@
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: 'Inter', 'Noto Sans Devanagari', -apple-system, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background-color: var(--bg-page);
     color: var(--text-main);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
-    padding-bottom: 72px; /* space for persistent mobile bottom bar */
-  }
-  @media (min-width: 992px) {
-    body { padding-bottom: 0; }
+    padding-bottom: 76px; /* space for sticky mobile bottom bar */
   }
 
-  a { color: var(--primary); text-decoration: none; transition: all 0.2s ease; }
-  a:hover { color: var(--primary-dark); }
-
-  /* --------------------------------------------------------------------------
-     1. TOP CONTACT & PORTALS ANNOUNCEMENT BAR
-     -------------------------------------------------------------------------- */
-  .header-top-bar {
-    background: var(--navy-dark);
-    color: #94A3B8;
-    font-size: 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 7px 0;
-  }
-  .header-container {
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
-  .top-bar-flex {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .top-bar-contact {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .top-bar-contact a {
-    color: #F8FAFC;
-    font-weight: 600;
-  }
-  .top-bar-contact a:hover {
-    color: var(--primary);
-  }
-  .top-bar-links {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-  .top-bar-links a {
-    color: #CBD5E1;
-    font-weight: 500;
-  }
-  .top-bar-links a:hover {
-    color: var(--primary);
-  }
-  @media (max-width: 768px) {
-    .header-top-bar { display: none; }
+  /* Top Header Layout Section */
+  #top-banner-ads {
+    width: 100%;
   }
 
-  /* --------------------------------------------------------------------------
-     2. MAIN HEADER & BRAND IDENTITY
-     -------------------------------------------------------------------------- */
-  .lexa-header {
+  /* Main Luxury Header */
+  .main-header {
     background: #FFFFFF;
+    border-bottom: 1px solid var(--border);
     position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
-    border-bottom: 1px solid var(--border);
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
   }
-  .header-main-bar {
-    padding: 12px 0;
-  }
-  .header-main-flex {
+  .header-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 12px 20px;
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
     gap: 16px;
   }
-  .brand-logo-area {
+
+  /* Brand Logo & Typography */
+  .brand-logo-link {
     display: flex;
     align-items: center;
     gap: 12px;
     text-decoration: none;
+    flex-shrink: 0;
   }
-  .brand-logo-img {
+  .brand-logo-circle {
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    object-fit: cover;
-    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.25);
+    background: #FFFFFF;
     border: 2px solid #FF6B00;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(255, 107, 0, 0.2);
+    flex-shrink: 0;
   }
-  .brand-text-block {
+  .brand-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .brand-text {
     display: flex;
     flex-direction: column;
   }
-  .brand-title-wrap {
+  .brand-name-row {
     display: flex;
     align-items: center;
-    gap: 5px;
-    font-family: 'Outfit', sans-serif;
-    font-size: 24px;
+    gap: 6px;
     line-height: 1.1;
   }
   .brand-word-lexa {
+    font-family: 'Outfit', 'Inter', sans-serif;
+    font-size: 26px;
     font-weight: 900;
-    color: #0F172A;
-    letter-spacing: -0.5px;
-  }
-  .brand-word-trip {
-    font-weight: 900;
-    color: #FF6B00;
+    color: var(--navy);
     letter-spacing: 0.5px;
-    position: relative;
-    /* Outline aesthetic matching official logo */
-    -webkit-text-stroke: 1.2px #FF6B00;
-    -webkit-text-fill-color: #FFFFFF;
+  }
+  /* Official Dual-line / Outline Orange TRIP */
+  .brand-word-trip {
+    font-family: 'Outfit', 'Inter', sans-serif;
+    font-size: 26px;
+    font-weight: 900;
+    color: #FFFFFF;
+    -webkit-text-stroke: 1.8px #FF6B00;
+    letter-spacing: 2px;
+    display: inline-block;
+    text-shadow: 0 0 1px #FF6B00, 1px 1px 0px rgba(255, 107, 0, 0.35);
   }
   .brand-dest-badge {
-    font-size: 11px;
-    font-weight: 800;
-    background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+    background: var(--navy);
     color: #FFA000;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
     padding: 3px 8px;
-    border-radius: 6px;
-    letter-spacing: 0.8px;
-    margin-left: 6px;
+    border-radius: 4px;
+    margin-left: 4px;
     text-transform: uppercase;
-    border: 1px solid rgba(255, 160, 0, 0.3);
   }
   .brand-tagline {
-    font-size: 9.5px;
+    font-size: 9px;
     font-weight: 700;
-    color: #64748B;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 2px;
     margin-top: 2px;
+    text-transform: uppercase;
   }
 
-  /* 4 Quick Action Header Buttons */
-  .header-quick-actions {
+  /* Header Quick Action Buttons */
+  .header-actions {
     display: flex;
     align-items: center;
     gap: 10px;
   }
-  .btn-action {
+  .btn-header {
     display: inline-flex;
     align-items: center;
     gap: 6px;
     font-size: 13px;
     font-weight: 700;
-    padding: 9px 15px;
-    border-radius: 30px;
-    cursor: pointer;
+    padding: 8px 14px;
+    border-radius: 20px;
+    text-decoration: none;
     transition: all 0.2s ease;
     white-space: nowrap;
   }
-  .btn-action-book {
-    background: linear-gradient(135deg, #FF6B00 0%, #E65100 100%);
-    color: #FFFFFF !important;
-    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.28);
+  .btn-header-book {
+    background: var(--primary);
+    color: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(255, 107, 0, 0.3);
   }
-  .btn-action-book:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(255, 107, 0, 0.38);
+  .btn-header-book:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
   }
-  .btn-action-app {
-    background: #0F172A;
-    color: #FFFFFF !important;
+  .btn-header-wa {
+    background: #25D366;
+    color: #FFFFFF;
   }
-  .btn-action-app:hover {
-    background: #1E293B;
+  .btn-header-wa:hover {
+    background: #1EBE5B;
   }
-  .btn-action-wa {
-    background: #E8F8EE;
-    color: #128C7E !important;
-    border: 1px solid #C6F0D5;
+  .btn-header-app {
+    background: var(--navy);
+    color: #FFFFFF;
   }
-  .btn-action-wa:hover {
-    background: #D5F4E2;
-  }
-  .btn-action-avail {
-    background: #FFF5EB;
-    color: #FF6B00 !important;
-    border: 1px solid #FFE0C2;
-  }
-  .btn-action-avail:hover {
-    background: #FFE8D1;
-  }
-  @media (max-width: 991px) {
-    .header-quick-actions { display: none; }
+  .btn-header-app:hover {
+    background: var(--navy-light);
   }
 
-  /* --------------------------------------------------------------------------
-     3. CATEGORY NAVIGATION / FILTER BAR (Sections & Labels)
-     -------------------------------------------------------------------------- */
-  .category-nav-bar {
+  /* Language Switcher Button */
+  .lang-switcher {
+    position: relative;
+    cursor: pointer;
     background: #F1F5F9;
-    border-top: 1px solid var(--border);
-    padding: 8px 0;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--navy);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    user-select: none;
   }
-  .category-nav-bar::-webkit-scrollbar { display: none; }
-  .category-nav-flex {
+  .lang-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 6px;
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    min-width: 140px;
+    z-index: 1001;
+    overflow: hidden;
+  }
+  .lang-dropdown a {
+    display: block;
+    padding: 8px 14px;
+    font-size: 13px;
+    color: var(--text-main);
+    text-decoration: none;
+  }
+  .lang-dropdown a:hover, .lang-dropdown a.active {
+    background: var(--primary-light);
+    color: var(--primary);
+    font-weight: 700;
+  }
+
+  /* Category Navigation Bar (Horizontally Scrollable) */
+  .category-nav-wrapper {
+    background: #FFFFFF;
+    border-bottom: 1px solid var(--border);
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 8px;
+  }
+  .category-nav-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .cat-nav-scroll-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    color: var(--navy);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    z-index: 5;
+    flex-shrink: 0;
+    margin: 0 4px;
+    font-weight: 900;
+    user-select: none;
+  }
+  .cat-nav-scroll-btn:hover {
+    background: var(--primary-light);
+    color: var(--primary);
+  }
+  .category-nav-flex {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding: 10px 12px;
     white-space: nowrap;
+    scrollbar-width: thin;
+    scrollbar-color: #CBD5E1 transparent;
+    flex-grow: 1;
+  }
+  .category-nav-flex::-webkit-scrollbar {
+    height: 3px;
+  }
+  .category-nav-flex::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 3px;
   }
   .cat-pill {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: #FFFFFF;
-    color: var(--navy);
+    background: #F8FAFC;
+    color: var(--text-main);
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    border-radius: 24px;
     font-size: 13px;
     font-weight: 600;
-    padding: 7px 16px;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    transition: all 0.2s;
-    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
   }
-  .cat-pill:hover {
-    border-color: var(--primary);
-    color: var(--primary);
+  .cat-pill:hover, .cat-pill.active {
+    background: var(--navy);
+    color: #FFFFFF;
+    border-color: var(--navy);
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
   }
   .cat-pill.active {
     background: var(--primary);
-    color: #FFFFFF !important;
     border-color: var(--primary);
-    box-shadow: 0 4px 10px rgba(255, 107, 0, 0.25);
   }
 
-  /* --------------------------------------------------------------------------
-     4. COMPACT LUXURY HERO SECTION
-     -------------------------------------------------------------------------- */
+  /* Compact Luxury Hero Section */
   .hero-compact {
-    background: linear-gradient(135deg, #090D16 0%, #0F172A 60%, #1A2639 100%);
+    background: linear-gradient(135deg, #090D16 0%, #0F172A 60%, #1E293B 100%);
     color: #FFFFFF;
-    padding: 28px 0 26px;
-    border-bottom: 2px solid rgba(255, 107, 0, 0.35);
+    padding: 24px 20px;
     text-align: center;
+    border-bottom: 2px solid var(--primary);
   }
   .hero-container {
     max-width: 900px;
     margin: 0 auto;
-    padding: 0 20px;
   }
   .hero-badge-pill {
     display: inline-block;
@@ -303,10 +342,11 @@
     border: 1px solid rgba(255, 107, 0, 0.4);
     color: #FFA000;
     font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.8px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
     padding: 4px 14px;
     border-radius: 20px;
+    text-transform: uppercase;
     margin-bottom: 10px;
   }
   .hero-compact-title {
@@ -314,219 +354,187 @@
     font-size: 26px;
     font-weight: 800;
     color: #FFFFFF;
-    line-height: 1.25;
     margin-bottom: 8px;
-    letter-spacing: -0.3px;
-  }
-  @media (max-width: 768px) {
-    .hero-compact-title { font-size: 21px; }
+    line-height: 1.25;
   }
   .hero-compact-desc {
-    font-size: 13.5px;
+    font-size: 14px;
     color: #CBD5E1;
-    line-height: 1.6;
+    line-height: 1.5;
+    max-width: 780px;
     margin: 0 auto;
   }
 
-  /* --------------------------------------------------------------------------
-     5. MAIN POSTS GRID & 4:5 ASPECT RATIO CARDS
-     -------------------------------------------------------------------------- */
-  .main-wrapper {
-    max-width: 1240px;
-    margin: 32px auto;
-    padding: 0 20px;
-  }
-  .section-header-title {
-    font-family: 'Outfit', sans-serif;
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--navy);
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .section-header-title::after {
-    content: '';
-    flex-grow: 1;
-    height: 1px;
-    background: var(--border);
-  }
-  .posts-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-  @media (min-width: 640px) {
-    .posts-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-  @media (min-width: 1024px) {
-    .posts-grid { grid-template-columns: repeat(3, 1fr); }
-  }
-  @media (min-width: 1280px) {
-    .posts-grid { grid-template-columns: repeat(3, 1fr); }
+  /* Main Content Layout */
+  .content-wrapper {
+    max-width: 1280px;
+    margin: 24px auto;
+    padding: 0 16px;
   }
 
-  /* 4:5 Aspect Ratio Card Frame */
+  /* 4:5 Vertical Aspect Ratio Post Card Grid */
+  .post-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 22px;
+  }
   .post-card {
     background: #FFFFFF;
-    border-radius: var(--radius-lg);
     border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
     overflow: hidden;
-    box-shadow: var(--shadow-sm);
-    transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
     display: flex;
     flex-direction: column;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.25s ease;
+    position: relative;
   }
   .post-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-4px);
     box-shadow: var(--shadow-md);
-    border-color: rgba(255, 107, 0, 0.4);
+    border-color: #CBD5E1;
   }
+
+  /* Strict 4:5 Media Container */
   .card-media-wrapper {
     position: relative;
     width: 100%;
     aspect-ratio: 4 / 5;
-    overflow: hidden;
     background: #0F172A;
+    overflow: hidden;
   }
-  .card-media {
+  .card-media-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
+    transition: transform 0.4s ease;
     display: block;
-    transition: transform 0.3s ease;
   }
-  .post-card:hover .card-media {
-    transform: scale(1.04);
+  .post-card:hover .card-media-img {
+    transform: scale(1.05);
   }
-  .card-category-tag {
+
+  /* Card Badges */
+  .card-badge-cat {
     position: absolute;
-    top: 14px;
-    left: 14px;
+    top: 12px;
+    left: 12px;
     background: rgba(15, 23, 42, 0.85);
     backdrop-filter: blur(4px);
-    color: #FFFFFF;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 5px 12px;
-    border-radius: 20px;
-    border: 1px solid rgba(255, 107, 0, 0.5);
-    z-index: 2;
-  }
-  .card-offer-badge {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    background: linear-gradient(135deg, #FF6B00 0%, #E65100 100%);
-    color: #FFFFFF;
+    color: #FFA000;
     font-size: 11px;
     font-weight: 800;
-    padding: 5px 11px;
+    padding: 4px 10px;
     border-radius: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     z-index: 2;
   }
+  .card-badge-discount {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--primary);
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 900;
+    padding: 4px 10px;
+    border-radius: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    z-index: 2;
+  }
+
   .card-body {
-    padding: 18px 20px 20px;
+    padding: 16px;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
   }
   .card-title {
     font-family: 'Outfit', sans-serif;
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 700;
-    line-height: 1.35;
     color: var(--navy);
+    line-height: 1.35;
     margin-bottom: 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
-  .card-title a { color: inherit; text-decoration: none; }
-  .card-title a:hover { color: var(--primary); }
-  .card-excerpt {
+  .card-snippet {
     font-size: 13px;
     color: var(--text-muted);
-    line-height: 1.6;
-    margin-bottom: 16px;
+    line-height: 1.5;
+    margin-bottom: 14px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
     flex-grow: 1;
   }
-  .card-meta-line {
-    font-size: 12px;
-    color: #94A3B8;
-    margin-bottom: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .card-actions-grid {
+  .card-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
     margin-top: auto;
   }
-  .card-btn-book {
-    background: linear-gradient(135deg, #FF6B00 0%, #E65100 100%);
-    color: #FFFFFF !important;
-    font-weight: 700;
-    font-size: 12.5px;
-    padding: 10px;
-    border-radius: var(--radius-sm);
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(255, 107, 0, 0.25);
-    transition: transform 0.2s;
-  }
-  .card-btn-book:hover {
-    transform: translateY(-2px);
-  }
-  .card-btn-wa {
-    background: #E8F8EE;
-    color: #128C7E !important;
-    font-weight: 700;
-    font-size: 12.5px;
-    padding: 10px;
-    border-radius: var(--radius-sm);
-    text-align: center;
-    border: 1px solid #C6F0D5;
-  }
-
-  /* --------------------------------------------------------------------------
-     6. ARTICLE VIEW & IN-ARTICLE BOOKING ENGINE WITH DATES & PAX
-     -------------------------------------------------------------------------- */
-  .article-container {
-    background: #FFFFFF;
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border);
-    padding: 36px 32px;
-    box-shadow: var(--shadow-sm);
-    max-width: 880px;
-    margin: 0 auto;
-  }
-  @media (max-width: 768px) {
-    .article-container { padding: 24px 18px; }
-  }
-  .article-category {
+  .card-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
     font-size: 12px;
     font-weight: 700;
+    padding: 9px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.2s ease;
+  }
+  .card-btn-book {
+    background: var(--navy);
+    color: #FFFFFF;
+  }
+  .card-btn-book:hover {
+    background: var(--primary);
+  }
+  .card-btn-wa {
+    background: #E8F5E9;
+    color: #1B5E20;
+    border: 1px solid #C8E6C9;
+  }
+  .card-btn-wa:hover {
+    background: #25D366;
+    color: #FFFFFF;
+  }
+
+  /* Single Article View & In-Article Booking Engine */
+  .article-container {
+    max-width: 860px;
+    margin: 0 auto;
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px 28px;
+    box-shadow: var(--shadow-sm);
+  }
+  .article-category {
     color: var(--primary);
-    background: var(--primary-light);
-    padding: 4px 12px;
-    border-radius: 20px;
-    display: inline-block;
-    margin-bottom: 14px;
+    font-size: 13px;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    display: block;
   }
   .article-title {
     font-family: 'Outfit', sans-serif;
     font-size: 30px;
-    font-weight: 800;
+    font-weight: 900;
     color: var(--navy);
-    line-height: 1.3;
+    line-height: 1.25;
     margin-bottom: 14px;
-  }
-  @media (max-width: 768px) {
-    .article-title { font-size: 22px; }
   }
   .article-meta {
     display: flex;
@@ -534,7 +542,7 @@
     gap: 12px;
     font-size: 13px;
     color: var(--text-muted);
-    padding-bottom: 20px;
+    padding-bottom: 16px;
     border-bottom: 1px solid var(--border);
     margin-bottom: 24px;
     flex-wrap: wrap;
@@ -543,868 +551,1107 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--navy);
   }
   .author-avatar {
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
     background: var(--primary);
     color: #FFFFFF;
-    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 11px;
-    font-weight: 800;
+    font-weight: 900;
   }
 
-  /* In-Article Interactive Booking Engine */
-  .in-article-booking-engine {
-    background: linear-gradient(135deg, #FFFDF8 0%, #FFF8EE 100%);
-    border: 2px dashed #FFA000;
-    border-radius: var(--radius-lg);
-    padding: 26px 24px;
+  /* Interactive Booking Engine Card */
+  .booking-engine-box {
+    background: linear-gradient(135deg, #FFF5EB 0%, #FFFFFF 100%);
+    border: 2px solid var(--primary);
+    border-radius: var(--radius-md);
+    padding: 24px;
     margin: 28px 0;
-    box-shadow: 0 8px 24px rgba(255, 107, 0, 0.08);
+    box-shadow: var(--shadow-md);
   }
-  .engine-header {
-    text-align: center;
-    margin-bottom: 20px;
+  .booking-box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    gap: 8px;
   }
-  .engine-badge {
-    background: #0F172A;
-    color: #FFA000;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 4px 12px;
-    border-radius: 20px;
-    display: inline-block;
-    margin-bottom: 8px;
-    letter-spacing: 0.5px;
-  }
-  .engine-header h3 {
+  .booking-box-title {
     font-family: 'Outfit', sans-serif;
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 800;
     color: var(--navy);
-    line-height: 1.3;
-    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
-  .engine-header p {
-    font-size: 14px;
-    color: #78350F;
+  .booking-box-tag {
+    background: var(--primary);
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 12px;
+    text-transform: uppercase;
   }
-  .engine-form-grid {
+  .booking-fields-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 14px;
-    margin-bottom: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
   }
-  @media (min-width: 640px) {
-    .engine-form-grid { grid-template-columns: 1fr 1fr; }
-  }
-  .form-field {
-    text-align: left;
-  }
-  .form-field label {
+  .booking-field label {
     display: block;
-    font-size: 12.5px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--navy);
-    margin-bottom: 5px;
+    margin-bottom: 6px;
   }
-  .eng-input {
+  .booking-field input, .booking-field select {
     width: 100%;
     padding: 10px 12px;
     border: 1px solid #CBD5E1;
-    border-radius: var(--radius-sm);
-    font-size: 13.5px;
+    border-radius: 8px;
+    font-size: 13px;
     font-family: inherit;
     background: #FFFFFF;
+    color: var(--navy);
   }
-  .eng-input:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.15);
+  .booking-engine-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
   }
-  .engine-actions {
-    display: grid;
-    grid-template-columns: 1fr;
+  .engine-btn {
+    flex: 1;
+    min-width: 180px;
+    padding: 12px 18px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 800;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+  }
+  .engine-btn-book {
+    background: var(--primary);
+    color: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
+  }
+  .engine-btn-book:hover {
+    background: var(--primary-dark);
+  }
+  .engine-btn-wa {
+    background: #25D366;
+    color: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
+  }
+  .engine-btn-wa:hover {
+    background: #1EBE5B;
+  }
+
+  /* Compact Sleek Footer */
+  .main-footer {
+    background: #090D16;
+    color: #CBD5E1;
+    padding: 40px 20px 24px;
+    border-top: 3px solid var(--primary);
+  }
+  .footer-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .footer-brand-section {
+    display: flex;
+    flex-direction: column;
     gap: 10px;
   }
-  @media (min-width: 640px) {
-    .engine-actions { grid-template-columns: 1fr 1fr; }
+  .footer-brand-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
-  .btn-eng-book {
-    background: linear-gradient(135deg, #FF6B00 0%, #E65100 100%);
-    color: #FFFFFF;
-    font-family: 'Outfit', sans-serif;
-    font-size: 15px;
-    font-weight: 800;
-    padding: 13px;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    box-shadow: 0 6px 16px rgba(255, 107, 0, 0.3);
-    transition: transform 0.2s;
+  .footer-desc {
+    font-size: 13px;
+    color: #94A3B8;
+    max-width: 720px;
+    line-height: 1.5;
   }
-  .btn-eng-book:hover { transform: translateY(-2px); }
-  .btn-eng-wa {
-    background: #128C7E;
-    color: #FFFFFF;
-    font-family: 'Outfit', sans-serif;
-    font-size: 15px;
-    font-weight: 800;
-    padding: 13px;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    box-shadow: 0 6px 16px rgba(18, 140, 126, 0.25);
-    transition: transform 0.2s;
+
+  /* Official Portals as Premium Pill Buttons */
+  .footer-portals-section {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 20px;
   }
-  .btn-eng-wa:hover { transform: translateY(-2px); }
-  .engine-footer-note {
-    text-align: center;
+  .footer-heading {
+    color: #FFA000;
     font-size: 12px;
-    color: #92400E;
-    margin-top: 14px;
-    font-weight: 600;
-  }
-
-  .article-content {
-    font-size: 16px;
-    line-height: 1.85;
-    color: #334155;
-  }
-  .article-content h2 {
-    font-family: 'Outfit', sans-serif;
-    font-size: 22px;
     font-weight: 800;
-    color: var(--navy);
-    margin: 32px 0 16px;
-    border-left: 4px solid var(--primary);
-    padding-left: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
   }
-  .article-content h3 {
-    font-family: 'Outfit', sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--navy);
-    margin: 24px 0 12px;
+  .footer-portal-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
   }
-  .article-content p { margin-bottom: 18px; }
-  .article-content ul, .article-content ol {
-    margin-bottom: 20px;
-    padding-left: 24px;
-  }
-  .article-content li { margin-bottom: 8px; }
-
-  /* Social Share Bar */
-  .share-bar {
+  .portal-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    text-decoration: none;
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-top: 36px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
-    flex-wrap: wrap;
+    transition: all 0.2s ease;
   }
-  .share-label {
+  .portal-btn:hover {
+    background: rgba(255, 107, 0, 0.15);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+  }
+  .portal-btn-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .portal-btn-info {
+    display: flex;
+    flex-direction: column;
+  }
+  .portal-btn-title {
+    color: #FFFFFF;
     font-size: 13px;
     font-weight: 700;
-    color: var(--navy);
   }
-  .share-btn {
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 700;
-    color: #FFFFFF !important;
+  .portal-btn-sub {
+    color: #94A3B8;
+    font-size: 11px;
   }
-  .share-wa { background: #25D366; }
-  .share-fb { background: #1877F2; }
-  .share-tw { background: #0F172A; }
 
-  /* --------------------------------------------------------------------------
-     7. PERSISTENT MOBILE BOTTOM ACTION BAR (Refined & Pulsing)
-     -------------------------------------------------------------------------- */
-  .mobile-bottom-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: #FFFFFF;
-    border-top: 1px solid var(--border);
-    padding: 8px 12px;
+  /* 24/7 Helpline & Concierge Row */
+  .footer-support-section {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 20px;
+  }
+  .footer-contact-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 6px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+  }
+  .contact-pill {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 10px 14px;
+    text-decoration: none;
+    color: #E2E8F0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    transition: all 0.2s ease;
+  }
+  .contact-pill:hover {
+    border-color: var(--primary);
+    background: rgba(255, 107, 0, 0.1);
+  }
+  .contact-pill span {
+    font-size: 11px;
+    color: #94A3B8;
+  }
+  .contact-pill strong {
+    font-size: 13px;
+    color: #FFA000;
+  }
+
+  /* Footer Legal & Copyright */
+  .footer-legal-bar {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  .legal-links-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .legal-links-row a {
+    color: #CBD5E1;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .legal-links-row a:hover {
+    color: var(--primary);
+    text-decoration: underline;
+  }
+  .legal-links-row .sep {
+    color: #475569;
+  }
+  .copyright-text {
+    font-size: 12px;
+    color: #64748B;
+  }
+
+  /* =======================================================================
+     LUXURY ULTRA-PREMIUM BOTTOM ACTION BAR (Animated & Eye-Catching)
+     ======================================================================= */
+  .mobile-bottom-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.35fr 1fr;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 92%;
+    max-width: 580px;
+    height: 72px;
+    background: rgba(10, 15, 29, 0.96);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1.5px solid rgba(255, 107, 0, 0.45);
+    border-radius: 22px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55), 0 0 25px rgba(255, 107, 0, 0.22);
     z-index: 9999;
-    box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.1);
+    padding: 6px 10px;
+    gap: 8px;
+    align-items: center;
+    box-sizing: border-box;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
-  @media (min-width: 992px) {
-    .mobile-bottom-bar { display: none; }
-  }
-  .mob-btn {
+  .bar-btn {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 8px 4px;
-    border-radius: var(--radius-sm);
+    gap: 3px;
+    text-decoration: none;
     font-size: 11px;
     font-weight: 700;
-    text-align: center;
-    line-height: 1.2;
-    gap: 3px;
-    transition: transform 0.15s;
-  }
-  .mob-btn-call {
-    background: #F1F5F9;
-    color: var(--navy) !important;
-  }
-  .mob-btn-wa {
-    background: #E8F8EE;
-    color: #128C7E !important;
-  }
-  .mob-btn-book {
-    background: linear-gradient(135deg, #FF6B00 0%, #E65100 100%);
-    color: #FFFFFF !important;
-    box-shadow: 0 4px 10px rgba(255, 107, 0, 0.3);
-  }
-  .mob-btn-app {
-    background: #0F172A;
-    color: #FFFFFF !important;
-  }
-
-  /* Gentle Pulse Vibration Animation to attract user attention */
-  @keyframes gentle-pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.04); }
-    100% { transform: scale(1); }
-  }
-  .pulse-btn-primary {
-    animation: gentle-pulse 2.2s infinite ease-in-out;
-  }
-
-  /* --------------------------------------------------------------------------
-     8. LUXURY FOOTER & LEGAL LINKS
-     -------------------------------------------------------------------------- */
-  .lexa-footer {
-    background: var(--navy-dark);
-    color: #94A3B8;
-    padding: 48px 0 28px;
-    border-top: 3px solid var(--primary);
-    margin-top: 48px;
-  }
-  .footer-container {
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
-  .footer-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 32px;
-    margin-bottom: 40px;
-  }
-  @media (min-width: 768px) {
-    .footer-grid { grid-template-columns: 1.4fr 1fr 1fr 1.2fr; }
-  }
-  .footer-brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 14px;
-  }
-  .footer-logo-img {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    border: 2px solid #FF6B00;
-    object-fit: cover;
-  }
-  .footer-desc {
-    font-size: 13px;
-    line-height: 1.7;
-    margin-bottom: 16px;
-    color: #94A3B8;
-  }
-  .footer-rating-pill {
-    display: inline-block;
-    background: rgba(255, 107, 0, 0.15);
-    border: 1px solid rgba(255, 107, 0, 0.4);
-    color: #FFA000;
-    font-size: 12px;
-    font-weight: 700;
-    padding: 5px 12px;
-    border-radius: 20px;
-  }
-  .footer-col h4 {
-    font-family: 'Outfit', sans-serif;
-    color: #FFFFFF;
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 16px;
+    height: 56px;
+    border-radius: 14px;
+    transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
     position: relative;
-    padding-bottom: 8px;
+    overflow: hidden;
   }
-  .footer-col h4::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 28px;
-    height: 2px;
-    background: var(--primary);
+  .bar-btn:active {
+    transform: scale(0.93);
   }
-  .footer-col ul { list-style: none; padding: 0; }
-  .footer-col li { margin-bottom: 10px; font-size: 13px; }
-  .footer-col a { color: #94A3B8; }
-  .footer-col a:hover { color: #FFFFFF; padding-left: 4px; }
-  .footer-col p { font-size: 13px; margin-bottom: 10px; line-height: 1.6; }
-  .footer-col p strong { color: #F1F5F9; }
+  
+  /* Call Button */
+  .bar-btn-call {
+    color: #F8FAFC;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .bar-btn-call:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+  @keyframes phoneWiggle {
+    0%, 75%, 100% { transform: rotate(0deg) scale(1); }
+    80% { transform: rotate(-18deg) scale(1.15); }
+    85% { transform: rotate(18deg) scale(1.15); }
+    90% { transform: rotate(-12deg) scale(1.08); }
+    95% { transform: rotate(10deg) scale(1.05); }
+  }
+  .icon-call-svg {
+    animation: phoneWiggle 3.5s ease-in-out infinite;
+    transform-origin: center;
+  }
 
-  /* Footer Legal & Policy Bar */
-  .footer-legal-bar {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: 24px;
-    display: flex;
+  /* WhatsApp Button */
+  .bar-btn-wa {
+    color: #FFFFFF;
+    background: rgba(37, 211, 102, 0.12);
+    border: 1px solid rgba(37, 211, 102, 0.35);
+  }
+  .bar-btn-wa:hover {
+    background: rgba(37, 211, 102, 0.22);
+  }
+  @keyframes waPulseGlow {
+    0%, 100% {
+      transform: scale(1);
+      filter: drop-shadow(0 0 2px rgba(37, 211, 102, 0.4));
+    }
+    50% {
+      transform: scale(1.12);
+      filter: drop-shadow(0 0 10px rgba(37, 211, 102, 0.95));
+    }
+  }
+  .icon-wa-svg {
+    animation: waPulseGlow 2.6s ease-in-out infinite;
+    transform-origin: center;
+  }
+  .online-indicator {
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    width: 6px;
+    height: 6px;
+    background: #25D366;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #25D366;
+    animation: blinkIndicator 1.4s ease-in-out infinite;
+  }
+  @keyframes blinkIndicator {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(0.7); }
+  }
+
+  /* Book Now Button (Hero CTA) */
+  .bar-btn-book {
+    color: #FFFFFF !important;
+    background: linear-gradient(135deg, #FF6B00 0%, #FF9033 50%, #FF6B00 100%) !important;
+    background-size: 200% 100% !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 0 4px 18px rgba(255, 107, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+    animation: shimmerSlide 3s linear infinite, bookFloat 2.8s ease-in-out infinite !important;
+  }
+  @keyframes shimmerSlide {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  @keyframes bookFloat {
+    0%, 100% { transform: translateY(0); box-shadow: 0 4px 18px rgba(255, 107, 0, 0.55); }
+    50% { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(255, 107, 0, 0.85); }
+  }
+  .deal-tag {
+    font-size: 8px;
+    background: rgba(0, 0, 0, 0.35);
+    padding: 1px 5px;
+    border-radius: 6px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    margin-top: -1px;
+  }
+
+  /* Get App Button */
+  .bar-btn-app {
+    color: #E2E8F0;
+    background: rgba(99, 102, 241, 0.12);
+    border: 1px solid rgba(99, 102, 241, 0.35);
+  }
+  .bar-btn-app:hover {
+    background: rgba(99, 102, 241, 0.22);
+  }
+  @keyframes appDownloadSlide {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(3px); }
+  }
+  .app-download-arrow {
+    animation: appDownloadSlide 1.8s ease-in-out infinite;
+  }
+
+  .bar-btn .bar-label {
+    line-height: 1;
+    font-size: 11px;
+    letter-spacing: 0.2px;
+  }
+
+  @media (max-width: 768px) {
+    .mobile-bottom-bar {
+      width: 100%;
+      max-width: 100%;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      transform: none;
+      border-radius: 0;
+      border-left: none;
+      border-right: none;
+      border-bottom: none;
+      padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px));
+      height: 68px;
+      gap: 6px;
+    }
+  }
+
+  /* Desktop Call Prompt Modal */
+  .call-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 10000;
     align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 16px;
-    font-size: 13px;
+    justify-content: center;
+    padding: 16px;
   }
-  .legal-links {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-  .legal-links a {
-    color: #CBD5E1;
-  }
-  .legal-links a:hover {
-    color: var(--primary);
-  }
-  .copyright-text {
-    color: #64748B;
+  .call-modal-box {
+    background: #FFFFFF;
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.25);
   }
   ]]></b:skin>
 </head>
-
 <body>
-  <!-- =======================================================================
-       1. TOP CONTACT & PORTALS ANNOUNCEMENT BAR
-       ======================================================================= -->
-  <div class='header-top-bar'>
-    <div class='header-container top-bar-flex'>
-      <div class='top-bar-contact'>
-        <span>📞 24/7 हेल्पलाइन: <a href='tel:+919079854982'>+91 90798 54982</a> | <a href='tel:+919079017880'>+91 90790 17880</a></span>
-      </div>
-      <div class='top-bar-links'>
-        <a href='https://bookings.lexatrip.com/' target='_blank'>🏨 आधिकारिक बुकिंग पोर्टल</a>
-        <a href='https://www.lexatrip.com/' target='_blank'>🌐 LexaTrip.com</a>
-        <a href='https://www.lexatrip.in/' target='_blank'>🇮🇳 LexaTrip.in</a>
-      </div>
-    </div>
-  </div>
 
   <!-- =======================================================================
-       2. MAIN LUXURY HEADER WITH OFFICIAL LOGO & 4 QUICK ACTIONS
+       TOP CUSTOMIZABLE GADGETS & ADS (Blogger Layout Editable)
        ======================================================================= -->
-  <header class='lexa-header'>
-    <div class='header-main-bar'>
-      <div class='header-container header-main-flex'>
-        <a class='brand-logo-area' expr:href='data:blog.homepageUrl'>
-          <img alt='LexaTrip Logo' class='brand-logo-img' src='https://lexa-trip-automation.onrender.com/images/lexatrip_logo.jpg'/>
-          <div class='brand-text-block'>
-            <div class='brand-title-wrap'>
-              <span class='brand-word-lexa'>LEXA</span>
-              <span class='brand-word-trip'>TRIP</span>
-              <span class='brand-dest-badge'>MOUNT ABU</span>
-            </div>
-            <span class='brand-tagline'>BOOK. EXPLORE. REPEAT.</span>
-          </div>
-        </a>
+  <b:section id='top-banner-ads' name='[Top of Page] Ads &amp; Announcement Gadgets' maxwidgets='5' showaddelement='yes'/>
 
-        <!-- 4 Quick Action Header Buttons -->
-        <div class='header-quick-actions'>
-          <a class='btn-action btn-action-book' href='https://bookings.lexatrip.com/' target='_blank'>
-            <span>🏨 बुक ऑनलाइन (50% Off)</span>
-          </a>
-          <a class='btn-action btn-action-app' href='https://www.lexatrip.com/app' target='_blank'>
-            <span>📲 ऐप डाउनलोड</span>
-          </a>
-          <a class='btn-action btn-action-wa' href='https://wa.me/919079854982?text=नमस्ते%20LexaTrip,%20मुझे%20जैसलमेर%20होटल्स%20और%20कैंप्स%20की%20जानकारी%20चाहिए!' target='_blank'>
-            <span>💬 WhatsApp पूछताछ</span>
-          </a>
-          <a class='btn-action btn-action-avail' href='https://bookings.lexatrip.com/' target='_blank'>
-            <span>📅 चेक अवेलेबिलिटी</span>
-          </a>
+  <!-- =======================================================================
+       2. MAIN LUXURY HEADER
+       ======================================================================= -->
+  <header class='main-header'>
+    <div class='header-container'>
+      
+      <!-- Official Logo with Embedded Lifetime Base64 Data URI -->
+      <a class='brand-logo-link' href='/'>
+        <div class='brand-logo-circle'>
+          <img alt='LexaTrip Emblem' class='brand-logo-img' src='data:image/jpeg;base64,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'/>
         </div>
+        <div class='brand-text'>
+          <div class='brand-name-row'>
+            <span class='brand-word-lexa'>LEXA</span>
+            <span class='brand-word-trip'>TRIP</span>
+            <span class='brand-dest-badge'>MOUNT ABU</span>
+          </div>
+          <span class='brand-tagline'>BOOK. EXPLORE. REPEAT.</span>
+        </div>
+      </a>
+
+      <!-- Quick Action Buttons -->
+      <div class='header-actions'>
+        <!-- Language Switcher -->
+        <div class='lang-switcher' onclick='toggleLangMenu(event)'>
+          <span>🌐</span>
+          <span>EN</span>
+          <span>▾</span>
+          <div class='lang-dropdown' id='langDropdown'>
+            <a class='active' href='#' onclick='selectLang("en", event)'>English (Default)</a>
+            <a href='#' onclick='selectLang("hi", event)'>हिन्दी (Hindi)</a>
+          </div>
+        </div>
+
+        <a class='btn-header btn-header-book' href='https://bookings.lexatrip.com/' target='_blank'>
+          <span>🏨 Book Online</span>
+        </a>
+        <a class='btn-header btn-header-wa' href='https://wa.me/919079854982?text=Hello%20LexaTrip,%20I%20would%20like%20to%20inquire%20about%20MOUNT ABU%20stays' target='_blank'>
+          <span>💬 WhatsApp</span>
+        </a>
+        <a class='btn-header btn-header-app' href='https://www.lexatrip.com/app' target='_blank'>
+          <span>📲 App</span>
+        </a>
       </div>
+
     </div>
 
-    <!-- Category Navigation / Filter Bar -->
-    <nav class='category-nav-bar'>
-      <div class='header-container category-nav-flex' id='categoryNav'>
-        <a class='cat-pill active' href='#' onclick='filterCategory("all", event)'>
-          <span>🏠 होम पेज</span>
-        </a>
-        <a class='cat-pill' href='#' onclick='filterCategory("camp", event)'>
-          <span>⛺ लक्ज़री कैंप्स</span>
-        </a>
-        <a class='cat-pill' href='#' onclick='filterCategory("5-star", event)'>
-          <span>⭐ 5-स्टार होटल्स</span>
-        </a>
-        <a class='cat-pill' href='#' onclick='filterCategory("4-star", event)'>
-          <span>🏨 4-स्टार होटल्स</span>
-        </a>
-        <a class='cat-pill' href='#' onclick='filterCategory("3-star", event)'>
-          <span>🛏️ 3-स्टार होटल्स</span>
-        </a>
-        <a class='cat-pill' href='#' onclick='filterCategory("budget", event)'>
-          <span>💰 बजट फ्रेंडली होटल्स</span>
-        </a>
+    <!-- =======================================================================
+         3. CATEGORY NAVIGATION BAR (Horizontally Scrollable in Pure English)
+         ======================================================================= -->
+    <div class='category-nav-wrapper'>
+      <div class='category-nav-container'>
+        <button class='cat-nav-scroll-btn' onclick='scrollCatNav(-180)' title='Scroll Left'>‹</button>
+        <nav class='category-nav-flex' id='categoryNav'>
+          <a class='cat-pill active' href='#' onclick='filterCategory("all", event)'>
+            <span>🏠 Home</span>
+          </a>
+          <a class='cat-pill' href='#' onclick='filterCategory("camp", event)'>
+            <span>⛺ Luxury Camps</span>
+          </a>
+          <a class='cat-pill' href='#' onclick='filterCategory("5-star", event)'>
+            <span>⭐ 5-Star Hotels</span>
+          </a>
+          <a class='cat-pill' href='#' onclick='filterCategory("4-star", event)'>
+            <span>🏨 4-Star Hotels</span>
+          </a>
+          <a class='cat-pill' href='#' onclick='filterCategory("3-star", event)'>
+            <span>🛏️ 3-Star Hotels</span>
+          </a>
+          <a class='cat-pill' href='#' onclick='filterCategory("budget", event)'>
+            <span>💰 Budget Friendly Hotels</span>
+          </a>
+        </nav>
+        <button class='cat-nav-scroll-btn' onclick='scrollCatNav(180)' title='Scroll Right'>›</button>
       </div>
-    </nav>
+    </div>
   </header>
 
   <!-- =======================================================================
-       3. COMPACT LUXURY HERO BANNER (2 Lines)
+       ABOVE POSTS ADS & PROMO (Blogger Layout Editable)
        ======================================================================= -->
-  <b:if cond='data:view.isMultipleItems'>
-    <div class='hero-compact'>
-      <div class='hero-container'>
-        <span class='hero-badge-pill'>✦ Verified Experiential Luxury Travel &amp; Camps ✦</span>
-        <h1 class='hero-compact-title'>माउंट आबू लक्ज़री रिसॉर्ट्स व हिल स्टेशन गाइड</h1>
-        <p class='hero-compact-desc'>
-          राजस्थान के एकमात्र हिल स्टेशन में शांत नक्की झील, दिलवाड़ा मंदिर और अरावली की ठंडी वादियों में लक्ज़री स्टे।<br/>
-          100% वेरिफाइड प्रॉपर्टीज, एक्सक्लूसिव 50% तक की छूट और 24/7 स्थानीय सहायता के साथ अभी प्लान करें।
+  <b:section id='above-posts-ads' name='[Above Posts] Promo Banner &amp; Sponsored Ads' maxwidgets='5' showaddelement='yes'/>
+
+  <!-- =======================================================================
+       5. MAIN CONTENT & BLOG WIDGET
+       ======================================================================= -->
+  <div class='content-wrapper'>
+    <b:section id='main' name='Main Content Area' maxwidgets='1' showaddelement='no'>
+      <b:widget id='Blog1' locked='true' title='Blog Posts' type='Blog' version='2'>
+        <b:includable id='main' var='this'>
+          <!-- Resilient Client-Side Hybrid Container -->
+          <div id='lexa-dynamic-root'>
+            <!-- Post Card Grid will be rendered dynamically here -->
+            <div class='post-grid' id='postGrid'></div>
+          </div>
+        </b:includable>
+      </b:widget>
+    </b:section>
+  </div>
+
+  <!-- Optional In-Article / In-Feed Ads Section (Blogger Layout Customizable) -->
+  <b:section id='in-feed-promo-ads' name='[Between Posts] In-Feed Promo &amp; Advertisements' maxwidgets='5' showaddelement='yes'/>
+
+  <!-- =======================================================================
+       6. COMPACT SLEEK FOOTER (English, No Bulky Categories, Button Portals)
+       ======================================================================= -->
+  <footer class='main-footer'>
+    <div class='footer-container'>
+
+      <!-- Top Row: Logo & Brand Description -->
+      <div class='footer-brand-section'>
+        <div class='footer-brand-row'>
+          <div class='brand-logo-circle'>
+            <img alt='LexaTrip Emblem' class='brand-logo-img' src='data:image/jpeg;base64,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'/>
+          </div>
+          <div class='brand-text'>
+            <div class='brand-name-row'>
+              <span class='brand-word-lexa' style='color:#FFFFFF;'>LEXA</span>
+              <span class='brand-word-trip'>TRIP</span>
+              <span class='brand-dest-badge'>MOUNT ABU</span>
+            </div>
+            <span class='brand-tagline' style='color:#94A3B8;'>BOOK. EXPLORE. REPEAT.</span>
+          </div>
+        </div>
+        <p class='footer-desc'>
+          India's premier experiential luxury travel network. Curated luxury desert camps, heritage palace hotels, and verified tours in MOUNT ABU.
         </p>
       </div>
-    </div>
-  </b:if>
 
-  <!-- =======================================================================
-       4. MAIN BLOG CONTENT & POSTS GRID
-       ======================================================================= -->
-  <div class='main-wrapper'>
-    <div id='lexaMainContent'>
-      <div style='text-align: center; padding: 40px; color: #64748B;'>
-        <p style='font-size: 16px; font-weight: 600;'>लोड हो रहा है...</p>
-      </div>
-    </div>
-    <b:section class='main' id='main' showaddelement='no'/>
-  </div>
-
-  <!-- =======================================================================
-       5. PERSISTENT MOBILE BOTTOM ACTION BAR (4 Pulsing Buttons)
-       ======================================================================= -->
-  <div class='mobile-bottom-bar'>
-    <a class='mob-btn mob-btn-call' href='tel:+919079854982'>
-      <span style='font-size: 16px;'>📞</span>
-      <span>कॉल करें</span>
-    </a>
-    <a class='mob-btn mob-btn-wa' href='https://wa.me/919079854982?text=नमस्ते%20LexaTrip,%20मुझे%20जैसलमेर%20होटल्स%20और%20कैंप्स%20की%20बुकिंग%20करनी%20है!' target='_blank'>
-      <span style='font-size: 16px;'>💬</span>
-      <span>WhatsApp</span>
-    </a>
-    <a class='mob-btn mob-btn-book pulse-btn-primary' href='https://bookings.lexatrip.com/' target='_blank'>
-      <span style='font-size: 16px;'>🏨</span>
-      <span>बुक नाउ</span>
-    </a>
-    <a class='mob-btn mob-btn-app' href='https://www.lexatrip.com/app' target='_blank'>
-      <span style='font-size: 16px;'>📲</span>
-      <span>ऐप डाउनलोड</span>
-    </a>
-  </div>
-
-  <!-- =======================================================================
-       6. LUXURY FOOTER, CONTACT NUMBERS & LEGAL LINKS
-       ======================================================================= -->
-  <footer class='lexa-footer'>
-    <div class='footer-container'>
-      <div class='footer-grid'>
-        <div class='footer-brand-col'>
-          <div class='footer-brand'>
-            <img alt='LexaTrip Logo' class='footer-logo-img' src='https://lexa-trip-automation.onrender.com/images/lexatrip_logo.jpg'/>
-            <div class='brand-text-block'>
-              <div class='brand-title-wrap'>
-                <span class='brand-word-lexa' style='color:#FFFFFF;'>LEXA</span>
-                <span class='brand-word-trip'>TRIP</span>
-              </div>
-              <span class='brand-tagline' style='color:#94A3B8;'>BOOK. EXPLORE. REPEAT.</span>
+      <!-- Official Portals (Button-style pills) -->
+      <div class='footer-portals-section'>
+        <h4 class='footer-heading'>OFFICIAL PORTALS</h4>
+        <div class='footer-portal-buttons'>
+          <a class='portal-btn' href='https://bookings.lexatrip.com/' target='_blank'>
+            <span class='portal-btn-icon'>🏨</span>
+            <div class='portal-btn-info'>
+              <span class='portal-btn-title'>Online Reservations</span>
+              <span class='portal-btn-sub'>bookings.lexatrip.com</span>
             </div>
-          </div>
-          <p class='footer-desc'>
-            भारत का प्रमुख एक्सपीरियंसियल ट्रैवल ब्रांड। जैसलमेर के सुनहरे थार रेगिस्तान में लक्ज़री टेंट कैंप्स, हेरिटेज फोर्ट्स, कैमल सफारी और एक्सक्लूसिव टूर पैकेजेस।
-          </p>
-          <div class='footer-rating-pill'>
-            ★ 5.0 Google Rated Experience | 24/7 Helpline
-          </div>
-        </div>
-
-        <div class='footer-col'>
-          <h4>श्रेणियां (Categories)</h4>
-          <ul>
-            <li><a href='#' onclick='filterCategory("camp", event)'>⛺ लक्ज़री कैंप्स व टेंट्स</a></li>
-            <li><a href='#' onclick='filterCategory("5-star", event)'>⭐ 5-स्टार लक्ज़री होटल्स</a></li>
-            <li><a href='#' onclick='filterCategory("4-star", event)'>🏨 4-स्टार प्रीमियम होटल्स</a></li>
-            <li><a href='#' onclick='filterCategory("3-star", event)'>🛏️ 3-स्टार कंफर्ट होटल्स</a></li>
-            <li><a href='#' onclick='filterCategory("budget", event)'>💰 बजट फ्रेंडली स्टे</a></li>
-          </ul>
-        </div>
-
-        <div class='footer-col'>
-          <h4>आधिकारिक पोर्टल्स</h4>
-          <ul>
-            <li><a href='https://bookings.lexatrip.com/' target='_blank'>🏨 आधिकारिक बुकिंग पोर्टल (bookings.lexatrip.com)</a></li>
-            <li><a href='https://www.lexatrip.com/' target='_blank'>🌐 मुख्य वेबसाइट (lexatrip.com)</a></li>
-            <li><a href='https://www.lexatrip.in/' target='_blank'>🇮🇳 राष्ट्रीय पोर्टल (lexatrip.in)</a></li>
-            <li><a href='https://www.lexatrip.com/app' target='_blank'>📲 लेक्सा ट्रिप मोबाइल ऐप (Play Store)</a></li>
-          </ul>
-        </div>
-
-        <div class='footer-col'>
-          <h4>संपर्क व सहायता</h4>
-          <p><strong>📞 24/7 हेल्पलाइन 1:</strong> <a href='tel:+919079854982'>+91 90798 54982</a></p>
-          <p><strong>📞 24/7 हेल्पलाइन 2:</strong> <a href='tel:+919079017880'>+91 90790 17880</a></p>
-          <p><strong>💬 आधिकारिक WhatsApp:</strong> <a href='https://wa.me/919079854982' target='_blank'>+91 90798 54982</a></p>
-          <p><strong>📧 आधिकारिक ईमेल:</strong> <a href='mailto:info@lexatrip.com'>info@lexatrip.com</a></p>
+          </a>
+          <a class='portal-btn' href='https://www.lexatrip.com/' target='_blank'>
+            <span class='portal-btn-icon'>🌐</span>
+            <div class='portal-btn-info'>
+              <span class='portal-btn-title'>Main Website</span>
+              <span class='portal-btn-sub'>lexatrip.com</span>
+            </div>
+          </a>
+          <a class='portal-btn' href='https://www.lexatrip.in/' target='_blank'>
+            <span class='portal-btn-icon'>🇮🇳</span>
+            <div class='portal-btn-info'>
+              <span class='portal-btn-title'>National Portal</span>
+              <span class='portal-btn-sub'>lexatrip.in</span>
+            </div>
+          </a>
+          <a class='portal-btn' href='https://www.lexatrip.com/app' target='_blank'>
+            <span class='portal-btn-icon'>📲</span>
+            <div class='portal-btn-info'>
+              <span class='portal-btn-title'>Mobile App</span>
+              <span class='portal-btn-sub'>Android &amp; iOS App</span>
+            </div>
+          </a>
         </div>
       </div>
 
-      <!-- Legal & Policy Links Row -->
+      <!-- Optional Customizable Portal Section in Blogger Layout -->
+      <b:section id='footer-custom-links' name='[Footer Top] Custom Links, Social &amp; Partner Portals' maxwidgets='5' showaddelement='yes'/>
+
+      <!-- 24/7 Helpline & Support -->
+      <div class='footer-support-section'>
+        <h4 class='footer-heading'>24/7 HELPLINE &amp; GUEST SUPPORT</h4>
+        <div class='footer-contact-grid'>
+          <a class='contact-pill' href='tel:+919079854982' onclick='handleCallClick(event)'>
+            <span>📞 24/7 Priority Helpline 1</span>
+            <strong>+91 90798 54982</strong>
+          </a>
+          <a class='contact-pill' href='tel:+919079017880' onclick='handleCallClick(event)'>
+            <span>📞 24/7 Priority Helpline 2</span>
+            <strong>+91 90790 17880</strong>
+          </a>
+          <a class='contact-pill' href='https://wa.me/919079854982?text=Hello%20LexaTrip,%20I%20need%20assistance' target='_blank'>
+            <span>💬 Official WhatsApp Desk</span>
+            <strong>+91 90798 54982</strong>
+          </a>
+          <a class='contact-pill' href='mailto:info@lexatrip.com'>
+            <span>✉️ Official Email Desk</span>
+            <strong>info@lexatrip.com</strong>
+          </a>
+        </div>
+      </div>
+
+      <!-- Legal Links & Copyright -->
       <div class='footer-legal-bar'>
-        <div class='legal-links'>
-          <a href='/p/about-us.html'>हमारे बारे में (About Us)</a>
-          <a href='/p/contact-us.html'>संपर्क करें (Contact Us)</a>
-          <a href='/p/privacy-policy.html'>गोपनीयता नीति (Privacy Policy)</a>
-          <a href='/p/terms-conditions.html'>नियम व शर्तें (Terms &amp; Conditions)</a>
+        <div class='legal-links-row'>
+          <a href='/p/about-us.html'>About Us</a>
+          <span class='sep'>•</span>
+          <a href='/p/contact-us.html'>Contact Us</a>
+          <span class='sep'>•</span>
+          <a href='/p/privacy-policy.html'>Privacy Policy</a>
+          <span class='sep'>•</span>
+          <a href='/p/terms-conditions.html'>Terms &amp; Conditions</a>
         </div>
         <p class='copyright-text'>
-          © 2026 LexaTrip™ Technologies Pvt. Ltd. सर्वाधिकार सुरक्षित। Book. Explore. Repeat.
+          © 2026 LexaTrip™ Technologies Pvt. Ltd. All rights reserved. Book. Explore. Repeat.
         </p>
       </div>
+
     </div>
   </footer>
 
+  <!-- Optional Footer Bottom Ad Banner Section -->
+  <b:section id='footer-bottom-ads' name='[Footer Bottom] Custom Ads, Disclaimer &amp; Tracking Codes' maxwidgets='5' showaddelement='yes'/>
+
   <!-- =======================================================================
-       7. JAVASCRIPT CONTROLLERS (Categories, Feeds & Interactive Booking)
+       LUXURY ULTRA-PREMIUM BOTTOM ACTION BAR (Fixed, Eye-Catching & Animated)
+       ======================================================================= -->
+  <div class='mobile-bottom-bar'>
+    <!-- 1. Call Button with Phone Wiggle -->
+    <a class='bar-btn bar-btn-call' href='tel:+919079854982' onclick='handleCallClick(event)' title='Call LexaTrip 24/7 Helpline'>
+      <svg class='icon-call-svg' viewBox='0 0 24 24' width='22' height='22' fill='none' stroke='#FF6B00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>
+        <path d='M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z'></path>
+      </svg>
+      <span class='bar-label'>Call</span>
+    </a>
+
+    <!-- 2. Official WhatsApp Button with Pulse Glow & Online Dot -->
+    <a class='bar-btn bar-btn-wa' href='https://wa.me/919079854982?text=Hello%20LexaTrip,%20I%20would%20like%20to%20inquire%20about%20MOUNT ABU%20packages' target='_blank' title='Direct WhatsApp Chat'>
+      <span class='online-indicator'></span>
+      <svg class='icon-wa-svg' viewBox='0 0 24 24' width='24' height='24' fill='none'>
+        <circle cx='12' cy='12' r='12' fill='#25D366'/>
+        <path d='M17.5 14.3c-.2-.1-1.3-.6-1.5-.7-.2-.1-.4-.1-.5.1-.2.2-.6.7-.8.9-.1.1-.3.2-.5.1-.2-.1-.9-.3-1.7-1-.6-.5-1-1.2-1.1-1.4-.1-.2 0-.3.1-.4.1-.1.2-.2.3-.4.1-.1.1-.2.2-.3 0-.1 0-.3 0-.4 0-.1-.5-1.2-.7-1.6-.2-.4-.4-.3-.5-.3h-.4c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9 0 1.1.8 2.2 1 2.3.1.2 1.6 2.5 3.9 3.5.5.2 1 .4 1.3.5.6.2 1.1.2 1.5.1.5-.1 1.3-.5 1.5-1.1.2-.5.2-1 .1-1.1-.1-.1-.3-.2-.5-.3z' fill='#FFFFFF'/>
+        <path d='M12 4a8 8 0 0 0-6.9 12L4 20l4.2-1.1A8 8 0 1 0 12 4zm0 14.5c-1.3 0-2.5-.4-3.6-1l-.3-.2-2.5.7.7-2.4-.2-.3a6.5 6.5 0 1 1 5.9 3.2z' fill='#FFFFFF'/>
+      </svg>
+      <span class='bar-label'>WhatsApp</span>
+    </a>
+
+    <!-- 3. Book Now Elevated Hero CTA with Shimmer Gradient -->
+    <a class='bar-btn bar-btn-book' href='https://bookings.lexatrip.com/' target='_blank' title='Instant Online Reservation'>
+      <svg viewBox='0 0 24 24' width='20' height='20' fill='none' stroke='#FFFFFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>
+        <path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'></path>
+        <polyline points='9 22 9 12 15 12 15 22'></polyline>
+      </svg>
+      <span class='bar-label'>Book Now</span>
+      <span class='deal-tag'>⚡ Instant</span>
+    </a>
+
+    <!-- 4. Get App Button with Animated Download -->
+    <a class='bar-btn bar-btn-app' href='https://www.lexatrip.com/app' target='_blank' title='Download LexaTrip Mobile App'>
+      <svg viewBox='0 0 24 24' width='20' height='20' fill='none' stroke='#818CF8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>
+        <rect x='5' y='2' width='14' height='20' rx='2' ry='2'></rect>
+        <line x1='12' y1='18' x2='12.01' y2='18'></line>
+        <path class='app-download-arrow' d='M12 7v5m-2.5-2.5l2.5 2.5 2.5-2.5' stroke='#38BDF8'></path>
+      </svg>
+      <span class='bar-label'>Get App</span>
+    </a>
+  </div>
+
+  <!-- Desktop Call Dialog Modal -->
+  <div class='call-modal-overlay' id='callModal' onclick='if(event.target===this)this.style.display="none";'>
+    <div class='call-modal-box'>
+      <div style='font-size:36px; margin-bottom:12px;'>📞</div>
+      <h3 style='margin-bottom:8px; color:#0F172A;'>LexaTrip™ 24/7 Helpline</h3>
+      <p style='color:#64748B; font-size:13px; margin-bottom:20px;'>Connect directly with our destination travel concierge:</p>
+      <div style='display:flex; flex-direction:column; gap:10px; margin-bottom:20px;'>
+        <a href='tel:+919079854982' style='background:#FF6B00; color:#FFFFFF; padding:12px; border-radius:8px; font-weight:700; text-decoration:none;'>📞 Call +91 90798 54982</a>
+        <a href='tel:+919079017880' style='background:#0F172A; color:#FFFFFF; padding:12px; border-radius:8px; font-weight:700; text-decoration:none;'>📞 Call +91 90790 17880</a>
+        <a href='https://wa.me/919079854982' target='_blank' style='background:#25D366; color:#FFFFFF; padding:12px; border-radius:8px; font-weight:700; text-decoration:none;'>💬 Chat on WhatsApp</a>
+      </div>
+      <button onclick='document.getElementById("callModal").style.display="none";' style='background:#F1F5F9; border:none; padding:8px 20px; border-radius:20px; font-weight:700; color:#475569; cursor:pointer;'>Close</button>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       8. CLIENT-SIDE HYBRID ENGINE (Dynamic Discounts, Category Filter & Legal)
        ======================================================================= -->
   <script type='text/javascript'>
-    //<![CDATA[
-    let allBlogEntries = [];
-    let currentFilter = 'all';
+  //<![CDATA[
+    let allPostsData = [];
+    let currentCategoryFilter = 'all';
 
-    async function loadLexaBlogContent() {
-      const container = document.getElementById('lexaMainContent');
-      if (!container) return;
+    // Horizontal Scroll for Category Pills
+    function scrollCatNav(offset) {
+      const el = document.getElementById('categoryNav');
+      if (el) el.scrollBy({ left: offset, behavior: 'smooth' });
+    }
 
-      try {
-        const res = await fetch('/feeds/posts/default?alt=json');
-        const data = await res.json();
-        allBlogEntries = (data.feed && data.feed.entry) ? data.feed.entry : [];
-
-
-        const currentPath = window.location.pathname;
-        const lowPath = currentPath.toLowerCase();
-
-        // 1. Check for Legal / Static Pages
-        if (lowPath.includes('about-us')) {
-          renderLegalStaticPage(container, 'हमारे बारे में (About Us) - LexaTrip', "<h2>LexaTrip: भारत का अग्रणी एक्सपीरियंसियल ट्रैवल व हॉस्पिटैलिटी ब्रांड</h2><p><strong>LexaTrip</strong> में आपका स्वागत है। हमारा विजन भारत के प्रत्येक यात्री को प्रामाणिक, पारदर्शी और लक्ज़री यात्रा अनुभव प्रदान करना है। 'Book. Explore. Repeat.' के मूलमंत्र के साथ, हम आपको जैसलमेर के सुनहरे थार रेगिस्तान से लेकर भारत के प्रमुख पर्यटन स्थलों तक सर्वश्रेष्ठ स्टे और टूर्स उपलब्ध कराते हैं।</p><h3>हमारी प्रमुख सेवाएं:</h3><ul><li><strong>100% वेरिफाइड प्रॉपर्टीज:</strong> प्रीमियम स्विस टेंट कैंप्स, हेरिटेज फोर्ट्स और 5-स्टार / 4-स्टार लक्ज़री होटल्स।</li><li><strong>बेस्ट प्राइस गारंटी:</strong> पारदर्शी दरें, बिना किसी छिपे हुए शुल्क के।</li><li><strong>24/7 स्थानीय गाइड व कस्टमर असिस्टेंस:</strong> हर कदम पर समर्पित ऑन-ग्राउंड सपोर्ट।</li></ul><p><strong>आधिकारिक वेबसाइट:</strong> <a href='https://www.lexatrip.com/'>lexatrip.com</a> | <a href='https://bookings.lexatrip.com/'>bookings.lexatrip.com</a><br/><strong>हेल्पलाइन:</strong> +91 90798 54982 / +91 90790 17880<br/><strong>ईमेल:</strong> info@lexatrip.com</p>");
-          return;
-        }
-        if (lowPath.includes('contact-us')) {
-          renderLegalStaticPage(container, 'संपर्क करें (Contact Us) - LexaTrip', "<h2>LexaTrip 24/7 गेस्ट सपोर्ट व रिज़र्वेशन हेल्पडेस्क</h2><p>अपनी अगली यात्रा, डेज़र्ट कैंपिंग, हेरिटेज होटल बुकिंग अथवा कॉर्पोरेट टूर के लिए हमारी विशेषज्ञ टीम से संपर्क करें:</p><h3>हेल्पलाइन व संपर्क विवरण:</h3><ul><li><strong>24/7 प्राथमिक हेल्पलाइन:</strong> <a href='tel:+919079854982'>+91 90798 54982</a></li><li><strong>24/7 द्वितीयक हेल्पलाइन:</strong> <a href='tel:+919079017880'>+91 90790 17880</a></li><li><strong>आधिकारिक WhatsApp:</strong> <a href='https://wa.me/919079854982'>+91 90798 54982</a></li><li><strong>आधिकारिक ईमेल:</strong> <a href='mailto:info@lexatrip.com'>info@lexatrip.com</a></li><li><strong>मुख्यालय:</strong> LexaTrip Technologies Pvt. Ltd., जैसलमेर, राजस्थान (345001)</li></ul><p><strong>आधिकारिक बुकिंग पोर्टल:</strong> <a href='https://bookings.lexatrip.com/' target='_blank'>bookings.lexatrip.com</a></p>");
-          return;
-        }
-        if (lowPath.includes('privacy-policy')) {
-          renderLegalStaticPage(container, 'गोपनीयता नीति (Privacy Policy) - LexaTrip', "<h2>गोपनीयता नीति (Privacy Policy) - LexaTrip</h2><p>अंतिम अपडेट: 2026। LexaTrip Technologies ('LexaTrip', 'हम', 'हमारा') हमारे उपयोगकर्ताओं की गोपनीयता का सम्मान करता है। यह नीति बताती है कि जब आप हमारी वेबसाइटों (lexatrip.com, bookings.lexatrip.com, lexatrip.in) और हमारे गंतव्य ब्लॉग्स का उपयोग करते हैं तो हम आपकी जानकारी को कैसे एकत्र, उपयोग और सुरक्षित रखते हैं।</p><h3>1. एकत्रित की जाने वाली जानकारी:</h3><p>जब आप हमारी वेबसाइट पर पूछताछ फॉर्म भरते हैं अथवा बुकिंग करते हैं, तो हम आपका नाम, मोबाइल/WhatsApp नंबर, ईमेल पता और यात्रा की तारीखें एकत्र करते हैं।</p><h3>2. डेटा का उपयोग:</h3><p>हम इस डेटा का उपयोग केवल आपकी बुकिंग की पुष्टि, डिस्काउंट कूपन प्रदान करने, और 24/7 ग्राहक सहायता उपलब्ध कराने के लिए करते हैं। हम आपका डेटा किसी भी तीसरे पक्ष को नहीं बेचते हैं।</p><h3>3. डेटा सुरक्षा:</h3><p>हम आपके डेटा को उद्योग-मानक एन्क्रिप्शन और सुरक्षा प्रोटोकॉल के साथ सुरक्षित रखते हैं।</p><p>प्रश्नों के लिए संपर्क करें: <strong>privacy@lexatrip.com</strong> अथवा हेल्पलाइन: <strong>+91 90798 54982</strong>।</p>");
-          return;
-        }
-        if (lowPath.includes('terms-conditions') || lowPath.includes('terms')) {
-          renderLegalStaticPage(container, 'नियम व शर्तें (Terms & Conditions) - LexaTrip', "<h2>नियम व शर्तें (Terms & Conditions) - LexaTrip</h2><p>अंतिम अपडेट: 2026। LexaTrip के माध्यम से होटल, रिसॉर्ट, डेज़र्ट कैंप या टूर पैकेज बुक करते समय निम्नलिखित नियम व शर्तें लागू होती हैं:</p><h3>1. बुकिंग व भुगतान:</h3><p>सभी बुकिंग्स उपलब्धता के अधीन हैं। बुकिंग की पुष्टि आधिकारिक बुकिंग पोर्टल (bookings.lexatrip.com) या आधिकारिक WhatsApp (+91 90798 54982) के माध्यम से टोकन राशि प्राप्त होने पर ही मान्य होगी।</p><h3>2. चेक-इन व चेक-आउट:</h3><p>मानक चेक-इन समय दोपहर 12:00 बजे और चेक-आउट समय सुबह 10:00 बजे है। सभी अतिथियों के पास वैध सरकारी पहचान पत्र (आधार, पासपोर्ट या वोटर आईडी) होना अनिवार्य है।</p><h3>3. रद्दीकरण व रिफंड:</h3><p>चेक-इन से 72 घंटे पूर्व रद्दीकरण पर पॉलिसी के अनुसार रिफंड देय होगा। पीक सीज़न / न्यू ईयर पैकेज गैर-वापसी योग्य (Non-Refundable) हो सकते हैं।</p><p>अधिक जानकारी के लिए संपर्क करें: <strong>support@lexatrip.com</strong> | हेल्पलाइन: <strong>+91 90798 54982</strong>।</p>");
-          return;
-        }
-
-        // 2. Single Post vs Homepage Grid
-        const isSinglePost = currentPath.endsWith('.html') && !currentPath.includes('/p/');
-        if (isSinglePost) {
-          renderSingleArticle(container, currentPath);
-        } else {
-          renderPostGrid(container, currentFilter);
-        }
-
-      } catch (err) {
-        console.error('Error loading blog feed:', err);
+    // Call Action Handler
+    function handleCallClick(e) {
+      const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      if (isMobile) {
+        window.location.href = 'tel:+919079854982';
+      } else {
+        if (e) e.preventDefault();
+        const modal = document.getElementById('callModal');
+        if (modal) modal.style.display = 'flex';
       }
     }
 
-    // Filter by Category Function
-    function filterCategory(category, evt) {
-      if (evt) evt.preventDefault();
-      currentFilter = category;
-
-      // Update active pill state
-      const pills = document.querySelectorAll('.cat-pill');
-      pills.forEach(p => p.classList.remove('active'));
-      if (evt && evt.currentTarget) {
-        evt.currentTarget.classList.add('active');
+    // Language Toggle
+    function toggleLangMenu(e) {
+      if (e) e.stopPropagation();
+      const dd = document.getElementById('langDropdown');
+      if (dd) dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+    }
+    document.addEventListener('click', () => {
+      const dd = document.getElementById('langDropdown');
+      if (dd) dd.style.display = 'none';
+    });
+    function selectLang(lang, e) {
+      if (e) e.preventDefault();
+      if (lang === 'hi') {
+        window.location.href = 'https://translate.google.com/translate?sl=en&tl=hi&u=' + encodeURIComponent(window.location.href);
+      } else {
+        const dd = document.getElementById('langDropdown');
+        if (dd) dd.style.display = 'none';
       }
+    }
 
-      // If user is on a single post page and clicks a category, go to homepage with filter
-      if (window.location.pathname.endsWith('.html') && !window.location.pathname.includes('/p/')) {
-        window.location.href = '/?category=' + category;
+    // Dynamic Realistic Discount Generator
+    function getPostDiscount(title, id) {
+      const match = (title + '').match(/(\d{2})%\s*off/i);
+      if (match) return match[1] + '% Off';
+      const discounts = ['35% Off', '40% Off', '45% Off', '50% Off', '55% Off', '60% Off'];
+      let hash = 0;
+      const str = (title || '') + (id || '');
+      for (let i = 0; i < str.length; i++) hash = (hash * 31 + str.charCodeAt(i)) >>> 0;
+      return discounts[hash % discounts.length];
+    }
+
+    // Main Engine Runner
+    async function loadLexaBlogContent() {
+      const container = document.getElementById('lexa-dynamic-root');
+      if (!container) return;
+
+      const currentPath = window.location.pathname;
+      const lowPath = currentPath.toLowerCase();
+
+      // 1. Legal / Static Page Routing
+      if (lowPath.includes('about-us')) {
+        renderLegalStaticPage(container, "About Us - LexaTrip™ MOUNT ABU", "\n        <h2>Welcome to LexaTrip™ MOUNT ABU</h2>\n        <p><strong>LexaTrip™ Technologies Pvt. Ltd.</strong> is India's leading experiential luxury travel and hospitality network. LexaTrip™ MOUNT ABU is our dedicated official portal curating the finest 100% verified luxury stays, resorts, heritage properties, and bespoke tours in MOUNT ABU.</p>\n        \n        <h3>Our Core Philosophy: Book. Explore. Repeat.</h3>\n        <p>At LexaTrip, we believe true travel luxury combines authentic local culture with seamless, stress-free hospitality. Whether you are experiencing Hill Resorts, Nakki Lake Boat Rides & Dilwara Temples, every LexaTrip partner property is physically inspected and audited for guest safety, premium hygiene, verified amenities, and world-class hospitality.</p>\n\n        <h3>Why Travelers Choose LexaTrip™ MOUNT ABU:</h3>\n        <ul>\n          <li><strong>100% Physically Verified Properties:</strong> Every hotel, luxury camp, and resort in MOUNT ABU is rigorously audited by our local destination concierges.</li>\n          <li><strong>Best Rate Guarantee:</strong> Direct hotelier partnerships give you up to 50-60% exclusive seasonal discounts with zero hidden charges.</li>\n          <li><strong>24/7 Dedicated Concierge Support:</strong> Priority assistance via phone (+91 90798 54982 / +91 90790 17880) and WhatsApp.</li>\n          <li><strong>Instant Confirmation &amp; Vouchers:</strong> Real-time booking access via <a href=\"https://bookings.lexatrip.com\" target=\"_blank\">bookings.lexatrip.com</a>.</li>\n        </ul>\n\n        <h3>Corporate Contact &amp; Portals</h3>\n        <p><strong>LexaTrip Technologies Private Limited</strong><br/>\n        Official Portals: <a href=\"https://bookings.lexatrip.com\">bookings.lexatrip.com</a> | <a href=\"https://www.lexatrip.com\">lexatrip.com</a> | <a href=\"https://www.lexatrip.in\">lexatrip.in</a><br/>\n        24/7 Helplines: <a href=\"tel:+919079854982\">+91 90798 54982</a>, <a href=\"tel:+919079017880\">+91 90790 17880</a><br/>\n        Official Email: <a href=\"mailto:infolexatrip@gmail.com\">infolexatrip@gmail.com</a></p>\n      ");
+        return;
+      }
+      if (lowPath.includes('contact-us')) {
+        renderLegalStaticPage(container, "Contact Us - LexaTrip™ MOUNT ABU", "\n        <h2>Get in Touch with LexaTrip™ MOUNT ABU Concierge</h2>\n        <p>Our dedicated 24/7 travel concierge and reservation desk is ready to assist you with tour planning, hotel reservations, package customization, and special requests for MOUNT ABU.</p>\n\n        <div style=\"display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:16px; margin:24px 0;\">\n          <div style=\"background:#F8FAFC; border:1px solid #E2E8F0; border-radius:12px; padding:16px;\">\n            <h4 style=\"margin:0 0 8px; color:#FF6B00;\">📞 24/7 Helpline 1</h4>\n            <p style=\"margin:0; font-size:16px; font-weight:700;\"><a href=\"tel:+919079854982\" style=\"color:#0F172A; text-decoration:none;\">+91 90798 54982</a></p>\n            <small style=\"color:#64748B;\">Direct Call &amp; Booking Support</small>\n          </div>\n          <div style=\"background:#F8FAFC; border:1px solid #E2E8F0; border-radius:12px; padding:16px;\">\n            <h4 style=\"margin:0 0 8px; color:#FF6B00;\">📞 24/7 Helpline 2</h4>\n            <p style=\"margin:0; font-size:16px; font-weight:700;\"><a href=\"tel:+919079017880\" style=\"color:#0F172A; text-decoration:none;\">+91 90790 17880</a></p>\n            <small style=\"color:#64748B;\">Direct Line &amp; WhatsApp</small>\n          </div>\n          <div style=\"background:#F8FAFC; border:1px solid #E2E8F0; border-radius:12px; padding:16px;\">\n            <h4 style=\"margin:0 0 8px; color:#25D366;\">💬 Official WhatsApp Desk</h4>\n            <p style=\"margin:0; font-size:16px; font-weight:700;\"><a href=\"https://wa.me/919079854982?text=Hello%20LexaTrip,%20I%20would%20like%20to%20inquire%20about%20MOUNT%20ABU%20packages\" target=\"_blank\" style=\"color:#0F172A; text-decoration:none;\">Chat on WhatsApp</a></p>\n            <small style=\"color:#64748B;\">Instant Quotes &amp; Itineraries</small>\n          </div>\n          <div style=\"background:#F8FAFC; border:1px solid #E2E8F0; border-radius:12px; padding:16px;\">\n            <h4 style=\"margin:0 0 8px; color:#0F172A;\">✉️ Email Support</h4>\n            <p style=\"margin:0; font-size:16px; font-weight:700;\"><a href=\"mailto:infolexatrip@gmail.com\" style=\"color:#0F172A; text-decoration:none;\">infolexatrip@gmail.com</a></p>\n            <small style=\"color:#64748B;\">Official Inquiries &amp; Bookings</small>\n          </div>\n        </div>\n\n        <h3>Official Web Portals</h3>\n        <ul>\n          <li><strong>Online Reservations:</strong> <a href=\"https://bookings.lexatrip.com\" target=\"_blank\">bookings.lexatrip.com</a></li>\n          <li><strong>Main Website:</strong> <a href=\"https://www.lexatrip.com\" target=\"_blank\">lexatrip.com</a></li>\n          <li><strong>National Portal:</strong> <a href=\"https://www.lexatrip.in\" target=\"_blank\">lexatrip.in</a></li>\n          <li><strong>Mobile App:</strong> <a href=\"https://www.lexatrip.com/app\" target=\"_blank\">Download LexaTrip Mobile App</a></li>\n        </ul>\n      ");
+        return;
+      }
+      if (lowPath.includes('privacy-policy')) {
+        renderLegalStaticPage(container, "Privacy Policy - LexaTrip™ MOUNT ABU", "\n        <h2>Privacy Policy</h2>\n        <p><em>Last Updated: 2026 | LexaTrip™ Technologies Pvt. Ltd.</em></p>\n        \n        <p>At LexaTrip™ MOUNT ABU (accessible from https://lexatripmountabu.blogspot.com, lexatrip.com, bookings.lexatrip.com, and lexatrip.in), the privacy of our visitors and guests is paramount. This Privacy Policy details the types of personal information collected, how it is used, and the security protocols employed to safeguard your data.</p>\n\n        <h3>1. Information We Collect</h3>\n        <p>When you browse our guides, submit an inquiry, or book travel packages through LexaTrip™ MOUNT ABU, we may collect the following details:</p>\n        <ul>\n          <li>Full Name, Contact Number, and Email Address</li>\n          <li>Travel Dates (Check-in / Check-out) and Number of Guests (Pax)</li>\n          <li>Selected Destination (MOUNT ABU), Hotel/Camp preference, and Tour requirements</li>\n          <li>Standard technical log data (IP address, browser type, device information) for security and analytical optimization</li>\n        </ul>\n\n        <h3>2. How We Use Your Information</h3>\n        <ul>\n          <li>To confirm hotel reservations, desert camp bookings, and safari vouchers in MOUNT ABU.</li>\n          <li>To provide real-time updates and customer support via WhatsApp, phone, or email.</li>\n          <li>To communicate exclusive discounts, promo codes, and special seasonal travel offers.</li>\n          <li>To prevent fraud, verify guest identity upon arrival, and maintain booking integrity.</li>\n        </ul>\n\n        <h3>3. 256-Bit SSL Data Security</h3>\n        <p>All sensitive communications, bookings, and customer interactions are encrypted using industry-standard 256-bit SSL encryption. We never sell, rent, or trade your personal data to unauthorized third parties.</p>\n\n        <h3>4. Third-Party Integrations</h3>\n        <p>We work with trusted partners including Google, Meta, verified payment gateways, and WhatsApp Business API to deliver seamless travel services in MOUNT ABU. These providers maintain strict data privacy compliance standards.</p>\n\n        <h3>5. Contact Our Data Protection Officer</h3>\n        <p>For any questions regarding our Privacy Policy or your personal data, please contact us at <a href=\"mailto:infolexatrip@gmail.com\">infolexatrip@gmail.com</a>.</p>\n      ");
+        return;
+      }
+      if (lowPath.includes('terms-conditions') || lowPath.includes('terms')) {
+        renderLegalStaticPage(container, "Terms & Conditions - LexaTrip™ MOUNT ABU", "\n        <h2>Terms and Conditions</h2>\n        <p><em>Last Updated: 2026 | LexaTrip™ Technologies Pvt. Ltd.</em></p>\n\n        <p>Please read these Terms and Conditions carefully before booking any tour packages, hotel stays, or activities in MOUNT ABU through LexaTrip™ websites, blogs, or mobile platforms.</p>\n\n        <h3>1. Booking and Confirmation</h3>\n        <ul>\n          <li>All reservations made through <a href=\"https://bookings.lexatrip.com\">bookings.lexatrip.com</a> or our WhatsApp concierge desk for MOUNT ABU are subject to availability and formal confirmation via booking voucher.</li>\n          <li>Promotional coupon codes (such as LEXA50ACTIVE or dynamic seasonal discounts) are valid only during specified promotional periods.</li>\n        </ul>\n\n        <h3>2. Check-in, Check-out &amp; Guest Verification</h3>\n        <ul>\n          <li>Standard check-in is 12:00 PM and check-out is 10:00 AM (or as designated by the specific resort/hotel in MOUNT ABU).</li>\n          <li>All Indian citizens must present government-approved photo ID (Aadhaar Card, Driving License, or Passport). Foreign nationals must present a valid Passport and Visa. Pan Cards are not accepted for hotel check-ins under local laws.</li>\n        </ul>\n\n        <h3>3. Cancellation and Refund Policy</h3>\n        <ul>\n          <li>Cancellations made 7 or more days prior to check-in date: 90% refund (10% processing fee).</li>\n          <li>Cancellations made 3 to 6 days prior to check-in: 50% refund.</li>\n          <li>Cancellations made within 48 hours of check-in or no-shows: Non-refundable.</li>\n        </ul>\n\n        <h3>4. Local Activities &amp; Tours</h3>\n        <p>Participation in local tours, safaris, and activities in MOUNT ABU (including Hill Resorts, Nakki Lake Boat Rides & Dilwara Temples) is undertaken with certified partners adhering to safety regulations. Guests are advised to follow all safety briefings issued by local guides and pilots.</p>\n\n        <h3>5. Governing Law and Jurisdiction</h3>\n        <p>These terms and conditions are governed by and construed in accordance with the laws of India. Any disputes arising hereunder shall be subject to the exclusive jurisdiction of the competent courts in India.</p>\n      ");
         return;
       }
 
-      const container = document.getElementById('lexaMainContent');
-      if (container) renderPostGrid(container, category);
+      // 2. Fetch Blogger JSON Feed
+      try {
+        const res = await fetch('/feeds/posts/default?alt=json&max-results=50');
+        if (res.ok) {
+          const data = await res.json();
+          allPostsData = (data.feed && data.feed.entry) ? data.feed.entry : [];
+        }
+      } catch (e) {
+        console.warn('Feed fetch error:', e);
+      }
+
+      // 3. Route: Single Post vs Grid
+      const isSinglePost = currentPath.endsWith('.html') && !currentPath.includes('/p/');
+      if (isSinglePost) {
+        renderSingleArticle(container, currentPath);
+      } else {
+        renderPostGrid(container, currentCategoryFilter);
+      }
     }
 
-    // Render Grid with 4:5 Aspect Ratio Cards
-    function renderPostGrid(container, filter) {
-      let filtered = allBlogEntries;
+    // Real-Time Category Filtering
+    function filterCategory(cat, event) {
+      if (event) event.preventDefault();
+      currentCategoryFilter = cat;
 
-      if (filter !== 'all') {
-        filtered = allBlogEntries.filter(entry => {
-          const categories = (entry.category || []).map(c => (c.term || '').toLowerCase());
-          const title = (entry.title.$t || '').toLowerCase();
-          const content = (entry.content ? entry.content.$t : '').toLowerCase();
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('onclick').includes("'" + cat + "'") || btn.getAttribute('onclick').includes('"' + cat + '"'));
+      });
 
-          if (filter === 'camp') {
-            return categories.some(c => c.includes('camp') || c.includes('कैंप') || c.includes('tent')) ||
-                   title.includes('camp') || title.includes('कैंप') || content.includes('camp');
-          }
-          if (filter === '5-star') {
-            return categories.some(c => c.includes('5') || c.includes('five')) ||
-                   title.includes('5') || title.includes('five') || content.includes('5-star') || content.includes('फाइव स्टार');
-          }
-          if (filter === '4-star') {
-            return categories.some(c => c.includes('4') || c.includes('four')) ||
-                   title.includes('4') || title.includes('four') || content.includes('4-star') || content.includes('फोर स्टार');
-          }
-          if (filter === '3-star') {
-            return categories.some(c => c.includes('3') || c.includes('three')) ||
-                   title.includes('3') || title.includes('three') || content.includes('3-star') || content.includes('थ्री स्टार');
-          }
-          if (filter === 'budget') {
-            return categories.some(c => c.includes('budget') || c.includes('बजट')) ||
-                   title.includes('budget') || title.includes('बजट') || content.includes('budget');
-          }
+      const container = document.getElementById('lexa-dynamic-root');
+      if (container) renderPostGrid(container, cat);
+    }
+
+    // Render 4:5 Card Grid
+    function renderPostGrid(container, cat) {
+      let filtered = allPostsData;
+      if (cat !== 'all') {
+        filtered = allPostsData.filter(entry => {
+          const catList = (entry.category || []).map(c => (c.term || '').toLowerCase());
+          const title = ((entry.title && entry.title.$t) || '').toLowerCase();
+          const content = ((entry.content && entry.content.$t) || '').toLowerCase();
+          const target = cat.toLowerCase();
+
+          if (target === 'camp') return catList.some(c => c.includes('camp') || c.includes('tent') || c.includes('कैंप')) || title.includes('camp') || content.includes('camp');
+          if (target === '5-star') return catList.some(c => c.includes('5-star') || c.includes('5 star') || c.includes('luxury') || c.includes('5-स्टार')) || title.includes('5 star') || content.includes('5 star');
+          if (target === '4-star') return catList.some(c => c.includes('4-star') || c.includes('4 star') || c.includes('premium') || c.includes('4-स्टार')) || title.includes('4 star') || content.includes('4 star');
+          if (target === '3-star') return catList.some(c => c.includes('3-star') || c.includes('3 star') || c.includes('comfort') || c.includes('3-स्टार')) || title.includes('3 star') || content.includes('3 star');
+          if (target === 'budget') return catList.some(c => c.includes('budget') || c.includes('affordable') || c.includes('बजट')) || title.includes('budget') || content.includes('budget');
           return true;
         });
       }
 
       if (filtered.length === 0) {
-        container.innerHTML = '<div style="text-align:center; padding: 50px 20px; color:#64748B;">' +
-          '<div style="font-size: 36px; margin-bottom: 12px;">🏨</div>' +
-          '<h3>इस श्रेणी में जल्द ही नए होटल्स और कैंप्स जोड़े जा रहे हैं।</h3>' +
-          '<p style="margin-top: 8px;">तत्काल बुकिंग व पूछताछ के लिए हमारी 24/7 हेल्पलाइन <a href="tel:+919079854982">+91 90798 54982</a> पर संपर्क करें।</p>' +
+        container.innerHTML = 
+          '<div style="text-align:center; padding:60px 20px; background:#FFFFFF; border-radius:16px; border:1px solid #E2E8F0; margin:20px 0;">' +
+            '<div style="font-size:48px; margin-bottom:12px;">🏨</div>' +
+            '<h3 style="font-size:20px; font-weight:800; color:#0F172A; margin-bottom:8px;">New verified hotels &amp; camps coming soon!</h3>' +
+            '<p style="color:#64748B; font-size:14px; max-width:500px; margin:0 auto 20px;">For immediate reservation quotes and priority bookings in this category, contact our 24/7 travel desk.</p>' +
+            '<a href="https://wa.me/919079854982" target="_blank" style="display:inline-block; background:#25D366; color:#FFF; font-weight:700; padding:10px 22px; border-radius:24px; text-decoration:none;">💬 WhatsApp Concierge</a>' +
           '</div>';
         return;
       }
 
-      let html = '<div class="posts-grid">';
-      filtered.forEach(entry => {
-        const title = entry.title.$t;
-        const altLink = (entry.link || []).find(l => l.rel === 'alternate');
-        const url = altLink ? altLink.href : '#';
-        const pubDate = new Date(entry.published.$t).toLocaleDateString('hi-IN', {
-          year: 'numeric', month: 'short', day: 'numeric'
-        });
-
-        // 4:5 image extraction
-        let imgUrl = '';
-        if (entry.media$thumbnail) {
-          imgUrl = entry.media$thumbnail.url.replace('/s72-c/', '/w600-h750-p-k-no-nu/');
-        } else {
-          const raw = (entry.content ? entry.content.$t : '') || '';
-          const m = raw.match(/<img[^>]+src=["']([^"']+)["']/i);
-          if (m) imgUrl = m[1];
+      let html = '<div class="post-grid" id="postGrid">';
+      filtered.forEach((entry, idx) => {
+        const title = (entry.title && entry.title.$t) || 'LexaTrip Luxury Stay';
+        const content = (entry.content && entry.content.$t) || (entry.summary && entry.summary.$t) || '';
+        const id = (entry.id && entry.id.$t) || ('post_' + idx);
+        
+        let postUrl = '#';
+        if (entry.link) {
+          const altLink = entry.link.find(l => l.rel === 'alternate');
+          if (altLink) postUrl = altLink.href;
         }
 
-        let snippet = (entry.summary ? entry.summary.$t : (entry.content ? entry.content.$t : '')) || '';
-        snippet = snippet.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim().slice(0, 130) + '...';
+        // Image extraction
+        let imgUrl = 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=800&q=80';
+        if (entry.media$thumbnail && entry.media$thumbnail.url) {
+          imgUrl = entry.media$thumbnail.url.replace('/s72-c/', '/s800/').replace('/w72-h72-p-k-no-nu/', '/w800-h1000-c/');
+        } else {
+          const m = content.match(/<img[^>]+src=['"]([^'"]+)['"]/i);
+          if (m && m[1]) imgUrl = m[1];
+        }
 
-        // Detect category badge
-        let catBadge = 'लक्ज़री स्टे';
-        const rawContent = (entry.content ? entry.content.$t : '').toLowerCase();
-        if (rawContent.includes('camp') || rawContent.includes('कैंप')) catBadge = '⛺ लक्ज़री कैंप';
-        else if (rawContent.includes('5-star') || rawContent.includes('फाइव')) catBadge = '⭐ 5-स्टार लक्ज़री';
-        else if (rawContent.includes('4-star') || rawContent.includes('फोर')) catBadge = '🏨 4-स्टार होटल';
-        else if (rawContent.includes('3-star') || rawContent.includes('थ्री')) catBadge = '🛏️ 3-स्टार होटल';
-        else if (rawContent.includes('budget') || rawContent.includes('बजट')) catBadge = '💰 बजट फ्रेंडली';
+        // Category Tag
+        let catLabel = 'Luxury Stay';
+        if (entry.category && entry.category.length > 0) catLabel = entry.category[0].term;
+
+        // Dynamic Realistic Discount
+        const discountBadge = getPostDiscount(title, id);
+
+        // Clean Snippet
+        const tmp = document.createElement('div');
+        tmp.innerHTML = content;
+        const textOnly = (tmp.textContent || tmp.innerText || '').trim();
+        const snippet = textOnly.slice(0, 110) + '...';
 
         html += 
-          '<div class="post-card">' +
+          '<article class="post-card">' +
             '<div class="card-media-wrapper">' +
-              (imgUrl ? '<img class="card-media" src="' + imgUrl + '" alt="' + title.replace(/"/g, '&quot;') + '" loading="lazy" />' : '<div class="card-media" style="display:flex; align-items:center; justify-content:center; color:#FF6B00; font-size:42px;">🐪</div>') +
-              '<span class="card-category-tag">' + catBadge + '</span>' +
-              '<span class="card-offer-badge">50% Off</span>' +
+              '<span class="card-badge-cat">' + catLabel + '</span>' +
+              '<span class="card-badge-discount">' + discountBadge + '</span>' +
+              '<a href="' + postUrl + '">' +
+                '<img alt="' + title.replace(/"/g, '&quot;') + '" class="card-media-img" loading="lazy" src="' + imgUrl + '"/>' +
+              '</a>' +
             '</div>' +
             '<div class="card-body">' +
-              '<h2 class="card-title"><a href="' + url + '">' + title + '</a></h2>' +
-              '<p class="card-excerpt">' + snippet + '</p>' +
-              '<div class="card-meta-line">' +
-                '<span>📅 ' + pubDate + '</span>' +
-                '<span>★ 5.0 (वेरिफाइड)</span>' +
-              '</div>' +
-              '<div class="card-actions-grid">' +
-                '<a href="https://bookings.lexatrip.com/" target="_blank" class="card-btn-book">🏨 बुक नाउ</a>' +
-                '<a href="https://wa.me/919079854982?text=' + encodeURIComponent('नमस्ते LexaTrip, मुझे ' + title + ' की बुकिंग और डिस्काउंट की जानकारी चाहिए!') + '" target="_blank" class="card-btn-wa">💬 WhatsApp</a>' +
+              '<h3 class="card-title"><a href="' + postUrl + '" style="color:inherit; text-decoration:none;">' + title + '</a></h3>' +
+              '<p class="card-snippet">' + snippet + '</p>' +
+              '<div class="card-actions">' +
+                '<a class="card-btn card-btn-book" href="https://bookings.lexatrip.com/" target="_blank">🏨 Book Now</a>' +
+                '<a class="card-btn card-btn-wa" href="https://wa.me/919079854982?text=' + encodeURIComponent('Hello LexaTrip, I would like to book: ' + title) + '" target="_blank">💬 WhatsApp</a>' +
               '</div>' +
             '</div>' +
-          '</div>';
+          '</article>';
       });
       html += '</div>';
+
       container.innerHTML = html;
     }
 
-    // Render Single Article Page
+    // Render Single Article with Interactive Booking Engine
     function renderSingleArticle(container, currentPath) {
-      let post = allBlogEntries.find(e => {
-        const altLink = (e.link || []).find(l => l.rel === 'alternate');
-        return altLink && altLink.href.includes(currentPath);
-      }) || allBlogEntries[0];
+      let matched = null;
+      for (const entry of allPostsData) {
+        if (entry.link) {
+          const altLink = entry.link.find(l => l.rel === 'alternate');
+          if (altLink && altLink.href && altLink.href.includes(currentPath)) {
+            matched = entry;
+            break;
+          }
+        }
+      }
 
-      if (!post) return;
-
-      const title = post.title.$t;
-      const content = post.content ? post.content.$t : (post.summary ? post.summary.$t : '');
-      const pubDate = new Date(post.published.$t).toLocaleDateString('hi-IN', {
-        year: 'numeric', month: 'long', day: 'numeric'
-      });
-
-      // Default tomorrow checkin, day after checkout
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      const dayAfter = new Date();
-      dayAfter.setDate(dayAfter.getDate() + 2);
-      const strTomorrow = tomorrow.toISOString().split('T')[0];
-      const strDayAfter = dayAfter.toISOString().split('T')[0];
+      const postTitle = matched ? ((matched.title && matched.title.$t) || '') : document.title;
+      const postContent = matched ? ((matched.content && matched.content.$t) || '') : (document.querySelector('.post-body, .entry-content')?.innerHTML || '');
+      const dynamicDiscount = getPostDiscount(postTitle, currentPath);
 
       container.innerHTML = 
         '<article class="article-container">' +
-          '<span class="article-category">माउंट आबू लक्ज़री ट्रैवल व होटल गाइड</span>' +
-          '<h1 class="article-title">' + title + '</h1>' +
+          '<span class="article-category">' + "MOUNT ABU Luxury Travel & Stays" + '</span>' +
+          '<h1 class="article-title">' + postTitle + '</h1>' +
           '<div class="article-meta">' +
             '<div class="author-badge">' +
               '<div class="author-avatar">LT</div>' +
-              '<span>LexaTrip Editorial Specialist</span>' +
+              '<span>LexaTrip™ Verified Concierge</span>' +
             '</div>' +
             '<span>•</span>' +
-            '<span>📅 ' + pubDate + '</span>' +
+            '<span>⭐ Verified 5.0 Rating</span>' +
             '<span>•</span>' +
-            '<span>★ 5.0 Verified Travel Guide</span>' +
+            '<span style="color:#FF6B00; font-weight:800;">⚡ ' + dynamicDiscount + ' Available</span>' +
           '</div>' +
 
-          '<div class="article-content">' + content + '</div>' +
-
-          '<!-- In-Article Interactive Booking Engine -->' +
-          '<div class="in-article-booking-engine" id="bookingSection">' +
-            '<div class="engine-header">' +
-              '<div class="engine-badge">🏨 LexaTrip Direct Best Rate Guarantee</div>' +
-              '<h3>इस प्रॉपर्टी को 50% तक की छूट पर अभी बुक करें</h3>' +
-              '<p>अपनी तारीखें और गेस्ट संख्या चुनें, और तुरंत सर्वोत्तम डिस्काउंटेड दर प्राप्त करें।</p>' +
+          // Interactive Booking Engine Card
+          '<div class="booking-engine-box">' +
+            '<div class="booking-box-header">' +
+              '<div class="booking-box-title">' +
+                '<span>📅</span> Reserve Tour &amp; Check Availability' +
+              '</div>' +
+              '<span class="booking-box-tag">' + dynamicDiscount + '</span>' +
             '</div>' +
-            '<div class="engine-form-grid">' +
-              '<div class="form-field">' +
-                '<label>📅 चेक-इन तारीख</label>' +
-                '<input type="date" id="artCheckIn" class="eng-input" value="' + strTomorrow + '" />' +
+            '<div class="booking-fields-grid">' +
+              '<div class="booking-field">' +
+                '<label>Check-in Date</label>' +
+                '<input id="bookCheckIn" type="date"/>' +
               '</div>' +
-              '<div class="form-field">' +
-                '<label>📅 चेक-आउट तारीख</label>' +
-                '<input type="date" id="artCheckOut" class="eng-input" value="' + strDayAfter + '" />' +
+              '<div class="booking-field">' +
+                '<label>Check-out Date</label>' +
+                '<input id="bookCheckOut" type="date"/>' +
               '</div>' +
-              '<div class="form-field">' +
-                '<label>👥 कुल गेस्ट (Pax)</label>' +
-                '<select id="artPax" class="eng-input">' +
-                  '<option value="1">1 गेस्ट (Solo Traveler)</option>' +
-                  '<option value="2" selected="selected">2 गेस्ट (Couple / Friends)</option>' +
-                  '<option value="3">3 गेस्ट</option>' +
-                  '<option value="4">4 गेस्ट (Family)</option>' +
-                  '<option value="5+">5+ गेस्ट (Group Tour)</option>' +
+              '<div class="booking-field">' +
+                '<label>Guests (Pax)</label>' +
+                '<select id="bookPax">' +
+                  '<option value="1 Adult">1 Guest (Solo)</option>' +
+                  '<option selected="selected" value="2 Adults">2 Guests (Couple)</option>' +
+                  '<option value="3 Guests">3 Guests</option>' +
+                  '<option value="4 Guests (Family)">4 Guests (Family)</option>' +
+                  '<option value="5+ Guests (Group)">5+ Guests (Group)</option>' +
                 '</select>' +
               '</div>' +
-              '<div class="form-field">' +
-                '<label>🛏️ रूम / कैंप श्रेणी</label>' +
-                '<select id="artRoomType" class="eng-input">' +
-                  '<option value="Luxury Swiss Camp" selected="selected">लक्ज़री स्विस टेंट कैंप</option>' +
-                  '<option value="5-Star Luxury Suite">5-स्टार लक्ज़री सुइट</option>' +
-                  '<option value="4-Star Deluxe Room">4-स्टार डीलक्स रूम</option>' +
-                  '<option value="3-Star Comfort">3-स्टार कंफर्ट रूम</option>' +
-                  '<option value="Budget Friendly">बजट फ्रेंडली रूम</option>' +
+              '<div class="booking-field">' +
+                '<label>Room / Camp Category</label>' +
+                '<select id="bookRoomType">' +
+                  '<option value="Luxury Royal Camp">Luxury Royal Camp (AC/Heater)</option>' +
+                  '<option value="5-Star Palace Suite">5-Star Palace Suite</option>' +
+                  '<option value="4-Star Heritage Room">4-Star Heritage Room</option>' +
+                  '<option value="3-Star Deluxe Room">3-Star Deluxe Room</option>' +
+                  '<option value="Budget Friendly Room">Budget Friendly Stay</option>' +
                 '</select>' +
               '</div>' +
             '</div>' +
-            '<div class="engine-actions">' +
-              '<button class="btn-eng-book" onclick="handleArticleBooking('online', '' + encodeURIComponent(title) + '')">' +
-                '🏨 तुरंत ऑनलाइन बुक करें — 50% Off' +
-              '</button>' +
-              '<button class="btn-eng-wa" onclick="handleArticleBooking('whatsapp', '' + encodeURIComponent(title) + '')">' +
-                '💬 WhatsApp पर कोटेशन प्राप्त करें' +
-              '</button>' +
-            '</div>' +
-            '<div class="engine-footer-note">' +
-              '🔒 बेस्ट प्राइस गारंटी | 24/7 स्थानीय गाइड सहायता | कोई छिपा हुआ शुल्क नहीं' +
+            '<div class="booking-engine-actions">' +
+              '<a class="engine-btn engine-btn-book" href="https://bookings.lexatrip.com/" onclick="triggerDirectBooking(event, '' + postTitle.replace(/'/g, '\\'') + '')">' +
+                '<span>🏨 Instant Online Booking</span>' +
+              '</a>' +
+              '<a class="engine-btn engine-btn-wa" href="#" onclick="triggerWhatsAppBooking(event, '' + postTitle.replace(/'/g, '\\'') + '')">' +
+                '<span>💬 Get Instant WhatsApp Quote</span>' +
+              '</a>' +
             '</div>' +
           '</div>' +
 
-          '<div class="share-bar">' +
-            '<span class="share-label">आर्टिकल शेयर करें:</span>' +
-            '<a href="https://api.whatsapp.com/send?text=' + encodeURIComponent(title + ' ' + window.location.href) + '" target="_blank" class="share-btn share-wa">WhatsApp</a>' +
-            '<a href="https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href) + '" target="_blank" class="share-btn share-fb">Facebook</a>' +
-            '<a href="https://twitter.com/intent/tweet?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent(title) + '" target="_blank" class="share-btn share-tw">Twitter / X</a>' +
+          '<div class="article-content" style="font-size:16px; line-height:1.8;">' +
+            postContent +
+          '</div>' +
+
+          '<div style="margin-top:40px; padding-top:24px; border-top:1px solid #E2E8F0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">' +
+            '<a href="/" style="display:inline-block; background:#0F172A; color:#FFFFFF; font-weight:700; padding:10px 22px; border-radius:30px; text-decoration:none;">← Back to All Stays</a>' +
+            '<a href="https://bookings.lexatrip.com/" target="_blank" style="display:inline-block; background:#FF6B00; color:#FFFFFF; font-weight:700; padding:10px 22px; border-radius:30px; text-decoration:none;">Explore More Destinations →</a>' +
           '</div>' +
         '</article>';
+
+      // Set default check-in/out dates
+      const today = new Date();
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const inEl = document.getElementById('bookCheckIn');
+      const outEl = document.getElementById('bookCheckOut');
+      if (inEl) inEl.value = today.toISOString().split('T')[0];
+      if (outEl) outEl.value = tomorrow.toISOString().split('T')[0];
     }
 
-    // Article Booking Handler (Online vs WhatsApp)
-    function handleArticleBooking(mode, encodedTitle) {
-      const title = decodeURIComponent(encodedTitle || 'MOUNT ABU Tour & Stay');
-      const checkIn = document.getElementById('artCheckIn') ? document.getElementById('artCheckIn').value : '';
-      const checkOut = document.getElementById('artCheckOut') ? document.getElementById('artCheckOut').value : '';
-      const pax = document.getElementById('artPax') ? document.getElementById('artPax').value : '2';
-      const roomType = document.getElementById('artRoomType') ? document.getElementById('artRoomType').value : 'Luxury Camp';
-
-      if (mode === 'online') {
-        const targetUrl = 'https://bookings.lexatrip.com/?dest=MOUNT%20ABU&checkin=' + checkIn + '&checkout=' + checkOut + '&guests=' + pax;
-        window.open(targetUrl, '_blank');
-      } else {
-        const waText = encodeURIComponent(
-          'नमस्ते LexaTrip! मुझे बुकिंग कोटेशन चाहिए:\n' +
-          '🏨 प्रॉपर्टी: ' + title + '\n' +
-          '🛏️ श्रेणी: ' + roomType + '\n' +
-          '📅 चेक-इन: ' + (checkIn || 'जल्द') + '\n' +
-          '📅 चेक-आउट: ' + (checkOut || 'जल्द') + '\n' +
-          '👥 गेस्ट संख्या: ' + pax + '\n' +
-          'कूपन: LEXA50ACTIVE (50% Off)\n' +
-          'कृपया सर्वोत्तम दर और उपलब्धता की पुष्टि करें!'
-        );
-        window.open('https://wa.me/919079854982?text=' + waText, '_blank');
-      }
+    // Direct Online Booking Trigger
+    function triggerDirectBooking(event, title) {
+      if (event) event.preventDefault();
+      const checkIn = document.getElementById('bookCheckIn')?.value || '';
+      const checkOut = document.getElementById('bookCheckOut')?.value || '';
+      const pax = document.getElementById('bookPax')?.value || '2 Adults';
+      const roomType = document.getElementById('bookRoomType')?.value || 'Luxury Camp';
+      
+      const params = new URLSearchParams({
+        dest: "MOUNT ABU",
+        hotel: title,
+        checkIn: checkIn,
+        checkOut: checkOut,
+        pax: pax,
+        category: roomType,
+        coupon: 'LEXA50ACTIVE'
+      });
+      window.open('https://bookings.lexatrip.com/?' + params.toString(), '_blank');
     }
 
+    // Instant WhatsApp Quote Trigger
+    function triggerWhatsAppBooking(event, title) {
+      if (event) event.preventDefault();
+      const checkIn = document.getElementById('bookCheckIn')?.value || '';
+      const checkOut = document.getElementById('bookCheckOut')?.value || '';
+      const pax = document.getElementById('bookPax')?.value || '2 Adults';
+      const roomType = document.getElementById('bookRoomType')?.value || 'Luxury Camp';
+
+      const waText = encodeURIComponent(
+        'Hello LexaTrip Concierge! 🏨✨\n\n' +
+        'I would like to book a verified stay in ' + "MOUNT ABU" + ':\n\n' +
+        '📍 Hotel/Camp: ' + (title || 'Tour & Stay') + '\n' +
+        '🛏️ Category: ' + roomType + '\n' +
+        '📅 Check-in: ' + (checkIn || 'Earliest') + '\n' +
+        '📅 Check-out: ' + (checkOut || 'Next Day') + '\n' +
+        '👥 Number of Guests: ' + pax + '\n' +
+        '🏷️ Promo Code: LEXAACTIVE\n\n' +
+        'Please confirm availability and the best discounted quotation!'
+      );
+      window.open('https://wa.me/919079854982?text=' + waText, '_blank');
+    }
 
     // Render Legal / Static Page
     function renderLegalStaticPage(container, title, content) {
       container.innerHTML = 
         '<article class="article-container">' +
-          '<span class="article-category">LexaTrip Official Verified Page</span>' +
+          '<span class="article-category">LexaTrip™ Official Verified Page</span>' +
           '<h1 class="article-title">' + title + '</h1>' +
           '<div class="article-meta">' +
             '<div class="author-badge">' +
               '<div class="author-avatar">LT</div>' +
-              '<span>LexaTrip Legal & Compliance Team</span>' +
+              '<span>LexaTrip Legal &amp; Compliance Team</span>' +
             '</div>' +
             '<span>•</span>' +
-            '<span>📅 अपडेटेड: 2026</span>' +
+            '<span>📅 Updated: 2026</span>' +
             '<span>•</span>' +
             '<span>★ Verified Official Policy</span>' +
           '</div>' +
@@ -1412,7 +1659,7 @@
             content +
           '</div>' +
           '<div style="margin-top:30px; padding-top:20px; border-top:1px solid #E2E8F0; text-align:center;">' +
-            '<a href="/" style="display:inline-block; background:#0F172A; color:#FFFFFF; font-weight:700; padding:10px 24px; border-radius:30px; text-decoration:none;">← वापस मुख्य पृष्ठ (Home) पर जाएं</a>' +
+            '<a href="/" style="display:inline-block; background:#0F172A; color:#FFFFFF; font-weight:700; padding:10px 24px; border-radius:30px; text-decoration:none;">← Back to Home</a>' +
           '</div>' +
         '</article>';
     }
@@ -1423,7 +1670,7 @@
     } else {
       loadLexaBlogContent();
     }
-    //]]>
+  //]]>
   </script>
 </body>
 </html>
