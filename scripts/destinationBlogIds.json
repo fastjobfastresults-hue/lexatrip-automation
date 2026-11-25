@@ -1,0 +1,138 @@
+[
+  {
+    "slug": "jaisalmer",
+    "name": "LexaTrip Jaisalmer",
+    "blogId": "4024327205805487932",
+    "url": "https://lexatripjaisalmer.blogspot.com/",
+    "themeFile": "public/theme/destinations/lexatrip_theme_jaisalmer.xml",
+    "status": "deployed_and_verified"
+  },
+  {
+    "slug": "sam",
+    "name": "LexaTrip Sam Sand Dunes",
+    "blogId": "2631033297606829389",
+    "url": "https://lexatripsam.blogspot.com/",
+    "themeFile": "public/theme/destinations/lexatrip_theme_sam.xml",
+    "status": "deployed_and_verified"
+  },
+  {
+    "slug": "mountabu",
+    "name": "LexaTrip Mount Abu",
+    "blogId": "1027872484699338479",
+    "url": "https://lexatripmountabu.blogspot.com/",
+    "themeFile": "public/theme/destinations/lexatrip_theme_mountabu.xml",
+    "status": "deployed_and_verified"
+  },
+  {
+    "slug": "udaipur",
+    "name": "LexaTrip Udaipur",
+    "blogId": "6787404616983771931",
+    "url": "https://lexatripudaipur.blogspot.com/",
+    "themeFile": "public/theme/destinations/lexatrip_theme_udaipur.xml",
+    "status": "deployed_and_verified"
+  },
+  {
+    "slug": "jaipur",
+    "name": "LexaTrip Jaipur",
+    "blogId": "2752884582157723179",
+    "url": "https://lexatripjaipur.blogspot.com/",
+    "themeFile": "public/theme/destinations/lexatrip_theme_jaipur.xml",
+    "status": "deployed_and_verified"
+  },
+  {
+    "slug": "manali",
+    "name": "LexaTrip Manali",
+    "blogId": "1000409647101245296",
+    "url": "https://lexatripmanali.blogspot.com/",
+    "themeFile": "public/theme/destinations/lexatrip_theme_manali.xml",
+    "status": "deployed_and_verified"
+  },
+  {
+    "slug": "rishikesh",
+    "name": "LexaTrip Rishikesh",
+    "blogId": "896182806823857407",
+    "url": "https://lexatriprishikesh.blogspot.com/",
+    "themeFile": "public/theme/destinations/lexatrip_theme_rishikesh.xml",
+    "status": "deployed_and_verified"
+  },
+  {
+    "slug": "goa",
+    "name": "LexaTrip Goa",
+    "blogId": "1428500981922425383",
+    "url": "https://lexatripgoa.blogspot.com/",
+    "themeFile": "public/theme/destinations/lexatrip_theme_goa.xml",
+    "status": "deployed_and_verified"
+  },
+  {
+    "slug": "munnar",
+    "name": "LexaTrip Munnar",
+    "blogId": "382873728585436411",
+    "url": "https://lexatripmunnar.blogspot.com/",
+    "themeFile": "public/theme/destinations/lexatrip_theme_munnar.xml",
+    "status": "deployed_and_verified"
+  },
+  {
+    "slug": "varanasi",
+    "name": "LexaTrip Varanasi",
+    "blogId": "5479686253434609955",
+    "url": "https://lexatripvaranasi.blogspot.com/",
+    "themeFile": "public/theme/destinations/lexatrip_theme_varanasi.xml",
+    "status": "deployed_and_verified"
+  },
+  {
+    "slug": "tirupati",
+    "name": "LexaTrip Tirupati",
+    "blogId": "300785227543069976",
+    "url": "https://lexatriptirupati.blogspot.com/",
+    "themeFile": "public/theme/destinations/lexatrip_theme_tirupati.xml",
+    "status": "deployed_and_verified"
+  },
+  {
+    "slug": "ranthambore",
+    "name": "LexaTrip Ranthambore",
+    "blogId": "3741521023702407368",
+    "url": "https://lexatripranthambore.blogspot.com/",
+    "themeFile": "public/theme/destinations/lexatrip_theme_ranthambore.xml",
+    "status": "deployed_and_verified"
+  },
+  {
+    "slug": "rajasthan",
+    "name": "LexaTrip Rajasthan",
+    "blogId": "3618436631178385723",
+    "url": "https://lexatriprajasthan.blogspot.com/",
+    "themeFile": "public/theme/destinations/lexatrip_theme_rajasthan.xml",
+    "status": "deployed_and_verified"
+  },
+  {
+    "slug": "amritsar",
+    "name": "LexaTrip Amritsar",
+    "blogId": "507446566157740566",
+    "url": "https://lexatripamritsar.blogspot.com/",
+    "themeFile": "public/theme/destinations/lexatrip_theme_amritsar.xml",
+    "status": "theme_deploying"
+  },
+  {
+    "slug": "mysuru",
+    "name": "LexaTrip Mysuru",
+    "blogId": null,
+    "url": "https://lexatripmysuru.blogspot.com/",
+    "themeFile": "public/theme/destinations/lexatrip_theme_mysuru.xml",
+    "status": "provisioning"
+  },
+  {
+    "slug": "bengaluru",
+    "name": "LexaTrip Bengaluru",
+    "blogId": null,
+    "url": "https://lexatripbengaluru.blogspot.com/",
+    "themeFile": "public/theme/destinations/lexatrip_theme_bengaluru.xml",
+    "status": "provisioning"
+  },
+  {
+    "slug": "kochi",
+    "name": "LexaTrip Kochi",
+    "blogId": null,
+    "url": "https://lexatripkochi.blogspot.com/",
+    "themeFile": "public/theme/destinations/lexatrip_theme_kochi.xml",
+    "status": "provisioning"
+  }
+]

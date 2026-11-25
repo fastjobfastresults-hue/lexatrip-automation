@@ -1,0 +1,1429 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html b:css='false' b:defaultwidgetversion='2' b:layoutsversion='3' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<head>
+  <b:include data='blog' name='all-head-content'/>
+  <meta content='width=device-width, initial-scale=1, maximum-scale=5' name='viewport'/>
+  <title><data:blog.pageTitle/></title>
+  
+  <!-- Favicon & Fonts -->
+  <link href='https://bookings.lexatrip.com/favicon.ico' rel='icon' type='image/x-icon'/>
+  <link href='https://fonts.googleapis.com' rel='preconnect'/>
+  <link crossorigin='' href='https://fonts.gstatic.com' rel='preconnect'/>
+  <link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Outfit:wght@500;600;700;800;900&amp;family=Noto+Sans+Devanagari:wght@400;500;600;700;800&amp;display=swap' rel='stylesheet'/>
+
+  <b:skin><![CDATA[
+  /* ==========================================================================
+     LEXATRIP ULTRA-LUXURY TRAVEL BLOGGER MASTER THEME
+     Brand Identity: Royal Deep Navy (#0F172A), Sunset Gold (#FF6B00), Amber (#FFA000)
+     ========================================================================== */
+  :root {
+    --primary: #FF6B00;
+    --primary-dark: #E65100;
+    --primary-light: #FFF5EB;
+    --accent: #FFA000;
+    --navy: #0F172A;
+    --navy-light: #1E293B;
+    --navy-dark: #090D16;
+    --bg-page: #F8FAFC;
+    --card-bg: #FFFFFF;
+    --text-main: #1E293B;
+    --text-muted: #64748B;
+    --border: #E2E8F0;
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
+    --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.05);
+    --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
+    --shadow-lg: 0 16px 36px rgba(255, 107, 0, 0.16);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', 'Noto Sans Devanagari', -apple-system, sans-serif;
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 72px; /* space for persistent mobile bottom bar */
+  }
+  @media (min-width: 992px) {
+    body { padding-bottom: 0; }
+  }
+
+  a { color: var(--primary); text-decoration: none; transition: all 0.2s ease; }
+  a:hover { color: var(--primary-dark); }
+
+  /* --------------------------------------------------------------------------
+     1. TOP CONTACT & PORTALS ANNOUNCEMENT BAR
+     -------------------------------------------------------------------------- */
+  .header-top-bar {
+    background: var(--navy-dark);
+    color: #94A3B8;
+    font-size: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 7px 0;
+  }
+  .header-container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  .top-bar-flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .top-bar-contact {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .top-bar-contact a {
+    color: #F8FAFC;
+    font-weight: 600;
+  }
+  .top-bar-contact a:hover {
+    color: var(--primary);
+  }
+  .top-bar-links {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .top-bar-links a {
+    color: #CBD5E1;
+    font-weight: 500;
+  }
+  .top-bar-links a:hover {
+    color: var(--primary);
+  }
+  @media (max-width: 768px) {
+    .header-top-bar { display: none; }
+  }
+
+  /* --------------------------------------------------------------------------
+     2. MAIN HEADER & BRAND IDENTITY
+     -------------------------------------------------------------------------- */
+  .lexa-header {
+    background: #FFFFFF;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+    border-bottom: 1px solid var(--border);
+  }
+  .header-main-bar {
+    padding: 12px 0;
+  }
+  .header-main-flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .brand-logo-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+  .brand-logo-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.25);
+    border: 2px solid #FF6B00;
+  }
+  .brand-text-block {
+    display: flex;
+    flex-direction: column;
+  }
+  .brand-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    line-height: 1.1;
+  }
+  .brand-word-lexa {
+    font-weight: 900;
+    color: #0F172A;
+    letter-spacing: -0.5px;
+  }
+  .brand-word-trip {
+    font-weight: 900;
+    color: #FF6B00;
+    letter-spacing: 0.5px;
+    position: relative;
+    /* Outline aesthetic matching official logo */
+    -webkit-text-stroke: 1.2px #FF6B00;
+    -webkit-text-fill-color: #FFFFFF;
+  }
+  .brand-dest-badge {
+    font-size: 11px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+    color: #FFA000;
+    padding: 3px 8px;
+    border-radius: 6px;
+    letter-spacing: 0.8px;
+    margin-left: 6px;
+    text-transform: uppercase;
+    border: 1px solid rgba(255, 160, 0, 0.3);
+  }
+  .brand-tagline {
+    font-size: 9.5px;
+    font-weight: 700;
+    color: #64748B;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* 4 Quick Action Header Buttons */
+  .header-quick-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .btn-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 9px 15px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+  .btn-action-book {
+    background: linear-gradient(135deg, #FF6B00 0%, #E65100 100%);
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.28);
+  }
+  .btn-action-book:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 107, 0, 0.38);
+  }
+  .btn-action-app {
+    background: #0F172A;
+    color: #FFFFFF !important;
+  }
+  .btn-action-app:hover {
+    background: #1E293B;
+  }
+  .btn-action-wa {
+    background: #E8F8EE;
+    color: #128C7E !important;
+    border: 1px solid #C6F0D5;
+  }
+  .btn-action-wa:hover {
+    background: #D5F4E2;
+  }
+  .btn-action-avail {
+    background: #FFF5EB;
+    color: #FF6B00 !important;
+    border: 1px solid #FFE0C2;
+  }
+  .btn-action-avail:hover {
+    background: #FFE8D1;
+  }
+  @media (max-width: 991px) {
+    .header-quick-actions { display: none; }
+  }
+
+  /* --------------------------------------------------------------------------
+     3. CATEGORY NAVIGATION / FILTER BAR (Sections & Labels)
+     -------------------------------------------------------------------------- */
+  .category-nav-bar {
+    background: #F1F5F9;
+    border-top: 1px solid var(--border);
+    padding: 8px 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .category-nav-bar::-webkit-scrollbar { display: none; }
+  .category-nav-flex {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+  .cat-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #FFFFFF;
+    color: var(--navy);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 7px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .cat-pill:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+  .cat-pill.active {
+    background: var(--primary);
+    color: #FFFFFF !important;
+    border-color: var(--primary);
+    box-shadow: 0 4px 10px rgba(255, 107, 0, 0.25);
+  }
+
+  /* --------------------------------------------------------------------------
+     4. COMPACT LUXURY HERO SECTION
+     -------------------------------------------------------------------------- */
+  .hero-compact {
+    background: linear-gradient(135deg, #090D16 0%, #0F172A 60%, #1A2639 100%);
+    color: #FFFFFF;
+    padding: 28px 0 26px;
+    border-bottom: 2px solid rgba(255, 107, 0, 0.35);
+    text-align: center;
+  }
+  .hero-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  .hero-badge-pill {
+    display: inline-block;
+    background: rgba(255, 107, 0, 0.15);
+    border: 1px solid rgba(255, 107, 0, 0.4);
+    color: #FFA000;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+  .hero-compact-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    color: #FFFFFF;
+    line-height: 1.25;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+  }
+  @media (max-width: 768px) {
+    .hero-compact-title { font-size: 21px; }
+  }
+  .hero-compact-desc {
+    font-size: 13.5px;
+    color: #CBD5E1;
+    line-height: 1.6;
+    margin: 0 auto;
+  }
+
+  /* --------------------------------------------------------------------------
+     5. MAIN POSTS GRID & 4:5 ASPECT RATIO CARDS
+     -------------------------------------------------------------------------- */
+  .main-wrapper {
+    max-width: 1240px;
+    margin: 32px auto;
+    padding: 0 20px;
+  }
+  .section-header-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--navy);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-header-title::after {
+    content: '';
+    flex-grow: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .posts-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  @media (min-width: 640px) {
+    .posts-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1024px) {
+    .posts-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (min-width: 1280px) {
+    .posts-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  /* 4:5 Aspect Ratio Card Frame */
+  .post-card {
+    background: #FFFFFF;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+    display: flex;
+    flex-direction: column;
+  }
+  .post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(255, 107, 0, 0.4);
+  }
+  .card-media-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: #0F172A;
+  }
+  .card-media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+  .post-card:hover .card-media {
+    transform: scale(1.04);
+  }
+  .card-category-tag {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(4px);
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 107, 0, 0.5);
+    z-index: 2;
+  }
+  .card-offer-badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: linear-gradient(135deg, #FF6B00 0%, #E65100 100%);
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 5px 11px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 2;
+  }
+  .card-body {
+    padding: 18px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  .card-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+  .card-title a { color: inherit; text-decoration: none; }
+  .card-title a:hover { color: var(--primary); }
+  .card-excerpt {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+    flex-grow: 1;
+  }
+  .card-meta-line {
+    font-size: 12px;
+    color: #94A3B8;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .card-actions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: auto;
+  }
+  .card-btn-book {
+    background: linear-gradient(135deg, #FF6B00 0%, #E65100 100%);
+    color: #FFFFFF !important;
+    font-weight: 700;
+    font-size: 12.5px;
+    padding: 10px;
+    border-radius: var(--radius-sm);
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(255, 107, 0, 0.25);
+    transition: transform 0.2s;
+  }
+  .card-btn-book:hover {
+    transform: translateY(-2px);
+  }
+  .card-btn-wa {
+    background: #E8F8EE;
+    color: #128C7E !important;
+    font-weight: 700;
+    font-size: 12.5px;
+    padding: 10px;
+    border-radius: var(--radius-sm);
+    text-align: center;
+    border: 1px solid #C6F0D5;
+  }
+
+  /* --------------------------------------------------------------------------
+     6. ARTICLE VIEW & IN-ARTICLE BOOKING ENGINE WITH DATES & PAX
+     -------------------------------------------------------------------------- */
+  .article-container {
+    background: #FFFFFF;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    padding: 36px 32px;
+    box-shadow: var(--shadow-sm);
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  @media (max-width: 768px) {
+    .article-container { padding: 24px 18px; }
+  }
+  .article-category {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--primary);
+    background: var(--primary-light);
+    padding: 4px 12px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .article-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--navy);
+    line-height: 1.3;
+    margin-bottom: 14px;
+  }
+  @media (max-width: 768px) {
+    .article-title { font-size: 22px; }
+  }
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .author-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: var(--navy);
+  }
+  .author-avatar {
+    width: 28px;
+    height: 28px;
+    background: var(--primary);
+    color: #FFFFFF;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+  }
+
+  /* In-Article Interactive Booking Engine */
+  .in-article-booking-engine {
+    background: linear-gradient(135deg, #FFFDF8 0%, #FFF8EE 100%);
+    border: 2px dashed #FFA000;
+    border-radius: var(--radius-lg);
+    padding: 26px 24px;
+    margin: 28px 0;
+    box-shadow: 0 8px 24px rgba(255, 107, 0, 0.08);
+  }
+  .engine-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .engine-badge {
+    background: #0F172A;
+    color: #FFA000;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+  .engine-header h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--navy);
+    line-height: 1.3;
+    margin-bottom: 6px;
+  }
+  .engine-header p {
+    font-size: 14px;
+    color: #78350F;
+  }
+  .engine-form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  @media (min-width: 640px) {
+    .engine-form-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .form-field {
+    text-align: left;
+  }
+  .form-field label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 5px;
+  }
+  .eng-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #CBD5E1;
+    border-radius: var(--radius-sm);
+    font-size: 13.5px;
+    font-family: inherit;
+    background: #FFFFFF;
+  }
+  .eng-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.15);
+  }
+  .engine-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  @media (min-width: 640px) {
+    .engine-actions { grid-template-columns: 1fr 1fr; }
+  }
+  .btn-eng-book {
+    background: linear-gradient(135deg, #FF6B00 0%, #E65100 100%);
+    color: #FFFFFF;
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    padding: 13px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(255, 107, 0, 0.3);
+    transition: transform 0.2s;
+  }
+  .btn-eng-book:hover { transform: translateY(-2px); }
+  .btn-eng-wa {
+    background: #128C7E;
+    color: #FFFFFF;
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    padding: 13px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(18, 140, 126, 0.25);
+    transition: transform 0.2s;
+  }
+  .btn-eng-wa:hover { transform: translateY(-2px); }
+  .engine-footer-note {
+    text-align: center;
+    font-size: 12px;
+    color: #92400E;
+    margin-top: 14px;
+    font-weight: 600;
+  }
+
+  .article-content {
+    font-size: 16px;
+    line-height: 1.85;
+    color: #334155;
+  }
+  .article-content h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--navy);
+    margin: 32px 0 16px;
+    border-left: 4px solid var(--primary);
+    padding-left: 12px;
+  }
+  .article-content h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 24px 0 12px;
+  }
+  .article-content p { margin-bottom: 18px; }
+  .article-content ul, .article-content ol {
+    margin-bottom: 20px;
+    padding-left: 24px;
+  }
+  .article-content li { margin-bottom: 8px; }
+
+  /* Social Share Bar */
+  .share-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 36px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .share-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .share-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #FFFFFF !important;
+  }
+  .share-wa { background: #25D366; }
+  .share-fb { background: #1877F2; }
+  .share-tw { background: #0F172A; }
+
+  /* --------------------------------------------------------------------------
+     7. PERSISTENT MOBILE BOTTOM ACTION BAR (Refined & Pulsing)
+     -------------------------------------------------------------------------- */
+  .mobile-bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #FFFFFF;
+    border-top: 1px solid var(--border);
+    padding: 8px 12px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    z-index: 9999;
+    box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.1);
+  }
+  @media (min-width: 992px) {
+    .mobile-bottom-bar { display: none; }
+  }
+  .mob-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 4px;
+    border-radius: var(--radius-sm);
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.2;
+    gap: 3px;
+    transition: transform 0.15s;
+  }
+  .mob-btn-call {
+    background: #F1F5F9;
+    color: var(--navy) !important;
+  }
+  .mob-btn-wa {
+    background: #E8F8EE;
+    color: #128C7E !important;
+  }
+  .mob-btn-book {
+    background: linear-gradient(135deg, #FF6B00 0%, #E65100 100%);
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 10px rgba(255, 107, 0, 0.3);
+  }
+  .mob-btn-app {
+    background: #0F172A;
+    color: #FFFFFF !important;
+  }
+
+  /* Gentle Pulse Vibration Animation to attract user attention */
+  @keyframes gentle-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+    100% { transform: scale(1); }
+  }
+  .pulse-btn-primary {
+    animation: gentle-pulse 2.2s infinite ease-in-out;
+  }
+
+  /* --------------------------------------------------------------------------
+     8. LUXURY FOOTER & LEGAL LINKS
+     -------------------------------------------------------------------------- */
+  .lexa-footer {
+    background: var(--navy-dark);
+    color: #94A3B8;
+    padding: 48px 0 28px;
+    border-top: 3px solid var(--primary);
+    margin-top: 48px;
+  }
+  .footer-container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    margin-bottom: 40px;
+  }
+  @media (min-width: 768px) {
+    .footer-grid { grid-template-columns: 1.4fr 1fr 1fr 1.2fr; }
+  }
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .footer-logo-img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid #FF6B00;
+    object-fit: cover;
+  }
+  .footer-desc {
+    font-size: 13px;
+    line-height: 1.7;
+    margin-bottom: 16px;
+    color: #94A3B8;
+  }
+  .footer-rating-pill {
+    display: inline-block;
+    background: rgba(255, 107, 0, 0.15);
+    border: 1px solid rgba(255, 107, 0, 0.4);
+    color: #FFA000;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 20px;
+  }
+  .footer-col h4 {
+    font-family: 'Outfit', sans-serif;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    position: relative;
+    padding-bottom: 8px;
+  }
+  .footer-col h4::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 28px;
+    height: 2px;
+    background: var(--primary);
+  }
+  .footer-col ul { list-style: none; padding: 0; }
+  .footer-col li { margin-bottom: 10px; font-size: 13px; }
+  .footer-col a { color: #94A3B8; }
+  .footer-col a:hover { color: #FFFFFF; padding-left: 4px; }
+  .footer-col p { font-size: 13px; margin-bottom: 10px; line-height: 1.6; }
+  .footer-col p strong { color: #F1F5F9; }
+
+  /* Footer Legal & Policy Bar */
+  .footer-legal-bar {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 13px;
+  }
+  .legal-links {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .legal-links a {
+    color: #CBD5E1;
+  }
+  .legal-links a:hover {
+    color: var(--primary);
+  }
+  .copyright-text {
+    color: #64748B;
+  }
+  ]]></b:skin>
+</head>
+
+<body>
+  <!-- =======================================================================
+       1. TOP CONTACT & PORTALS ANNOUNCEMENT BAR
+       ======================================================================= -->
+  <div class='header-top-bar'>
+    <div class='header-container top-bar-flex'>
+      <div class='top-bar-contact'>
+        <span>📞 24/7 हेल्पलाइन: <a href='tel:+919079854982'>+91 90798 54982</a> | <a href='tel:+919079017880'>+91 90790 17880</a></span>
+      </div>
+      <div class='top-bar-links'>
+        <a href='https://bookings.lexatrip.com/' target='_blank'>🏨 आधिकारिक बुकिंग पोर्टल</a>
+        <a href='https://www.lexatrip.com/' target='_blank'>🌐 LexaTrip.com</a>
+        <a href='https://www.lexatrip.in/' target='_blank'>🇮🇳 LexaTrip.in</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       2. MAIN LUXURY HEADER WITH OFFICIAL LOGO & 4 QUICK ACTIONS
+       ======================================================================= -->
+  <header class='lexa-header'>
+    <div class='header-main-bar'>
+      <div class='header-container header-main-flex'>
+        <a class='brand-logo-area' expr:href='data:blog.homepageUrl'>
+          <img alt='LexaTrip Logo' class='brand-logo-img' src='https://lexa-trip-automation.onrender.com/images/lexatrip_logo.jpg'/>
+          <div class='brand-text-block'>
+            <div class='brand-title-wrap'>
+              <span class='brand-word-lexa'>LEXA</span>
+              <span class='brand-word-trip'>TRIP</span>
+              <span class='brand-dest-badge'>UDAIPUR</span>
+            </div>
+            <span class='brand-tagline'>BOOK. EXPLORE. REPEAT.</span>
+          </div>
+        </a>
+
+        <!-- 4 Quick Action Header Buttons -->
+        <div class='header-quick-actions'>
+          <a class='btn-action btn-action-book' href='https://bookings.lexatrip.com/' target='_blank'>
+            <span>🏨 बुक ऑनलाइन (50% Off)</span>
+          </a>
+          <a class='btn-action btn-action-app' href='https://www.lexatrip.com/app' target='_blank'>
+            <span>📲 ऐप डाउनलोड</span>
+          </a>
+          <a class='btn-action btn-action-wa' href='https://wa.me/919079854982?text=नमस्ते%20LexaTrip,%20मुझे%20जैसलमेर%20होटल्स%20और%20कैंप्स%20की%20जानकारी%20चाहिए!' target='_blank'>
+            <span>💬 WhatsApp पूछताछ</span>
+          </a>
+          <a class='btn-action btn-action-avail' href='https://bookings.lexatrip.com/' target='_blank'>
+            <span>📅 चेक अवेलेबिलिटी</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Navigation / Filter Bar -->
+    <nav class='category-nav-bar'>
+      <div class='header-container category-nav-flex' id='categoryNav'>
+        <a class='cat-pill active' href='#' onclick='filterCategory("all", event)'>
+          <span>🏠 होम पेज</span>
+        </a>
+        <a class='cat-pill' href='#' onclick='filterCategory("camp", event)'>
+          <span>⛺ लक्ज़री कैंप्स</span>
+        </a>
+        <a class='cat-pill' href='#' onclick='filterCategory("5-star", event)'>
+          <span>⭐ 5-स्टार होटल्स</span>
+        </a>
+        <a class='cat-pill' href='#' onclick='filterCategory("4-star", event)'>
+          <span>🏨 4-स्टार होटल्स</span>
+        </a>
+        <a class='cat-pill' href='#' onclick='filterCategory("3-star", event)'>
+          <span>🛏️ 3-स्टार होटल्स</span>
+        </a>
+        <a class='cat-pill' href='#' onclick='filterCategory("budget", event)'>
+          <span>💰 बजट फ्रेंडली होटल्स</span>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- =======================================================================
+       3. COMPACT LUXURY HERO BANNER (2 Lines)
+       ======================================================================= -->
+  <b:if cond='data:view.isMultipleItems'>
+    <div class='hero-compact'>
+      <div class='hero-container'>
+        <span class='hero-badge-pill'>✦ Verified Experiential Luxury Travel &amp; Camps ✦</span>
+        <h1 class='hero-compact-title'>उदयपुर रॉयल पैलेस व लेकव्यू लक्ज़री गाइड</h1>
+        <p class='hero-compact-desc'>
+          झीलों की नगरी उदयपुर में लेक पिछोला बोट क्रूज़, सिटी पैलेस हेरिटेज और 5-स्टार लेकव्यू होटल्स।<br/>
+          100% वेरिफाइड प्रॉपर्टीज, एक्सक्लूसिव 50% तक की छूट और 24/7 स्थानीय सहायता के साथ अभी प्लान करें।
+        </p>
+      </div>
+    </div>
+  </b:if>
+
+  <!-- =======================================================================
+       4. MAIN BLOG CONTENT & POSTS GRID
+       ======================================================================= -->
+  <div class='main-wrapper'>
+    <div id='lexaMainContent'>
+      <div style='text-align: center; padding: 40px; color: #64748B;'>
+        <p style='font-size: 16px; font-weight: 600;'>लोड हो रहा है...</p>
+      </div>
+    </div>
+    <b:section class='main' id='main' showaddelement='no'/>
+  </div>
+
+  <!-- =======================================================================
+       5. PERSISTENT MOBILE BOTTOM ACTION BAR (4 Pulsing Buttons)
+       ======================================================================= -->
+  <div class='mobile-bottom-bar'>
+    <a class='mob-btn mob-btn-call' href='tel:+919079854982'>
+      <span style='font-size: 16px;'>📞</span>
+      <span>कॉल करें</span>
+    </a>
+    <a class='mob-btn mob-btn-wa' href='https://wa.me/919079854982?text=नमस्ते%20LexaTrip,%20मुझे%20जैसलमेर%20होटल्स%20और%20कैंप्स%20की%20बुकिंग%20करनी%20है!' target='_blank'>
+      <span style='font-size: 16px;'>💬</span>
+      <span>WhatsApp</span>
+    </a>
+    <a class='mob-btn mob-btn-book pulse-btn-primary' href='https://bookings.lexatrip.com/' target='_blank'>
+      <span style='font-size: 16px;'>🏨</span>
+      <span>बुक नाउ</span>
+    </a>
+    <a class='mob-btn mob-btn-app' href='https://www.lexatrip.com/app' target='_blank'>
+      <span style='font-size: 16px;'>📲</span>
+      <span>ऐप डाउनलोड</span>
+    </a>
+  </div>
+
+  <!-- =======================================================================
+       6. LUXURY FOOTER, CONTACT NUMBERS & LEGAL LINKS
+       ======================================================================= -->
+  <footer class='lexa-footer'>
+    <div class='footer-container'>
+      <div class='footer-grid'>
+        <div class='footer-brand-col'>
+          <div class='footer-brand'>
+            <img alt='LexaTrip Logo' class='footer-logo-img' src='https://lexa-trip-automation.onrender.com/images/lexatrip_logo.jpg'/>
+            <div class='brand-text-block'>
+              <div class='brand-title-wrap'>
+                <span class='brand-word-lexa' style='color:#FFFFFF;'>LEXA</span>
+                <span class='brand-word-trip'>TRIP</span>
+              </div>
+              <span class='brand-tagline' style='color:#94A3B8;'>BOOK. EXPLORE. REPEAT.</span>
+            </div>
+          </div>
+          <p class='footer-desc'>
+            भारत का प्रमुख एक्सपीरियंसियल ट्रैवल ब्रांड। जैसलमेर के सुनहरे थार रेगिस्तान में लक्ज़री टेंट कैंप्स, हेरिटेज फोर्ट्स, कैमल सफारी और एक्सक्लूसिव टूर पैकेजेस।
+          </p>
+          <div class='footer-rating-pill'>
+            ★ 5.0 Google Rated Experience | 24/7 Helpline
+          </div>
+        </div>
+
+        <div class='footer-col'>
+          <h4>श्रेणियां (Categories)</h4>
+          <ul>
+            <li><a href='#' onclick='filterCategory("camp", event)'>⛺ लक्ज़री कैंप्स व टेंट्स</a></li>
+            <li><a href='#' onclick='filterCategory("5-star", event)'>⭐ 5-स्टार लक्ज़री होटल्स</a></li>
+            <li><a href='#' onclick='filterCategory("4-star", event)'>🏨 4-स्टार प्रीमियम होटल्स</a></li>
+            <li><a href='#' onclick='filterCategory("3-star", event)'>🛏️ 3-स्टार कंफर्ट होटल्स</a></li>
+            <li><a href='#' onclick='filterCategory("budget", event)'>💰 बजट फ्रेंडली स्टे</a></li>
+          </ul>
+        </div>
+
+        <div class='footer-col'>
+          <h4>आधिकारिक पोर्टल्स</h4>
+          <ul>
+            <li><a href='https://bookings.lexatrip.com/' target='_blank'>🏨 आधिकारिक बुकिंग पोर्टल (bookings.lexatrip.com)</a></li>
+            <li><a href='https://www.lexatrip.com/' target='_blank'>🌐 मुख्य वेबसाइट (lexatrip.com)</a></li>
+            <li><a href='https://www.lexatrip.in/' target='_blank'>🇮🇳 राष्ट्रीय पोर्टल (lexatrip.in)</a></li>
+            <li><a href='https://www.lexatrip.com/app' target='_blank'>📲 लेक्सा ट्रिप मोबाइल ऐप (Play Store)</a></li>
+          </ul>
+        </div>
+
+        <div class='footer-col'>
+          <h4>संपर्क व सहायता</h4>
+          <p><strong>📞 24/7 हेल्पलाइन 1:</strong> <a href='tel:+919079854982'>+91 90798 54982</a></p>
+          <p><strong>📞 24/7 हेल्पलाइन 2:</strong> <a href='tel:+919079017880'>+91 90790 17880</a></p>
+          <p><strong>💬 आधिकारिक WhatsApp:</strong> <a href='https://wa.me/919079854982' target='_blank'>+91 90798 54982</a></p>
+          <p><strong>📧 आधिकारिक ईमेल:</strong> <a href='mailto:info@lexatrip.com'>info@lexatrip.com</a></p>
+        </div>
+      </div>
+
+      <!-- Legal & Policy Links Row -->
+      <div class='footer-legal-bar'>
+        <div class='legal-links'>
+          <a href='/p/about-us.html'>हमारे बारे में (About Us)</a>
+          <a href='/p/contact-us.html'>संपर्क करें (Contact Us)</a>
+          <a href='/p/privacy-policy.html'>गोपनीयता नीति (Privacy Policy)</a>
+          <a href='/p/terms-conditions.html'>नियम व शर्तें (Terms &amp; Conditions)</a>
+        </div>
+        <p class='copyright-text'>
+          © 2026 LexaTrip™ Technologies Pvt. Ltd. सर्वाधिकार सुरक्षित। Book. Explore. Repeat.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =======================================================================
+       7. JAVASCRIPT CONTROLLERS (Categories, Feeds & Interactive Booking)
+       ======================================================================= -->
+  <script type='text/javascript'>
+    //<![CDATA[
+    let allBlogEntries = [];
+    let currentFilter = 'all';
+
+    async function loadLexaBlogContent() {
+      const container = document.getElementById('lexaMainContent');
+      if (!container) return;
+
+      try {
+        const res = await fetch('/feeds/posts/default?alt=json');
+        const data = await res.json();
+        allBlogEntries = (data.feed && data.feed.entry) ? data.feed.entry : [];
+
+
+        const currentPath = window.location.pathname;
+        const lowPath = currentPath.toLowerCase();
+
+        // 1. Check for Legal / Static Pages
+        if (lowPath.includes('about-us')) {
+          renderLegalStaticPage(container, 'हमारे बारे में (About Us) - LexaTrip', "<h2>LexaTrip: भारत का अग्रणी एक्सपीरियंसियल ट्रैवल व हॉस्पिटैलिटी ब्रांड</h2><p><strong>LexaTrip</strong> में आपका स्वागत है। हमारा विजन भारत के प्रत्येक यात्री को प्रामाणिक, पारदर्शी और लक्ज़री यात्रा अनुभव प्रदान करना है। 'Book. Explore. Repeat.' के मूलमंत्र के साथ, हम आपको जैसलमेर के सुनहरे थार रेगिस्तान से लेकर भारत के प्रमुख पर्यटन स्थलों तक सर्वश्रेष्ठ स्टे और टूर्स उपलब्ध कराते हैं।</p><h3>हमारी प्रमुख सेवाएं:</h3><ul><li><strong>100% वेरिफाइड प्रॉपर्टीज:</strong> प्रीमियम स्विस टेंट कैंप्स, हेरिटेज फोर्ट्स और 5-स्टार / 4-स्टार लक्ज़री होटल्स।</li><li><strong>बेस्ट प्राइस गारंटी:</strong> पारदर्शी दरें, बिना किसी छिपे हुए शुल्क के।</li><li><strong>24/7 स्थानीय गाइड व कस्टमर असिस्टेंस:</strong> हर कदम पर समर्पित ऑन-ग्राउंड सपोर्ट।</li></ul><p><strong>आधिकारिक वेबसाइट:</strong> <a href='https://www.lexatrip.com/'>lexatrip.com</a> | <a href='https://bookings.lexatrip.com/'>bookings.lexatrip.com</a><br/><strong>हेल्पलाइन:</strong> +91 90798 54982 / +91 90790 17880<br/><strong>ईमेल:</strong> info@lexatrip.com</p>");
+          return;
+        }
+        if (lowPath.includes('contact-us')) {
+          renderLegalStaticPage(container, 'संपर्क करें (Contact Us) - LexaTrip', "<h2>LexaTrip 24/7 गेस्ट सपोर्ट व रिज़र्वेशन हेल्पडेस्क</h2><p>अपनी अगली यात्रा, डेज़र्ट कैंपिंग, हेरिटेज होटल बुकिंग अथवा कॉर्पोरेट टूर के लिए हमारी विशेषज्ञ टीम से संपर्क करें:</p><h3>हेल्पलाइन व संपर्क विवरण:</h3><ul><li><strong>24/7 प्राथमिक हेल्पलाइन:</strong> <a href='tel:+919079854982'>+91 90798 54982</a></li><li><strong>24/7 द्वितीयक हेल्पलाइन:</strong> <a href='tel:+919079017880'>+91 90790 17880</a></li><li><strong>आधिकारिक WhatsApp:</strong> <a href='https://wa.me/919079854982'>+91 90798 54982</a></li><li><strong>आधिकारिक ईमेल:</strong> <a href='mailto:info@lexatrip.com'>info@lexatrip.com</a></li><li><strong>मुख्यालय:</strong> LexaTrip Technologies Pvt. Ltd., जैसलमेर, राजस्थान (345001)</li></ul><p><strong>आधिकारिक बुकिंग पोर्टल:</strong> <a href='https://bookings.lexatrip.com/' target='_blank'>bookings.lexatrip.com</a></p>");
+          return;
+        }
+        if (lowPath.includes('privacy-policy')) {
+          renderLegalStaticPage(container, 'गोपनीयता नीति (Privacy Policy) - LexaTrip', "<h2>गोपनीयता नीति (Privacy Policy) - LexaTrip</h2><p>अंतिम अपडेट: 2026। LexaTrip Technologies ('LexaTrip', 'हम', 'हमारा') हमारे उपयोगकर्ताओं की गोपनीयता का सम्मान करता है। यह नीति बताती है कि जब आप हमारी वेबसाइटों (lexatrip.com, bookings.lexatrip.com, lexatrip.in) और हमारे गंतव्य ब्लॉग्स का उपयोग करते हैं तो हम आपकी जानकारी को कैसे एकत्र, उपयोग और सुरक्षित रखते हैं।</p><h3>1. एकत्रित की जाने वाली जानकारी:</h3><p>जब आप हमारी वेबसाइट पर पूछताछ फॉर्म भरते हैं अथवा बुकिंग करते हैं, तो हम आपका नाम, मोबाइल/WhatsApp नंबर, ईमेल पता और यात्रा की तारीखें एकत्र करते हैं।</p><h3>2. डेटा का उपयोग:</h3><p>हम इस डेटा का उपयोग केवल आपकी बुकिंग की पुष्टि, डिस्काउंट कूपन प्रदान करने, और 24/7 ग्राहक सहायता उपलब्ध कराने के लिए करते हैं। हम आपका डेटा किसी भी तीसरे पक्ष को नहीं बेचते हैं।</p><h3>3. डेटा सुरक्षा:</h3><p>हम आपके डेटा को उद्योग-मानक एन्क्रिप्शन और सुरक्षा प्रोटोकॉल के साथ सुरक्षित रखते हैं।</p><p>प्रश्नों के लिए संपर्क करें: <strong>privacy@lexatrip.com</strong> अथवा हेल्पलाइन: <strong>+91 90798 54982</strong>।</p>");
+          return;
+        }
+        if (lowPath.includes('terms-conditions') || lowPath.includes('terms')) {
+          renderLegalStaticPage(container, 'नियम व शर्तें (Terms & Conditions) - LexaTrip', "<h2>नियम व शर्तें (Terms & Conditions) - LexaTrip</h2><p>अंतिम अपडेट: 2026। LexaTrip के माध्यम से होटल, रिसॉर्ट, डेज़र्ट कैंप या टूर पैकेज बुक करते समय निम्नलिखित नियम व शर्तें लागू होती हैं:</p><h3>1. बुकिंग व भुगतान:</h3><p>सभी बुकिंग्स उपलब्धता के अधीन हैं। बुकिंग की पुष्टि आधिकारिक बुकिंग पोर्टल (bookings.lexatrip.com) या आधिकारिक WhatsApp (+91 90798 54982) के माध्यम से टोकन राशि प्राप्त होने पर ही मान्य होगी।</p><h3>2. चेक-इन व चेक-आउट:</h3><p>मानक चेक-इन समय दोपहर 12:00 बजे और चेक-आउट समय सुबह 10:00 बजे है। सभी अतिथियों के पास वैध सरकारी पहचान पत्र (आधार, पासपोर्ट या वोटर आईडी) होना अनिवार्य है।</p><h3>3. रद्दीकरण व रिफंड:</h3><p>चेक-इन से 72 घंटे पूर्व रद्दीकरण पर पॉलिसी के अनुसार रिफंड देय होगा। पीक सीज़न / न्यू ईयर पैकेज गैर-वापसी योग्य (Non-Refundable) हो सकते हैं।</p><p>अधिक जानकारी के लिए संपर्क करें: <strong>support@lexatrip.com</strong> | हेल्पलाइन: <strong>+91 90798 54982</strong>।</p>");
+          return;
+        }
+
+        // 2. Single Post vs Homepage Grid
+        const isSinglePost = currentPath.endsWith('.html') && !currentPath.includes('/p/');
+        if (isSinglePost) {
+          renderSingleArticle(container, currentPath);
+        } else {
+          renderPostGrid(container, currentFilter);
+        }
+
+      } catch (err) {
+        console.error('Error loading blog feed:', err);
+      }
+    }
+
+    // Filter by Category Function
+    function filterCategory(category, evt) {
+      if (evt) evt.preventDefault();
+      currentFilter = category;
+
+      // Update active pill state
+      const pills = document.querySelectorAll('.cat-pill');
+      pills.forEach(p => p.classList.remove('active'));
+      if (evt && evt.currentTarget) {
+        evt.currentTarget.classList.add('active');
+      }
+
+      // If user is on a single post page and clicks a category, go to homepage with filter
+      if (window.location.pathname.endsWith('.html') && !window.location.pathname.includes('/p/')) {
+        window.location.href = '/?category=' + category;
+        return;
+      }
+
+      const container = document.getElementById('lexaMainContent');
+      if (container) renderPostGrid(container, category);
+    }
+
+    // Render Grid with 4:5 Aspect Ratio Cards
+    function renderPostGrid(container, filter) {
+      let filtered = allBlogEntries;
+
+      if (filter !== 'all') {
+        filtered = allBlogEntries.filter(entry => {
+          const categories = (entry.category || []).map(c => (c.term || '').toLowerCase());
+          const title = (entry.title.$t || '').toLowerCase();
+          const content = (entry.content ? entry.content.$t : '').toLowerCase();
+
+          if (filter === 'camp') {
+            return categories.some(c => c.includes('camp') || c.includes('कैंप') || c.includes('tent')) ||
+                   title.includes('camp') || title.includes('कैंप') || content.includes('camp');
+          }
+          if (filter === '5-star') {
+            return categories.some(c => c.includes('5') || c.includes('five')) ||
+                   title.includes('5') || title.includes('five') || content.includes('5-star') || content.includes('फाइव स्टार');
+          }
+          if (filter === '4-star') {
+            return categories.some(c => c.includes('4') || c.includes('four')) ||
+                   title.includes('4') || title.includes('four') || content.includes('4-star') || content.includes('फोर स्टार');
+          }
+          if (filter === '3-star') {
+            return categories.some(c => c.includes('3') || c.includes('three')) ||
+                   title.includes('3') || title.includes('three') || content.includes('3-star') || content.includes('थ्री स्टार');
+          }
+          if (filter === 'budget') {
+            return categories.some(c => c.includes('budget') || c.includes('बजट')) ||
+                   title.includes('budget') || title.includes('बजट') || content.includes('budget');
+          }
+          return true;
+        });
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding: 50px 20px; color:#64748B;">' +
+          '<div style="font-size: 36px; margin-bottom: 12px;">🏨</div>' +
+          '<h3>इस श्रेणी में जल्द ही नए होटल्स और कैंप्स जोड़े जा रहे हैं।</h3>' +
+          '<p style="margin-top: 8px;">तत्काल बुकिंग व पूछताछ के लिए हमारी 24/7 हेल्पलाइन <a href="tel:+919079854982">+91 90798 54982</a> पर संपर्क करें।</p>' +
+          '</div>';
+        return;
+      }
+
+      let html = '<div class="posts-grid">';
+      filtered.forEach(entry => {
+        const title = entry.title.$t;
+        const altLink = (entry.link || []).find(l => l.rel === 'alternate');
+        const url = altLink ? altLink.href : '#';
+        const pubDate = new Date(entry.published.$t).toLocaleDateString('hi-IN', {
+          year: 'numeric', month: 'short', day: 'numeric'
+        });
+
+        // 4:5 image extraction
+        let imgUrl = '';
+        if (entry.media$thumbnail) {
+          imgUrl = entry.media$thumbnail.url.replace('/s72-c/', '/w600-h750-p-k-no-nu/');
+        } else {
+          const raw = (entry.content ? entry.content.$t : '') || '';
+          const m = raw.match(/<img[^>]+src=["']([^"']+)["']/i);
+          if (m) imgUrl = m[1];
+        }
+
+        let snippet = (entry.summary ? entry.summary.$t : (entry.content ? entry.content.$t : '')) || '';
+        snippet = snippet.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim().slice(0, 130) + '...';
+
+        // Detect category badge
+        let catBadge = 'लक्ज़री स्टे';
+        const rawContent = (entry.content ? entry.content.$t : '').toLowerCase();
+        if (rawContent.includes('camp') || rawContent.includes('कैंप')) catBadge = '⛺ लक्ज़री कैंप';
+        else if (rawContent.includes('5-star') || rawContent.includes('फाइव')) catBadge = '⭐ 5-स्टार लक्ज़री';
+        else if (rawContent.includes('4-star') || rawContent.includes('फोर')) catBadge = '🏨 4-स्टार होटल';
+        else if (rawContent.includes('3-star') || rawContent.includes('थ्री')) catBadge = '🛏️ 3-स्टार होटल';
+        else if (rawContent.includes('budget') || rawContent.includes('बजट')) catBadge = '💰 बजट फ्रेंडली';
+
+        html += 
+          '<div class="post-card">' +
+            '<div class="card-media-wrapper">' +
+              (imgUrl ? '<img class="card-media" src="' + imgUrl + '" alt="' + title.replace(/"/g, '&quot;') + '" loading="lazy" />' : '<div class="card-media" style="display:flex; align-items:center; justify-content:center; color:#FF6B00; font-size:42px;">🐪</div>') +
+              '<span class="card-category-tag">' + catBadge + '</span>' +
+              '<span class="card-offer-badge">50% Off</span>' +
+            '</div>' +
+            '<div class="card-body">' +
+              '<h2 class="card-title"><a href="' + url + '">' + title + '</a></h2>' +
+              '<p class="card-excerpt">' + snippet + '</p>' +
+              '<div class="card-meta-line">' +
+                '<span>📅 ' + pubDate + '</span>' +
+                '<span>★ 5.0 (वेरिफाइड)</span>' +
+              '</div>' +
+              '<div class="card-actions-grid">' +
+                '<a href="https://bookings.lexatrip.com/" target="_blank" class="card-btn-book">🏨 बुक नाउ</a>' +
+                '<a href="https://wa.me/919079854982?text=' + encodeURIComponent('नमस्ते LexaTrip, मुझे ' + title + ' की बुकिंग और डिस्काउंट की जानकारी चाहिए!') + '" target="_blank" class="card-btn-wa">💬 WhatsApp</a>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+      });
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    // Render Single Article Page
+    function renderSingleArticle(container, currentPath) {
+      let post = allBlogEntries.find(e => {
+        const altLink = (e.link || []).find(l => l.rel === 'alternate');
+        return altLink && altLink.href.includes(currentPath);
+      }) || allBlogEntries[0];
+
+      if (!post) return;
+
+      const title = post.title.$t;
+      const content = post.content ? post.content.$t : (post.summary ? post.summary.$t : '');
+      const pubDate = new Date(post.published.$t).toLocaleDateString('hi-IN', {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
+
+      // Default tomorrow checkin, day after checkout
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const dayAfter = new Date();
+      dayAfter.setDate(dayAfter.getDate() + 2);
+      const strTomorrow = tomorrow.toISOString().split('T')[0];
+      const strDayAfter = dayAfter.toISOString().split('T')[0];
+
+      container.innerHTML = 
+        '<article class="article-container">' +
+          '<span class="article-category">उदयपुर लक्ज़री ट्रैवल व होटल गाइड</span>' +
+          '<h1 class="article-title">' + title + '</h1>' +
+          '<div class="article-meta">' +
+            '<div class="author-badge">' +
+              '<div class="author-avatar">LT</div>' +
+              '<span>LexaTrip Editorial Specialist</span>' +
+            '</div>' +
+            '<span>•</span>' +
+            '<span>📅 ' + pubDate + '</span>' +
+            '<span>•</span>' +
+            '<span>★ 5.0 Verified Travel Guide</span>' +
+          '</div>' +
+
+          '<div class="article-content">' + content + '</div>' +
+
+          '<!-- In-Article Interactive Booking Engine -->' +
+          '<div class="in-article-booking-engine" id="bookingSection">' +
+            '<div class="engine-header">' +
+              '<div class="engine-badge">🏨 LexaTrip Direct Best Rate Guarantee</div>' +
+              '<h3>इस प्रॉपर्टी को 50% तक की छूट पर अभी बुक करें</h3>' +
+              '<p>अपनी तारीखें और गेस्ट संख्या चुनें, और तुरंत सर्वोत्तम डिस्काउंटेड दर प्राप्त करें।</p>' +
+            '</div>' +
+            '<div class="engine-form-grid">' +
+              '<div class="form-field">' +
+                '<label>📅 चेक-इन तारीख</label>' +
+                '<input type="date" id="artCheckIn" class="eng-input" value="' + strTomorrow + '" />' +
+              '</div>' +
+              '<div class="form-field">' +
+                '<label>📅 चेक-आउट तारीख</label>' +
+                '<input type="date" id="artCheckOut" class="eng-input" value="' + strDayAfter + '" />' +
+              '</div>' +
+              '<div class="form-field">' +
+                '<label>👥 कुल गेस्ट (Pax)</label>' +
+                '<select id="artPax" class="eng-input">' +
+                  '<option value="1">1 गेस्ट (Solo Traveler)</option>' +
+                  '<option value="2" selected="selected">2 गेस्ट (Couple / Friends)</option>' +
+                  '<option value="3">3 गेस्ट</option>' +
+                  '<option value="4">4 गेस्ट (Family)</option>' +
+                  '<option value="5+">5+ गेस्ट (Group Tour)</option>' +
+                '</select>' +
+              '</div>' +
+              '<div class="form-field">' +
+                '<label>🛏️ रूम / कैंप श्रेणी</label>' +
+                '<select id="artRoomType" class="eng-input">' +
+                  '<option value="Luxury Swiss Camp" selected="selected">लक्ज़री स्विस टेंट कैंप</option>' +
+                  '<option value="5-Star Luxury Suite">5-स्टार लक्ज़री सुइट</option>' +
+                  '<option value="4-Star Deluxe Room">4-स्टार डीलक्स रूम</option>' +
+                  '<option value="3-Star Comfort">3-स्टार कंफर्ट रूम</option>' +
+                  '<option value="Budget Friendly">बजट फ्रेंडली रूम</option>' +
+                '</select>' +
+              '</div>' +
+            '</div>' +
+            '<div class="engine-actions">' +
+              '<button class="btn-eng-book" onclick="handleArticleBooking('online', '' + encodeURIComponent(title) + '')">' +
+                '🏨 तुरंत ऑनलाइन बुक करें — 50% Off' +
+              '</button>' +
+              '<button class="btn-eng-wa" onclick="handleArticleBooking('whatsapp', '' + encodeURIComponent(title) + '')">' +
+                '💬 WhatsApp पर कोटेशन प्राप्त करें' +
+              '</button>' +
+            '</div>' +
+            '<div class="engine-footer-note">' +
+              '🔒 बेस्ट प्राइस गारंटी | 24/7 स्थानीय गाइड सहायता | कोई छिपा हुआ शुल्क नहीं' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="share-bar">' +
+            '<span class="share-label">आर्टिकल शेयर करें:</span>' +
+            '<a href="https://api.whatsapp.com/send?text=' + encodeURIComponent(title + ' ' + window.location.href) + '" target="_blank" class="share-btn share-wa">WhatsApp</a>' +
+            '<a href="https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href) + '" target="_blank" class="share-btn share-fb">Facebook</a>' +
+            '<a href="https://twitter.com/intent/tweet?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent(title) + '" target="_blank" class="share-btn share-tw">Twitter / X</a>' +
+          '</div>' +
+        '</article>';
+    }
+
+    // Article Booking Handler (Online vs WhatsApp)
+    function handleArticleBooking(mode, encodedTitle) {
+      const title = decodeURIComponent(encodedTitle || 'UDAIPUR Tour & Stay');
+      const checkIn = document.getElementById('artCheckIn') ? document.getElementById('artCheckIn').value : '';
+      const checkOut = document.getElementById('artCheckOut') ? document.getElementById('artCheckOut').value : '';
+      const pax = document.getElementById('artPax') ? document.getElementById('artPax').value : '2';
+      const roomType = document.getElementById('artRoomType') ? document.getElementById('artRoomType').value : 'Luxury Camp';
+
+      if (mode === 'online') {
+        const targetUrl = 'https://bookings.lexatrip.com/?dest=UDAIPUR&checkin=' + checkIn + '&checkout=' + checkOut + '&guests=' + pax;
+        window.open(targetUrl, '_blank');
+      } else {
+        const waText = encodeURIComponent(
+          'नमस्ते LexaTrip! मुझे बुकिंग कोटेशन चाहिए:\n' +
+          '🏨 प्रॉपर्टी: ' + title + '\n' +
+          '🛏️ श्रेणी: ' + roomType + '\n' +
+          '📅 चेक-इन: ' + (checkIn || 'जल्द') + '\n' +
+          '📅 चेक-आउट: ' + (checkOut || 'जल्द') + '\n' +
+          '👥 गेस्ट संख्या: ' + pax + '\n' +
+          'कूपन: LEXA50ACTIVE (50% Off)\n' +
+          'कृपया सर्वोत्तम दर और उपलब्धता की पुष्टि करें!'
+        );
+        window.open('https://wa.me/919079854982?text=' + waText, '_blank');
+      }
+    }
+
+
+    // Render Legal / Static Page
+    function renderLegalStaticPage(container, title, content) {
+      container.innerHTML = 
+        '<article class="article-container">' +
+          '<span class="article-category">LexaTrip Official Verified Page</span>' +
+          '<h1 class="article-title">' + title + '</h1>' +
+          '<div class="article-meta">' +
+            '<div class="author-badge">' +
+              '<div class="author-avatar">LT</div>' +
+              '<span>LexaTrip Legal & Compliance Team</span>' +
+            '</div>' +
+            '<span>•</span>' +
+            '<span>📅 अपडेटेड: 2026</span>' +
+            '<span>•</span>' +
+            '<span>★ Verified Official Policy</span>' +
+          '</div>' +
+          '<div class="article-content" style="font-size:15px; line-height:1.8;">' +
+            content +
+          '</div>' +
+          '<div style="margin-top:30px; padding-top:20px; border-top:1px solid #E2E8F0; text-align:center;">' +
+            '<a href="/" style="display:inline-block; background:#0F172A; color:#FFFFFF; font-weight:700; padding:10px 24px; border-radius:30px; text-decoration:none;">← वापस मुख्य पृष्ठ (Home) पर जाएं</a>' +
+          '</div>' +
+        '</article>';
+    }
+
+    // Initialize on load
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadLexaBlogContent);
+    } else {
+      loadLexaBlogContent();
+    }
+    //]]>
+  </script>
+</body>
+</html>
