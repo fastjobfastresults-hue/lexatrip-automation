@@ -198,14 +198,37 @@ class ChannelTester {
       }
 
       if (platform === 'blogger') {
-        const { blogId, apiKey, accessToken } = credentials;
+        const { blogId, apiKey } = credentials;
+        let token = credentials.accessToken;
         if (!blogId) throw new Error('Blogger requires a Blog ID.');
-        if (!apiKey && !accessToken) {
+
+        // Auto-refresh token if refreshToken is available
+        const refreshToken = credentials.refreshToken || destination?.channels?.youtube?.credentials?.refreshToken;
+        const clientId = credentials.clientId || destination?.channels?.youtube?.credentials?.clientId || process.env.GOOGLE_CLIENT_ID;
+        const clientSecret = credentials.clientSecret || destination?.channels?.youtube?.credentials?.clientSecret || process.env.GOOGLE_CLIENT_SECRET;
+
+        if (refreshToken && clientId && clientSecret) {
+          try {
+            const tokenRes = await axios.post('https://oauth2.googleapis.com/token', {
+              client_id: clientId,
+              client_secret: clientSecret,
+              refresh_token: refreshToken,
+              grant_type: 'refresh_token'
+            }, { timeout: 10000 });
+            if (tokenRes.data?.access_token) {
+              token = tokenRes.data.access_token;
+            }
+          } catch (refErr) {
+            console.warn('[ChannelTester Blogger] Refresh token exchange warning:', refErr.message);
+          }
+        }
+
+        if (!apiKey && !token) {
           throw new Error('Blogger requires either an API Key or OAuth Access Token.');
         }
 
-        const headers = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
-        const params = apiKey ? { key: apiKey } : {};
+        const headers = token ? { Authorization: `Bearer ${token}` } : {};
+        const params = (!token && apiKey) ? { key: apiKey } : {};
 
         const res = await axios.get(`https://www.googleapis.com/blogger/v3/blogs/${blogId}`, {
           headers,
@@ -213,7 +236,7 @@ class ChannelTester {
           timeout: 10000
         });
 
-        const hasWriteAuth = !!(accessToken || credentials.refreshToken);
+        const hasWriteAuth = !!(token || credentials.refreshToken);
         return {
           success: true,
           platform: 'blogger',

@@ -6,6 +6,15 @@ const tunnelService = require('../tunnelService');
 const seoGenerator = require('../seoGenerator');
 const { sanitizePostText } = require('../textSanitizer');
 
+let db = null;
+try {
+  db = require('../../database/db');
+} catch (e) {
+  try {
+    db = require('../database/db');
+  } catch (e2) {}
+}
+
 class BloggerPublisher {
   /**
    * Publish SEO Travel Article to Google Blogger (.blogspot.com)
@@ -14,20 +23,42 @@ class BloggerPublisher {
    * 2. Mail2Blogger (Publish via Secret Email - 100% Zero-Maintenance Native Blogger Feature)
    */
   async publishPost({ account, title, caption, hashtags = '', mediaPath = null, imageUrl = null, destinationName = 'Lexa Trip', destination = null }) {
-    const creds = account?.credentials || {};
-    const blogId = creds.blogId || account?.handle || '';
+    // 1. Auto-resolve destination if omitted
+    if (!destination && db && typeof db.getDestinations === 'function') {
+      try {
+        const allDests = db.getDestinations();
+        destination = allDests.find(d => 
+          d.name === destinationName || 
+          d.channels?.blogger?.credentials?.blogId === account?.credentials?.blogId ||
+          d.channels?.blogger?.handle === account?.handle
+        ) || allDests[0];
+      } catch (dErr) {}
+    }
+
+    const creds = account?.credentials || destination?.channels?.blogger?.credentials || {};
+    const blogId = creds.blogId || account?.handle || destination?.channels?.blogger?.credentials?.blogId || '';
     let apiKey = creds.accessToken || creds.apiKey || '';
     const secretEmail = creds.secretEmail || creds.email || null;
 
-    // Inherit Google OAuth credentials from destination YouTube channel if not directly configured
+    // Multi-Tier OAuth Token Resolution:
+    // Tier 1: Direct blogger credentials
+    // Tier 2: Destination YouTube credentials
+    // Tier 3: Database Jaisalmer master credentials
     const ytCreds = destination?.channels?.youtube?.credentials;
-    const refreshToken = creds.refreshToken || ytCreds?.refreshToken;
-    const clientId = creds.clientId || ytCreds?.clientId;
-    const clientSecret = creds.clientSecret || ytCreds?.clientSecret;
+    let jMasterCreds = null;
+    try {
+      if (db && typeof db.getDestinations === 'function') {
+        jMasterCreds = db.getDestinations().find(d => d.id === 'dest_jaisalmer')?.channels?.blogger?.credentials;
+      }
+    } catch (e) {}
 
-    // Automatic Google OAuth2 Token Refresh for Lifetime Publishing
-    if (refreshToken && clientId && clientSecret) {
-      try {
+    const refreshToken = creds.refreshToken || ytCreds?.refreshToken || jMasterCreds?.refreshToken || process.env.GOOGLE_REFRESH_TOKEN;
+    const clientId = creds.clientId || ytCreds?.clientId || jMasterCreds?.clientId || process.env.GOOGLE_CLIENT_ID;
+    const clientSecret = creds.clientSecret || ytCreds?.clientSecret || jMasterCreds?.clientSecret || process.env.GOOGLE_CLIENT_SECRET;
+
+    // Helper: Refresh OAuth token on demand
+    const refreshAccessToken = async () => {
+      if (refreshToken && clientId && clientSecret) {
         const tokenRes = await axios.post('https://oauth2.googleapis.com/token', {
           client_id: clientId,
           client_secret: clientSecret,
@@ -35,8 +66,17 @@ class BloggerPublisher {
           grant_type: 'refresh_token'
         }, { timeout: 10000 });
         if (tokenRes.data?.access_token) {
-          apiKey = tokenRes.data.access_token;
+          return tokenRes.data.access_token;
         }
+      }
+      return null;
+    };
+
+    // Automatic Google OAuth2 Token Refresh for Lifetime Publishing
+    if (refreshToken && clientId && clientSecret) {
+      try {
+        const freshToken = await refreshAccessToken();
+        if (freshToken) apiKey = freshToken;
       } catch (refErr) {
         console.warn('[Blogger Publisher] OAuth token refresh warning:', refErr.response?.data?.error_description || refErr.message);
       }
@@ -66,7 +106,7 @@ class BloggerPublisher {
     }
 
     if (!blogId || !apiKey) {
-      throw new Error('Blogger credentials missing: blogId and OAuth2 accessToken/apiKey are required.');
+      throw new Error(`Blogger credentials missing: blogId (${blogId || 'none'}) and OAuth2 accessToken/apiKey are required.`);
     }
 
     try {
@@ -135,16 +175,42 @@ class BloggerPublisher {
         headers.Authorization = `Bearer ${apiKey}`;
       }
 
-      const res = await axios.post(url, {
-        kind: 'blogger#post',
-        title: finalTitle,
-        content: htmlContent,
-        labels: finalLabels
-      }, {
-        headers,
-        params,
-        timeout: 25000
-      });
+      let res;
+      try {
+        res = await axios.post(url, {
+          kind: 'blogger#post',
+          title: finalTitle,
+          content: htmlContent,
+          labels: finalLabels
+        }, {
+          headers,
+          params,
+          timeout: 25000
+        });
+      } catch (postErr) {
+        // If 401 Unauthorized, attempt forced token refresh and retry once
+        if (postErr.response?.status === 401 && refreshToken) {
+          console.log('[Blogger Publisher] Received 401, forcing fresh OAuth2 token exchange...');
+          const retryToken = await refreshAccessToken();
+          if (retryToken) {
+            headers.Authorization = `Bearer ${retryToken}`;
+            res = await axios.post(url, {
+              kind: 'blogger#post',
+              title: finalTitle,
+              content: htmlContent,
+              labels: finalLabels
+            }, {
+              headers,
+              params: {},
+              timeout: 25000
+            });
+          } else {
+            throw postErr;
+          }
+        } else {
+          throw postErr;
+        }
+      }
 
       return {
         success: true,
@@ -157,8 +223,29 @@ class BloggerPublisher {
     } catch (err) {
       const errMsg = err.response?.data?.error?.message || (err.response ? JSON.stringify(err.response.data) : err.message);
       console.error('[Blogger API Error]:', errMsg);
+
+      // Automated Fallback Engine: If real SMTP credentials exist, attempt Mail2Blogger
+      if (secretEmail && (creds.smtp?.host || process.env.SMTP_HOST)) {
+        console.log(`[Blogger Publisher] Primary API failed. Engaging Fallback Engine: Mail2Blogger for ${destinationName}...`);
+        try {
+          return await this.publishViaEmail({
+            account,
+            secretEmail,
+            title,
+            caption,
+            hashtags,
+            mediaPath: mediaPath || imageUrl,
+            destinationName,
+            destination,
+            smtpConfig: creds.smtp || null
+          });
+        } catch (mErr) {
+          console.warn('[Blogger Fallback Mail2Blogger Warning]:', mErr.message);
+        }
+      }
+
       if (err.response?.status === 403 && apiKey.startsWith('AIzaSy')) {
-        throw new Error(`Blogger post publish failed: Google API Key (AIzaSy...) cannot publish blog posts. Google Blogger API requires OAuth2 Access Token with scope https://www.googleapis.com/auth/blogger or Generative Language API authorization.`);
+        throw new Error(`Blogger post publish failed: Google API Key (AIzaSy...) cannot publish blog posts. Google Blogger API requires OAuth2 Access Token with scope https://www.googleapis.com/auth/blogger.`);
       }
       throw new Error(`Blogger post publish failed: ${errMsg}`);
     }
