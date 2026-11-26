@@ -106,6 +106,9 @@ class BloggerPublisher {
 
       // Generate a 100% Human-Friendly, Google Helpful Content E-E-A-T Compliant Blog Article
       let htmlContent = '';
+      let finalTitle = cleanTitle;
+      let finalLabels = labels;
+
       if (cleanCaption && (cleanCaption.includes('<article') || (cleanCaption.includes('<div') && cleanCaption.includes('<h2')))) {
         htmlContent = cleanCaption;
       } else {
@@ -116,6 +119,11 @@ class BloggerPublisher {
           mediaUrl: publicMediaUrl
         });
         htmlContent = fullArticle.htmlContent;
+        if (fullArticle.title) finalTitle = fullArticle.title;
+        if (Array.isArray(fullArticle.tags) && fullArticle.tags.length > 0) {
+          const combined = Array.from(new Set([...finalLabels, ...fullArticle.tags]));
+          finalLabels = combined.slice(0, 15);
+        }
       }
 
       const headers = { 'Content-Type': 'application/json' };
@@ -129,9 +137,9 @@ class BloggerPublisher {
 
       const res = await axios.post(url, {
         kind: 'blogger#post',
-        title: title,
+        title: finalTitle,
         content: htmlContent,
-        labels: labels
+        labels: finalLabels
       }, {
         headers,
         params,

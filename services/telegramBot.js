@@ -1083,7 +1083,11 @@ class TelegramBotService {
             const name = telegramNotifier.formatPlatformName(r.platform);
             const postUrl = r.details?.postUrl || r.postUrl;
             if (postUrl) {
-              reportMsg += `• [${icon} ${name} Live Post](${postUrl})\n`;
+              if (r.platform === 'instagram') {
+                reportMsg += `• [${icon} ${name} Live Post](${postUrl}) 📲 (ऐप व वेब)\n`;
+              } else {
+                reportMsg += `• [${icon} ${name} Live Post](${postUrl})\n`;
+              }
             } else {
               const chanUrl = telegramNotifier.getChannelUrl(dest, r.platform);
               reportMsg += chanUrl ? `• [${icon} ${name} Profile](${chanUrl})\n` : `• ${icon} ${name}: लाइव पब्लिश संपन्न ✅\n`;
@@ -1102,8 +1106,14 @@ class TelegramBotService {
           if (ch.instagram?.credentials?.status === 'pending_dedicated_account' || (!ch.instagram?.enabled && !singleTargets.includes('instagram'))) {
             reportMsg += `• ⏸️ 📸 Instagram: LexaTrip ${dest.name} का स्वतंत्र अकाउंट कनेक्ट होना बाकी है\n`;
           }
+          if (ch.linkedin?.credentials?.organizationUrn && !singleTargets.includes('linkedin')) {
+            reportMsg += `• ⏳ 💼 LinkedIn: LexaTrip ${dest.name} Company Page (Community Management API रिव्यू में है)\n`;
+          }
           if (ch.pinterest?.credentials?.status === 'trial_access_pending' || !singleTargets.includes('pinterest')) {
             reportMsg += `• ⏳ 📌 Pinterest: नया ऐप (ID ${ch.pinterest?.credentials?.appId || '1642972'}) Pinterest रिव्यू में है (Standard Access अप्रूवल के बाद पब्लिशिंग स्वतः शुरू होगी)\n`;
+          }
+          if (!singleTargets.includes('google_business')) {
+            reportMsg += `• ⏳ 📍 Google Business Profile: API एक्सेस व रिव्यू प्रक्रियाधीन है\n`;
           }
         } else if (publishedTargets.length > 0 && failedTargets.length > 0) {
           // Partial Success
@@ -1117,7 +1127,15 @@ class TelegramBotService {
             const icon = telegramNotifier.getPlatformIcon(r.platform);
             const name = telegramNotifier.formatPlatformName(r.platform);
             const postUrl = r.details?.postUrl || r.postUrl;
-            reportMsg += postUrl ? `• ✅ [${icon} ${name} Live Post](${postUrl})\n` : `• ✅ ${icon} ${name}: लाइव पब्लिश संपन्न\n`;
+            if (postUrl) {
+              if (r.platform === 'instagram') {
+                reportMsg += `• ✅ [${icon} ${name} Live Post](${postUrl}) 📲 (ऐप व वेब)\n`;
+              } else {
+                reportMsg += `• ✅ [${icon} ${name} Live Post](${postUrl})\n`;
+              }
+            } else {
+              reportMsg += `• ✅ ${icon} ${name}: लाइव पब्लिश संपन्न\n`;
+            }
             if (r.warning) {
               reportMsg += `  ↳ ⚠️ ${r.warning}\n`;
             }
@@ -1139,8 +1157,14 @@ class TelegramBotService {
           if (ch.instagram?.credentials?.status === 'pending_dedicated_account' || (!ch.instagram?.enabled && !singleTargets.includes('instagram'))) {
             reportMsg += `• ⏸️ 📸 Instagram: LexaTrip ${dest.name} का स्वतंत्र अकाउंट कनेक्ट होना बाकी है\n`;
           }
+          if (ch.linkedin?.credentials?.organizationUrn && !singleTargets.includes('linkedin')) {
+            reportMsg += `• ⏳ 💼 LinkedIn: LexaTrip ${dest.name} Company Page (Community Management API रिव्यू में है)\n`;
+          }
           if (ch.pinterest?.credentials?.status === 'trial_access_pending' || !singleTargets.includes('pinterest')) {
             reportMsg += `• ⏳ 📌 Pinterest: नया ऐप (ID ${ch.pinterest?.credentials?.appId || '1642972'}) Pinterest रिव्यू में है\n`;
+          }
+          if (!singleTargets.includes('google_business')) {
+            reportMsg += `• ⏳ 📍 Google Business Profile: API एक्सेस व रिव्यू प्रक्रियाधीन है\n`;
           }
 
           if (skippedTargets.length > 0) {
@@ -1318,7 +1342,12 @@ class TelegramBotService {
         // 6. In background: Synthesize 100% Human-Friendly Google SEO Travel Article and Publish to Destination's blogspot.com
         setImmediate(async () => {
           try {
-            console.log(`[TelegramBot] Synthesizing 800+ word Google SEO Human Blog Article for ${dest.name}...`);
+            const alreadyPublishedBlog = publishedTargets.some(r => r.platform === 'blogger');
+            if (alreadyPublishedBlog) {
+              console.log(`[TelegramBot] Blog Article for ${dest.name} was already published in primary dispatch.`);
+              return;
+            }
+            console.log(`[TelegramBot] Synthesizing 1000+ word Google SEO Human Blog Article for ${dest.name}...`);
             const blogChannel = dest.channels?.blogger;
             if (!blogChannel || blogChannel.enabled === false) {
               return;
@@ -1352,8 +1381,10 @@ class TelegramBotService {
                 `✍️ *[Blogger ब्लॉग आर्टिकल पब्लिश संपन्न]* 🐪\n\n` +
                 `📍 *डेस्टिनेशन:* ${dest.name}\n` +
                 `📑 *आर्टिकल:* ${blogArticle.title}\n` +
-                `🌐 *ब्लॉग:* [${dest.name} Official Blogspot](${liveBlogUrl})\n\n` +
-                `✨ *Google E-E-A-T और Helpful Content अनुपालन:* 800+ शब्दों का विस्तृत मानवीय लेख, फ़ोटो व बुकिंग लिंक्स के साथ लाइव है!`,
+                `🏨 *होटल / स्टे:* ${blogArticle.hotelInfo?.hotelName || 'LexaTrip Curated Luxury Stay'} (${blogArticle.hotelInfo?.starSymbol || '⭐⭐⭐⭐⭐'})\n` +
+                `🏷️ *लेबल्स:* \`${(blogArticle.tags || []).slice(0, 5).join(', ')}\`\n` +
+                `🌐 *लाइव लिंक:* [${dest.name} Blogspot Post](${liveBlogUrl})\n\n` +
+                `✨ *Google E-E-A-T अनुपालन:* 1,000+ शब्दों का विस्तृत लेख, होटल समीक्षा, 3-दिवसीय यात्रा कार्यक्रम व VIP बुकिंग लिंक्स के साथ लाइव है!`,
                 { parse_mode: 'Markdown' }
               );
             }

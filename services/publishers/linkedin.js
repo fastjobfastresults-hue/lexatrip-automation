@@ -185,16 +185,20 @@ class LinkedInPublisher {
       const errMsg = err.response?.data?.message || (err.response ? JSON.stringify(err.response.data) : err.message);
       
       // If organization permission is missing (requires w_organization_social via Community Management API),
-      // gracefully fall back to personal profile so content is NEVER dropped!
+      // only fall back to personal profile if explicitly allowed by destination credentials
       if (targetAuthor !== memberUrn && memberUrn && (err.response?.status === 400 || err.response?.status === 403)) {
-        console.warn(`[LinkedIn] Organization publish not authorized for ${targetAuthor} (${errMsg}). Gracefully falling back to personal profile ${memberUrn}.`);
-        try {
-          const fallbackResult = await attemptPublish(memberUrn);
-          fallbackResult.warning = `Posted to personal profile (${memberUrn}) because LinkedIn Company Page posting requires the Community Management API (w_organization_social scope).`;
-          return fallbackResult;
-        } catch (fallbackErr) {
-          const fbMsg = fallbackErr.response?.data?.message || fallbackErr.message;
-          throw new Error(`LinkedIn post failed: ${fbMsg}`);
+        if (account.credentials?.allowPersonalFallback === true) {
+          console.warn(`[LinkedIn] Organization publish not authorized for ${targetAuthor} (${errMsg}). Falling back to personal profile ${memberUrn}.`);
+          try {
+            const fallbackResult = await attemptPublish(memberUrn);
+            fallbackResult.warning = `Posted to personal profile (${memberUrn}) because LinkedIn Company Page posting requires the Community Management API (w_organization_social scope).`;
+            return fallbackResult;
+          } catch (fallbackErr) {
+            const fbMsg = fallbackErr.response?.data?.message || fallbackErr.message;
+            throw new Error(`LinkedIn post failed: ${fbMsg}`);
+          }
+        } else {
+          throw new Error(`LinkedIn Company Page (${targetAuthor}) प्रकाशन के लिए Community Management API (w_organization_social) LinkedIn द्वारा रिव्यू में है। पर्सनल प्रोफ़ाइल पर पोस्टिंग नीतिगत रूप से रोकी गई है।`);
         }
       }
 

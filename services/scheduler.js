@@ -466,7 +466,7 @@ class Scheduler {
           } else if (targetPlatform === 'linkedin') {
             res = await linkedinPublisher.publishPost({ account: accountAdapter, text: `${item.title}\n\n${item.caption}`, imageUrl: item.mediaPath });
           } else if (targetPlatform === 'blogger') {
-            res = await bloggerPublisher.publishPost({ account: accountAdapter, title: item.title, caption: item.caption, hashtags: item.hashtags || '', mediaPath: item.mediaPath, destinationName: destination.name });
+            res = await bloggerPublisher.publishPost({ account: accountAdapter, title: item.title, caption: item.caption, hashtags: item.hashtags || '', mediaPath: item.mediaPath, destinationName: destination.name, destination: destination });
           } else if (targetPlatform === 'google_business' || targetPlatform === 'gmb') {
             res = await googleBusinessPublisher.publishPost({
               account: accountAdapter,
@@ -537,7 +537,7 @@ class Scheduler {
               mediaPath: item.mediaPath
             });
           } else if (targetPlatform === 'blogger') {
-            res = await bloggerPublisher.publishPost({ account: accountAdapter, title: item.title, caption: item.caption, hashtags: item.hashtags || '', mediaPath: item.mediaPath, destinationName: destination.name });
+            res = await bloggerPublisher.publishPost({ account: accountAdapter, title: item.title, caption: item.caption, hashtags: item.hashtags || '', mediaPath: item.mediaPath, destinationName: destination.name, destination: destination });
           } else if (targetPlatform === 'custom') {
             res = await customPublisher.publish({
               account: accountAdapter,
