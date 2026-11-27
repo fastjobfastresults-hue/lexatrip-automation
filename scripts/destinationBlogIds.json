@@ -182,5 +182,13 @@
     "url": "https://lexatripagra.blogspot.com/",
     "themeFile": "public/theme/destinations/lexatrip_theme_agra.xml",
     "status": "created"
+  },
+  {
+    "slug": "srinagar",
+    "name": "LexaTrip Srinagar",
+    "blogId": "2801553112629920556",
+    "url": "https://lexatripsrinagar-official.blogspot.com/",
+    "themeFile": "public/theme/destinations/lexatrip_theme_srinagar.xml",
+    "status": "created"
   }
 ]
