@@ -653,7 +653,10 @@ ${dest.themes.flatMap(t => t.hashtags.slice(0, 3)).join(' ')}`;
     // Clean candidate
     if (hotelName) {
       hotelName = hotelName.replace(/^(?:at|in|with|the|and)\s+/i, '').trim();
-      if (hotelName.length < 5 || hotelName.toLowerCase() === 'camp' || hotelName.toLowerCase() === 'hotel') {
+      const majorCities = ['chennai', 'mumbai', 'delhi', 'kolkata', 'bangalore', 'bengaluru', 'hyderabad', 'pune', 'ahmedabad', 'gurgaon', 'noida'];
+      if (majorCities.some(city => hotelName.toLowerCase().includes(city) && !destSlug.includes(city))) {
+        hotelName = null;
+      } else if (hotelName.length < 5 || hotelName.toLowerCase() === 'camp' || hotelName.toLowerCase() === 'hotel') {
         hotelName = null;
       }
     }
@@ -912,8 +915,15 @@ ${dest.themes.flatMap(t => t.hashtags.slice(0, 3)).join(' ')}`;
       'LexaTrip'
     ].filter(Boolean);
 
+    let finalTitle = cleanTitle;
+    if (!finalTitle.toLowerCase().includes(hotelInfo.hotelName.toLowerCase())) {
+      finalTitle = `${cleanTitle} — ${hotelInfo.hotelName} (${hotelInfo.starSymbol})`;
+    } else if (!finalTitle.includes('⭐')) {
+      finalTitle = `${cleanTitle} (${hotelInfo.starSymbol})`;
+    }
+
     return {
-      title: `${cleanTitle} — ${hotelInfo.hotelName} (${hotelInfo.starSymbol})`,
+      title: finalTitle,
       htmlContent,
       hotelInfo,
       tags

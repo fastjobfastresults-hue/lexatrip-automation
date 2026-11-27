@@ -13,13 +13,16 @@ function sanitizePostText(raw) {
   let text = raw;
 
   // 1. Replace 【entity-...|canonicalname=YYYY】 or [entity-...|canonicalname=YYYY] with YYYY
-  text = text.replace(/[【\[]entity[-:][^|]+?\|canonicalname=([^】\]]+?)[】\]]/gi, '$1');
+  text = text.replace(/[【\[]entity[-:][^|]+?[|¦]canonical_?name=([^】\]]+?)[】\]]/gi, '$1');
+
+  // 1b. Replace standalone |canonical_name=... or ¦canonical_name=...
+  text = text.replace(/[|¦]canonical_?name=[^|\s】\]]+/gi, '');
 
   // 2. Replace 【entity-...】 or [entity-...] with name
   text = text.replace(/[【\[]entity[-:]([^】\]]+?)[】\]]/gi, '$1');
 
   // 3. Replace any 【...canonicalname=YYYY...】 with YYYY
-  text = text.replace(/[【\[][^】\]]*?canonicalname=([^】\]]+?)[】\]]/gi, '$1');
+  text = text.replace(/[【\[][^】\]]*?canonical_?name=([^】\]]+?)[】\]]/gi, '$1');
 
   // 4. Remove any remaining entity-style bracket artifacts 【...】
   text = text.replace(/【[^】]*?】/g, '');

@@ -41,6 +41,31 @@ app.get('/healthz', (req, res) => res.status(200).send('OK'));
 app.get('/api/health', (req, res) => res.status(200).json({ status: 'ok', uptime: process.uptime(), timestamp: new Date().toISOString() }));
 app.get('/health/deep', deepHealthHandler);
 
+// Master RSS Feeds for Pinterest Auto-Publish & Social Syndication
+const rssBridge = require('./services/rssBridge');
+app.get('/feeds/pinterest-master.rss', async (req, res) => {
+  try {
+    const xml = await rssBridge.generateFeed({ destinationId: null });
+    res.set('Content-Type', 'application/rss+xml; charset=utf-8');
+    res.send(xml);
+  } catch (err) {
+    res.status(500).send(`Error generating master RSS feed: ${err.message}`);
+  }
+});
+
+app.get('/feeds/:destinationId.rss', async (req, res) => {
+  try {
+    const { destinationId } = req.params;
+    const xml = await rssBridge.generateFeed({ destinationId });
+    res.set('Content-Type', 'application/rss+xml; charset=utf-8');
+    res.send(xml);
+  } catch (err) {
+    res.status(500).send(`Error generating destination RSS feed: ${err.message}`);
+  }
+});
+
+app.get('/rss', (req, res) => res.redirect('/feeds/pinterest-master.rss'));
+
 // Cache-Control headers to prevent browser from caching stale files
 app.use((req, res, next) => {
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
