@@ -60,9 +60,12 @@ class RssBridge {
       ? `LexaTrip ${primaryDest.name} — Luxury Stays, Camps & Travel Guides`
       : 'LexaTrip™ Official Travel Media — 100+ Verified Luxury Destinations';
 
+    const masterClaimedBlogId = '7541042203565068285'; // lexatrip.blogspot.com (Claimed on Pinterest)
+    const masterClaimedDomain = 'https://lexatrip.blogspot.com/';
+
     const feedLink = destinationId && primaryDest.channels?.blogger?.handle
       ? `https://${primaryDest.channels.blogger.handle}/`
-      : 'https://bookings.lexatrip.com/';
+      : masterClaimedDomain;
 
     const feedDesc = destinationId
       ? `Curated luxury experiential travel, desert camps, heritage hotels, and itinerary guides for ${primaryDest.name}.`
@@ -75,10 +78,14 @@ class RssBridge {
       .slice(-25)
       .reverse();
 
-    // Gather Blogger posts
+    // Gather Blogger posts from Claimed Master Blog (for master feed) or specific destination blog
     let bloggerPosts = [];
-    if (primaryDest?.channels?.blogger?.credentials?.blogId) {
-      bloggerPosts = await this.getBloggerPosts(primaryDest.channels.blogger.credentials.blogId);
+    const targetBlogId = destinationId 
+      ? primaryDest?.channels?.blogger?.credentials?.blogId 
+      : masterClaimedBlogId;
+
+    if (targetBlogId) {
+      bloggerPosts = await this.getBloggerPosts(targetBlogId);
     }
 
     const itemsXml = [];
@@ -134,7 +141,17 @@ class RssBridge {
         mediaUrl = 'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80';
       }
 
-      const itemLink = qItem.postUrl || (destinationId && primaryDest.channels?.blogger?.handle ? `https://${primaryDest.channels.blogger.handle}/` : 'https://bookings.lexatrip.com/');
+      let itemLink = qItem.postUrl;
+      if (!destinationId) {
+        // Pinterest Master Feed requires all links to strictly match the claimed domain (lexatrip.blogspot.com)
+        if (!itemLink || !itemLink.includes('lexatrip.blogspot.com')) {
+          itemLink = masterClaimedDomain;
+        }
+      } else {
+        if (!itemLink) {
+          itemLink = primaryDest.channels?.blogger?.handle ? `https://${primaryDest.channels.blogger.handle}/` : 'https://bookings.lexatrip.com/';
+        }
+      }
       const pubDate = qItem.createdAt ? new Date(qItem.createdAt).toUTCString() : new Date().toUTCString();
       const snippet = (qItem.caption || qItem.title || 'Curated luxury travel experience by LexaTrip.').slice(0, 300);
 
