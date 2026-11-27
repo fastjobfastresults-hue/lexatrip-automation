@@ -134,5 +134,53 @@
     "url": "https://lexatripkochi.blogspot.com/",
     "themeFile": "public/theme/destinations/lexatrip_theme_kochi.xml",
     "status": "provisioning"
+  },
+  {
+    "slug": "mumbai",
+    "name": "LexaTrip Mumbai",
+    "blogId": "5539445648066803314",
+    "url": "https://lexatripmumbai.blogspot.com/",
+    "themeFile": "public/theme/destinations/lexatrip_theme_mumbai.xml",
+    "status": "created"
+  },
+  {
+    "slug": "delhi",
+    "name": "LexaTrip Delhi",
+    "blogId": "948101593521848783",
+    "url": "https://lexatripdelhi.blogspot.com/",
+    "themeFile": "public/theme/destinations/lexatrip_theme_delhi.xml",
+    "status": "created"
+  },
+  {
+    "slug": "ahmedabad",
+    "name": "LexaTrip Ahmedabad",
+    "blogId": "4654565420389498319",
+    "url": "https://lexatripahmedabad.blogspot.com/",
+    "themeFile": "public/theme/destinations/lexatrip_theme_ahmedabad.xml",
+    "status": "created"
+  },
+  {
+    "slug": "chennai",
+    "name": "LexaTrip Chennai",
+    "blogId": "4028441166142393574",
+    "url": "https://lexatripchennai.blogspot.com/",
+    "themeFile": "public/theme/destinations/lexatrip_theme_chennai.xml",
+    "status": "created"
+  },
+  {
+    "slug": "ayodhya",
+    "name": "LexaTrip Ayodhya",
+    "blogId": "2574509431641993119",
+    "url": "https://lexatripayodhya.blogspot.com/",
+    "themeFile": "public/theme/destinations/lexatrip_theme_ayodhya.xml",
+    "status": "created"
+  },
+  {
+    "slug": "agra",
+    "name": "LexaTrip Agra",
+    "blogId": "1218891158231997785",
+    "url": "https://lexatripagra.blogspot.com/",
+    "themeFile": "public/theme/destinations/lexatrip_theme_agra.xml",
+    "status": "created"
   }
 ]

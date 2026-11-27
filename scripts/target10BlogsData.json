@@ -1,0 +1,112 @@
+[
+  {
+    "slug": "mumbai",
+    "name": "LexaTrip Mumbai",
+    "title": "LexaTrip Mumbai | Gateway of India, Sea-Facing Luxury Stays & Marine Drive",
+    "address": "lexatripmumbai",
+    "fallbackAddress": "lexatripmumbai-official",
+    "state": "Maharashtra",
+    "themeFile": "public/theme/destinations/lexatrip_theme_mumbai.xml",
+    "desc": "Official luxury travel and heritage guide for Mumbai by LexaTrip. Discover 5-star sea-facing luxury hotels, private yacht charters, colonial South Bombay heritage tours, and sunset rooftop fine dining.",
+    "searchDesc": "Explore Mumbai luxury stays, sea-view suites, Gateway of India, and Marine Drive curated experiential tours with LexaTrip."
+  },
+  {
+    "slug": "delhi",
+    "name": "LexaTrip Delhi",
+    "title": "LexaTrip Delhi | Capital Grandeur, Heritage Palaces & Luxury Boutique Stays",
+    "address": "lexatripdelhi",
+    "fallbackAddress": "lexatripdelhi-official",
+    "state": "Delhi",
+    "themeFile": "public/theme/destinations/lexatrip_theme_delhi.xml",
+    "desc": "Official curated luxury travel portal for New Delhi and Old Delhi. Experience 5-star imperial palace hotels, Mughal heritage walks, private luxury chauffeur tours, and diplomatic enclave suites with LexaTrip.",
+    "searchDesc": "Discover luxury 5-star hotels, Mughal heritage tours, and curated capital experiences in New Delhi with LexaTrip."
+  },
+  {
+    "slug": "ahmedabad",
+    "name": "LexaTrip Ahmedabad",
+    "title": "LexaTrip Ahmedabad | UNESCO Heritage City Haveli Stays & Sabarmati Luxury",
+    "address": "lexatripahmedabad",
+    "fallbackAddress": "lexatripahmedabad-official",
+    "state": "Gujarat",
+    "themeFile": "public/theme/destinations/lexatrip_theme_ahmedabad.xml",
+    "desc": "Experience India's first UNESCO World Heritage City with LexaTrip Ahmedabad. Curated restored Pol havelis, Sabarmati riverfront luxury retreats, textile heritage walks, and authentic Kathiyawadi gourmet dining.",
+    "searchDesc": "Book verified UNESCO heritage haveli stays, Sabarmati riverfront luxury retreats, and cultural tours in Ahmedabad with LexaTrip."
+  },
+  {
+    "slug": "chennai",
+    "name": "LexaTrip Chennai",
+    "title": "LexaTrip Chennai | Coastal Heritage, Marina Beach Luxury & Temple Architecture",
+    "address": "lexatripchennai",
+    "fallbackAddress": "lexatripchennai-official",
+    "state": "Tamil Nadu",
+    "themeFile": "public/theme/destinations/lexatrip_theme_chennai.xml",
+    "desc": "Gateway to South India curated by LexaTrip. Discover coastal luxury resorts along ECR, Dravidian temple heritage, private Carnatic cultural experiences, and pristine beachfront villas in Chennai.",
+    "searchDesc": "Curated East Coast Road luxury beach resorts, heritage temple tours, and verified stays in Chennai with LexaTrip."
+  },
+  {
+    "slug": "ayodhya",
+    "name": "LexaTrip Ayodhya",
+    "title": "LexaTrip Ayodhya | Sacred Ram Janmabhoomi Stays, Saryu River Ghats & VIP Darshan",
+    "address": "lexatripayodhya",
+    "fallbackAddress": "lexatripayodhya-official",
+    "state": "Uttar Pradesh",
+    "themeFile": "public/theme/destinations/lexatrip_theme_ayodhya.xml",
+    "desc": "The divine spiritual capital curated by LexaTrip Ayodhya. Premium verified pilgrimage hotels, serene Saryu riverfront aarti views, private guided heritage tours, and priority guest assistance.",
+    "searchDesc": "Book verified luxury and premium pilgrimage stays, Saryu aarti tours, and divine travel experiences in Ayodhya with LexaTrip."
+  },
+  {
+    "slug": "agra",
+    "name": "LexaTrip Agra",
+    "title": "LexaTrip Agra | Taj Mahal View Luxury Resorts, Mughal Architecture & Heritage",
+    "address": "lexatripagra",
+    "fallbackAddress": "lexatripagra-official",
+    "state": "Uttar Pradesh",
+    "themeFile": "public/theme/destinations/lexatrip_theme_agra.xml",
+    "desc": "The city of the Taj curated by LexaTrip Agra. Experience direct Taj-view luxury suites, Mughal architectural walking tours, Fatehpur Sikri expeditions, and fine royal dining.",
+    "searchDesc": "Direct Taj Mahal view luxury hotels, 5-star Mughal suites, and verified heritage experiences in Agra with LexaTrip."
+  },
+  {
+    "slug": "srinagar",
+    "name": "LexaTrip Srinagar",
+    "title": "LexaTrip Srinagar | Dal Lake Luxury Houseboats, Mughal Gardens & Snow Views",
+    "address": "lexatripsrinagar",
+    "fallbackAddress": "lexatripsrinagar-official",
+    "state": "Jammu & Kashmir",
+    "themeFile": "public/theme/destinations/lexatrip_theme_srinagar.xml",
+    "desc": "Paradise on Earth with LexaTrip Srinagar. Curated cedarwood luxury houseboats on Dal Lake & Nigeen Lake, private Shikara sunset rides, Shalimar Bagh tours, and pine-scented mountain villas.",
+    "searchDesc": "Book authentic luxury houseboats on Dal Lake, Shikara rides, and premium Kashmir stays in Srinagar with LexaTrip."
+  },
+  {
+    "slug": "jodhpur",
+    "name": "LexaTrip Jodhpur",
+    "title": "LexaTrip Jodhpur | Sun City Blue Haveli Stays, Mehrangarh Fort & Royal Palaces",
+    "address": "lexatripjodhpur",
+    "fallbackAddress": "lexatripjodhpur-official",
+    "state": "Rajasthan",
+    "themeFile": "public/theme/destinations/lexatrip_theme_jodhpur.xml",
+    "desc": "The royal Sun City curated by LexaTrip. Discover heritage blue havelis overlooking Mehrangarh Fort, Umaid Bhawan royal suites, desert village safaris, and authentic Marwari hospitality.",
+    "searchDesc": "Verified Mehrangarh view heritage haveli stays, royal palaces, and blue city experiential tours in Jodhpur with LexaTrip."
+  },
+  {
+    "slug": "kumbhalgarh",
+    "name": "LexaTrip Kumbhalgarh",
+    "title": "LexaTrip Kumbhalgarh | Great Wall of India, Aravali Jungle Lodges & Hill Forts",
+    "address": "lexatripkumbhalgarh",
+    "fallbackAddress": "lexatripkumbhalgarh-official",
+    "state": "Rajasthan",
+    "themeFile": "public/theme/destinations/lexatrip_theme_kumbhalgarh.xml",
+    "desc": "Guardians of Mewar with LexaTrip Kumbhalgarh. Luxury wilderness jungle lodges, Aravali valley view resorts, sound & light show at Kumbhalgarh Fort, and leopard safari expeditions.",
+    "searchDesc": "Book luxury Aravali mountain resorts, Kumbhalgarh Fort view suites, and jungle wilderness stays with LexaTrip."
+  },
+  {
+    "slug": "ajmer",
+    "name": "LexaTrip Ajmer",
+    "title": "LexaTrip Ajmer | Dargah Sharif Spiritual Stays, Ana Sagar Lake & Heritage",
+    "address": "lexatripajmer",
+    "fallbackAddress": "lexatripajmer-official",
+    "state": "Rajasthan",
+    "themeFile": "public/theme/destinations/lexatrip_theme_ajmer.xml",
+    "desc": "Sacred oasis in the Aravalis curated by LexaTrip. Premium verified stays near Ajmer Dargah Sharif, peaceful Ana Sagar lakefront hotels, Taragarh hill excursions, and twin-city Pushkar connectivity.",
+    "searchDesc": "Verified premium stays near Ajmer Sharif Dargah, Ana Sagar lakefront luxury, and spiritual guide in Ajmer with LexaTrip."
+  }
+]
