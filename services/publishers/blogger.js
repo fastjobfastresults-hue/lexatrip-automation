@@ -72,13 +72,14 @@ class BloggerPublisher {
       return null;
     };
 
-    // Automatic Google OAuth2 Token Refresh for Lifetime Publishing
-    if (refreshToken && clientId && clientSecret) {
+    // Guaranteed Google Blogger OAuth Access Token from Master Auth:
+    if (!apiKey || apiKey.startsWith('AIzaSy') || !apiKey.startsWith('ya29.')) {
       try {
-        const freshToken = await refreshAccessToken();
-        if (freshToken) apiKey = freshToken;
-      } catch (refErr) {
-        console.warn('[Blogger Publisher] OAuth token refresh warning:', refErr.response?.data?.error_description || refErr.message);
+        const googleMasterAuth = require('../googleMasterAuth');
+        const masterToken = await googleMasterAuth.getBloggerAccessToken();
+        if (masterToken) apiKey = masterToken;
+      } catch (gErr) {
+        console.warn('[Blogger Publisher] Master auth error:', gErr.message);
       }
     }
 
@@ -188,10 +189,32 @@ class BloggerPublisher {
           timeout: 25000
         });
       } catch (postErr) {
-        // If 401 Unauthorized, attempt forced token refresh and retry once
-        if (postErr.response?.status === 401 && refreshToken) {
-          console.log('[Blogger Publisher] Received 401, forcing fresh OAuth2 token exchange...');
-          const retryToken = await refreshAccessToken();
+        // If network reset or timeout, retry once after 1s
+        if (postErr.code === 'ECONNRESET' || postErr.code === 'ETIMEDOUT' || postErr.message?.includes('socket') || postErr.message?.includes('timeout')) {
+          console.log('[Blogger Publisher] Transient network glitch (' + postErr.message + '), retrying in 1.5s...');
+          await new Promise(r => setTimeout(r, 1500));
+          res = await axios.post(url, {
+            kind: 'blogger#post',
+            title: finalTitle,
+            content: htmlContent,
+            labels: finalLabels
+          }, {
+            headers,
+            params,
+            timeout: 30000
+          });
+        }
+        // If 401 Unauthorized, attempt forced token refresh from Master Auth and retry once
+        else if (postErr.response?.status === 401) {
+          console.log('[Blogger Publisher] Received 401, forcing fresh OAuth2 token exchange from Master Auth...');
+          let retryToken = null;
+          try {
+            const googleMasterAuth = require('../googleMasterAuth');
+            googleMasterAuth._bloggerTokenCache = null;
+            retryToken = await googleMasterAuth.getBloggerAccessToken();
+          } catch (rErr) {
+            retryToken = await refreshAccessToken();
+          }
           if (retryToken) {
             headers.Authorization = `Bearer ${retryToken}`;
             res = await axios.post(url, {
@@ -202,7 +225,7 @@ class BloggerPublisher {
             }, {
               headers,
               params: {},
-              timeout: 25000
+              timeout: 30000
             });
           } else {
             throw postErr;

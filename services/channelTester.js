@@ -73,25 +73,13 @@ class ChannelTester {
       }
 
       if (platform === 'youtube') {
-        let { apiKey, accessToken, channelId, clientId, clientSecret, refreshToken } = credentials;
-        let token = accessToken || (apiKey && String(apiKey).startsWith('ya29.') ? apiKey : null);
-
-        // Auto-refresh token if refreshToken is available
-        if (!token && refreshToken && clientId && clientSecret) {
-          try {
-            const tokenRes = await axios.post('https://oauth2.googleapis.com/token', new URLSearchParams({
-              client_id: clientId,
-              client_secret: clientSecret,
-              refresh_token: refreshToken,
-              grant_type: 'refresh_token'
-            }).toString(), {
-              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-              timeout: 10000
-            });
-            token = tokenRes.data?.access_token;
-          } catch (e) {
-            console.warn('[ChannelTester YouTube refresh warning]:', e.message);
-          }
+        let token = null;
+        try {
+          const googleMasterAuth = require('./googleMasterAuth');
+          token = await googleMasterAuth.getYouTubeAccessToken();
+        } catch (e) {
+          console.warn('[ChannelTester YouTube Master Auth warning]:', e.message);
+          token = credentials.accessToken || (credentials.apiKey && String(credentials.apiKey).startsWith('ya29.') ? credentials.apiKey : null);
         }
 
         if (token) {
@@ -202,25 +190,13 @@ class ChannelTester {
         let token = credentials.accessToken;
         if (!blogId) throw new Error('Blogger requires a Blog ID.');
 
-        // Auto-refresh token if refreshToken is available
-        const dest = (typeof destination !== 'undefined' && destination) ? destination : null;
-        const refreshToken = credentials.refreshToken || dest?.channels?.youtube?.credentials?.refreshToken;
-        const clientId = credentials.clientId || dest?.channels?.youtube?.credentials?.clientId || process.env.GOOGLE_CLIENT_ID;
-        const clientSecret = credentials.clientSecret || dest?.channels?.youtube?.credentials?.clientSecret || process.env.GOOGLE_CLIENT_SECRET;
-
-        if (refreshToken && clientId && clientSecret) {
+        // Auto-refresh token from Master Auth if not already an OAuth access token
+        if (!token || !token.startsWith('ya29.')) {
           try {
-            const tokenRes = await axios.post('https://oauth2.googleapis.com/token', {
-              client_id: clientId,
-              client_secret: clientSecret,
-              refresh_token: refreshToken,
-              grant_type: 'refresh_token'
-            }, { timeout: 10000 });
-            if (tokenRes.data?.access_token) {
-              token = tokenRes.data.access_token;
-            }
+            const googleMasterAuth = require('./googleMasterAuth');
+            token = await googleMasterAuth.getBloggerAccessToken();
           } catch (refErr) {
-            console.warn('[ChannelTester Blogger] Refresh token exchange warning:', refErr.message);
+            console.warn('[ChannelTester Blogger] Master auth token exchange warning:', refErr.message);
           }
         }
 
@@ -234,7 +210,7 @@ class ChannelTester {
         const res = await axios.get(`https://www.googleapis.com/blogger/v3/blogs/${blogId}`, {
           headers,
           params,
-          timeout: 10000
+          timeout: 25000
         });
 
         const hasWriteAuth = !!(token || credentials.refreshToken);

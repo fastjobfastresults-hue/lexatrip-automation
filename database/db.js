@@ -212,6 +212,28 @@ class Database {
           };
           changed = true;
         }
+
+        // Ensure Master Google Credentials (Blogger & YouTube) are automatically active
+        try {
+          const googleMasterAuth = require('../services/googleMasterAuth');
+          if (dest.channels?.blogger?.credentials) {
+            if (!dest.channels.blogger.credentials.refreshToken || !dest.channels.blogger.credentials.clientId) {
+              dest.channels.blogger.credentials.refreshToken = googleMasterAuth.bloggerRefreshToken;
+              dest.channels.blogger.credentials.clientId = googleMasterAuth.clientId;
+              dest.channels.blogger.credentials.clientSecret = googleMasterAuth.clientSecret;
+              dest.channels.blogger.credentials.publishMethod = 'api';
+              changed = true;
+            }
+          }
+          if (dest.channels?.youtube?.credentials) {
+            if (!dest.channels.youtube.credentials.refreshToken || !dest.channels.youtube.credentials.clientId) {
+              dest.channels.youtube.credentials.refreshToken = googleMasterAuth.youtubeRefreshToken;
+              dest.channels.youtube.credentials.clientId = googleMasterAuth.clientId;
+              dest.channels.youtube.credentials.clientSecret = googleMasterAuth.clientSecret;
+              changed = true;
+            }
+          }
+        } catch (gErr) {}
       });
       if (!current.currentUser) {
         current.currentUser = {

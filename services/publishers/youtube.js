@@ -60,6 +60,15 @@ class YouTubePublisher {
    * Resolve a valid OAuth2 Access Token from credentials
    */
   async resolveAccessToken(credentials) {
+    // 1. Guaranteed live YouTube OAuth Access Token from Master Auth:
+    try {
+      const googleMasterAuth = require('../googleMasterAuth');
+      const token = await googleMasterAuth.getYouTubeAccessToken();
+      if (token) return token;
+    } catch (e) {
+      console.warn('[YouTube Publisher] Master auth fallback warning:', e.message);
+    }
+
     if (!credentials) {
       throw new Error('YouTube credentials missing. OAuth 2.0 User Access Token required.');
     }
@@ -85,12 +94,18 @@ class YouTubePublisher {
       }
     }
 
-    // Check if only an API key is provided without any OAuth tokens
-    if (!token && (credentials.apiKey || credentials.api_key) && !credentials.refreshToken) {
-      throw new Error(
-        "YouTube video upload requires an OAuth 2.0 User Access Token with 'https://www.googleapis.com/auth/youtube.upload' scope. " +
-        "A simple Google API Key (AIzaSy...) only provides read-only access for public data and cannot upload videos to YouTube."
-      );
+    // Guaranteed YouTube OAuth Access Token from Master Auth:
+    if (!token || !token.startsWith('ya29.')) {
+      try {
+        const googleMasterAuth = require('../googleMasterAuth');
+        const masterToken = await googleMasterAuth.getYouTubeAccessToken();
+        if (masterToken) {
+          token = masterToken;
+          credentials.accessToken = masterToken;
+        }
+      } catch (gErr) {
+        console.warn('[YouTube Publisher] Master auth error:', gErr.message);
+      }
     }
 
     if (!token) {
