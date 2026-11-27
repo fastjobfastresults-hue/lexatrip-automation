@@ -7,7 +7,7 @@ class ChannelTester {
    * Test and verify connection credentials for any social media platform
    * MUST execute genuine external API calls. Never returns simulated success.
    */
-  async testChannel(platform, credentials) {
+  async testChannel(platform, credentials, destination = null) {
     if (!credentials) {
       throw new Error('No credentials provided.');
     }
@@ -203,9 +203,10 @@ class ChannelTester {
         if (!blogId) throw new Error('Blogger requires a Blog ID.');
 
         // Auto-refresh token if refreshToken is available
-        const refreshToken = credentials.refreshToken || destination?.channels?.youtube?.credentials?.refreshToken;
-        const clientId = credentials.clientId || destination?.channels?.youtube?.credentials?.clientId || process.env.GOOGLE_CLIENT_ID;
-        const clientSecret = credentials.clientSecret || destination?.channels?.youtube?.credentials?.clientSecret || process.env.GOOGLE_CLIENT_SECRET;
+        const dest = (typeof destination !== 'undefined' && destination) ? destination : null;
+        const refreshToken = credentials.refreshToken || dest?.channels?.youtube?.credentials?.refreshToken;
+        const clientId = credentials.clientId || dest?.channels?.youtube?.credentials?.clientId || process.env.GOOGLE_CLIENT_ID;
+        const clientSecret = credentials.clientSecret || dest?.channels?.youtube?.credentials?.clientSecret || process.env.GOOGLE_CLIENT_SECRET;
 
         if (refreshToken && clientId && clientSecret) {
           try {
