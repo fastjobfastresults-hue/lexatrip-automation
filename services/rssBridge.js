@@ -27,23 +27,33 @@ class RssBridge {
 
   async getBloggerPosts(blogId) {
     if (!blogId) return [];
+    if (this._bloggerCache && (Date.now() - this._bloggerCacheTime < 10 * 60 * 1000)) {
+      return this._bloggerCache;
+    }
     try {
       const token = await googleMasterAuth.getBloggerAccessToken();
       const res = await axios.get(`https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts`, {
         headers: { Authorization: `Bearer ${token}` },
         params: { maxResults: 15 },
-        timeout: 10000
+        timeout: 15000
       });
-      return res.data?.items || [];
+      if (res.data?.items) {
+        this._bloggerCache = res.data.items;
+        this._bloggerCacheTime = Date.now();
+        return this._bloggerCache;
+      }
+      return [];
     } catch (err) {
       console.warn('[RssBridge] Could not fetch Blogger posts:', err.message);
-      return [];
+      return this._bloggerCache || [];
     }
   }
 
   async generateFeed({ destinationId = null, baseUrl = 'https://lexa-trip-automation.onrender.com' }) {
     db.init();
-    const destinations = destinationId ? [db.getDestination(destinationId)].filter(Boolean) : db.getAllDestinations();
+    const destinations = destinationId 
+      ? [db.getDestination(destinationId)].filter(Boolean) 
+      : (typeof db.getDestinations === 'function' ? db.getDestinations() : (db.destinations || []));
     const primaryDest = destinations[0] || { name: 'LexaTrip Global', slug: 'global' };
 
     const feedTitle = destinationId 
