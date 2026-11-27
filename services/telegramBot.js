@@ -8,6 +8,7 @@ const seoGenerator = require('./seoGenerator');
 const scheduler = require('./scheduler');
 const telegramNotifier = require('./telegramNotifier');
 const channelTester = require('./channelTester');
+const tunnelService = require('./tunnelService');
 
 class NativeTelegramBot {
   constructor(token) {
@@ -1353,7 +1354,14 @@ class TelegramBotService {
               return;
             }
 
-            const publicImageUrl = tunnelService.resolvePublicMediaUrl(processedPath);
+            let publicImageUrl = null;
+            try {
+              if (tunnelService && typeof tunnelService.resolvePublicMediaUrl === 'function') {
+                publicImageUrl = tunnelService.resolvePublicMediaUrl(processedPath);
+              }
+            } catch (tErr) {
+              console.warn('[TelegramBot] tunnelService resolution warning:', tErr.message);
+            }
             const blogArticle = seoGenerator.generateDestinationHumanBlogArticle({
               destination: dest,
               title: parsedSeo.title,
